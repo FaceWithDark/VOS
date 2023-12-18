@@ -1,0 +1,50 @@
+body {
+    /* Create spaces between each "Box" */
+    margin: 0px;
+}
+
+h1 {
+    /* Alliging text */
+    text-align: center;
+}
+
+main {
+    /* Create spaces between each "Box" (in order: top, right, bottom, left) */ 
+    margin: 0px 20px 0px 20px;
+}
+.navbar ul {
+    /* Using header styles (dot points, square points, none, etc) */
+    list-style-type: none;
+    /* Set background colour */
+    background-color: hsl(0, 0%, 25%);
+    /* Create box surrounding the text contents inside */
+    padding: 0px;
+    /* Create spaces between each "Box" */
+    margin: 0px;
+    /* Set the overflown of the "Box" */
+    overflow: hidden;
+}
+
+.navbar a {
+    /* Set text color insde the navigation links */
+    color: white;
+    /* Using decoration styles for text (italics, bold, none, etc) */
+    text-decoration: none;
+    /* Create box surrounding the text contents inside */    
+    padding: 15px;
+    /* Set "Box" display */
+    display: block;
+    /* Alliging text */
+    text-align: center;
+}
+
+/* Allows to hover on top of each navigation links with psudo in-use*/
+.navbar a:hover {
+    /* Set background colour */    
+    background-color: hsl(0, 0%, 10%);
+}
+
+.navbar li {
+    /* Move all navigation links to the left with float values (decimal applies) */
+    float: left;
+}
