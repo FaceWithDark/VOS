@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VOT</title>
-    <!-- Include HTML file into the current HTML website with PHP -->    
-    <?php include ("./navbar.html"); ?>
 </head>
 <!-- Set backhround color -->
 <body style="background-color: #367588;">

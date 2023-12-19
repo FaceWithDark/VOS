@@ -1,50 +1,51 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+/* Applied to all elements */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* Show Google Font imported eariler on */    
+    font-family: 'Montserrat', sans-serif;
+}
+
 body {
-    /* Create spaces between each "Box" */
-    margin: 0px;
+    height: 100vh;
+    background-color: rgb(142, 177, 177);
 }
 
-h1 {
-    /* Alliging text */
-    text-align: center;
-}
-
-main {
-    /* Create spaces between each "Box" (in order: top, right, bottom, left) */ 
-    margin: 0px 20px 0px 20px;
-}
-.navbar ul {
-    /* Using header styles (dot points, square points, none, etc) */
+li {
     list-style-type: none;
-    /* Set background colour */
-    background-color: hsl(0, 0%, 25%);
-    /* Create box surrounding the text contents inside */
-    padding: 0px;
-    /* Create spaces between each "Box" */
-    margin: 0px;
-    /* Set the overflown of the "Box" */
-    overflow: hidden;
 }
 
-.navbar a {
-    /* Set text color insde the navigation links */
-    color: white;
-    /* Using decoration styles for text (italics, bold, none, etc) */
+a {
     text-decoration: none;
-    /* Create box surrounding the text contents inside */    
-    padding: 15px;
-    /* Set "Box" display */
-    display: block;
-    /* Alliging text */
-    text-align: center;
+    color: white;
+    font-size: 1rem;
 }
 
-/* Allows to hover on top of each navigation links with psudo in-use*/
-.navbar a:hover {
-    /* Set background colour */    
-    background-color: hsl(0, 0%, 10%);
+a:hover {
+    color: orange;
 }
 
-.navbar li {
-    /* Move all navigation links to the left with float values (decimal applies) */
-    float: left;
+/* HEADER STYLISH */
+header {
+    position: relative;
+    padding: 0 2rem;
+}
+
+.navbar {
+    width: 100%;
+    height: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar .logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
 }
