@@ -9,13 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VOT</title>
-    <!-- Include HTML file into the current HTML website with PHP -->
-    <?php include ("./navbar.html"); ?>
 </head>
 <body style="background-color: #008b8b;">
     <form action="archives.php" method="post">
         <!-- Webpage's main title name -->
-        <center><h1 style="color: orange;">VOT archieves</h2></center>
+        <center><h1 style="color: orange;">Archived Tournament</h2></center>
 
         <!-- Direct to VOT main spreadsheet -->
         <a href="https://docs.google.com/spreadsheets/d/1NTKjjdmax-qjO8L9-V8Iuom8zjcCaz9X-DHFJ4SDSAg/edit#gid=0">Vietnam osu!taiko Tournament 1 </a><br>
