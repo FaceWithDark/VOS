@@ -5,13 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VOT</title>
+
+    <?php include 'navigation_bar.html'; ?>
 </head>
 <!-- Set backhround color -->
 <body style="background-color: #367588;">
     <form action="index.php" method="post">
         <!-- Website title name -->
-        <center><h1>Welcome to VOT (Vietnamese Osu!Taiko Tournament) webisite !</h1></center>
-        
+        <!-- <center><h1>Welcome to VOT (Vietnamese Osu!Taiko Tournament) webisite !</h1></center> -->
+        <div class="title">>Welcome to VOT (Vietnamese Osu!Taiko Tournament) webisite !</div>
+        <!-- Stylish ""title" class inside HTML file using CSS inline -->
+        <style>
+            .title {
+                font-family: "Montserrat", sans-serif;
+                font-size: 30px;
+                text-align: center;
+                color: orange;
+                margin: 15px;
+            }
+        </style>        
         <!-- Login section -->
         <center><label>Login: </label> <br></center>
         <center><input type="text" name="username"> <br></center>
