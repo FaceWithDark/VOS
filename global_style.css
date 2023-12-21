@@ -63,7 +63,7 @@ header {
     /* Set the allignment type for items/elements inside "navbar" class when it doesn't use up all of the remaining space correctly */
     justify-content: space-between;
     /* Set the background color for the elements implemented inside <body> tag */
-    background-color: hsl(0, 0%, 33%);    
+    background-color: hsl(0, 0%, 20%);    
 }
 
 /* Apply stylish to the <a> tag inside "logo" class in the wanted HTML file */
