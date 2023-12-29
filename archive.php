@@ -1,5 +1,5 @@
 <?php
-    include 'navigation_bar.html';
+    include 'navigation-bar.html';
     // Start the on-going session throughtout all other webpages (stored within' the server's cookie sessions //TODO: need to implement cookies).
     session_start()
 ?>

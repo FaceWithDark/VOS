@@ -1,225 +1,37 @@
-/* Apply stylish to all elements within' the current CSS file */
 * {
-    /* Create spacing between each boxes */
-    margin: 0;
-    /* Create border surrounding the content inside */
-    padding: 0;
-    /* Prevent boxes not covering the whole desired width and height on the website */
-    box-sizing: border-box;
-    /* Apply Google Font to all elements within' the current CSS file */
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
 }
 
-/* Apply stylish to the <body> tag in the wanted HTMl file */
-body {
-    /* Set the height for all element implemented inside <body> tag */
-    height: 100vh;
+.box {
+    background-color: lightgreen;
+    margin: 1rem 30px 0rem 30px;
+    border-radius: 1rem;
 }
 
-/* Apply stylish to the <li> tag in the wanted HTML file */
-li {
-    /* Set listing style/type (dot points, square points, etc) */
-    list-style-type: none;
+.box .box-top {
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Apply stylish to the <a> tag in the wanted HTML file */
-a {
-    /* Set decoration for the text (underline, crossline, upperline, etc) */
-    text-decoration: none;
-    /* Set color for text which implemented inside <a> tag */
-    color: white;
-    /* Set font size for the text which implemented inside <a> tag */
-    font-size: 1rem;
+.box .box-bottom {
+    background-color: lightblue;
 }
 
-/* Apply stylish for hovering action in <a> tag which implemented in the wanted HTML file  */
-a:hover {
-    /* Set color for the text which implemented inside <a> tag when doing hover action on it */
-    color: orange;
-}
-
-/* HEADER STYLISH */
-
-/* Apply stylish to the <header> tag in the wanted HTML file */
-header {
-    /* Set positon of all elements implemented inside <header> tag */
+.youtube-iframe-container {
     position: relative;
-    /* Create border surronding the content inside */
-    padding: 0 2 rem;
-}
-
-/* Apply stylish to the "navbar" class in the wanted HTML file */
-.navbar {
-    /* Set the width for all elements implemented inside "navbar" class */
     width: 100%;
-    /* Set the height for all elements implemented inside "navbar" class */
-    height: 60px;
-    /* Create spacing between each boxes implemented inside ""navbar* class */
-    margin: 0 auto;
-    /* Set the type of displaying all elements implemented inside "navbar" class */
-    display: flex;
-    /* Set the allignment type for items/elements implemented inside "navbar" class */
-    align-items: center;
-    /* Set the allignment type for items/elements inside "navbar" class when it doesn't use up all of the remaining space correctly */
-    justify-content: space-between;
-    /* Set the background color for the elements implemented inside <body> tag */
-    background-color: hsl(0, 0%, 33%);    
-}
-
-/* Apply stylish to the <a> tag inside "logo" class in the wanted HTML file */
-.navbar .logo a {
-    /* Set font size for the text which implemented inside <a> tag */
-    font-size: 1.5rem;
-    /* Set font bolded level (thichker/thinner/default) based on dev preference */
-    font-weight: bold;
-}
-
-/* Apply stylish to the "navlinks" class in the wanted HTML file */
-.navbar .navlinks {
-    /* Set elemements display behaviour on the website (flexible, fixed, etc) */
-    display: flex;
-    /* Set the gap space between rows/columns/grid/multi-column for each elements inside */
-    gap: 2rem;
-}
-
-/* Apply stylish to the "toggle_button" class in the wanted HTML file */
-.navbar .toggle_button {
-    /* Set color for the button inside the custom class */
-    color: white;
-    /* Set font size for the text inside the button implemneted in the custom class */
-    font-size: 1.5rem;
-    /* Set types of cursor when hover on the button (pointer, none, etc) */
-    cursor: pointer;
-    /* Set elemements display behaviour on the website (flexible, fixed, etc) */    
-    display: none;
-}
-
-/* Apply stylish to the "action_button" class in the wanted HTML file */
-.action_button {
-    /* Set the background color for the button implemented inside the custom class */    
-    background-color: orange;
-    /* Set color for the button inside the custom class */    
-    color: white;
-    /* Create border surronding the content inside */
-    padding: 0.5rem 1rem;
-    /* Create border surrouding the padding (which surrounding the content) inside */
-    border: none;
-    /* Create a thin/thick line surrounding the border (which surrouding the padding that surrouding the content) inside to make it stand out */
-    outline: none;
-    /* Apply on the border of the box to create the curves for each corners (not necessary all 4 corners) */
-    border-radius: 20px;
-    /* Set font size for the text inside the button implemneted in the custom class */    
-    font-size: 0.8rem;
-    /* Set font bolded level (thichker/thinner/default) based on dev preference */
-    font-weight: bold;
-    /* Set types of cursor when hover on the button (pointer, none, etc) */
-    cursor: pointer;
-    /* Create the transition effect (smoothly or smooth over a given time/period) when clicked on the button implemented in the custom class */
-    transition: scale 0.2 ease;
-}
-
-/* Apply stylish for hovering action in "action_button" class which implemented in the wanted HTML file  */
-.action_button:hover {
-    /* Set the size of the button implemented when hovering on it in the custom class */
-    scale: 1.05;
-    /* Set color for the button implemented when hoveving on it in the custom class */    
-    color: white;
-}
-
-/* Apply stylish for the active action (clicked on the button) after hovering on it inside the "action_button" class which implemented in the wanted HTML file */
-.action_button:active {
-    /* Set the size of the button implemented when it in action action (clicked on the button) after hovering on it in the custom class */
-    scale: 0.95;
-}
-
-/* DROPDOWN MENU */
-
-/* Apply stylish to the "dropdrown_menu" class in the wanted HTML file */
-.dropdown_menu {
-    /* Set elemements display behaviour on the website (flexible, fixed, etc) */    
-    display: none;
-    /* Set the position of the navigation menu implemented in the custom class */
-    position: absolute;
-    /* Set the size for the right value of the navigation menu implemented in the custom class */
-    right: 2rem;
-    /* Set the size for the top(height) value of the navigation menu implemented in the custom class */
-    top: 60px;
-    /* Set the height for the naviation menu implemented inside the custom class */
-    height: 0;
-    /* Set the width for the navigation menu implemented inside the custom class */
-    width: 300px;
-    /* Set the background color for the navigation menu implemented inside the custom class */    
-    background-color: rgb(105, 105, 105);
-    /* Set the blurring effect for the navigaton menu's background implemented inside the custom class */
-    backdrop-filter: blur(15px);
-    /* Apply on the border of the box to create the curves for each corners (not necessary all 4 corners) */
-    border-radius: 10px;
-    /* Create a slidebar or clip the current elements when itself cannot be handled within' a certain size of box */
+    padding-bottom: 56.25%;
+    height: auto;
     overflow: hidden;
-    /* Create the transition effect (smoothly or smooth over a given time/period) when clicked on the dropdown bar implemented in the custom class */
-    transition: height .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Apply stylish for the custom "open" JS function in the wanted HTML file  */
-.dropdown_menu.open {
-    /* Set the height for the naviation menu implemented inside the custom class after clicked on the dropdown bar */
-    height: 240px;
-}
-
-/* Apply stylish for the <li> tag inside the "dropdown_menu" class implemented in the wanted HTML file  */
-.dropdown_menu li {
-    /* Create border surronding the content inside */
-    padding: 0.7rem;
-    /* Set elemements display behaviour on the website (flexible, fixed, etc) */    
-    display: flex;
-    /* Set the allignment type for items/elements implemented inside "navbar" class */
-    align-items: center;
-    /* Set the allignment type for items/elements inside "navbar" class when it doesn't use up all of the remaining space correctly */
-    justify-content: center;
-}
-
-/* Apply stylish for the "action_button" class inside the "dropdown_menu" class implemented in the wanted HTML file */
-.dropdown_menu .action_button {
-    /* Set the width for the button when clicked inside the dropdown bar implemented inside the custom class */
+.youtube-iframe-container iframe {
+    position: absolute;
     width: 100%;
-    /* Set elemements display behaviour on the website (flexible, fixed, etc) */    
-    display: flex;
-    /* Set the allignment type for items/elements inside "navbar" class when it doesn't use up all of the remaining space correctly */
-    justify-content: center;
-}
-
-/* RESPONSIVE */
-
-/* Modify some elements behaviour based on users' device setting conditons thorugh @media query (non-full Window resolution, high-contrast, invert-color for color differentiation disorder, etc)  */
-@media(max-width: 992px) {
-    /* TODO: need to find an explanation for this line of code */
-    .navbar .navlinks,
-    /* Apply stylish to the "action_button" class inside the "navbar" class implemented in the wanted HTML file so that it would meet users' device setting conditions */
-    .navbar .action_button {
-        /* Set elemements display behaviour on the website (flexible, fixed, etc) */    
-        display: none;
-    }
-
-    /* Apply stylish to the "toggle_button" class inside the "navbar" class implemented in the wanted HTML file so that it would meet users' device setting conditions */
-    .navbar .toggle_button {
-        /* Set elemements display behaviour on the website (flexible, fixed, etc) */    
-        display: block;
-    }
-
-    /* Apply stylish to the "dropdown_menu" class implemented in the wanted HTML file so that it would meet users' device setting conditions */
-    .dropdown_menu {
-        /* Set elemements display behaviour on the website (flexible, fixed, etc) */    
-        display: block;
-    }
-}
-
-/* Modify some elements behaviour based on users' device setting conditons thorugh @media query (non-full Window resolution, high-contrast, invert-color for color differentiation disorder, etc)  */
-@media(max-width: 992px) {
-    /* Apply stylish to the "dropdown_menu" class implemented in the wanted HTML file so that it would meet users' device setting conditions */
-    .dropdown_menu {
-        /* Set the size for the left value of the navigation menu implemented in the custom class after clicking the dropbar */
-        left: 2rem;
-         /* Set the width for the button when clicked inside the dropdown bar implemented inside the custom class */
-        width: unset;
-    }
+    height: 100%;
+    overflow: hidden;
 }
