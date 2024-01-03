@@ -33,7 +33,7 @@ a {
 }
 
 /* Apply stylish for hovering action in <a> tag which implemented in the wanted HTML file  */
-a:hover {
+header a:hover {
     /* Set color for the text which implemented inside <a> tag when doing hover action on it */
     color: orange;
 }
