@@ -1,0 +1,199 @@
+/* GLobal Styling.  */
+* {
+    /* TODO: This should be removable. */
+    margin: 0;
+    padding: 0;
+    /* Create 'box' where both padding & border values are included in when changing width & height values. */
+    /* Much more preferrable method to customize box of contents (in this case: Navigaton Bar). */
+    box-sizing: border-box;
+    /* Set Google font for the website. */
+    /* Always goes for 'system-ui' first as it's supported on all web browsers.
+       Otherwise, 'Segoe UI' is more preferrable.
+    */
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.users-image {
+    /* Adjust users image. */
+    /* TODO: This would need to be tweaked again after implementing PHP to call users
+    image data to appear on this website. */
+    /* For testing purposes, keep this for now. */
+    width: 50px;
+    border-radius: 100%;
+    border: 1px solid #eee;
+}
+
+nav {
+    /* Adjust itself to the nearest positioned attributes. */
+    /* If no positioned attributes were found, it will use the document body as it 
+    based to aligned to. */
+    position: absolute;
+    /* TODO: This should be removable. */
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 80px;
+    background-color: #12171e;
+    padding: 0.4rem 0.8rem;
+    transition: all 0.5s ease;
+}
+
+/* Sibling 2 different classes to have same CSS style. */
+/* TODO: Perhaps remove 'main-contents' and left values stil work. */
+nav.active-button ~ .main-contents {
+    left: 250px;
+    width: calc(100% - 250px);
+}
+
+nav.active-button {
+    /* Expand the width values when click on the 'menu' button. */
+    width: 250px;;
+}
+
+/* TODO: This part is really confusing. Might need to re-code. */
+nav #click-button {
+    position: absolute;
+    color: white;
+    top: .4rem;
+    left: 50%;
+    font-size: 1.2rem;
+    line-height: 50px;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+/* TODO: This part is really confusing. Might need to re-code. */
+nav.active-button #click-button {
+    left: 90%;
+}
+
+/* TODO: Might need to clean-up code. */
+nav .top-navigation-bar {
+    color: white;
+    display: flex;
+    height: 50px;
+    width: 100%;
+    align-items: center;
+    /* Prevent it changes the text-editing cursor. */
+    pointer-events: none;
+    /* Hidden when not click on the 'navigation' button. */
+    opacity: 0;
+}
+
+nav.active-button .top-navigation-bar {
+    /* Show when clicked on ''navigation' button. */
+    opacity: 1;
+}
+
+.top-navigation-bar i {
+    margin-right: 10px;
+}
+
+.users {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+}
+
+.users p {
+    font-weight: 600;
+    color: white;
+    opacity: 0;
+    margin-left: .5rem;
+}
+
+nav.active-button p {
+    opacity: 1;
+}
+
+/* NAVIGATION LINKS */
+
+nav ul li {
+    position: relative;
+    /* Remove dot-pointed. */
+    list-style-type: none;
+    height: 50px;
+    width: 90%;
+    margin: 0.8rem auto;
+    /* Shift the height of every <li> tags. */
+    line-height: 50px;
+}
+
+/* TODO: Have a second look at this block of codes. */
+nav ul li a {
+    color: white;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 4rem;
+    /* border: 5px solid red; */
+}
+
+nav ul li a:hover {
+    background-color: white;
+    color: #12171e;
+}
+
+nav ul li a i {
+    min-width: 50px;
+    text-align: center;
+    /* Align texts next to the icons (Not efficient this way). */
+    height: 15px;
+    border-radius: 12px;
+    line-height: 50px;
+}
+/* THis is the end of that block of codes. */
+
+nav .navigation-links {
+    opacity: 0;
+}
+
+nav.active-button .navigation-links {
+    opacity: 1;
+}
+
+/* TEXT NEXT TO THE NAV LINKS */
+
+/* TODO: HAve a second check for this block of codes. */
+nav ul li .small-navigation-links {
+    position: absolute;
+    left: 125px;
+    /* border: 5px solid green; */
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0.5rem 0.8rem rgba(0, 0, 0, 0.2);
+    border-radius: 1.2rem;
+    padding: .5rem 1.2rem;
+    line-height: 2rem;
+    z-index: 20;
+    opacity: 0;
+}
+
+nav ul li:hover .small-navigation-links {
+    opacity: 1;
+}
+
+nav.active-button ul li .small-navigation-links {
+    /* Hidden the small navigation links tool tip when clicked the 'menu' button. */
+    display: none;
+}
+
+/* HEADER */
+
+.main-contents {
+    position: relative;
+    background-color: #eee;
+    min-height: 100vh;
+    top: 0;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 80px);
+    padding: .7rem;
+}
+
+.containers {
+    display: flex;
+    justify-content: space-around;
+    /* border: 5px solid gray; */
+}
