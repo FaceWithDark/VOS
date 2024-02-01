@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Side Navigation Bar (For personal website purpose)</title>
+
+    <link rel="stylesheet" href="style(real).css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>    
+</head>
+    <body>
+        <nav>
+            <div class="top-navigation-bar">
+                <i class="bx bxs-navigation"></i>
+                <strong>Navigate</strong>
+            </div>
+
+            <i class="bx bx-menu" id="click-button"></i>
+            <div class="users">
+                <img src="#" alt="me" class="users-image">
+                <!-- Use PHP to call player name's after API passed -->
+                <p>Insert name here</p>
+            </div>
+
+            <ul>
+                <li>
+                    <a href="#">
+                        <i class="bx bxs-grid-alt"></i>
+                        <span class="navigation-links">Home</span>
+                    </a>
+                    <span class="small-navigation-links">Home</span>
+                </li>
+    
+                <li>
+                    <a href="#">
+                        <i class="bx bxs-box"></i>
+                        <span class="navigation-links">Archieve</span>
+                    </a>
+                    <span class="small-navigation-links">Archieve</span>
+                </li>
+    
+                <li>
+                    <a href="#">
+                        <i class="bx bxs-phone"></i>
+                        <span class="navigation-links">Staff</span>
+                    </a>
+                    <span class="small-navigation-links">Staff</span>
+                </li>
+    
+                <li>
+                    <a href="#">
+                        <i class="bx bxs-music"></i>
+                        <span class="navigation-links">Song</span>
+                    </a>
+                    <span class="small-navigation-links">Song</span>
+                </li>
+            </ul>
+        </nav>
+        
+        <section class="main-contents">
+            <div class="containers">
+                <h3>Lorem, ipsum dolor.</h3>
+                <h3>Lorem ipsum dolor sit amet.</h3>
+            </div>
+        </section>
+    </body>
+
+    <script>
+        let button = document.querySelector('#click-button');
+        let sideBar = document.querySelector('nav');
+
+        button.onclick = function () {
+            sideBar.classList.toggle('active-button');
+        };
+    </script>    
+</html>
