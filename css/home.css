@@ -1,0 +1,41 @@
+* {
+    font-family: "Montserrat", sans-serif;
+}
+
+.box {
+    display: relative;
+    /* width: 100%; */
+    background-color: lightgreen;
+    margin: 1rem 1.5rem 1.5rem 6.5rem;
+    /* border: 5px solid red; */
+    border-radius: 1rem;
+}
+
+.box .box-top {
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box .box-bottom {
+    background-color: lightblue;
+    /* border: 5px solid yellow; */
+}
+
+.youtube-iframe-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: auto;
+    overflow: hidden;
+}
+
+.youtube-iframe-container iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}

@@ -1,7 +1,5 @@
 <?php
     include 'navigation-bar.html';
-    // Start the on-going session throughtout all other webpages (stored within' the server's cookie sessions //TODO: need to implement cookies).
-    session_start()
 ?>
 
 <!DOCTYPE html>
@@ -62,8 +60,3 @@
         </form>
     </body>
 </html>
-
-<?php
-    // End the current session.
-    session_destroy();
-?>
