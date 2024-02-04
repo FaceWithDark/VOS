@@ -36,54 +36,74 @@ nav {
     /* TODO: This 2 should be removable. */
     top: 0;
     left: 0;
-    /*  */
+    /* Extend the navigation bar's height value. */
     height: 100vh;
+    /* Set navigation bar's width value (push the none-underlinded text under
+       the underlineded ones). 
+    */
     width: 80px;
+    /* Set navigation bar's background colour. */
     background-color: #12171e;
+    /* Tween the navigation bar in with padding around it so the transition 
+       can work properly. 
+    */
     padding: 0.4rem 0.8rem;
+    /* Create smooth ease transition within' set timer. */
     transition: all 0.5s ease;
 }
 
-/* Sibling 2 different classes to have same CSS style. */
-/* TODO: Perhaps remove 'main-contents' and left values stil work. */
+/* TODO: Perhaps remove the last 2 line of codes should work still fine. */
+nav #click-button {
+    /* Adjust itself to the nearest positioned attributes. */
+    /* If no positioned attributes were found, it will use the document body as it 
+    based to aligned to. */
+    position: absolute;
+    /* Change icon colour. */
+    color: white;
+    /* Push 'menu' icon up. */
+    top: .4rem;
+    /* Push 'menu' icon to the left. */
+    left: 70%;
+    /* line-height: 50px;
+    transform: translateX(-50%); */
+    cursor: pointer;
+}
+
+/* Both '.active-button' class & '.main-contents' class share the same CSS styling. */
+/* TODO: Perhaps remove this styling this works perfectly. */
 nav.active-button ~ .main-contents {
     left: 250px;
     width: calc(100% - 250px);
 }
 
 nav.active-button {
-    /* Expand the width values when click on the 'menu' button. */
+    /* Expand the navigation bar's width value when clicked on the 'menu' icon. */
     width: 250px;
 }
 
-/* TODO: This part is really confusing. Might need to re-code. */
-nav #click-button {
-    position: absolute;
-    color: white;
-    top: .4rem;
-    left: 50%;
-    font-size: 1.2rem;
-    line-height: 50px;
-    transform: translateX(-50%);
-    cursor: pointer;
-}
-
-/* TODO: This part is really confusing. Might need to re-code. */
 nav.active-button #click-button {
-    left: 90%;
+    /* Push 'menu'  icon to the left when cliked on. */
+    margin-left: 50px;
+    /* Create smooth ease transition within' set timer. */
+    transition: all 0.5s ease;
 }
 
-/* TODO: Might need to clean-up code. */
+/* TOURNAMENT HEAD TITLE INSIDE NAVIGATION BAR */
+
+/* TODO: Perhaps remove the width value should work still fine. */
 nav .top-navigation-bar {
+    /* Change colour for the text and icon attached in with the custom class. */
     color: white;
     display: flex;
-    height: 50px;
-    width: 100%;
-    align-items: center;
+    /* align-items: center; */
+    font-size: 1rem;
+    margin: 1rem 0;
+    /* width: 100%; */
+    border: 3px solid green;
     /* Prevent it changes the text-editing cursor. */
     pointer-events: none;
     /* Hidden when not click on the 'navigation' button. */
-    opacity: 0;
+    opacity: 0;    
 }
 
 nav.active-button .top-navigation-bar {
@@ -92,13 +112,23 @@ nav.active-button .top-navigation-bar {
 }
 
 .top-navigation-bar i {
-    margin-right: 10px;
+    margin-left: 3.7rem;
+    /* border: 3px solid red; */
 }
 
+.top-navigation-bar i strong {
+    margin-left: .3rem;
+}
+
+/* PROFILE DETAIL */
+
+/* TODO: Perhaps remove 'align-items' still work. */
 .users {
     display: flex;
+    /* Center evenly the text and avatar. */
     align-items: center;
     margin: 1.5rem 0;
+    border: 3px solid green;
 }
 
 .users p {
@@ -106,6 +136,7 @@ nav.active-button .top-navigation-bar {
     color: white;
     opacity: 0;
     margin-left: .5rem;
+    /* border: 3px solid red; */
 }
 
 nav.active-button p {
@@ -114,63 +145,69 @@ nav.active-button p {
 
 /* NAVIGATION LINKS */
 
+/* TODO: Perhaps 'line-height' can be replaced by 'padding' values. */
 nav ul li {
+    /* Shifting or customize the current elements only without affecting the bigger (or general) tag/custom class wrapping over it. */
     position: relative;
-    /* Remove dot-pointed. */
+    /* Remove dot-pointed on each <li> elements. */
     list-style-type: none;
-    height: 50px;
-    width: 90%;
+    height: 5vh;
     margin: 0.8rem auto;
-    /* Shift the height of every <li> tags. */
-    line-height: 50px;
+    width: 80%;
+    /* Height spacing between each line of texts. */
+    line-height: 5vh;
 }
 
-/* TODO: Have a second look at this block of codes. */
 nav ul li a {
     color: white;
     display: flex;
+    /* Center evenly the text and icon. */
     align-items: center;
+    /* Remove underlines. */
     text-decoration: none;
     border-radius: 4rem;
-    /* border: 5px solid red; */
 }
 
 nav ul li a:hover {
+    /* Set navigation links' background colour. */
     background-color: white;
+    /* Keep the navigation links' colour after hovering on top of it. */
     color: #12171e;
 }
 
+/* TODO: Perhaps remove 'height' & 'line-height' value still work. */
 nav ul li a i {
-    min-width: 50px;
+    min-width: 7vw;
     text-align: center;
-    /* Align texts next to the icons (Not efficient this way). */
-    height: 15px;
+    padding-right: 1.2rem;
+    /* height: 7vh; */
+    /* This might not needed. */
     border-radius: 12px;
-    line-height: 50px;
+    /* border: 3px solid green; */
+    /* line-height: 7vh; */
 }
-/* THis is the end of that block of codes. */
 
 nav .navigation-links {
     opacity: 0;
+    /* border: 3px solid blue; */
 }
-
 nav.active-button .navigation-links {
     opacity: 1;
 }
 
-/* TEXT NEXT TO THE NAV LINKS */
-
-/* TODO: HAve a second check for this block of codes. */
 nav ul li .small-navigation-links {
     position: absolute;
-    left: 125px;
-    /* border: 5px solid green; */
-    top: 50%;
-    transform: translate(-50%, -50%);
+    color: black;
+    font-weight: 500;
+    left: 5rem;
+    top: 0;
+    /* Create shadow for the current element. */
+    /* TODO: Need clearly understand this attribute yet. */
     box-shadow: 0 0.5rem 0.8rem rgba(0, 0, 0, 0.2);
     border-radius: 1.2rem;
-    padding: .5rem 1.2rem;
-    line-height: 2rem;
+    padding: 0 1.2rem;
+    line-height: 5vh;
+    /* TODO: Need more understand about this attribute. */
     z-index: 20;
     opacity: 0;
 }
@@ -186,19 +223,20 @@ nav.active-button ul li .small-navigation-links {
 
 /* HEADER */
 
+/* TODO: Might have to tweak around when putting contents in. */
 .main-contents {
     position: relative;
-    background-color: #eee;
+    background-color: white;
     min-height: 100vh;
     top: 0;
     left: 80px;
     transition: all 0.5s ease;
     width: calc(100% - 80px);
-    padding: .7rem;
+    padding: .5rem;
 }
 
 .containers {
     display: flex;
     justify-content: space-around;
-    /* border: 5px solid gray; */
+    /* border: 3px solid gray; */
 }

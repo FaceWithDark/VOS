@@ -1,53 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Website title name -->
-        <title>VOT</title>
-        <!-- Include CDNjs toolkit into the current HTML file -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <!-- Include CSS file into the current HTML file -->
-        <link rel="stylesheet" href="navigation-bar-style.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Website title name. -->
+    <title>VOT</title>
+
+    <!-- Import CSS styling file into the current HTML file. -->
+    <link rel="stylesheet" href="css/navigation-bar.css">
+    <!-- Import Boxicons icons into the current HTML file. -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>    
+</head>
     <body>
         <form action="navigation-bar.html" method="post">
-            <!-- Create header contents (Top of the website) -->
-            <header>
-                <!-- Create custom "navigation bar" class to stylish in CSS file -->
-                <div class="navbar">
-                    <!-- Create custom "logo" class to stylish in CSS file -->
-                    <div class="logo"><a href="index.php">VOT</a></div>
-                    <!-- Create listing element where order of the items inside not matter -->
-                    <ul class="navlinks">
-                        <!-- List of navigation links -->
-                        <li><a href="index.php">Home</a></li>
-                        <li><a href="archive.php">Archive</a></li>
-                        <li><a href="#">Staff</a></li>
-                        <li><a href="#">Song</a></li>
-                    </ul>
-                    <!-- Create custom "action button" class for stylishing button in CSS file -->
-                    <a href="login.php" class="action_button">Login</a>
-                    <!-- Create custom "toggle button" class for stylishing button in CSS file -->
-                    <div class="toggle_button">
-                        <!-- Create/Import custom stylish text -->
-                        <i class="fa-solid fa-bars"></i>
-                    </div>
+            <!-- Indicate the 'navigation' part of the current HTML file. -->
+            <nav>
+                <!-- Custom class for styling the 'top part' of the navigation bar. -->
+                <div class="top-navigation-bar">
+                    <!-- Import custom Boxicons icons' class. -->
+                    <!-- Bold the wanted text (less bolded than <h1> tag). -->
+                    <i class="bx bxs-navigation"><strong>Navigate</strong></i>
                 </div>
 
-                <!-- Create custom "slide down menu" class to stylish in CSS for better optimizing navigation bar when re-size Window resolution -->
-                <div class="dropdown_menu">
-                    <!-- List of navigation links -->
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="archive.php">Archive</a></li>
-                    <li><a href="#">Staff</a></li>
-                    <li><a href="#">Song</a></li>
-                    <!-- List a custom "action button" class which act the same as the navigation links above -->
-                    <li><a href="login.php" class="action_button">Login</a></li>
+                <!-- Import custom Boxicons icons' class -->
+                <!-- Custom 'id' class for styling when clicked on the 'menu' icon. -->
+                <i class="bx bx-menu" id="click-button"></i>
+
+                <!-- Custom class for styling users profile. -->
+                <div class="users">
+                    <!-- Customize the current imported image to fit with the wanted navigation bar. -->
+                    <img src="#" alt="me" class="users-image">
+                    <!-- TODO: Use PHP to call player name's after API passed. -->
+                    <p>Insert name here</p>
                 </div>
-            </header>
-            <!-- Include JS file into the current HTML file -->
-            <script src="buttonFucntion.js" type="text/javascript"></script>
+
+                <!-- Create an un-ordered list of elements. -->
+                <ul>
+                    <!-- Formatting elements into dot-point listed style. -->
+                    <li>
+                        <!-- Direct links. -->
+                        <a href="home.php">
+                            <!-- Import custom Boxicons icons' class. -->                            
+                            <i class="bx bxs-grid-alt"></i>
+                            <!-- Custom class to style 'Home' click button. -->
+                            <span class="navigation-links">Home</span>
+                        </a>
+                        <!-- Custom class to style 'Home' guide tip when re-sized 'menu' button. -->
+                        <span class="small-navigation-links">Home</span>
+                    </li>
+        
+                    <!-- Formatting elements into dot-point listed style. -->
+                    <li>
+                        <!-- Direct links. -->
+                        <a href="archive.php">
+                            <!-- Import custom Boxicons icons' class. -->
+                            <i class="bx bxs-box"></i>
+                            <!-- Custom class to style 'Archive' click button. -->
+                            <span class="navigation-links">Archive</span>
+                        </a>
+                        <!-- Custom class to style 'Archieve' guide tip when re-sized 'menu' button. -->
+                        <span class="small-navigation-links">Archive</span>
+                    </li>
+                    
+                    <!-- Formatting elements into dot-point listed style. -->
+                    <li>
+                        <!-- Direct links. -->
+                        <a href="staff.php">
+                            <!-- Import custom Boxicons icons' class. -->
+                            <i class="bx bxs-phone"></i>
+                            <!-- Custom class to style 'Staff' click button. -->
+                            <span class="navigation-links">Staff</span>
+                        </a>
+                        <!-- Custom class to style 'Staff' guide tip when re-sized 'menu' button. -->
+                        <span class="small-navigation-links">Staff</span>
+                    </li>
+ 
+                    <!-- Formatting elements into dot-point listed style. -->
+                    <li>
+                        <!-- Direct links. -->
+                        <a href="song.php">
+                            <!-- Import custom Boxicons icons' class. -->
+                            <i class="bx bxs-music"></i>
+                            <!-- Custom class to style 'Song' click button. -->
+                            <span class="navigation-links">Song</span>
+                        </a>
+                        <!-- Custom class to style 'Song' guide tip when re-sized 'menu' button. -->
+                        <span class="small-navigation-links">Song</span>
+                    </li>
+                </ul>
+            </nav>
         </form>
     </body>
+
+    <!-- Run JS function inside the current HTML file. -->
+    <script>
+        // Create custom click button function after clicked on the 'menu' icon.
+        let button = document.querySelector('#click-button');
+        // Create custom navigation bar function after clicked on the 'menu' icon.
+        let sideBar = document.querySelector('nav');
+
+        // Run a custom fuction when the customized click button is clicked.
+        button.onclick = function () {
+            // Toggling a custom class for the customized navigation bar called early on.
+            sideBar.classList.toggle('active-button');
+        };
+    </script>    
 </html>
