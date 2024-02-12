@@ -1,12 +1,11 @@
 /* GLobal Styling.  */
 * {
-    /* TODO: This 2 should be removable. */
+    /* First 3 lines are essential CSS trick to make life easier. */
     /* Create spacing between each boxes */
     margin: 0;
     /* Create border surrounding the content inside */
     padding: 0;
     /* Create 'box' where both padding & border values are included in when changing width & height values. */
-    /* Much more preferrable method to customize box of contents (in this case: Navigaton Bar). */
     box-sizing: border-box;
     /* Set Google font for the website. */
     /* Always goes for 'system-ui' first as it's supported on all web browsers.
@@ -49,7 +48,7 @@ nav {
     */
     padding: 0.4rem 0.8rem;
     /* Create smooth ease transition within' set timer. */
-    transition: all 0.5s ease;
+    transition: all 0.5s linear;
 }
 
 /* TODO: Perhaps remove the last 2 line of codes should work still fine. */
@@ -60,50 +59,52 @@ nav #click-button {
     position: absolute;
     /* Change icon colour. */
     color: white;
+    /* Change icon's size. */
+    font-size: 1.5rem;
     /* Push 'menu' icon up. */
-    top: .4rem;
+    top: .8rem;
     /* Push 'menu' icon to the left. */
-    left: 70%;
-    /* line-height: 50px;
-    transform: translateX(-50%); */
+    left: 35%;
+    /* transform: translateX(-50%); */
     cursor: pointer;
 }
 
 /* Both '.active-button' class & '.main-contents' class share the same CSS styling. */
 /* TODO: Perhaps remove this styling this works perfectly. */
 nav.active-button ~ .main-contents {
-    left: 250px;
-    width: calc(100% - 250px);
+    left: 200px;
+    width: calc(100% - 200px);
 }
 
 nav.active-button {
     /* Expand the navigation bar's width value when clicked on the 'menu' icon. */
-    width: 250px;
+    width: 200px;
 }
 
+/* TODO: Create back-and-forth smooth sliding effect using animation attribute perhaps. */
 nav.active-button #click-button {
     /* Push 'menu'  icon to the left when cliked on. */
-    margin-left: 50px;
+    margin-left: 6rem;
     /* Create smooth ease transition within' set timer. */
-    transition: all 0.5s ease;
+    transition: 0.5s linear;
 }
 
 /* TOURNAMENT HEAD TITLE INSIDE NAVIGATION BAR */
 
-/* TODO: Perhaps remove the width value should work still fine. */
+/* TODO: Perhaps remove the height value should work still fine. */
 nav .top-navigation-bar {
     /* Change colour for the text and icon attached in with the custom class. */
     color: white;
     display: flex;
-    /* align-items: center; */
-    font-size: 1rem;
-    margin: 1rem 0;
-    /* width: 100%; */
-    border: 3px solid green;
+    align-items: center;
+    /* height: 50px; */
+    margin: .5rem 0;
+    width: 90%;
     /* Prevent it changes the text-editing cursor. */
     pointer-events: none;
     /* Hidden when not click on the 'navigation' button. */
-    opacity: 0;    
+    opacity: 0;
+    transition: 0.3s;
 }
 
 nav.active-button .top-navigation-bar {
@@ -112,12 +113,12 @@ nav.active-button .top-navigation-bar {
 }
 
 .top-navigation-bar i {
-    margin-left: 3.7rem;
-    /* border: 3px solid red; */
+    margin: 0 1.5rem;
+    font-size: 1.2rem;
 }
 
 .top-navigation-bar i strong {
-    margin-left: .3rem;
+    padding: 0 .3rem;
 }
 
 /* PROFILE DETAIL */
@@ -128,7 +129,7 @@ nav.active-button .top-navigation-bar {
     /* Center evenly the text and avatar. */
     align-items: center;
     margin: 1.5rem 0;
-    border: 3px solid green;
+    border: 1px solid green;
 }
 
 .users p {
@@ -145,17 +146,17 @@ nav.active-button p {
 
 /* NAVIGATION LINKS */
 
-/* TODO: Perhaps 'line-height' can be replaced by 'padding' values. */
+/* TODO: Perhaps 'height' can be replaced by 'padding' values. */
 nav ul li {
     /* Shifting or customize the current elements only without affecting the bigger (or general) tag/custom class wrapping over it. */
     position: relative;
     /* Remove dot-pointed on each <li> elements. */
     list-style-type: none;
-    height: 5vh;
-    margin: 0.8rem auto;
-    width: 80%;
+    /* height: 70px; */
+    margin: 3rem auto;
+    width: 90%;
     /* Height spacing between each line of texts. */
-    line-height: 5vh;
+    line-height: 50px;
 }
 
 nav ul li a {
@@ -175,30 +176,28 @@ nav ul li a:hover {
     color: #12171e;
 }
 
-/* TODO: Perhaps remove 'height' & 'line-height' value still work. */
+/* TODO: Perhaps remove last 3 attributes still work. */
 nav ul li a i {
-    min-width: 7vw;
+    min-width: 48px;
     text-align: center;
-    padding-right: 1.2rem;
-    /* height: 7vh; */
-    /* This might not needed. */
-    border-radius: 12px;
-    /* border: 3px solid green; */
-    /* line-height: 7vh; */
+    /* height: 15px; */
+    font-size: 1.2rem;
+    /* border-radius: 12px; */
+    /* line-height: 48px; */
+    /* border: 1px solid red; */
 }
 
 nav .navigation-links {
     opacity: 0;
-    /* border: 3px solid blue; */
 }
 nav.active-button .navigation-links {
     opacity: 1;
 }
 
+/* TEXT NEXT TO THE NAV LINKS */
+
 nav ul li .small-navigation-links {
     position: absolute;
-    color: black;
-    font-weight: 500;
     left: 5rem;
     top: 0;
     /* Create shadow for the current element. */
@@ -221,22 +220,20 @@ nav.active-button ul li .small-navigation-links {
     display: none;
 }
 
-/* HEADER */
+/* SHORT TOURNAMENT BOX ANNOUCEMENT */
 
-/* TODO: Might have to tweak around when putting contents in. */
-.main-contents {
+/* .main-contents {
     position: relative;
-    background-color: white;
+    background-color: #eee;
     min-height: 100vh;
     top: 0;
     left: 80px;
     transition: all 0.5s ease;
     width: calc(100% - 80px);
-    padding: .5rem;
+    padding: .7rem;
 }
 
 .containers {
     display: flex;
     justify-content: space-around;
-    /* border: 3px solid gray; */
-}
+} */
