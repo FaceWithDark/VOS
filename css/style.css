@@ -51,6 +51,18 @@ nav {
     transition: all 0.5s linear;
 }
 
+/* Both '.active-button' class & '.main-contents' class share the same CSS styling. */
+/* TODO: Perhaps remove this styling this works perfectly. */
+nav.active-button ~ .tournament-news {
+    left: 200px;
+    width: calc(100% - 200px);
+}
+
+nav.active-button {
+    /* Expand the navigation bar's width value when clicked on the 'menu' icon. */
+    width: 200px;
+}
+
 /* TODO: Perhaps remove the last 2 line of codes should work still fine. */
 nav #click-button {
     /* Adjust itself to the nearest positioned attributes. */
@@ -67,18 +79,6 @@ nav #click-button {
     left: 35%;
     /* transform: translateX(-50%); */
     cursor: pointer;
-}
-
-/* Both '.active-button' class & '.main-contents' class share the same CSS styling. */
-/* TODO: Perhaps remove this styling this works perfectly. */
-nav.active-button ~ .main-contents {
-    left: 200px;
-    width: calc(100% - 200px);
-}
-
-nav.active-button {
-    /* Expand the navigation bar's width value when clicked on the 'menu' icon. */
-    width: 200px;
 }
 
 /* TODO: Create back-and-forth smooth sliding effect using animation attribute perhaps. */
@@ -146,17 +146,16 @@ nav.active-button p {
 
 /* NAVIGATION LINKS */
 
-/* TODO: Perhaps 'height' can be replaced by 'padding' values. */
 nav ul li {
     /* Shifting or customize the current elements only without affecting the bigger (or general) tag/custom class wrapping over it. */
     position: relative;
     /* Remove dot-pointed on each <li> elements. */
     list-style-type: none;
-    /* height: 70px; */
-    margin: 3rem auto;
+    height: 185px;
+    margin: 2rem auto;
     width: 90%;
     /* Height spacing between each line of texts. */
-    line-height: 50px;
+    line-height: 75px;
 }
 
 nav ul li a {
@@ -178,7 +177,7 @@ nav ul li a:hover {
 
 /* TODO: Perhaps remove last 3 attributes still work. */
 nav ul li a i {
-    min-width: 48px;
+    min-width: 50px;
     text-align: center;
     /* height: 15px; */
     font-size: 1.2rem;
@@ -194,23 +193,6 @@ nav.active-button .navigation-links {
     opacity: 1;
 }
 
-/* TEXT NEXT TO THE NAV LINKS */
-
-nav ul li .small-navigation-links {
-    position: absolute;
-    left: 5rem;
-    top: 0;
-    /* Create shadow for the current element. */
-    /* TODO: Need clearly understand this attribute yet. */
-    box-shadow: 0 0.5rem 0.8rem rgba(0, 0, 0, 0.2);
-    border-radius: 1.2rem;
-    padding: 0 1.2rem;
-    line-height: 5vh;
-    /* TODO: Need more understand about this attribute. */
-    z-index: 20;
-    opacity: 0;
-}
-
 nav ul li:hover .small-navigation-links {
     opacity: 1;
 }
@@ -222,18 +204,50 @@ nav.active-button ul li .small-navigation-links {
 
 /* SHORT TOURNAMENT BOX ANNOUCEMENT */
 
-/* .main-contents {
+.tournament-news {
     position: relative;
-    background-color: #eee;
+    /* background-color: #eee; */
     min-height: 100vh;
     top: 0;
     left: 80px;
     transition: all 0.5s ease;
     width: calc(100% - 80px);
     padding: .7rem;
+    z-index: -1;
+}
+/* BUG: Still show the body background when clicked the 'menu' icon. */
+
+.information-box {
+    /* border: 3px solid orange; */
+    background-color: lightcoral;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
 }
 
-.containers {
+.main-title {
     display: flex;
-    justify-content: space-around;
-} */
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.main-content {
+    padding: 1rem 0;
+    font-size: 1rem;
+}
+
+.youtube-iframe-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: auto;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+.youtube-iframe-container iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}   
