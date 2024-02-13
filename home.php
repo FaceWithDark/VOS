@@ -12,7 +12,7 @@
 
 </head>
     <!-- Set backhround color -->
-    <body style="background-color: #367588;">
+    <body>
         <form action="index.php" method="post">
             <!-- Indicate the 'navigation' part of the current HTML file. -->
             <nav>
@@ -46,8 +46,6 @@
                             <!-- Custom class to style 'Home' click button. -->
                             <span class="navigation-links">Home</span>
                         </a>
-                        <!-- Custom class to style 'Home' guide tip when re-sized 'menu' button. -->
-                        <span class="small-navigation-links">Home</span>
                     </li>
         
                     <!-- Formatting elements into dot-point listed style. -->
@@ -59,8 +57,6 @@
                             <!-- Custom class to style 'Archive' click button. -->
                             <span class="navigation-links">Archive</span>
                         </a>
-                        <!-- Custom class to style 'Archieve' guide tip when re-sized 'menu' button. -->
-                        <span class="small-navigation-links">Archive</span>
                     </li>
                     
                     <!-- Formatting elements into dot-point listed style. -->
@@ -72,8 +68,6 @@
                             <!-- Custom class to style 'Staff' click button. -->
                             <span class="navigation-links">Staff</span>
                         </a>
-                        <!-- Custom class to style 'Staff' guide tip when re-sized 'menu' button. -->
-                        <span class="small-navigation-links">Staff</span>
                     </li>
  
                     <!-- Formatting elements into dot-point listed style. -->
@@ -85,8 +79,6 @@
                             <!-- Custom class to style 'Song' click button. -->
                             <span class="navigation-links">Song</span>
                         </a>
-                        <!-- Custom class to style 'Song' guide tip when re-sized 'menu' button. -->
-                        <span class="small-navigation-links">Song</span>
                     </li>
                 </ul>
             </nav>
@@ -99,9 +91,9 @@
                     <div class="main-title">Vietnamese osu!taiko Tournament</div>
                     <!-- Customclass for styling the content part of each box -->
                     <p class="main-content">Welcome to the website of the biggest vietnamese osu!taiko tournament battlefield ! In here, you can look at everything related to VOT, with pages for all our current and past tournaments!</p>
-                    <div class="youtube-iframe-container">
+                    <!-- <div class="youtube-iframe-container">
                         <iframe src="https://www.youtube.com/embed/aeUVQe7irW4?si=HmFiaAGYbrz5fCuR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="information-box">

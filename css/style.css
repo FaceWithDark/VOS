@@ -48,7 +48,7 @@ nav {
     */
     padding: 0.4rem 0.8rem;
     /* Create smooth ease transition within' set timer. */
-    transition: all 0.5s linear;
+    transition: all 0.3s linear;
 }
 
 /* Both '.active-button' class & '.main-contents' class share the same CSS styling. */
@@ -86,7 +86,7 @@ nav.active-button #click-button {
     /* Push 'menu'  icon to the left when cliked on. */
     margin-left: 6rem;
     /* Create smooth ease transition within' set timer. */
-    transition: 0.5s linear;
+    transition: 0.3s linear;
 }
 
 /* TOURNAMENT HEAD TITLE INSIDE NAVIGATION BAR */
@@ -179,9 +179,10 @@ nav ul li a:hover {
 nav ul li a i {
     min-width: 50px;
     text-align: center;
-    /* height: 15px; */
+    /* height: 13px; */
     font-size: 1.2rem;
-    /* border-radius: 12px; */
+    border-radius: 12px;
+    /* background-color: pink; */
     /* line-height: 48px; */
     /* border: 1px solid red; */
 }
@@ -191,29 +192,21 @@ nav .navigation-links {
 }
 nav.active-button .navigation-links {
     opacity: 1;
-}
-
-nav ul li:hover .small-navigation-links {
-    opacity: 1;
-}
-
-nav.active-button ul li .small-navigation-links {
-    /* Hidden the small navigation links tool tip when clicked the 'menu' button. */
-    display: none;
+    margin: 0 0 .2rem .5rem;
 }
 
 /* SHORT TOURNAMENT BOX ANNOUCEMENT */
 
+/* TODO: Perhaps remove top value will still work. */
 .tournament-news {
     position: relative;
-    /* background-color: #eee; */
+    background-color: #eee;
     min-height: 100vh;
-    top: 0;
+    /* top: 0; */
     left: 80px;
     transition: all 0.5s ease;
     width: calc(100% - 80px);
-    padding: .7rem;
-    z-index: -1;
+    padding: 1rem;
 }
 /* BUG: Still show the body background when clicked the 'menu' icon. */
 
@@ -236,7 +229,7 @@ nav.active-button ul li .small-navigation-links {
     font-size: 1rem;
 }
 
-.youtube-iframe-container {
+/* .youtube-iframe-container {
     position: relative;
     width: 100%;
     padding-bottom: 56.25%;
@@ -250,4 +243,4 @@ nav.active-button ul li .small-navigation-links {
     width: 100%;
     height: 100%;
     overflow: hidden;
-}   
+}    */
