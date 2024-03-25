@@ -10,7 +10,7 @@
 }
 
 body {
-    background-color: #F3EEEA;
+    background-color: #8b8c89;
     /* Trick for font sizing. */
     font-size: 100%;
 }
@@ -201,36 +201,37 @@ nav.active-button .navigation-links {
 
 /* SHORT TOURNAMENT BOX ANNOUCEMENT */
 
-/* TODO: Perhaps remove top value will still work. */
 .tournament-news {
     position: relative;
-    background-color: #eee;
     min-height: 100vh;
-    /* top: 0; */
     left: 80px;
     transition: all 0.5s ease;
     width: calc(100% - 80px);
     padding: 1rem;
 }
-/* BUG: Still show the body background when clicked the 'menu' icon. */
 
+/* BUG: Still show the body background when clicked the 'menu' icon. */
 .information-box {
-    /* border: 3px solid orange; */
-    background-color: lightcoral;
+    background-color: #a3cef1;
     margin-bottom: 1rem;
-    border-radius: 1rem;
+    border-radius: 1.5rem;
+    border: 3px solid whitesmoke;
 }
 
-.main-title {
+.information-box h2 {
     display: flex;
     justify-content: center;
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-weight: bold;
+    padding: 1rem 0;
+    color: #274c77;
 }
 
-.main-content {
-    padding: 1rem 0;
+.information-box p {
     font-size: 1rem;
+    color: #e7ecef;
+    font-weight: 500;
+    padding-left: .5rem;
+    padding-bottom: 1rem;
 }
 
 
@@ -255,9 +256,7 @@ nav.active-button .navigation-links {
 
 .archieved-page {
     position: relative;
-    background-color: #eee;
     min-height: 100vh;
-    /* top: 0; */
     left: 80px;
     transition: all 0.5s ease;
     width: calc(100% - 80px);
@@ -267,37 +266,44 @@ nav.active-button .navigation-links {
 h1 {
     display: flex;
     justify-content: center;
-    font-size: 1.7rem;
-    color: #7C9D96;
-    margin: .5rem;
+    color: #e7ecef;
+    padding-bottom: 2.5rem;
 }
 
 .flex-container {
     display: flex;
-    /* Create gap between each elements. */
-    margin-top: 1rem;
-    /* Center text. */
     text-align: center;
     justify-content: space-between;
 }
 
 .box-of-content {
-    background-color: lightcoral;
+    background-color: #a3cef1;
     padding: 1rem;
     margin: 0 1rem;
+<<<<<<< Updated upstream
     border-radius: 25px;
     border: 5px solid lightgray;
 }
 
 .box-of-content a {
     color: lightgreen;
+=======
+    text-decoration: none;
+    border-radius: 1.5rem;
+    border: 3px solid whitesmoke;
+}
+
+.box-of-content a {
+    text-decoration: none;
+    color: #274c77;
+>>>>>>> Stashed changes
     font-weight: bold;
     font-size: 13.6px;
 }
 
 .box-of-content p {
     user-select: none;
-    color: lightgreen;
+    color: #274c77;
     font-weight: bold;
     font-size: 13.6px;
 }
