@@ -1,5 +1,5 @@
 <?php
-    include 'navigation-bar.html';
+    include './navigation-bar.html';
 ?>
 
 <!DOCTYPE html>
@@ -8,9 +8,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VOT</title>
-
-    <link rel="stylesheet" href="css/style.css">
-
 </head>
     <body>
         <div class="archieved-page">
