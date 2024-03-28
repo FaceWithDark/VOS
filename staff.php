@@ -20,7 +20,7 @@
 
             <section>
                 <!-- TODO: 
-                        - Inlcude avatar and other related info in.
+                        - Include avatar and other related info in.
                         - PHP can handle this. Need to get data from osu! API only.
                  -->
                 <div class="flex-container">
