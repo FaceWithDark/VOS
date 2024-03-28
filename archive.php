@@ -39,15 +39,15 @@
                     </div>
 
                     <div class="box-of-content">
-                        <p>Vietnam osu!taiko Tournament 4 (COMING SOON)</p>
+                        <a>Vietnam osu!taiko Tournament 4 (COMING SOON)</a>
                     </div>
 
                     <div class="box-of-content">
-                        <p>Vietnam osu!taiko Tournament 5 (COMING SOON)</p>
+                        <a>Vietnam osu!taiko Tournament 5 (COMING SOON)</a>
                     </div>
                     
                     <div class="box-of-content">
-                        <p>Vietnam osu!taiko Tournament 6 (COMING SOON)</p>
+                        <a>Vietnam osu!taiko Tournament 6 (COMING SOON)</a>
                     </div>
                 </div>
             </section>
