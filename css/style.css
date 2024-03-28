@@ -9,112 +9,149 @@
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+/* 
+    General styling used for multi-purpose.
+    This can be use to shared same functionality across all pages.
+ */
 body {
     background-color: #8b8c89;
     /* Trick for font sizing. */
     font-size: 100%;
 }
 
+h1 {
+    display: flex;
+    justify-content: center;
+    color: #e7ecef;
+    padding-bottom: 2.5rem;
+}
+
+.flex-container {
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+}
+
 .users-image {
+    /* TODO: 
+        - Osu! avatar called from osu! API. PHP can do this easily.
+        - This tough but just need some time to dig in for it.
+     */
+
     /* Adjust users avatar width. */
-    /* TODO: This would need to be tweaked again after implementing PHP to call users
-    image data to appear on this website. */
-    /* For testing purposes, keep this for now. */
     width: 50px;
-    /* Circlize the avatar. */
     border-radius: 100%;
-    /* Slight border colour for better UI. */
     border: 1px solid #eee;
 }
 
 nav {
-    /* Adjust itself to the nearest positioned attributes. */
-    /* If no positioned attributes were found, it will use the document body as it 
-    based to aligned to. */
+    /*
+        Adjust itself to the nearest positioned attributes.
+    
+        If no positioned attributes were found, it will use 
+        the document body as it based to aligned to. 
+    */
     position: absolute;
-    /* TODO: This 2 should be removable. */
+    /* Can have a quick check if this 2 can be removed or not. */
     top: 0;
     left: 0;
     /* Extend the navigation bar's height value. */
     height: 100vh;
-    /* Set navigation bar's width value (push the none-underlinded text under
-       the underlineded ones). 
-    */
+    /* Re-size the navigation bar's default width size. */
     width: 80px;
-    /* Set navigation bar's background colour. */
     background-color: #12171e;
-    /* Tween the navigation bar in with padding around it so the transition 
-       can work properly. 
+    /* 
+        Tween the navigation bar in with padding around it 
+        so the transition can work properly. 
     */
     padding: 0.4rem 0.8rem;
-    /* Create smooth ease transition within' set timer. */
+    /* 
+        Smooth linear effect. (Time can be adjusted after 
+        user's feedback on it) 
+    */
     transition: all 0.3s linear;
 }
 
 nav.active-button {
-    /* Expand the navigation bar's width value when clicked on the 'menu' icon. */
+    /* Expand navigation bar's width after clicking 'menu' icon. */
     width: 200px;
 }
 
-/* Responsive with Navigation bar when it extended. */
-/* TODO: Perhaps remove this styling this works perfectly. */
+/* 
+    All contents contained within the set class will be 
+    responsive with Navigation bar when it extended. 
+*/
+
+/* TODO: Combine all of them into 1 class for maintainability. */
 nav.active-button ~ .tournament-news {
     left: 200px;
     width: calc(100% - 200px);
 }
 
-/* Responsive with Navigation bar when it extended. */
 nav.active-button ~ .archieved-page {
     left: 200px;
     width: calc(100% - 200px);
 }
 
-/* TODO: Perhaps remove the last 2 line of codes should work still fine. */
+nav.active-button ~ .staff-page {
+    left: 200px;
+    width: calc(100% - 200px);
+}
+
+nav.active-button ~ .song-page {
+    left: 200px;
+    width: calc(100% - 200px);
+}
+
+
+/* SIDEWAY NAVIGATION BAR BUTTON */
+
 nav #click-button {
-    /* Adjust itself to the nearest positioned attributes. */
-    /* If no positioned attributes were found, it will use the document body as it 
-    based to aligned to. */
+    /*
+        Adjust itself to the nearest positioned attributes.
+    
+        If no positioned attributes were found, it will use 
+        the document body as it based to aligned to. 
+    */
     position: absolute;
-    /* Change icon colour. */
     color: white;
-    /* Change icon's size. */
     font-size: 1.5rem;
     /* Push 'menu' icon up. */
     top: .8rem;
     /* Push 'menu' icon to the left. */
     left: 35%;
+    /* Maybe 'transform' styling is not needed. */
     /* transform: translateX(-50%); */
     cursor: pointer;
 }
 
-/* TODO: Create back-and-forth smooth sliding effect using animation attribute perhaps. */
+/* The effect is a bit un-smooth + too fast somehow. */
 nav.active-button #click-button {
-    /* Push 'menu'  icon to the left when cliked on. */
+    /* Push 'menu' icon to the left when cliked on. */
     margin-left: 6rem;
-    /* Create smooth ease transition within' set timer. */
+    /* 
+        Smooth linear effect. (Time can be adjusted after 
+        user's feedback on it) 
+    */
     transition: 0.3s linear;
 }
 
-/* TOURNAMENT HEAD TITLE INSIDE NAVIGATION BAR */
+/* SIDEWAY NAVIGATION BAR TITLE */
 
 /* TODO: Perhaps remove the height value should work still fine. */
 nav .top-navigation-bar {
-    /* Change colour for the text and icon attached in with the custom class. */
-    color: white;
     display: flex;
     align-items: center;
     /* height: 50px; */
     margin: .5rem 0;
     width: 90%;
-    /* Prevent it changes the text-editing cursor. */
-    pointer-events: none;
-    /* Hidden when not click on the 'navigation' button. */
+    color: white;
+    user-select: none;
+    transition: all 0.15s linear;
     opacity: 0;
-    transition: 0.3s;
 }
 
 nav.active-button .top-navigation-bar {
-    /* Show when clicked on ''navigation' button. */
     opacity: 1;
 }
 
@@ -129,10 +166,13 @@ nav.active-button .top-navigation-bar {
 
 /* PROFILE DETAIL */
 
-/* TODO: Perhaps remove 'align-items' still work. */
+/* TODO: 
+    - Osu! username called from osu! API. PHP can do this easily.
+    - This tough but just need some time to dig in for it.
+*/
+
 .users {
     display: flex;
-    /* Center evenly the text and avatar. */
     align-items: center;
     margin: 1.5rem 0;
     border: 1px solid green;
@@ -143,21 +183,23 @@ nav.active-button .top-navigation-bar {
     color: white;
     opacity: 0;
     margin-left: .5rem;
-    /* border: 3px solid red; */
 }
 
 nav.active-button p {
     opacity: 1;
 }
 
+
 /* NAVIGATION LINKS */
 
 nav ul li {
-    /* Shifting or customize the current elements only without affecting the bigger (or general) tag/custom class wrapping over it. */
+    /* 
+        Shifting or customize the current elements only without 
+        affecting the bigger (or general) tag/custom class wrapping over it. 
+    */
     position: relative;
-    /* Remove dot-pointed on each <li> elements. */
     list-style-type: none;
-    height: 185px;
+    height: 185px; /* This is not a good code write at all. Need fix ASAP. */
     margin: 2rem auto;
     width: 90%;
     /* Height spacing between each line of texts. */
@@ -167,28 +209,23 @@ nav ul li {
 nav ul li a {
     color: white;
     display: flex;
-    /* Center evenly the text and icon. */
     align-items: center;
     border-radius: 4rem;
 }
 
 nav ul li a:hover {
-    /* Set navigation links' background colour. */
     background-color: white;
-    /* Keep the navigation links' colour after hovering on top of it. */
     color: #12171e;
 }
 
-/* TODO: Perhaps remove last 3 attributes still work. */
+/* TODO: Perhaps remove 'line-height' & 'height' still work. */
 nav ul li a i {
     min-width: 50px;
     text-align: center;
     /* height: 13px; */
     font-size: 1.2rem;
     border-radius: 12px;
-    /* background-color: pink; */
     /* line-height: 48px; */
-    /* border: 1px solid red; */
 }
 
 nav .navigation-links {
@@ -197,6 +234,19 @@ nav .navigation-links {
 nav.active-button .navigation-links {
     opacity: 1;
     margin: 0 0 .2rem .5rem;
+}
+
+nav .small-navigation-links {
+    display: flex;
+    justify-content: center;
+    color: white;
+    opacity: 1;
+    transition: all 0.1s linear;
+}
+
+nav.active-button .small-navigation-links {
+    opacity: 0;
+    transition: all 0.1s linear;
 }
 
 /* SHORT TOURNAMENT BOX ANNOUCEMENT */
@@ -210,7 +260,6 @@ nav.active-button .navigation-links {
     padding: 1rem;
 }
 
-/* BUG: Still show the body background when clicked the 'menu' icon. */
 .information-box {
     background-color: #a3cef1;
     margin-bottom: 1rem;
@@ -234,8 +283,7 @@ nav.active-button .navigation-links {
     padding-bottom: 1rem;
 }
 
-
-/* .youtube-iframe-container {
+.youtube-iframe-container {
     position: relative;
     width: 100%;
     padding-bottom: 56.25%;
@@ -249,7 +297,7 @@ nav.active-button .navigation-links {
     width: 100%;
     height: 100%;
     overflow: hidden;
-}    */
+}   
 
 
 /* ARCHIEVE PAGE */
@@ -263,47 +311,43 @@ nav.active-button .navigation-links {
     padding: 1rem;
 }
 
-h1 {
-    display: flex;
-    justify-content: center;
-    color: #e7ecef;
-    padding-bottom: 2.5rem;
-}
-
-.flex-container {
-    display: flex;
-    text-align: center;
-    justify-content: space-between;
-}
-
 .box-of-content {
     background-color: #a3cef1;
     padding: 1rem;
     margin: 0 1rem;
-<<<<<<< Updated upstream
     border-radius: 25px;
-    border: 5px solid lightgray;
-}
-
-.box-of-content a {
-    color: lightgreen;
-=======
-    text-decoration: none;
-    border-radius: 1.5rem;
     border: 3px solid whitesmoke;
 }
 
 .box-of-content a {
-    text-decoration: none;
     color: #274c77;
->>>>>>> Stashed changes
     font-weight: bold;
     font-size: 13.6px;
+    text-decoration: none;
+    /* For upcoming tournaments links. */
+    user-select: none;
 }
 
-.box-of-content p {
-    user-select: none;
-    color: #274c77;
-    font-weight: bold;
-    font-size: 13.6px;
+
+/* STAFF PAGE */
+
+.staff-page {
+    position: relative;
+    min-height: 100vh;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 80px);
+    padding: 1rem;
+}
+
+
+/* SONG PAGE */
+
+.song-page {
+    position: relative;
+    min-height: 100vh;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 80px);
+    padding: 1rem;
 }

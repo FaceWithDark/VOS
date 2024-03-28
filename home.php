@@ -87,9 +87,9 @@
             <div class="information-box" id="annoucement-box">
                 <h2>Vietnamese osu!taiko Tournament</h2>
                 <p>Welcome to the website of the biggest vietnamese osu!taiko tournament battlefield ! In here, you can look at everything related to VOT, with pages for all our current and past tournaments!</p>
-                <!-- <div class="youtube-iframe-container">
+                <div class="youtube-iframe-container">
                     <iframe src="https://www.youtube.com/embed/aeUVQe7irW4?si=HmFiaAGYbrz5fCuR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                </div> -->
+                </div>
             </div>
 
             <div class="information-box">
