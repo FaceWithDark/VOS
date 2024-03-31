@@ -1,0 +1,8 @@
+# Not commit "enviroment" file.
+**/.env
+
+# Not commit "image" folder.
+**/img
+
+# Not commit "vendor" folder.
+**/vendor
