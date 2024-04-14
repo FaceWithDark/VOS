@@ -1,3 +1,12 @@
+<?php
+
+    use Dotenv\Dotenv;
+    include './vendor/autoload.php';
+
+    $dotenv = Dotenv::createImmutable(__DIR__);
+    $dotenv -> load();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +45,7 @@
                         - Disappear this part when logged in.
                         - 'Logout' button will be implementing after the 'Song' icon.
                     -->
-                    <a href="#">
+                    <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=http://localhost/VOT/oauth/token_callback.php&response_type=code&scope=public+identify&state=randomise">
                         <i class='bx bx-user-plus'></i>
                         <span class="navigation-links">Login</span>
                     </a>

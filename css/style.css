@@ -176,6 +176,8 @@ nav.active-button .top-navigation-bar {
     align-items: center;
     margin: 1.5rem 0;
     border: 1px solid green;
+    /* Maybe need JS to handle this. This will be hide when users not logged in yet. Show again when logged in. */
+    /* opacity: 0; */
 }
 
 .users p {

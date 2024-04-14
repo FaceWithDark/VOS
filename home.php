@@ -1,5 +1,5 @@
 <?php
-    include './navigation-bar.html';
+    include 'oauth/navigation_bar.php';
 ?>
 
 <!DOCTYPE html>
