@@ -3,93 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Website title name. -->
     <title>VOT</title>
 
-    <!-- Import CSS styling file into the current HTML file. -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- Import Boxicons icons into the current HTML file. -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
     <body>
-        <!-- Indicate the 'navigation' part of the current HTML file. -->
         <nav>
-            <!-- Custom class for styling the 'top part' of the navigation bar. -->
             <div class="top-navigation-bar">
-                <!-- Import custom Boxicons icons' class. -->
-                <!-- Bold the wanted text (less bolded than <h1> tag). -->
                 <i class="bx bxs-navigation"><strong>Navigate</strong></i>
             </div>
 
-            <!-- Import custom Boxicons icons' class -->
-            <!-- Custom 'id' class for styling when clicked on the 'menu' icon. -->
             <i class="bx bx-menu" id="click-button"></i>
 
-            <!-- Custom class for styling users profile. -->
             <div class="users">
-                <!-- Customize the current imported image to fit with the wanted navigation bar. -->
+                <!-- 
+                    TODO:
+                    - Access this information from SQL using PHP.
+                    - This will be hidden when user not logged in yet.
+                    - Re-appear when logged in and hide the 'Login' button.
+                    - Show 'Logout' button at the same time as showing this user info.
+                -->
                 <img src="#" alt="me" class="users-image">
-                <!-- TODO: Use PHP to call player name's after API passed. -->
                 <p>Insert name here</p>
             </div>
 
-            <!-- Create an un-ordered list of elements. -->
             <ul>
-                <!-- Formatting elements into dot-point listed style. -->
                 <li>
-                    <!-- Direct links. -->
+                    <!-- 
+                        TODO: 
+                        - OAuth Login Format here. 
+                        - Disappear this part when logged in.
+                        - 'Logout' button will be implementing after the 'Song' icon.
+                    -->
+                    <a href="#">
+                        <i class='bx bx-user-plus'></i>
+                        <span class="navigation-links">Login</span>
+                    </a>
+                    <span class="small-navigation-links">Login</span>
+                </li>
+
+                <li>
                     <a href="home.php">
-                        <!-- Import custom Boxicons icons' class. -->                            
                         <i class="bx bxs-grid-alt"></i>
-                        <!-- Custom class to style 'Home' click button. -->
                         <span class="navigation-links">Home</span>
                     </a>
-                    <!-- Custom class to style 'Home' guide tip when re-sized 'menu' button. -->
                     <span class="small-navigation-links">Home</span>
                 </li>
     
-                <!-- Formatting elements into dot-point listed style. -->
                 <li>
-                    <!-- Direct links. -->
                     <a href="archive.php">
-                        <!-- Import custom Boxicons icons' class. -->
                         <i class="bx bxs-box"></i>
-                        <!-- Custom class to style 'Archive' click button. -->
                         <span class="navigation-links">Archive</span>
                     </a>
-                    <!-- Custom class to style 'Archieve' guide tip when re-sized 'menu' button. -->
                     <span class="small-navigation-links">Archive</span>
                 </li>
                 
-                <!-- Formatting elements into dot-point listed style. -->
                 <li>
-                    <!-- Direct links. -->
                     <a href="staff.php">
-                        <!-- Import custom Boxicons icons' class. -->
                         <i class="bx bxs-phone"></i>
-                        <!-- Custom class to style 'Staff' click button. -->
                         <span class="navigation-links">Staff</span>
                     </a>
-                    <!-- Custom class to style 'Staff' guide tip when re-sized 'menu' button. -->
                     <span class="small-navigation-links">Staff</span>
                 </li>
 
-                <!-- Formatting elements into dot-point listed style. -->
                 <li>
-                    <!-- Direct links. -->
                     <a href="song.php">
-                        <!-- Import custom Boxicons icons' class. -->
                         <i class="bx bxs-music"></i>
-                        <!-- Custom class to style 'Song' click button. -->
                         <span class="navigation-links">Song</span>
                     </a>
-                    <!-- Custom class to style 'Song' guide tip when re-sized 'menu' button. -->
                     <span class="small-navigation-links">Song</span>
                 </li>
             </ul>
         </nav>
 
-        <!-- Import JavaScript function file into the current HTML file. -->
         <script src="js/activeButton.js" type="text/JavaScript"></script>
     </body>
 </html>
