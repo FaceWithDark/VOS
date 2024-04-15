@@ -30,13 +30,6 @@ h1 {
     justify-content: space-between;
 }
 
-.users-image {
-    /* Adjust users avatar width. */
-    width: 50px;
-    border-radius: 100%;
-    border: 1px solid #eee;
-}
-
 nav {
     /*
         Adjust itself to the nearest positioned attributes.
@@ -165,7 +158,6 @@ nav.active-button .top-navigation-bar {
     display: flex;
     align-items: center;
     margin: 1.5rem 0;
-    border: 1px solid green;
 }
 
 .users p {
@@ -175,10 +167,39 @@ nav.active-button .top-navigation-bar {
     margin-left: .5rem;
 }
 
+.users-image {
+    /* Adjust users avatar width. */
+    width: 50px;
+    border-radius: 100%;
+    border: 1px solid #eee;
+}
+
 nav.active-button p {
     opacity: 1;
 }
 
+
+/* FAILED AUTHENTICATION PROFILE DETAIL */
+
+.failed-users {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+}
+
+.failed-users p {
+    font-weight: 600;
+    color: white;
+    opacity: 0;
+    margin-left: .5rem;
+}
+
+.authentication-failed-image {
+    /* Adjust users avatar width. */
+    width: 50px;
+    border-radius: 100%;
+    border: 1px solid #eee;
+}
 
 /* NAVIGATION LINKS */
 

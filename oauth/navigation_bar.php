@@ -71,11 +71,7 @@
 
             <?php if(!empty($user)): ?>
                 <div class="users">
-                    <!-- 
-                        TODO:
-                        - Access this information from SQL using PHP (maybe not).
-                        - Show 'Logout' button at the same time as showing this user info.
-                    -->
+                    <!-- TODO: Access this information from SQL using PHP (maybe not). -->
                     <img src="<?= htmlspecialchars($user -> avatar_url); ?>" alt="<?= htmlspecialchars($user -> username); ?>" class="users-image">
                     <p><?= htmlspecialchars($user -> username); ?></p>
                 </div>
@@ -115,8 +111,11 @@
                 </ul>
 
             <?php else: ?>
-                <strong style="color: white;">Please login again!</strong>
-                
+                <div class="failed-users">
+                    <img src="../img/Authentication failed.gif" alt="Sus?" class="authentication-failed-image">
+                    <p>Sussy Baka</p>
+                </div>
+
                 <ul>
                     <li>
                         <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=http://localhost/VOT/oauth/token_callback.php&response_type=code&scope=public+identify&state=randomise">
