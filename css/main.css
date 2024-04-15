@@ -1,12 +1,10 @@
-/* GLobal Styling.  */
 * {
-    /* Website perfection tricks. */
-    margin: 0;
-    padding: 0;
+    /* 
+        TODO: 
+        - Maybe not in global setting. This nav bar will be implemented differently in a way
+        that I can mantain it by myself. This one is pre-made by follow youtube tutorial. 
+    */
     box-sizing: border-box;
-    list-style: none;
-    text-decoration: none;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 /* 
@@ -15,14 +13,14 @@
  */
 body {
     background-color: #8b8c89;
-    /* Trick for font sizing. */
-    font-size: 100%;
 }
 
 h1 {
     display: flex;
     justify-content: center;
+    font-weight: bold;
     color: #e7ecef;
+    font-size: 1.75rem;
     padding-bottom: 2.5rem;
 }
 
@@ -33,11 +31,6 @@ h1 {
 }
 
 .users-image {
-    /* TODO: 
-        - Osu! avatar called from osu! API. PHP can do this easily.
-        - This tough but just need some time to dig in for it.
-     */
-
     /* Adjust users avatar width. */
     width: 50px;
     border-radius: 100%;
@@ -146,6 +139,8 @@ nav .top-navigation-bar {
     margin: .5rem 0;
     width: 90%;
     color: white;
+    /* Safari compatability. */
+    -webkit-user-select: none;
     user-select: none;
     transition: all 0.15s linear;
     opacity: 0;
@@ -166,18 +161,11 @@ nav.active-button .top-navigation-bar {
 
 /* PROFILE DETAIL */
 
-/* TODO: 
-    - Osu! username called from osu! API. PHP can do this easily.
-    - This tough but just need some time to dig in for it.
-*/
-
 .users {
     display: flex;
     align-items: center;
     margin: 1.5rem 0;
     border: 1px solid green;
-    /* Maybe need JS to handle this. This will be hide when users not logged in yet. Show again when logged in. */
-    /* opacity: 0; */
 }
 
 .users p {
@@ -326,6 +314,8 @@ nav.active-button .small-navigation-links {
     font-weight: bold;
     font-size: 13.6px;
     text-decoration: none;
+    /* Safari compatability. */
+    -webkit-user-select: none;
     /* For upcoming tournaments links. */
     user-select: none;
 }
