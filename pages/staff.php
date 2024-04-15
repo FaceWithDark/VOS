@@ -1,5 +1,5 @@
 <?php
-    include 'oauth/navigation_bar.php';
+    require_once '../oauth/navigation_bar.php';
 ?>
 
 <!DOCTYPE html>
@@ -10,30 +10,33 @@
     <title>VOT</title>
 </head>
     <body>
-        <div class="song-page">
+        <div class="staff-page">
             <header>
-                <h1>Banger Song 🔥</h1>
+                <h1>Our Lovely Staff 💖</h1>
             </header>
 
             <section>
                 <!-- TODO: 
-                        - Include song's image and other related info in.
+                        - Include avatar and other related info in.
                         - PHP can handle this. Need to get data from osu! API only.
-                        - Direct link will be change to Soundclound link (if there is one).
-                 -->                
+                 -->
                 <div class="flex-container">
                     <div class="box-of-content">
-                        <a href="https://osu.ppy.sh/beatmapsets/2032103#taiko/4235709">
-                            ILFK (SectorJack & Edolmary)
+                        <a href="https://osu.ppy.sh/users/9623142">
+                            ダビッド
                         </a>
                     </div>
 
                     <div class="box-of-content">
-                        <a href="#">Song 2</a>
+                        <a href="https://osu.ppy.sh/users/16688499">
+                            Nj! Scroll God
+                        </a>
                     </div>
 
                     <div class="box-of-content">
-                        <a href="#">Song 3</a>
+                        <a href="https://osu.ppy.sh/users/16039831">
+                            Aki Blind God
+                        </a>
                     </div>
             </section>
         </div>    

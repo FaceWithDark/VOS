@@ -1,5 +1,5 @@
 <?php
-    include 'oauth/navigation_bar.php';
+    require_once '../oauth/navigation_bar.php';
 ?>
 
 <!DOCTYPE html>
