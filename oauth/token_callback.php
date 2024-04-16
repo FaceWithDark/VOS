@@ -70,6 +70,6 @@
     if(!empty($tokenData -> access_token)) {
         // The last arguement "true' - sets it as an HTTP-only cookie.
         setcookie('vot_access_token', $tokenData -> access_token, time() + 86400, "/", "", false, true);
-        header('Location: ../pages/home.php');
+        header('Location: ../pages/index.php');
         exit();
     }

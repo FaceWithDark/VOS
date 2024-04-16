@@ -6,7 +6,7 @@
         setcookie('vot_access_token', '', time() - 3600, '/'); // empty value and old timestamp
 
         // Direct to the main page.
-        header("Location: home.php");
+        header("Location: index.php");
         // Terminate all functions.
         die();
     }
