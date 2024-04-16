@@ -78,7 +78,7 @@
             
                 <ul>
                     <li>
-                        <a href="../pages/home.php">
+                        <a href="../pages/index.php">
                             <i class="bx bxs-grid-alt"></i>
                             <span class="navigation-links">Home</span>
                         </a>
@@ -134,7 +134,7 @@
                     </li>
 
                     <li>
-                        <a href="../pages/home.php">
+                        <a href="../pages/index.php">
                             <i class="bx bxs-grid-alt"></i>
                             <span class="navigation-links">Home</span>
                         </a>
