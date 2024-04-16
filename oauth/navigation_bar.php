@@ -108,8 +108,16 @@
                         </a>
                         <span class="small-navigation-links">Song</span>
                     </li>
+                    
+                    <li>
+                        <a href="../pages/logout.php">
+                            <i class='bx bx-user-minus'></i>
+                            <span class="navigation-links">Logout</span>
+                        </a>
+                        <span class="small-navigation-links">Logout</span>
+                    </li>
                 </ul>
-
+                
             <?php else: ?>
                 <div class="failed-users">
                     <img src="../img/Authentication failed.gif" alt="Sus?" class="authentication-failed-image">
