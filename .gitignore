@@ -1,8 +1,22 @@
-# Not commit "enviroment" file.
+# Sus information.
 **/.env
 
-# Not commit "image" folder.
+# Website images.
 **/img
 
-# Not commit "vendor" folder.
+# Composer files.
 **/vendor
+
+# MacOS-specific CRUD.
+.DS_Store
+Thumbs.db
+Icon*
+desktop.ini
+
+# Dropbox Linux/MacOS files.
+.dropbox*
+
+# Docker building files.
+docker-compose.yml
+dockerfile
+.dockerignore
