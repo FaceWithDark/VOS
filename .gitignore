@@ -2,10 +2,19 @@
 **/.env
 
 # Website images.
-**/img
+**/img/
 
 # Composer files.
-**/vendor
+**/vendor/
+
+# Database files.
+**/db/
+
+# CSS files.
+**/css/
+
+# JS files.
+**/js/
 
 # MacOS-specific CRUD.
 .DS_Store
