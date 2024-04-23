@@ -5,4 +5,10 @@
 
 3. Will be doing a more general home page that can direct to both VTC tournaments and VOT tournaments.
 
-4. To be added later on.
+4. OAuth is copied from a 'tested' local dev. Will be improvised to match with MVC pattern later on.
+
+5. MVC is a must. Not sure what feature I will make next but this is a crucial reminder.
+
+6. README README README help ASAP please. I'm beggin' :sob:
+
+7. To be added later on.
