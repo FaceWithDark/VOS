@@ -3,7 +3,7 @@
     use GuzzleHttp\Exception\RequestException;
     use Dotenv\Dotenv;
 
-    include '../vendor/autoload.php';
+    require_once __DIR__ . '/../vendor/autoload.php';
 
     function exchangeCode($payloadData, $apiURL) {
         $client = new Client();
@@ -28,8 +28,7 @@
     }
 
     if(isset($_GET['error']) || !isset($_GET['code'])) {
-        echo 'Some error occurred';
-        exit();
+        exit('Some error occurred');
     }
 
     $authorizationCode = $_GET['code'];
@@ -37,7 +36,8 @@
     $dotenv = Dotenv::createImmutable(__DIR__);
     $dotenv -> load();
 
-    var_dump($_GET);
+    // Debugging for token received from Osu!
+    // var_dump($_GET);
 
     /**
      * Let's exchange the code for an access token.
@@ -50,7 +50,7 @@
     'client_secret' => $_ENV['CLIENT_SECRET'],
     'code' => $authorizationCode,
     'grant_type' => 'authorization_code',
-    'redirect_uri' => 'http://localhost/VOT/oauth/token_callback.php',
+    'redirect_uri' => 'http://localhost:8080/public/oauth/token_callback.php',
     ];
 
     $apiURL = "https://osu.ppy.sh/oauth/token";
@@ -65,8 +65,9 @@
         exit($tokenData -> error);
     }
     
-    var_dump($tokenData);
-    
+    // Debugging for exchange token received from Osu!
+    // var_dump($tokenData);
+
     if(!empty($tokenData -> access_token)) {
         // The last arguement "true' - sets it as an HTTP-only cookie.
         setcookie('vot_access_token', $tokenData -> access_token, time() + 86400, "/", "", false, true);
