@@ -1,0 +1,366 @@
+* {
+    /* 
+        TODO: 
+        - Maybe not in global setting. This nav bar will be implemented differently in a way
+        that I can mantain it by myself. This one is pre-made by follow youtube tutorial. 
+    */
+    box-sizing: border-box;
+}
+
+/* 
+    General styling used for multi-purpose.
+    This can be use to shared same functionality across all pages.
+ */
+body {
+    background-color: #8b8c89;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    color: #e7ecef;
+    font-size: 1.75rem;
+    padding-bottom: 2.5rem;
+}
+
+.flex-container {
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+}
+
+nav {
+    /*
+        Adjust itself to the nearest positioned attributes.
+    
+        If no positioned attributes were found, it will use 
+        the document body as it based to aligned to. 
+    */
+    position: absolute;
+    /* Can have a quick check if this 2 can be removed or not. */
+    top: 0;
+    left: 0;
+    /* Extend the navigation bar's height value. */
+    height: 100vh;
+    /* Re-size the navigation bar's default width size. */
+    width: 80px;
+    background-color: #12171e;
+    /* 
+        Tween the navigation bar in with padding around it 
+        so the transition can work properly. 
+    */
+    padding: 0.4rem 0.8rem;
+    /* 
+        Smooth linear effect. (Time can be adjusted after 
+        user's feedback on it) 
+    */
+    transition: all 0.3s linear;
+}
+
+nav.active-button {
+    /* Expand navigation bar's width after clicking 'menu' icon. */
+    width: 200px;
+}
+
+/* 
+    All contents contained within the set class will be 
+    responsive with Navigation bar when it extended. 
+*/
+
+/* TODO: Combine all of them into 1 class for maintainability. */
+nav.active-button ~ .tournament-news {
+    left: 200px;
+    width: calc(100% - 200px);
+}
+
+nav.active-button ~ .archieved-page {
+    left: 200px;
+    width: calc(100% - 200px);
+}
+
+nav.active-button ~ .staff-page {
+    left: 200px;
+    width: calc(100% - 200px);
+}
+
+nav.active-button ~ .song-page {
+    left: 200px;
+    width: calc(100% - 200px);
+}
+
+
+/* SIDEWAY NAVIGATION BAR BUTTON */
+
+nav #click-button {
+    /*
+        Adjust itself to the nearest positioned attributes.
+    
+        If no positioned attributes were found, it will use 
+        the document body as it based to aligned to. 
+    */
+    position: absolute;
+    color: white;
+    font-size: 1.5rem;
+    /* Push 'menu' icon up. */
+    top: .8rem;
+    /* Push 'menu' icon to the left. */
+    left: 35%;
+    /* Maybe 'transform' styling is not needed. */
+    /* transform: translateX(-50%); */
+    cursor: pointer;
+}
+
+/* The effect is a bit un-smooth + too fast somehow. */
+nav.active-button #click-button {
+    /* Push 'menu' icon to the left when cliked on. */
+    margin-left: 6rem;
+    /* 
+        Smooth linear effect. (Time can be adjusted after 
+        user's feedback on it) 
+    */
+    transition: 0.3s linear;
+}
+
+/* SIDEWAY NAVIGATION BAR TITLE */
+
+/* TODO: Perhaps remove the height value should work still fine. */
+nav .top-navigation-bar {
+    display: flex;
+    align-items: center;
+    /* height: 50px; */
+    margin: .5rem 0;
+    width: 90%;
+    color: white;
+    /* Safari compatability. */
+    -webkit-user-select: none;
+    user-select: none;
+    transition: all 0.15s linear;
+    opacity: 0;
+}
+
+nav.active-button .top-navigation-bar {
+    opacity: 1;
+}
+
+.top-navigation-bar i {
+    margin: 0 1.5rem;
+    font-size: 1.2rem;
+}
+
+.top-navigation-bar i strong {
+    padding: 0 .3rem;
+}
+
+/* PROFILE DETAIL */
+
+.users {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+}
+
+.users p {
+    font-weight: 600;
+    color: white;
+    opacity: 0;
+    margin-left: .5rem;
+}
+
+.users-image {
+    /* Adjust users avatar width. */
+    width: 50px;
+    border-radius: 100%;
+    border: 1px solid #eee;
+}
+
+nav.active-button p {
+    opacity: 1;
+}
+
+
+/* FAILED AUTHENTICATION PROFILE DETAIL */
+
+.failed-users {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+}
+
+.failed-users p {
+    font-weight: 600;
+    color: white;
+    opacity: 0;
+    margin-left: .5rem;
+}
+
+.authentication-failed-image {
+    /* Adjust users avatar width. */
+    width: 50px;
+    border-radius: 100%;
+    border: 1px solid #eee;
+}
+
+/* NAVIGATION LINKS */
+
+nav ul li {
+    /* 
+        Shifting or customize the current elements only without 
+        affecting the bigger (or general) tag/custom class wrapping over it. 
+    */
+    position: relative;
+    list-style-type: none;
+    height: 185px; /* This is not a good code write at all. Need fix ASAP. */
+    margin: 2rem auto;
+    width: 90%;
+    /* Height spacing between each line of texts. */
+    line-height: 75px;
+}
+
+nav ul li a {
+    color: white;
+    display: flex;
+    align-items: center;
+    border-radius: 4rem;
+}
+
+nav ul li a:hover {
+    background-color: white;
+    color: #12171e;
+}
+
+/* TODO: Perhaps remove 'line-height' & 'height' still work. */
+nav ul li a i {
+    min-width: 50px;
+    text-align: center;
+    /* height: 13px; */
+    font-size: 1.2rem;
+    border-radius: 12px;
+    /* line-height: 48px; */
+}
+
+nav .navigation-links {
+    opacity: 0;
+}
+nav.active-button .navigation-links {
+    opacity: 1;
+    margin: 0 0 .2rem .5rem;
+}
+
+nav .small-navigation-links {
+    display: flex;
+    justify-content: center;
+    color: white;
+    opacity: 1;
+    transition: all 0.1s linear;
+}
+
+nav.active-button .small-navigation-links {
+    opacity: 0;
+    transition: all 0.1s linear;
+}
+
+/* SHORT TOURNAMENT BOX ANNOUCEMENT */
+
+.tournament-news {
+    position: relative;
+    min-height: 100vh;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 80px);
+    padding: 1rem;
+}
+
+.information-box {
+    background-color: #a3cef1;
+    margin-bottom: 1rem;
+    border-radius: 1.5rem;
+    border: 3px solid whitesmoke;
+}
+
+.information-box h2 {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    padding: 1rem 0;
+    color: #274c77;
+}
+
+.information-box p {
+    font-size: 1rem;
+    color: #e7ecef;
+    font-weight: 500;
+    padding-left: .5rem;
+    padding-bottom: 1rem;
+}
+
+.youtube-iframe-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: auto;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+.youtube-iframe-container iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}   
+
+
+/* ARCHIEVE PAGE */
+
+.archieved-page {
+    position: relative;
+    min-height: 100vh;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 80px);
+    padding: 1rem;
+}
+
+.box-of-content {
+    background-color: #a3cef1;
+    padding: 1rem;
+    margin: 0 1rem;
+    border-radius: 25px;
+    border: 3px solid whitesmoke;
+}
+
+.box-of-content a {
+    color: #274c77;
+    font-weight: bold;
+    font-size: 13.6px;
+    text-decoration: none;
+    /* Safari compatability. */
+    -webkit-user-select: none;
+    /* For upcoming tournaments links. */
+    user-select: none;
+}
+
+
+/* STAFF PAGE */
+
+.staff-page {
+    position: relative;
+    min-height: 100vh;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 80px);
+    padding: 1rem;
+}
+
+
+/* SONG PAGE */
+
+.song-page {
+    position: relative;
+    min-height: 100vh;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 80px);
+    padding: 1rem;
+}
