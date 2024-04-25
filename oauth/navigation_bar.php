@@ -126,7 +126,7 @@
 
                 <ul>
                     <li>
-                        <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=http://localhost:8080/public/oauth/token_callback.php&response_type=code&scope=public+identify&state=randomise">
+                        <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=http://localhost:8080/oauth/token_callback.php&response_type=code&scope=public+identify&state=randomise">
                             <i class='bx bx-user-plus'></i>
                             <span class="navigation-links">Login</span>
                         </a>
