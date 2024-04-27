@@ -120,7 +120,7 @@
                 
             <?php else: ?>
                 <div class="failed-users">
-                    <img src="../img/FailedAuthenticateImage.gif" alt="Sus?" class="authentication-failed-image">
+                    <img src="https://consumingtech.com/wp-content/uploads/2022/10/among-us-twerk.gif" alt="Sus?" class="authentication-failed-image">
                     <p>Sussy Baka</p>
                 </div>
 
