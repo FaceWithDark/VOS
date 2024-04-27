@@ -57,8 +57,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VOT</title>
 
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
     <body>
@@ -120,7 +120,7 @@
                 
             <?php else: ?>
                 <div class="failed-users">
-                    <img src="../img/Authentication failed.gif" alt="Sus?" class="authentication-failed-image">
+                    <img src="../img/FailedAuthenticateImage.gif" alt="Sus?" class="authentication-failed-image">
                     <p>Sussy Baka</p>
                 </div>
 
@@ -168,6 +168,6 @@
             <?php endif; ?>
         </nav>
 
-        <script src="../js/activeButton.js" type="text/JavaScript"></script>
+        <script src="../js/activeButton.js" type="text/javascript"></script>
     </body>
 </html>
