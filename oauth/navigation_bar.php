@@ -1,9 +1,5 @@
 <?php
-    /*
-        Here, we want to sent anather request to fetch the user's profile details
-        name, avatar image.
-     */ 
-
+    // Sent another request to fetch the user's profile details incl name, avatar, etc. 
     use GuzzleHttp\Client;
     use GuzzleHttp\Exception\RequestException;
     
@@ -14,7 +10,7 @@
     $dotenv = Dotenv::createImmutable(__DIR__);
     $dotenv -> load();
 
-    // Get the user's details
+    // Get user details.
 
     function getUser() {
         if(empty($_COOKIE['vot_access_token'])) {
@@ -120,7 +116,7 @@
                 
             <?php else: ?>
                 <div class="failed-users">
-                    <img src="https://consumingtech.com/wp-content/uploads/2022/10/among-us-twerk.gif" alt="Sus?" class="authentication-failed-image">
+                    <img src="../img/FaliedAuthenticationImage.gif" alt="Sus?" class="authentication-failed-image">
                     <p>Sussy Baka</p>
                 </div>
 
