@@ -50,7 +50,7 @@
     'client_secret' => $_ENV['CLIENT_SECRET'],
     'code' => $authorizationCode,
     'grant_type' => 'authorization_code',
-    'redirect_uri' => 'http://localhost:8080/oauth/token_callback.php',
+    'redirect_uri' => 'https://phpstack-1257657-4517689.cloudwaysapps.com/oauth/token_callback.php',
     ];
 
     $apiURL = "https://osu.ppy.sh/oauth/token";
