@@ -60,15 +60,14 @@
     <body>
         <nav>
             <div class="top-navigation-bar">
-                <i class="bx bxs-navigation"><strong>Navigate</strong></i>
+                <strong><i class="bx bxs-navigation">VOT</i></strong>
+                <i class="bx bx-menu" id="click-button"></i>
             </div>
 
-            <i class="bx bx-menu" id="click-button"></i>
-
             <?php if(!empty($user)): ?>
-                <div class="users">
+                <div class="user-info">
                     <!-- TODO: Access this information from SQL using PHP (maybe not). -->
-                    <img src="<?= htmlspecialchars($user -> avatar_url); ?>" alt="<?= htmlspecialchars($user -> username); ?>" class="users-image">
+                    <img src="<?= htmlspecialchars($user -> avatar_url); ?>" alt="<?= htmlspecialchars($user -> username); ?>" class="user-image">
                     <p><?= htmlspecialchars($user -> username); ?></p>
                 </div>
             
@@ -76,46 +75,41 @@
                     <li>
                         <a href="../pages/index.php">
                             <i class="bx bxs-grid-alt"></i>
-                            <span class="navigation-links">Home</span>
+                            <p>Home</p>
                         </a>
-                        <span class="small-navigation-links">Home</span>
                     </li>
 
                     <li>
                         <a href="../pages/archive.php">
                             <i class="bx bxs-box"></i>
-                            <span class="navigation-links">Archive</span>
+                            <p>Archive<p>
                         </a>
-                        <span class="small-navigation-links">Archive</span>
                     </li>
 
                     <li>
                         <a href="../pages/staff.php">
                             <i class="bx bxs-phone"></i>
-                            <span class="navigation-links">Staff</span>
+                            <p>Staff</p>
                         </a>
-                        <span class="small-navigation-links">Staff</span>
                     </li>
 
                     <li>
                         <a href="../pages/song.php">
                             <i class="bx bxs-music"></i>
-                            <span class="navigation-links">Song</span>
+                            <p>Song</p>
                         </a>
-                        <span class="small-navigation-links">Song</span>
                     </li>
                     
                     <li>
                         <a href="../pages/logout.php">
                             <i class='bx bx-user-minus'></i>
-                            <span class="navigation-links">Logout</span>
+                            <p>Logout</p>
                         </a>
-                        <span class="small-navigation-links">Logout</span>
                     </li>
                 </ul>
                 
             <?php else: ?>
-                <div class="failed-users">
+                <div class="failed-user-info">
                     <img src="../img/FaliedAuthenticationImage.gif" alt="Sus?" class="authentication-failed-image">
                     <p>Sussy Baka</p>
                 </div>
@@ -124,41 +118,36 @@
                     <li>
                         <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=https://phpstack-1257657-4517689.cloudwaysapps.com/oauth/token_callback.php&response_type=code&scope=public+identify&state=randomise">
                             <i class='bx bx-user-plus'></i>
-                            <span class="navigation-links">Login</span>
+                            <p>Login</p>
                         </a>
-                        <span class="small-navigation-links">Login</span>
                     </li>
 
                     <li>
                         <a href="../pages/index.php">
                             <i class="bx bxs-grid-alt"></i>
-                            <span class="navigation-links">Home</span>
+                            <p>Home</p>
                         </a>
-                        <span class="small-navigation-links">Home</span>
                     </li>
 
                     <li>
                         <a href="../pages/archive.php">
                             <i class="bx bxs-box"></i>
-                            <span class="navigation-links">Archive</span>
+                            <p>Archive</p>
                         </a>
-                        <span class="small-navigation-links">Archive</span>
                     </li>
 
                     <li>
                         <a href="../pages/staff.php">
                             <i class="bx bxs-phone"></i>
-                            <span class="navigation-links">Staff</span>
+                            <p>Staff</p>
                         </a>
-                        <span class="small-navigation-links">Staff</span>
                     </li>
 
                     <li>
                         <a href="../pages/song.php">
                             <i class="bx bxs-music"></i>
-                            <span class="navigation-links">Song</span>
+                            <p>Song</p>
                         </a>
-                        <span class="small-navigation-links">Song</span>
                     </li>
                 </ul>
             <?php endif; ?>
