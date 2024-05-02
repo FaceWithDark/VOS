@@ -284,6 +284,10 @@ nav.active-button ul li a i {
     box-shadow: 0.25rem 0.25rem 0.25rem 0 rgba(0, 0, 0, 0.2);
 }
 
+.direct-link-container:not(:first-child) {
+    margin-left: .75rem;
+}
+
 .direct-link-container a {
     font-weight: bold;
     font-size: 0.85rem;
