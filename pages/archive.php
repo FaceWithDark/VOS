@@ -10,7 +10,7 @@
     <title>VOT</title>
 </head>
     <body>
-        <div class="archieved-page">
+        <div class="archived-page">
             <header>
                 <h1>Archived Tournament</h1>
             </header>
