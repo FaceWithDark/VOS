@@ -22,17 +22,17 @@
                         - Direct link will be change to Soundclound link (if there is one).
                  -->                
                 <div class="flex-container">
-                    <div class="box-of-content">
+                    <div class="direct-link-container">
                         <a href="https://osu.ppy.sh/beatmapsets/2032103#taiko/4235709">
                             ILFK (SectorJack & Edolmary)
                         </a>
                     </div>
 
-                    <div class="box-of-content">
+                    <div class="direct-link-container">
                         <a href="#">Song 2</a>
                     </div>
 
-                    <div class="box-of-content">
+                    <div class="direct-link-container">
                         <a href="#">Song 3</a>
                     </div>
             </section>

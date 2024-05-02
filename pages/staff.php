@@ -21,19 +21,19 @@
                         - PHP can handle this. Need to get data from osu! API only.
                  -->
                 <div class="flex-container">
-                    <div class="box-of-content">
+                    <div class="direct-link-container">
                         <a href="https://osu.ppy.sh/users/9623142">
                             ダビッド
                         </a>
                     </div>
 
-                    <div class="box-of-content">
+                    <div class="direct-link-container">
                         <a href="https://osu.ppy.sh/users/16688499">
                             Nj! Scroll God
                         </a>
                     </div>
 
-                    <div class="box-of-content">
+                    <div class="direct-link-container">
                         <a href="https://osu.ppy.sh/users/16039831">
                             Aki Blind God
                         </a>
