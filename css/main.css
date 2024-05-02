@@ -46,7 +46,8 @@ header h1 {
 nav {
     position: sticky;
     top: 0;
-    background-color: rgba(255, 20, 20, 0.5);
+    /* background-color: rgba(255, 20, 20, 0.5); */
+    background-color: rgba(35, 35, 35, 1);
     width: 5rem;
     height: 100vh;
     transition: all 0.3s linear;
@@ -227,7 +228,7 @@ nav.active-button ul li a i {
     background-color: rgba(220, 220, 220, 1);
     margin-bottom: 1.5rem;
     border-radius: 1.5rem;
-    border-right: 5px solid rgba(255, 150, 150, 1);
+    border-right: 5px solid rgba(100, 100, 100, 0.5);
     box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 0.2);
 }
 
