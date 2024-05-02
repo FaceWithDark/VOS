@@ -255,13 +255,22 @@ nav.active-button ul li a i {
     overflow: hidden;
 }
 
+/* TODO: media queries when split or fullscreen. */
 .youtube-iframe-container iframe {
     position: absolute;
-    width: 75%;
+    /* This is the config when split screen */
+
+    /* width: 75%;
     height: 75%;
     margin: 2.75rem 6rem;
+    overflow: hidden; */
+
+    /* This is the config when fullscreen */
+    width: 90%;
+    height: 90%;
+    margin: 2.75rem 5.5rem;
     overflow: hidden;
-}   
+} 
 
 
 /* BOXES OF DIRECT LINKS ACROSS ALL PAGES. */
