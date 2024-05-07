@@ -106,6 +106,11 @@
                             <p>Logout</p>
                         </a>
                     </li>
+
+                    <li>
+                        <i class='bx bxs-moon' id="dark-mode"></i>
+                        <i class='bx bxs-sun' id="light-mode"></i>
+                    </li>
                 </ul>
                 
             <?php else: ?>
@@ -148,6 +153,11 @@
                             <i class="bx bxs-music"></i>
                             <p>Song</p>
                         </a>
+                    </li>
+
+                    <li>
+                        <i class='bx bxs-moon' id="dark-mode"></i>
+                        <i class='bx bxs-sun' id="light-mode"></i>
                     </li>
                 </ul>
             <?php endif; ?>
