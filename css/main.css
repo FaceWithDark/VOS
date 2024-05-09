@@ -10,7 +10,6 @@
 body {
     box-sizing: border-box;
     display: flex;
-    min-height: 100vh;
     background-color: var(--background-colour);
 }
 
@@ -41,7 +40,7 @@ nav {
     /* background-color: rgba(255, 20, 20, 0.5); */
     background-color: rgba(35, 35, 35, 1);
     width: 5rem;
-    height: 100vh;
+    min-height: 100vh;
     transition: all 0.3s linear;
     z-index: 1000;
     flex-shrink: 0;
@@ -291,6 +290,10 @@ nav ul li #dark-mode, nav ul li #light-mode {
     color: var(--background-colour);
     padding: 0.15rem 0;
     font-size: 1.2rem;
+}
+
+nav ul li:last-child {
+    margin-top: 8.5rem;
 }
 
 
