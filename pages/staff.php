@@ -1,5 +1,5 @@
 <?php
-    require_once '../oauth/navigation_bar.php';
+    require_once '../layouts/navigation_bar.php';
 ?>
 
 <div class="staff-page">
@@ -11,7 +11,7 @@
         <!-- TODO: 
                 - Include avatar and other related info in.
                 - PHP can handle this. Need to get data from osu! API only.
-            -->
+        -->
         <div class="flex-container">
             <div class="direct-link-container">
                 <a href="https://osu.ppy.sh/users/9623142">

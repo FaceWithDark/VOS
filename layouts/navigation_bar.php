@@ -109,7 +109,7 @@
                     </li>
                     
                     <li>
-                        <a href="../pages/logout.php">
+                        <a href="../modules/user/logout.php">
                             <i class='bx bx-user-minus'></i>
                             <p>Logout</p>
                         </a>
@@ -123,13 +123,13 @@
                 
             <?php else: ?>
                 <div class="failed-user-info">
-                    <img src="../img/FaliedAuthenticationImage.gif" alt="Sus?" class="authentication-failed-image">
+                    <img src="../assets/images/FaliedAuthenticationImage.gif" alt="Sus?" class="authentication-failed-image">
                     <p>Sussy Baka</p>
                 </div>
 
                 <ul>
                     <li>
-                        <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=https://phpstack-1257657-4517689.cloudwaysapps.com/oauth/token_callback.php&response_type=code&scope=public+identify&state=randomise">
+                        <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=https://phpstack-1257657-4517689.cloudwaysapps.com/modules/authentication/token_callback.php&response_type=code&scope=public+identify&state=randomise">
                             <i class='bx bx-user-plus'></i>
                             <p>Login</p>
                         </a>

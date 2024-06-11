@@ -3,7 +3,7 @@
     use GuzzleHttp\Exception\RequestException;
     use Dotenv\Dotenv;
 
-    require_once __DIR__ . '/../vendor/autoload.php';
+    require_once __DIR__ . '/../../vendor/autoload.php';
 
     function exchangeCode($payloadData, $apiURL) {
         $client = new Client();
@@ -50,7 +50,7 @@
     'client_secret' => $_ENV['CLIENT_SECRET'],
     'code' => $authorizationCode,
     'grant_type' => 'authorization_code',
-    'redirect_uri' => 'https://phpstack-1257657-4517689.cloudwaysapps.com/oauth/token_callback.php',
+    'redirect_uri' => 'https://phpstack-1257657-4517689.cloudwaysapps.com/modules/authentication/token_callback.php',
     ];
 
     $apiURL = "https://osu.ppy.sh/oauth/token";
@@ -71,6 +71,6 @@
     if(!empty($tokenData -> access_token)) {
         // The last arguement "true' - sets it as an HTTP-only cookie.
         setcookie('vot_access_token', $tokenData -> access_token, time() + 86400, "/", "", false, true);
-        header('Location: ../pages/index.php');
+        header('Location: ../../pages/index.php');
         exit();
     }

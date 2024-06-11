@@ -1,37 +1,34 @@
-# Ignore environment configuration files which may contain sensitive data.
-**/.env
+# Sus information.
+*.env
 
-# Exclude image directories from version control to reduce repository size.
-**/img/
+# Website assets.
+assets/
 
-# Omit Composer dependency directories to prevent conflicts with other developers' environments.
-**/vendor/
+# Composer files.
+vendor/
 
-# Do not track database files to avoid leaking data and to maintain database integrity.
-**/db/
+# Database files.
+database/
 
-# Avoid tracking server-specific Apache configuration files which may differ per environment.
-**/.htaccess
+# Server static web configuration.
+*.htaccess
 
-# Global ignore for favicon files, typically not necessary to version control.
-*.ico
-
-# Exclude PNG images for the same reasons as the img/ directory.
-*.png
-
-# Web manifest files are not required in version control as they are specific to deployment.
-*.webmanifest
-
-# Exclude MacOS system files that are automatically generated and irrelevant to the project's code.
+# MacOS-specific CRUD.
 .DS_Store
 Thumbs.db
 Icon*
 desktop.ini
 
-# Ignore Dropbox sync files that are not part of the project's source code.
+# Dropbox Linux/MacOS files.
 .dropbox*
 
-# Docker configuration files should be included only if Docker is part of the development workflow.
+# Docker building files.
 docker-compose.yml
 dockerfile
 .dockerignore
+
+# Markdown files.
+*.md
+
+# Except some of these markdown files.
+!README.md
