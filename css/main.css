@@ -82,7 +82,8 @@ nav.active-button {
 .tournament-news, 
 .archived-page, 
 .staff-page,
-.song-page
+.song-page,
+.mappool-page
 {
     padding: 1rem;
     transition: margin-left 0.25s linear, width 0.25s linear;
@@ -94,7 +95,8 @@ nav.active-button ~
 .tournament-news, 
 .archived-page, 
 .staff-page,
-.song-page 
+.song-page,
+.mappool-page
 {
     margin-left: .25rem;
     width: calc(100% - .25rem);
@@ -261,7 +263,9 @@ nav.active-button ul li a i {
 
 /* BOXES OF DIRECT LINKS ACROSS ALL PAGES. */
 
-.direct-link-container {
+.direct-link-container,
+.mappool-card-container
+{
     background-color: rgba(220, 220, 220, 1);
     padding: 1rem;
     margin-bottom: 1.5rem;
@@ -270,7 +274,9 @@ nav.active-button ul li a i {
     box-shadow: 0.25rem 0.25rem 0.25rem 0 rgba(0, 0, 0, 0.2);
 }
 
-.direct-link-container:not(:first-child) {
+.direct-link-container:not(:first-child),
+.mappool-card-container:not(:first-child)
+{
     margin-left: .75rem;
 }
 
@@ -281,7 +287,6 @@ nav.active-button ul li a i {
     -webkit-user-select: none; /* Safari compatability. */
     user-select: none; /* Others broswer compatability. */
 }
-
 
 /* DARK/LIGHT MODE TOGGLE ICON */
 
@@ -323,8 +328,50 @@ body.dark-theme .announcement-box {
     box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
 }
 
-body.dark-theme .direct-link-container {
+body.dark-theme .direct-link-container,
+body.dark-theme .mappool-card-container
+{
     background-color: var(--accent-colour-alt);
     border-right: 5px solid rgba(100, 100, 100, 1);
     box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
 }
+
+
+/* NO-HEADER PAGES */
+
+.mappool-page {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.mappool-card-container a {
+    font-weight: bold;
+    color: var(--accent-colour);
+    -webkit-user-select: none; /* Safari compatability. */
+    user-select: none; /* Others broswer compatability. */
+}
+
+.mappool-card-container h1,
+.mappool-card-container h2,
+.mappool-card-container h3,
+.beatmap-creator-row,
+.beatmap-attribute-row
+{
+    display: flex;
+    justify-content: center;
+}
+
+.mappool-card-container h1,
+.mappool-card-container h2
+{
+    font-weight: bold;
+}
+
+.beatmap-creator-row a {
+    margin-left: .25rem;
+}
+
+
+
+
