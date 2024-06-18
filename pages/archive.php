@@ -29,7 +29,9 @@
             </div>
 
             <div class="direct-link-container">
-                <a>Vietnam osu!taiko Tournament 4 (COMING SOON)</a>
+                <a href="https://docs.google.com/spreadsheets/d/1H9N4hm1gcnipTtzKNtGpana7mJ2Gh4EbTnq9B19pCtU/edit?gid=1461400646#gid=1461400646">
+                    Vietnam osu!taiko Tournament 4
+                </a>
             </div>
 
             <div class="direct-link-container">
