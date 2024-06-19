@@ -3,13 +3,9 @@
     use GuzzleHttp\Client;
     use GuzzleHttp\Exception\RequestException;
     
-    use Dotenv\Dotenv;
-
     require_once __DIR__ . '/../vendor/autoload.php';
-
-    $dotenv = Dotenv::createImmutable(__DIR__);
-    $dotenv -> load();
-
+    require 'configuration.php';
+    
     // Get user details.
 
     function getUser() {
