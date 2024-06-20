@@ -11,6 +11,8 @@ body {
     box-sizing: border-box;
     display: flex;
     background-color: var(--background-colour);
+    /* TODO: May need this to be a global variable but for now, it's fine. */
+    font-family: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 /* Head title for each pages */
