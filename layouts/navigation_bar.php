@@ -2,10 +2,9 @@
     // Sent another request to fetch the user's profile details incl name, avatar, etc. 
     use GuzzleHttp\Client;
     use GuzzleHttp\Exception\RequestException;
-    
-    require_once __DIR__ . '/../vendor/autoload.php';
+
     require 'configuration.php';
-    
+
     // Get user details.
 
     function getUser() {
@@ -39,7 +38,7 @@
 
     $user = getUser();
 
-    // var_dump($user);
+    // die('<pre>' . print_r($user, true) . '</pre>');
 ?>
 
 <!DOCTYPE html>
