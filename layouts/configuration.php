@@ -12,15 +12,16 @@
 
     // PDO options for maximum error handling
     $fullErrorHandlingOption = [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Set error mode to exceptions
-        PDO::ATTR_EMULATE_PREPARES => false, // Use native prepared statements
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // Set default fetch mode to associative array
-        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8' // Ensure charset is set to utf8
+        PDO::ATTR_ERRMODE               => PDO::ERRMODE_EXCEPTION,  // Set error mode to exceptions
+        PDO::ATTR_DEFAULT_FETCH_MODE    => PDO::FETCH_ASSOC,        // Set default fetch mode to associative array
+        PDO::ATTR_EMULATE_PREPARES      => false,                   // Use native prepared statements
+        PDO::ATTR_PERSISTENT            => true,                    // Keeps database connection alive across scripts
+        PDO::MYSQL_ATTR_INIT_COMMAND    => 'SET NAMES utf8mb4'      // Ensure charset is set to utf8mb4 (same as database)
     ];
 
     // Create PDO instance
     try {
-        $phpDataObject = new PDO("mysql:host=$serverHost;dbname=$databaseName;charset=utf8", $databaseUsername, $databasePassword, $fullErrorHandlingOption);
+        $phpDataObject = new PDO("mysql:host=$serverHost;dbname=$databaseName;charset=utf8mb4", $databaseUsername, $databasePassword, $fullErrorHandlingOption);
         // echo "Connected successfully";
 
     } catch (PDOException $exceptions) {
