@@ -125,7 +125,7 @@
 
                 <ul>
                     <li>
-                        <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=http://localhost:8081/modules/authentication/token_callback.php&response_type=code&scope=public+identify&state=randomise">
+                        <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=https://phpstack-1257657-4517689.cloudwaysapps.com/modules/authentication/token_callback.php&response_type=code&scope=public+identify&state=randomise">
                             <i class='bx bx-user-plus'></i>
                             <p>Login</p>
                         </a>
