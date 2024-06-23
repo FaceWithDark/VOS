@@ -5,40 +5,41 @@
 
     require 'configuration.php';
 
-    // Get user details.
-
-    function getUser() {
-        if(empty($_COOKIE['vot_access_token'])) {
+    // Fetch user data from the Osu! API
+    function getUserDetail() {
+        $accessToken = $_COOKIE['vot_access_token'] ?? null;
+        if (!$accessToken) {
+            // Access token is not available
             return false;
         }
 
         $apiUrl = "https://osu.ppy.sh/api/v2/me/osu";
-
         $client = new Client();
 
         try {
             $response = $client -> get($apiUrl, [
                 'headers' => [
-                    'authorization' => 'Bearer ' . $_COOKIE['vot_access_token'],
+                    'Authorization' => "Bearer {$accessToken}",
                     'Accept' => 'application/json',
                 ]
             ]);
                 
-            if($response -> getStatusCode() == 200) {
+            if($response -> getStatusCode() === 200) {
                 return json_decode($response -> getBody() -> getContents());
             }
+            // API call did not return a 200 status
             return false;
         }
-        catch(RequestException $exceptions) {
-            return false;
+        catch(RequestException $exception) {
+            error_log($exception -> getMessage());  // Log the exception message
+            return false;                           // An exception occurred during the API call
         }
     }
 
-    $user = false;
+    // Get user data from the API call
+    $userData = getUserDetail();
 
-    $user = getUser();
-
-    // die('<pre>' . print_r($user, true) . '</pre>');
+    // die('<pre>' . print_r($userData, true) . '</pre>');
 ?>
 
 <!DOCTYPE html>
@@ -67,11 +68,11 @@
                 <i class="bx bx-menu" id="click-button"></i>
             </div>
 
-            <?php if(!empty($user)): ?>
+            <?php if($userData): ?>
                 <div class="user-info">
                     <!-- TODO: Access this information from SQL using PHP (maybe not). -->
-                    <img src="<?= htmlspecialchars($user -> avatar_url); ?>" alt="<?= htmlspecialchars($user -> username); ?>" class="user-image">
-                    <p><?= htmlspecialchars($user -> username); ?></p>
+                    <img src="<?= htmlspecialchars($userData -> avatar_url); ?>" alt="<?= htmlspecialchars($userData -> username); ?>" class="user-image">
+                    <p><?= htmlspecialchars($userData -> username); ?></p>
                 </div>
             
                 <ul>
@@ -124,7 +125,7 @@
 
                 <ul>
                     <li>
-                        <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=https://phpstack-1257657-4517689.cloudwaysapps.com/modules/authentication/token_callback.php&response_type=code&scope=public+identify&state=randomise">
+                        <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=http://localhost:8081/modules/authentication/token_callback.php&response_type=code&scope=public+identify&state=randomise">
                             <i class='bx bx-user-plus'></i>
                             <p>Login</p>
                         </a>
