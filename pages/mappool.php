@@ -1,73 +1,48 @@
-<?php    
-    // Sent another request to fetch the user's profile details incl name, avatar, etc. 
-    use GuzzleHttp\Client;
-    use GuzzleHttp\Exception\RequestException;
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
 
-    require_once '../layouts/navigation_bar.php';
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
-    // Get user details.
-    function getFirstBeatmap() {
-        if(empty($_COOKIE['vot_access_token'])) {
-            return false;
-        }
+require_once '../layouts/navigation_bar.php';
 
-        $firstNoModBeatmapApiUrl = "https://osu.ppy.sh/api/v2/beatmaps/3271670";
-
-        $client = new Client();
-
-        try {
-            $response = $client -> get($firstNoModBeatmapApiUrl, [
-                'headers' => [
-                    'authorization' => 'Bearer ' . $_COOKIE['vot_access_token'],
-                    'Accept' => 'application/json',
-                ]
-            ]);
-                
-            if($response -> getStatusCode() == 200) {
-                return json_decode($response -> getBody() -> getContents());
-            }
-            return false;
-        }
-        catch(RequestException $exceptions) {
-            return false;
-        }
+// Fetch beatmap data from the Osu! API
+function fetchBeatmapData($beatmapId) {
+    $accessToken = $_COOKIE['vot_access_token'] ?? null;
+    if (!$accessToken) {
+        // Access token is not available
+        return false;
     }
 
-    function getSecondBeatmap() {
-        if(empty($_COOKIE['vot_access_token'])) {
-            return false;
-        }
+    $apiUrl = "https://osu.ppy.sh/api/v2/beatmaps/{$beatmapId}";
+    $client = new Client();
 
-        $secondNoModBeatmapApiUrl = "https://osu.ppy.sh/api/v2/beatmaps/3524450";
+    try {
+        $response = $client->get($apiUrl, [
+            'headers' => [
+                'Authorization' => "Bearer {$accessToken}",
+                'Accept' => 'application/json',
+            ]
+        ]);
 
-        $client = new Client();
-
-        try {
-            $response = $client -> get($secondNoModBeatmapApiUrl, [
-                'headers' => [
-                    'authorization' => 'Bearer ' . $_COOKIE['vot_access_token'],
-                    'Accept' => 'application/json',
-                ]
-            ]);
-                
-            if($response -> getStatusCode() == 200) {
-                return json_decode($response -> getBody() -> getContents());
-            }
-            return false;
+        if ($response->getStatusCode() === 200) {
+            return json_decode($response -> getBody() -> getContents());
         }
-        catch(RequestException $exceptions) {
-            return false;
-        }
+        // API call did not return a 200 status
+        return false;
+    } 
+    catch (RequestException $exception) {
+        error_log($exception -> getMessage());    // Log the exception message
+        return false;                           // An exception occurred during the API call
     }
+}
 
-    $firstBeatmap = false;
-    $secondBeatmap = false;
+// Get the 'Beatmap Id' from the API call
+$beatmapData1 = fetchBeatmapData(3271670);
+$beatmapData2 = fetchBeatmapData(3524450);
 
-    $firstBeatmap = getFirstBeatmap();
-    $secondBeatmap = getsecondBeatmap();
-
-    // die('<pre>' . print_r($firstBeatmap, true) . '</pre>');
-    // die('<pre>' . print_r($secondBeatmap, true) . '</pre>');
+// die('<pre>' . print_r($beatmapData1, true) . '</pre>');
+// die('<pre>' . print_r($beatmapData2, true) . '</pre>');
 ?>
 
 <section>
@@ -77,30 +52,30 @@
             
             <br>
 
-            <a href="<?= htmlspecialchars($firstBeatmap -> url); ?>"><img src="<?= htmlspecialchars($firstBeatmap -> beatmapset -> covers -> cover); ?>" width="490px" alt="Beatmap Cover"></a>
+            <a href="<?= htmlspecialchars($beatmapData1 -> url); ?>"><img src="<?= htmlspecialchars($beatmapData1 -> beatmapset -> covers -> cover); ?>" width="490px" alt="Beatmap Cover"></a>
             
             <br><br>
 
-            <h2><?= htmlspecialchars($firstBeatmap -> beatmapset -> title_unicode); ?> [<?= htmlspecialchars($firstBeatmap -> version); ?>]</h2>
-            <h3><?= htmlspecialchars($firstBeatmap -> beatmapset -> artist_unicode); ?></h3>
+            <h2><?= htmlspecialchars($beatmapData1 -> beatmapset -> title_unicode); ?> [<?= htmlspecialchars($beatmapData1 -> version); ?>]</h2>
+            <h3><?= htmlspecialchars($beatmapData1 -> beatmapset -> artist_unicode); ?></h3>
             <h4 class="beatmap-creator-row">
-                Mapset by <a href="https://osu.ppy.sh/users/5938161"><?= htmlspecialchars($firstBeatmap -> beatmapset -> creator); ?></a>
+                Mapset by <a href="https://osu.ppy.sh/users/5938161"><?= htmlspecialchars($beatmapData1 -> beatmapset -> creator); ?></a>
             </h4>
             
             <br>
 
             <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars($firstBeatmap -> difficulty_rating); ?></p>
+                <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars($beatmapData1 -> difficulty_rating); ?></p>
                 <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?php echo "1:48"; ?></p>                        
-                <p><i class='bx bx-tachometer'></i> <?= htmlspecialchars($firstBeatmap -> bpm); ?>bpm</p>
+                <p><i class='bx bx-tachometer'></i> <?= htmlspecialchars($beatmapData1 -> bpm); ?>bpm</p>
             </div>
 
             <br>
 
             <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;">OD: <?= htmlspecialchars($firstBeatmap -> accuracy); ?></p>
-                <p style="margin-right: 1rem;">HP: <?= htmlspecialchars($firstBeatmap -> drain); ?></p>
-                <p>Passed: <?= htmlspecialchars($firstBeatmap -> passcount); ?></p>
+                <p style="margin-right: 1rem;">OD: <?= htmlspecialchars($beatmapData1 -> accuracy); ?></p>
+                <p style="margin-right: 1rem;">HP: <?= htmlspecialchars($beatmapData1 -> drain); ?></p>
+                <p>Passed: <?= htmlspecialchars($beatmapData1 -> passcount); ?></p>
             </div>
         </div>
 
@@ -109,30 +84,30 @@
             
             <br>
 
-            <a href="<?= htmlspecialchars($secondBeatmap -> url); ?>"><img src="<?= htmlspecialchars($secondBeatmap -> beatmapset -> covers -> cover); ?>" width="490px" alt="Beatmap Cover"></a>
+            <a href="<?= htmlspecialchars($beatmapData2 -> url); ?>"><img src="<?= htmlspecialchars($beatmapData2 -> beatmapset -> covers -> cover); ?>" width="490px" alt="Beatmap Cover"></a>
             
             <br><br>
 
-            <h2><?= htmlspecialchars($secondBeatmap -> beatmapset -> title_unicode); ?> [<?= htmlspecialchars($secondBeatmap -> version); ?>]</h2>
-            <h3><?= htmlspecialchars($secondBeatmap -> beatmapset -> artist_unicode); ?></h3>
+            <h2><?= htmlspecialchars($beatmapData2 -> beatmapset -> title_unicode); ?> [<?= htmlspecialchars($beatmapData2 -> version); ?>]</h2>
+            <h3><?= htmlspecialchars($beatmapData2 -> beatmapset -> artist_unicode); ?></h3>
             <h4 class="beatmap-creator-row">
-                Mapset by <a href="https://osu.ppy.sh/users/5938161"><?= htmlspecialchars($secondBeatmap -> beatmapset -> creator); ?></a>
+                Mapset by <a href="https://osu.ppy.sh/users/5938161"><?= htmlspecialchars($beatmapData2 -> beatmapset -> creator); ?></a>
             </h4>
             
             <br>
 
             <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars($secondBeatmap -> difficulty_rating); ?></p>
+                <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars($beatmapData2 -> difficulty_rating); ?></p>
                 <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?php echo "1:48"; ?></p>                        
-                <p><i class='bx bx-tachometer'></i> <?= htmlspecialchars($secondBeatmap -> bpm); ?>bpm</p>
+                <p><i class='bx bx-tachometer'></i> <?= htmlspecialchars($beatmapData2 -> bpm); ?>bpm</p>
             </div>
 
             <br>
             
             <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;">OD: <?= htmlspecialchars($secondBeatmap -> accuracy); ?></p>
-                <p style="margin-right: 1rem;">HP: <?= htmlspecialchars($secondBeatmap -> drain); ?></p>
-                <p>Passed: <?= htmlspecialchars($secondBeatmap -> passcount); ?></p>
+                <p style="margin-right: 1rem;">OD: <?= htmlspecialchars($beatmapData2 -> accuracy); ?></p>
+                <p style="margin-right: 1rem;">HP: <?= htmlspecialchars($beatmapData2 -> drain); ?></p>
+                <p>Passed: <?= htmlspecialchars($beatmapData2 -> passcount); ?></p>
             </div>
         </div>
 </section>
