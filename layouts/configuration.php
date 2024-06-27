@@ -5,7 +5,7 @@
     $dotenv->load();
 
     // Database configuration
-    $serverHost = 'db'; // The service name from docker-compose.yml
+    $serverHost = $_ENV['DATABASE_HOST'];
     $databaseName = $_ENV['DATABASE_NAME'];
     $databaseUsername = $_ENV['DATABASE_USER'];
     $databasePassword = $_ENV['DATABASE_PASSWORD'];
