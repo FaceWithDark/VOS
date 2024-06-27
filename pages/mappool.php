@@ -37,12 +37,70 @@ function fetchBeatmapData($beatmapId) {
     }
 }
 
-// Get the 'Beatmap Id' from the API call
-$beatmapData1 = fetchBeatmapData(3271670);
-$beatmapData2 = fetchBeatmapData(3524450);
+// Store beatmap data into database
+function storeBeatmapData($beatmapData, $phpDataObject) {
+    // SQL query to insert beatmap data into the 'beatmap' table
+    $query = "INSERT INTO beatmap (map_id, 
+                                   total_length, 
+                                   map_url, 
+                                   cover_image_url, 
+                                   title_unicode, 
+                                   artist_unicode, 
+                                   difficulty, 
+                                   mapper, 
+                                   difficulty_rating, 
+                                   map_bpm, 
+                                   overall_difficulty, 
+                                   health_point, 
+                                   amount_of_passes) 
+               VALUES (:map_id, 
+                       :total_length, 
+                       :map_url, 
+                       :cover_image_url, 
+                       :title_unicode, 
+                       :artist_unicode, 
+                       :difficulty, 
+                       :mapper, 
+                       :difficulty_rating, 
+                       :map_bpm, 
+                       :overall_difficulty, 
+                       :health_point, 
+                       :amount_of_passes)
+              ;";
+    
+    // Prepare the SQL statement to prevent SQL injection
+    $queryStatement = $phpDataObject -> prepare($query);
+    
+    // Bind the beatmap data to the prepared statement
+    //TODO: auto-call mods param.
+    $queryStatement -> bindParam(":map_id", $beatmapData['id']);
+    $queryStatement -> bindParam(":total_length", $beatmapData['total_length']);
+    $queryStatement -> bindParam(":map_url", $beatmapData['url']);
+    $queryStatement -> bindParam(":cover_image_url", $beatmapData['beatmapset']['covers']['cover']);
+    $queryStatement -> bindParam(":title_unicode", $beatmapData['beatmapset']['title_unicode']);
+    $queryStatement -> bindParam(":artist_unicode", $beatmapData['beatmapset']['artist_unicode']);
+    $queryStatement -> bindParam(":difficulty", $beatmapData['version']);
+    $queryStatement -> bindParam(":mapper", $beatmapData['beatmapset']['creator']);
+    $queryStatement -> bindParam(":difficulty_rating", $beatmapData['difficulty_rating']);
+    $queryStatement -> bindParam(":map_bpm", $beatmapData['bpm']);
+    $queryStatement -> bindParam(":overall_difficulty", $beatmapData['accuracy']);
+    $queryStatement -> bindParam(":health_point", $beatmapData['drain']);
+    $queryStatement -> bindParam(":amount_of_passes", $beatmapData['passcount']);
+    
+    // Execute the statement and insert the data into database
+    $queryStatement -> execute();
+    
+    // Check if the insert was successful by verifying affected rows
+    return $queryStatement -> rowCount() > 0;
+}
 
-// die('<pre>' . print_r($beatmapData1, true) . '</pre>');
-// die('<pre>' . print_r($beatmapData2, true) . '</pre>');
+// Define beatmap IDs for which data will be fetched
+$beatmapId1 = 3271670;
+$beatmapId2 = 3524450;
+
+// Fetch and store beatmap API data for specified beatmap IDs
+$beatmapData1 = fetchBeatmapData($beatmapId1);
+$beatmapData2 = fetchBeatmapData($beatmapId2);
 ?>
 
 <section>
