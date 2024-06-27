@@ -94,6 +94,30 @@ function storeBeatmapData($beatmapData, $phpDataObject) {
     return $queryStatement -> rowCount() > 0;
 }
 
+/*
+============================================================================
+        AN EXAMPLE USE-CASE TO CHECK IF THE QUERY PASSED OR NOT
+============================================================================
+
+    $beatmapId = 3271670;
+
+    $beatmapData = fetchBeatmapData($beatmapId);
+
+    if ($beatmapData && storeBeatmapData($beatmapData, $phpDataObject)) {
+        echo "Beatmap data for ID: {$beatmapId} inserted successfully.\n";
+    } else {
+        echo "Failed to insert beatmap data for ID: {$beatmapId}.\n";
+    }
+
+============================================================================
+    FOR DEBUGGING THE TEST CASE WHICH MAKING SURE THE API WORKING OR NOT
+============================================================================
+
+    die('<pre>' . print_r($beatmapData, true) . '</pre>');
+
+============================================================================
+*/
+
 // Define beatmap IDs for which data will be fetched
 $beatmapId1 = 3271670;
 $beatmapId2 = 3524450;
