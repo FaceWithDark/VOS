@@ -260,7 +260,11 @@ include_once '../modules/convertion/time_convertion.php';
                 <br>
                 <div class="beatmap-attribute-row">
                     <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars(number_format((float)$beatmapData['difficulty_rating'], 2)); ?></p>
-                    <!-- TODO: take use of the gmdate("i:s", <timestamp>) function to display the actual timestamp for each beatmap IDs called -->
+                    <!-- 
+                        TODO: 
+                        - Take use of the gmdate("i:s", <timestamp>) function to display the actual timestamp for each beatmap IDs called 
+                        - Take adventage of the durationToSeconds() function as well
+                    -->
                     <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= htmlspecialchars($beatmapData['total_length']); ?></p>
                     <p><i class='bx bx-tachometer'></i> <?= ($beatmapData['map_bpm']); ?>bpm</p>
                 </div>
@@ -271,6 +275,13 @@ include_once '../modules/convertion/time_convertion.php';
                     <p>Passed: <?= ($beatmapData['amount_of_passes']); ?></p>
                 </div>
             </div>
+
+            <!-- HD section -->
+            <!-- HR section -->
+            <!-- DT section -->
+            <!-- FM section -->
+            <!-- EZ section -->
+            <!-- TB section -->
         <?php endforeach; ?>
     </div> 
 </section>
