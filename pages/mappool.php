@@ -102,6 +102,16 @@ function storeBeatmapData($beatmapData, $phpDataObject) {
     }
 }
 
+// Check for existen beatmap data inside database
+function checkBeatmapData($beatmapId, $phpDataObject) {
+    $query = "SELECT id FROM vot3 WHERE map_id = :map_id";
+    $queryStatement = $phpDataObject -> prepare($query);
+    $queryStatement -> bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
+    $queryStatement -> execute();
+
+    return $queryStatement -> fetchColumn() !== false;
+}
+
 // Define beatmap IDs for which data will be fetched
 $beatmapId1 = 3271670;
 $beatmapId2 = 3524450;
