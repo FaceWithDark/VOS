@@ -172,11 +172,22 @@ $beatmapData2 = fetchBeatmapData($beatmapId2);
 
 // Get beatmap data from database by beatmap IDs
 function getBeatmapData($mapId, $phpDataObject) {
-    $query = "SELECT * FROM beatmap WHERE map_id = :map_id";            // SQL query to select specific values form all columns in targeted table.
+    $query = "SELECT * FROM vot3 WHERE map_id = :map_id";               // SQL query to select specific values form all columns in targeted table.
     $queryStatement = $phpDataObject -> prepare($query);                // Prepare the SQL statement to prevent SQL injection
     $queryStatement -> bindParam(":map_id", $mapId, PDO::PARAM_INT);    // Bind the beatmap data to the prepared statement
-    $queryStatement -> execute();                                       // Execute the statement and insert the data into database
-    return $queryStatement -> fetch(PDO::FETCH_ASSOC);                  // Fetch and return the result as an associative array
+
+    // Execute the statement and get the needed data in the database to display
+    if ($queryStatement -> execute()) {
+        error_log("Get data successfully for beatmap ID: " . $mapId);
+        // Fetch and return the result as an associative array
+        return $queryStatement -> fetch(PDO::FETCH_ASSOC);
+    } 
+    else {
+        error_log("Get data failed for beatmap ID: " . $mapId);
+        $errorInfo = $queryStatement -> errorInfo();
+        error_log("Error Info: " . implode(", ", $errorInfo));
+        return false;
+    }
 }
 
 // Get and store beatmap data for specific beatmap IDs from database
