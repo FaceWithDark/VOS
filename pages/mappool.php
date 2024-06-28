@@ -163,12 +163,62 @@ function updateBeatmapData($beatmapData, $phpDataObject) {
 }
 
 // Define beatmap IDs for which data will be fetched
-$beatmapId1 = 3271670;
-$beatmapId2 = 3524450;
+$beatmapIds = [3271670, 3524450];
 
-// Fetch and store beatmap API data for specified beatmap IDs
-$beatmapData1 = fetchBeatmapData($beatmapId1);
-$beatmapData2 = fetchBeatmapData($beatmapId2);
+$beatmapDataArray = [];
+foreach($beatmapIds as $beatmapId) {
+    // Fetch the beatmap data from the API
+    $beatmapData = fetchBeatmapData($beatmapId);
+
+    if($beatmapData) {
+        if(checkBeatmapData($beatmapData -> id, $phpDataObject)) {
+            // Update existing beatmap data
+            updateBeatmapData($beatmapData, $phpDataObject);
+        } 
+    }
+    else {
+        // Insert new beatmap data
+        storeBeatmapData($beatmapData, $phpDataObject);
+    }
+
+    // Retrieve the beatmap data from the database
+    $retrievedBeatmapData = getBeatmapData($beatmapId, $phpDataObject);
+    if($retrievedBeatmapData) {
+        $beatmapDataArray[] = $retrievedBeatmapData;
+    } 
+    else {
+        echo "Failed to retrieve beatmap data for ID: {$retrievedBeatmapData}.\n";
+    }
+}
+
+// Define beatmap IDs for which data will be fetched
+$beatmapIds = [3271670, 3524450];
+
+$beatmapDataArray = [];
+foreach($beatmapIds as $beatmapId) {
+    // Fetch the beatmap data from the API
+    $beatmapData = fetchBeatmapData($beatmapId);
+
+    if($beatmapData) {
+        if(checkBeatmapData($beatmapData -> id, $phpDataObject)) {
+            // Update existing beatmap data
+            updateBeatmapData($beatmapData, $phpDataObject);
+        } 
+    }
+    else {
+        // Insert new beatmap data
+        storeBeatmapData($beatmapData, $phpDataObject);
+    }
+
+    // Retrieve the beatmap data from the database
+    $retrievedBeatmapData = getBeatmapData($beatmapId, $phpDataObject);
+    if($retrievedBeatmapData) {
+        $beatmapDataArray[] = $retrievedBeatmapData;
+    } 
+    else {
+        echo "Failed to retrieve beatmap data for ID: {$retrievedBeatmapData}.\n";
+    }
+}
 
 // Get beatmap data from database by beatmap IDs
 function getBeatmapData($mapId, $phpDataObject) {
@@ -189,10 +239,6 @@ function getBeatmapData($mapId, $phpDataObject) {
         return false;
     }
 }
-
-// Get and store beatmap data for specific beatmap IDs from database
-$beatmapData1 = getBeatmapData(3271670, $phpDataObject);
-$beatmapData2 = getBeatmapData(3524450, $phpDataObject);
 ?>
 
 <section>
