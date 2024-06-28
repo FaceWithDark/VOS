@@ -245,67 +245,32 @@ include_once '../modules/convertion/time_convertion.php';
 
 <section>
     <div class="mappool-page">
-        <div class="mappool-card-container">
-            <h1>NM1</h1>
-            
-            <br>
-
-            <a href="<?= htmlspecialchars($beatmapData1 -> url); ?>"><img src="<?= htmlspecialchars($beatmapData1 -> beatmapset -> covers -> cover); ?>" width="490px" alt="Beatmap Cover"></a>
-            
-            <br><br>
-
-            <h2><?= htmlspecialchars($beatmapData1 -> beatmapset -> title_unicode); ?> [<?= htmlspecialchars($beatmapData1 -> version); ?>]</h2>
-            <h3><?= htmlspecialchars($beatmapData1 -> beatmapset -> artist_unicode); ?></h3>
-            <h4 class="beatmap-creator-row">
-                Mapset by <a href="https://osu.ppy.sh/users/5938161"><?= htmlspecialchars($beatmapData1 -> beatmapset -> creator); ?></a>
-            </h4>
-            
-            <br>
-
-            <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars($beatmapData1 -> difficulty_rating); ?></p>
-                <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?php echo "1:48"; ?></p>                        
-                <p><i class='bx bx-tachometer'></i> <?= htmlspecialchars($beatmapData1 -> bpm); ?>bpm</p>
+        <?php foreach($beatmapDataArray as $beatmapData): ?>
+            <!-- NM section -->
+            <div class="mappool-card-container">
+                <h1>NM1</h1>
+                <br>
+                <a href="<?= ($beatmapData['map_url']); ?>"><img src="<?= htmlspecialchars($beatmapData['cover_image_url']); ?>" width="490px" alt="Beatmap Cover"></a>
+                <br><br>
+                <h2><?= htmlspecialchars($beatmapData['title_unicode']); ?> [<?= ($beatmapData['difficulty']); ?>]</h2>
+                <h3><?= htmlspecialchars($beatmapData['artist_unicode']); ?></h3>
+                <h4 class="beatmap-creator-row">
+                    Mapset by <a href="https://osu.ppy.sh/users/<?= htmlspecialchars($beatmapData['mapper']); ?>"><?= htmlspecialchars($beatmapData['mapper']); ?></a>
+                </h4>
+                <br>
+                <div class="beatmap-attribute-row">
+                    <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars(number_format((float)$beatmapData['difficulty_rating'], 2)); ?></p>
+                    <!-- TODO: take use of the gmdate("i:s", <timestamp>) function to display the actual timestamp for each beatmap IDs called -->
+                    <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= htmlspecialchars($beatmapData['total_length']); ?></p>
+                    <p><i class='bx bx-tachometer'></i> <?= ($beatmapData['map_bpm']); ?>bpm</p>
+                </div>
+                <br>
+                <div class="beatmap-attribute-row">
+                    <p style="margin-right: 1rem;">OD: <?= htmlspecialchars(number_format((float)$beatmapData['overall_difficulty'], 2)); ?></p>
+                    <p style="margin-right: 1rem;">HP: <?= htmlspecialchars(number_format((float)$beatmapData['health_point'], 2)); ?></p>
+                    <p>Passed: <?= ($beatmapData['amount_of_passes']); ?></p>
+                </div>
             </div>
-
-            <br>
-
-            <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;">OD: <?= htmlspecialchars($beatmapData1 -> accuracy); ?></p>
-                <p style="margin-right: 1rem;">HP: <?= htmlspecialchars($beatmapData1 -> drain); ?></p>
-                <p>Passed: <?= htmlspecialchars($beatmapData1 -> passcount); ?></p>
-            </div>
-        </div>
-
-        <div class="mappool-card-container">
-            <h1>NM2</h1>
-            
-            <br>
-
-            <a href="<?= htmlspecialchars($beatmapData2 -> url); ?>"><img src="<?= htmlspecialchars($beatmapData2 -> beatmapset -> covers -> cover); ?>" width="490px" alt="Beatmap Cover"></a>
-            
-            <br><br>
-
-            <h2><?= htmlspecialchars($beatmapData2 -> beatmapset -> title_unicode); ?> [<?= htmlspecialchars($beatmapData2 -> version); ?>]</h2>
-            <h3><?= htmlspecialchars($beatmapData2 -> beatmapset -> artist_unicode); ?></h3>
-            <h4 class="beatmap-creator-row">
-                Mapset by <a href="https://osu.ppy.sh/users/5938161"><?= htmlspecialchars($beatmapData2 -> beatmapset -> creator); ?></a>
-            </h4>
-            
-            <br>
-
-            <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars($beatmapData2 -> difficulty_rating); ?></p>
-                <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?php echo "1:48"; ?></p>                        
-                <p><i class='bx bx-tachometer'></i> <?= htmlspecialchars($beatmapData2 -> bpm); ?>bpm</p>
-            </div>
-
-            <br>
-            
-            <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;">OD: <?= htmlspecialchars($beatmapData2 -> accuracy); ?></p>
-                <p style="margin-right: 1rem;">HP: <?= htmlspecialchars($beatmapData2 -> drain); ?></p>
-                <p>Passed: <?= htmlspecialchars($beatmapData2 -> passcount); ?></p>
-            </div>
-        </div>
+        <?php endforeach; ?>
+    </div> 
 </section>
