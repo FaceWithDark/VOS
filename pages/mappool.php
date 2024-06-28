@@ -239,6 +239,8 @@ function getBeatmapData($mapId, $phpDataObject) {
         return false;
     }
 }
+
+include_once '../modules/convertion/time_convertion.php';
 ?>
 
 <section>
