@@ -174,8 +174,8 @@ foreach($beatmapIds as $beatmapId) {
     if($beatmapData) {
         // Check if the beatmap data already exists in the database 
         if(!checkBeatmapData($beatmapData -> id, $phpDataObject)) {
-        // Insert new beatmap data
-        storeBeatmapData($beatmapData, $phpDataObject);
+            // Insert new beatmap data
+            storeBeatmapData($beatmapData, $phpDataObject);
         }
         else {
             // Update existing beatmap data
