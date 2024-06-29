@@ -24,8 +24,8 @@
         $phpDataObject = new PDO("mysql:host=$serverHost;dbname=$databaseName;charset=utf8mb4", $databaseUsername, $databasePassword, $fullErrorHandlingOption);
         // echo "Connected successfully";
 
-    } catch (PDOException $exceptions) {
+    } catch (PDOException $exception) {
         // Failed to connect the database
-        die("Connection failed: " . $exceptions -> getMessage());
+        die("Connection failed: " . $exception -> getMessage());
     }
 ?>
