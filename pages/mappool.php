@@ -40,7 +40,7 @@ function fetchBeatmapData($beatmapId) {
     }
 }
 
-// Store beatmap data into database
+// Store new beatmap data into database
 function storeBeatmapData($beatmapData, $phpDataObject) {
     // SQL query to store beatmap data in the 'vot3' table
     $query = "INSERT INTO vot3 (map_id, 
@@ -102,7 +102,7 @@ function storeBeatmapData($beatmapData, $phpDataObject) {
     }
 }
 
-// Check for existen beatmap data inside database
+// Check if beatmap data already exists in the database
 function checkBeatmapData($beatmapId, $phpDataObject) {
     $query = "SELECT id FROM vot3 WHERE map_id = :map_id";
     $queryStatement = $phpDataObject -> prepare($query);
@@ -112,7 +112,7 @@ function checkBeatmapData($beatmapId, $phpDataObject) {
     return $queryStatement -> fetchColumn() !== false;
 }
 
-// Update existen beatmap data with new data inside database
+// Update existing beatmap data in the database with new data
 function updateBeatmapData($beatmapData, $phpDataObject) {
     // SQL query to update beatmap data in the 'vot3' table
     $query = "UPDATE vot3 
@@ -170,53 +170,27 @@ foreach($beatmapIds as $beatmapId) {
     // Fetch the beatmap data from the API
     $beatmapData = fetchBeatmapData($beatmapId);
 
+    // If beatmap data is fetched successfully
     if($beatmapData) {
-        if(checkBeatmapData($beatmapData -> id, $phpDataObject)) {
-            // Update existing beatmap data
-            updateBeatmapData($beatmapData, $phpDataObject);
-        } 
-    }
-    else {
+        // Check if the beatmap data already exists in the database 
+        if(!checkBeatmapData($beatmapData -> id, $phpDataObject)) {
         // Insert new beatmap data
         storeBeatmapData($beatmapData, $phpDataObject);
-    }
-
-    // Retrieve the beatmap data from the database
-    $retrievedBeatmapData = getBeatmapData($beatmapId, $phpDataObject);
-    if($retrievedBeatmapData) {
-        $beatmapDataArray[] = $retrievedBeatmapData;
-    } 
-    else {
-        echo "Failed to retrieve beatmap data for ID: {$retrievedBeatmapData}.\n";
-    }
-}
-
-// Define beatmap IDs for which data will be fetched
-$beatmapIds = [3271670, 3524450];
-
-$beatmapDataArray = [];
-foreach($beatmapIds as $beatmapId) {
-    // Fetch the beatmap data from the API
-    $beatmapData = fetchBeatmapData($beatmapId);
-
-    if($beatmapData) {
-        if(checkBeatmapData($beatmapData -> id, $phpDataObject)) {
+        }
+        else {
             // Update existing beatmap data
             updateBeatmapData($beatmapData, $phpDataObject);
-        } 
-    }
-    else {
-        // Insert new beatmap data
-        storeBeatmapData($beatmapData, $phpDataObject);
-    }
+        }
 
-    // Retrieve the beatmap data from the database
-    $retrievedBeatmapData = getBeatmapData($beatmapId, $phpDataObject);
-    if($retrievedBeatmapData) {
-        $beatmapDataArray[] = $retrievedBeatmapData;
-    } 
-    else {
-        echo "Failed to retrieve beatmap data for ID: {$retrievedBeatmapData}.\n";
+        // Retrieve the beatmap data from the database
+        $retrievedBeatmapData = getBeatmapData($beatmapId, $phpDataObject);
+        // If data retrieval is successful, add it to the array
+        if($retrievedBeatmapData) {
+            $beatmapDataArray[] = $retrievedBeatmapData;
+        } 
+        else {
+            echo "Failed to retrieve beatmap data for ID: {$beatmapId}.\n";
+        }
     }
 }
 
