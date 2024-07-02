@@ -116,7 +116,7 @@ function checkBeatmapData($beatmapId, $phpDataObject) {
 }
 
 // Update existing beatmap data in the database with new data
-function updateBeatmapData($beatmapData, $phpDataObject) {
+function updateBeatmapData($beatmapData, $modType, $phpDataObject) {
     // SQL query to update beatmap data in the 'vot3' table
     $query = "UPDATE vot3 
               SET total_length = :total_length, 
@@ -130,7 +130,8 @@ function updateBeatmapData($beatmapData, $phpDataObject) {
                   map_bpm = :map_bpm, 
                   overall_difficulty = :overall_difficulty, 
                   health_point = :health_point, 
-                  amount_of_passes = :amount_of_passes
+                  amount_of_passes = :amount_of_passes,
+                  mod_type = :mod_type
               WHERE map_id = :map_id;";
     
     // Prepare the SQL statement to prevent SQL injection
@@ -151,6 +152,8 @@ function updateBeatmapData($beatmapData, $phpDataObject) {
     $queryStatement -> bindParam(":overall_difficulty", $beatmapData -> accuracy);
     $queryStatement -> bindParam(":health_point", $beatmapData -> drain);
     $queryStatement -> bindParam(":amount_of_passes", $beatmapData -> passcount);
+    $queryStatement -> bindParam(":mod_type", $modType);
+
 
     // Execute the statement and update the existen data in the database
     if ($queryStatement -> execute()) {
@@ -182,7 +185,7 @@ foreach($beatmapIds as $beatmapId) {
         }
         else {
             // Update existing beatmap data
-            updateBeatmapData($beatmapData, $phpDataObject);
+            updateBeatmapData($beatmapData, $modType, $phpDataObject);
         }
 
         // Retrieve the beatmap data from the database
