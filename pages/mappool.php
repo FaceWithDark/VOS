@@ -77,7 +77,6 @@ function storeBeatmapData($beatmapData, $modType, $phpDataObject) {
     $queryStatement = $phpDataObject -> prepare($query);
     
     // Bind the beatmap data to the prepared statement
-    //TODO: auto-call mods param.
     $queryStatement -> bindParam(":map_id", $beatmapData -> id);
     $queryStatement -> bindParam(":total_length", $beatmapData -> total_length);
     $queryStatement -> bindParam(":map_url", $beatmapData -> url);
@@ -139,7 +138,6 @@ function updateBeatmapData($beatmapData, $modType, $phpDataObject) {
     $queryStatement = $phpDataObject -> prepare($query);
     
     // Bind the beatmap data to the prepared statement
-    //TODO: auto-call mods param.
     $queryStatement -> bindParam(":map_id", $beatmapData -> id);
     $queryStatement -> bindParam(":total_length", $beatmapData -> total_length);
     $queryStatement -> bindParam(":map_url", $beatmapData -> url);
