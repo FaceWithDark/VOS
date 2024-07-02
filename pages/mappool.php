@@ -173,9 +173,59 @@ function updateBeatmapData($beatmapData, $modType, $phpDataObject) {
 $beatmapIds = [3271670, 3524450];
 
 $beatmapDataArray = [];
-foreach($beatmapIds as $beatmapId) {
+
+// Define a mapping of index ranges to beatmap mods
+$modTypes = [
+    // NM section
+    'NM1' => [0],
+    'NM2' => [1],
+    'NM3' => [2],
+    'NM4' => [],
+    'NM5' => [],
+    'NM6' => [],
+
+    // HD section
+    'HD1' => [3],
+    'HD2' => [4],
+
+    // HR section
+    'HR1' => [5],
+    'HR2' => [6],
+
+    // DT section
+    'DT1' => [7],
+    'DT2' => [],
+
+    // FM section
+    'FM1' => [8],
+    'FM2' => [],
+
+    // EZ section
+    'EZ' => [],
+
+    // TB section
+    'TB' => []
+];
+
+// Get beatmap mod by array index
+function getModTypeByIndex($arrayIndex, $modTypes) {
+    foreach($modTypes as $modType => $arrayIndexes) {
+        if(in_array($arrayIndex, $arrayIndexes)) {
+            return $modType;
+        }
+    }
+    // None of the mod applied if index is not found
+    return 'N/A';
+}
+
+foreach($beatmapIds as $arrayIndex => $beatmapId) {
+    // Get the beatmap mod type based on index number in an array
+    $modType = getModTypeByIndex($arrayIndex, $modTypes);
+
     // Fetch the beatmap data from the API
     $beatmapData = fetchBeatmapData($beatmapId);
+    
+    // die('<pre>' . print_r($beatmapData, true) . '</pre>');
 
     // If beatmap data is fetched successfully
     if($beatmapData) {
