@@ -10,26 +10,28 @@
     <section>
         <div class="flex-container">
             <div class="direct-link-container">
-                <a href="https://docs.google.com/spreadsheets/d/1NTKjjdmax-qjO8L9-V8Iuom8zjcCaz9X-DHFJ4SDSAg/edit#gid=0">
+                <!-- <a href="https://docs.google.com/spreadsheets/d/1NTKjjdmax-qjO8L9-V8Iuom8zjcCaz9X-DHFJ4SDSAg/edit#gid=0"> // TODO: Re-create this as the spreadsheet owner somehow delete this. -->
+                <a href="#">
                     Vietnam osu!taiko Tournament 1
                 </a>
             </div>
 
             <div class="direct-link-container">
-                <a href="https://docs.google.com/spreadsheets/d/1LJg5ITi8tqUer-C2dKb1xE-MYQSELpi_-_Ur2UV_las/edit#gid=0">
+                <!-- <a href="https://docs.google.com/spreadsheets/d/1LJg5ITi8tqUer-C2dKb1xE-MYQSELpi_-_Ur2UV_las/edit#gid=0"> // TODO: Re-create this as the spreadsheet owner somehow delete this. -->
+                <a href="#">
                     Vietnam osu!taiko Tournament 2
                 </a>
             </div>
 
             <div class="direct-link-container">
-                <!-- <a href="https://docs.google.com/spreadsheets/d/17O6J2lPWZWVvozOhT3OiumRrmFn_9wRlLQrwOHP2B-k/edit#gid=0"> -->
-                <a href="mappool.php">
+                <a href="https://docs.google.com/spreadsheets/d/17O6J2lPWZWVvozOhT3OiumRrmFn_9wRlLQrwOHP2B-k/edit#gid=0">
                     Vietnam osu!taiko Tournament 3
                 </a>
             </div>
 
             <div class="direct-link-container">
-                <a href="https://docs.google.com/spreadsheets/d/1H9N4hm1gcnipTtzKNtGpana7mJ2Gh4EbTnq9B19pCtU/edit?gid=1461400646#gid=1461400646">
+                <!-- <a href="https://docs.google.com/spreadsheets/d/1H9N4hm1gcnipTtzKNtGpana7mJ2Gh4EbTnq9B19pCtU/edit?gid=1461400646#gid=1461400646"> -->
+                <a href="mappool.php">
                     Vietnam osu!taiko Tournament 4
                 </a>
             </div>
