@@ -279,7 +279,7 @@ include_once '../modules/convertion/time_convertion.php';
         <?php foreach($beatmapDataArray as $beatmapData): ?>
             <!-- Dynamic beatmap display with correct mod type -->
             <div class="mappool-card-container">
-                <h1>NM1</h1>
+                <h1><?= htmlspecialchars($beatmapData['mod_type']) ?></h1>
                 <br>
                 <a href="<?= ($beatmapData['map_url']); ?>"><img src="<?= htmlspecialchars($beatmapData['cover_image_url']); ?>" width="490px" alt="Beatmap Cover"></a>
                 <br><br>
