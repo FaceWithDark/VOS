@@ -24,6 +24,7 @@ function fetchBeatmapData($beatmapId) {
         $response = $client->get($apiUrl, [
             'headers' => [
                 'Authorization' => "Bearer {$accessToken}",
+                'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
             ]
         ]);
@@ -35,7 +36,7 @@ function fetchBeatmapData($beatmapId) {
         return false;
     } 
     catch (RequestException $exception) {
-        error_log($exception -> getMessage());    // Log the exception message
+        error_log($exception -> getMessage());  // Log the exception message
         return false;                           // An exception occurred during the API call
     }
 }
