@@ -87,7 +87,7 @@ nav.active-button {
 .song-page,
 .mappool-page
 {
-    padding: 1rem;
+    padding-top: 1rem;
     transition: margin-left 0.25s linear, width 0.25s linear;
     width: calc(100% - .25rem);
     margin-left: .25rem;
@@ -343,7 +343,7 @@ body.dark-theme .mappool-card-container
 
 .mappool-page {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     flex-wrap: wrap;
 }
 
@@ -373,7 +373,3 @@ body.dark-theme .mappool-card-container
 .beatmap-creator-row a {
     margin-left: .25rem;
 }
-
-
-
-
