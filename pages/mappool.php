@@ -170,7 +170,9 @@ function updateBeatmapData($beatmapData, $modType, $phpDataObject) {
 }
 
 // Define beatmap IDs for which data will be fetched
-$beatmapIds = [3271670, 3524450];
+$beatmapIds = [ // VOT4 Qualifiers
+                3832435, 3167804, 4670818, 4353546, 3175478, 3412725, 4215511, 4670467, 2337091
+              ];
 
 $beatmapDataArray = [];
 
