@@ -220,7 +220,7 @@ include_once '../modules/convertion/time_convertion.php';
 <section>
     <div class="mappool-page">
         <?php foreach($beatmapDataArray as $beatmapData): ?>
-            <!-- NM section -->
+            <!-- Dynamic beatmap display with correct mod type -->
             <div class="mappool-card-container">
                 <h1>NM1</h1>
                 <br>
@@ -249,13 +249,6 @@ include_once '../modules/convertion/time_convertion.php';
                     <p>Passed: <?= ($beatmapData['amount_of_passes']); ?></p>
                 </div>
             </div>
-
-            <!-- HD section -->
-            <!-- HR section -->
-            <!-- DT section -->
-            <!-- FM section -->
-            <!-- EZ section -->
-            <!-- TB section -->
         <?php endforeach; ?>
     </div> 
 </section>
