@@ -41,7 +41,7 @@ function fetchBeatmapData($beatmapId) {
 }
 
 // Store new beatmap data into database
-function storeBeatmapData($beatmapData, $phpDataObject) {
+function storeBeatmapData($beatmapData, $modType, $phpDataObject) {
     // SQL query to store beatmap data in the 'vot3' table
     $query = "INSERT INTO vot3 (map_id, 
                                 total_length, 
@@ -55,7 +55,8 @@ function storeBeatmapData($beatmapData, $phpDataObject) {
                                 map_bpm, 
                                 overall_difficulty, 
                                 health_point, 
-                                amount_of_passes) 
+                                amount_of_passes,
+                                mod_type) 
                      VALUES (:map_id, 
                              :total_length, 
                              :map_url, 
@@ -68,7 +69,8 @@ function storeBeatmapData($beatmapData, $phpDataObject) {
                              :map_bpm, 
                              :overall_difficulty, 
                              :health_point, 
-                             :amount_of_passes);";
+                             :amount_of_passes,
+                             :mod_type);";
     
     // Prepare the SQL statement to prevent SQL injection
     $queryStatement = $phpDataObject -> prepare($query);
@@ -88,6 +90,7 @@ function storeBeatmapData($beatmapData, $phpDataObject) {
     $queryStatement -> bindParam(":overall_difficulty", $beatmapData -> accuracy);
     $queryStatement -> bindParam(":health_point", $beatmapData -> drain);
     $queryStatement -> bindParam(":amount_of_passes", $beatmapData -> passcount);
+    $queryStatement -> bindParam(":mod_type", $modType);
     
     // Execute the statement and insert the data into database
     if ($queryStatement -> execute()) {
@@ -175,7 +178,7 @@ foreach($beatmapIds as $beatmapId) {
         // Check if the beatmap data already exists in the database 
         if(!checkBeatmapData($beatmapData -> id, $phpDataObject)) {
             // Insert new beatmap data
-            storeBeatmapData($beatmapData, $phpDataObject);
+            storeBeatmapData($beatmapData, $modType, $phpDataObject);
         }
         else {
             // Update existing beatmap data
