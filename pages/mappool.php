@@ -43,8 +43,8 @@ function fetchBeatmapData($beatmapId) {
 
 // Store new beatmap data into database
 function storeBeatmapData($beatmapData, $modType, $phpDataObject) {
-    // SQL query to store beatmap data in the 'vot3' table
-    $query = "INSERT INTO vot3 (map_id, 
+    // SQL query to store beatmap data in the 'vot4' table
+    $query = "INSERT INTO vot4 (map_id, 
                                 total_length, 
                                 map_url, 
                                 cover_image_url, 
@@ -107,7 +107,7 @@ function storeBeatmapData($beatmapData, $modType, $phpDataObject) {
 
 // Check if beatmap data already exists in the database
 function checkBeatmapData($beatmapId, $phpDataObject) {
-    $query = "SELECT id FROM vot3 WHERE map_id = :map_id";
+    $query = "SELECT id FROM vot4 WHERE map_id = :map_id";
     $queryStatement = $phpDataObject -> prepare($query);
     $queryStatement -> bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
     $queryStatement -> execute();
@@ -117,8 +117,8 @@ function checkBeatmapData($beatmapId, $phpDataObject) {
 
 // Update existing beatmap data in the database with new data
 function updateBeatmapData($beatmapData, $modType, $phpDataObject) {
-    // SQL query to update beatmap data in the 'vot3' table
-    $query = "UPDATE vot3 
+    // SQL query to update beatmap data in the 'vot4' table
+    $query = "UPDATE vot4 
               SET total_length = :total_length, 
                   map_url = :map_url, 
                   cover_image_url = :cover_image_url, 
@@ -253,7 +253,7 @@ foreach($beatmapIds as $arrayIndex => $beatmapId) {
 
 // Get beatmap data from database by beatmap IDs
 function getBeatmapData($mapId, $phpDataObject) {
-    $query = "SELECT * FROM vot3 WHERE map_id = :map_id";               // SQL query to select specific values form all columns in targeted table.
+    $query = "SELECT * FROM vot4 WHERE map_id = :map_id";               // SQL query to select specific values form all columns in targeted table.
     $queryStatement = $phpDataObject -> prepare($query);                // Prepare the SQL statement to prevent SQL injection
     $queryStatement -> bindParam(":map_id", $mapId, PDO::PARAM_INT);    // Bind the beatmap data to the prepared statement
 
