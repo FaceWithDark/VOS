@@ -11,33 +11,66 @@ require_once '../layouts/navigation_bar.php';
 
 // Fetch beatmap data from the Osu! API
 function fetchBeatmapData($beatmapId) {
+    // Check if the user is authenticated by looking for the access token in cookies
     $accessToken = $_COOKIE['vot_access_token'] ?? null;
-    if (!$accessToken) {
-        // Access token is not available
-        return false;
-    }
-
-    $apiUrl = "https://osu.ppy.sh/api/v2/beatmaps/{$beatmapId}";
-    $client = new Client();
-
-    try {
-        $response = $client->get($apiUrl, [
-            'headers' => [
-                'Authorization' => "Bearer {$accessToken}",
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-            ]
-        ]);
-
-        if ($response->getStatusCode() === 200) {
-            return json_decode($response -> getBody() -> getContents());
+    if ($accessToken) {
+        // If authenticated, construct the API URL for fetching beatmap data
+        $apiUrl = "https://osu.ppy.sh/api/v2/beatmaps/{$beatmapId}";
+        $client = new Client();
+    
+        try {
+            // Make a GET request to the Osu! API with the access token
+            $response = $client -> get($apiUrl, [
+                'headers' => [
+                    'Authorization' => "Bearer {$accessToken}",
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ]
+            ]);
+            
+            // Return the beatmap data if it is a 200 status 
+            if ($response->getStatusCode() === 200) {
+                $apiData = json_decode($response -> getBody() -> getContents());
+                return $apiData;
+            }
+            // API call did not return a 200 status
+            return false;
+        } 
+        catch (RequestException $exception) {
+            error_log("API request failed: " . $exception -> getMessage());  // Log the exception message
+            return false;                                                    // An exception occurred during the API call
         }
-        // API call did not return a 200 status
-        return false;
-    } 
-    catch (RequestException $exception) {
-        error_log($exception -> getMessage());  // Log the exception message
-        return false;                           // An exception occurred during the API call
+    }
+    else {
+        // If not authenticated, fetch data from the database directly
+        try {
+            global $phpDataObject;
+            
+            // Check if the beatmap data exists in the database
+            if(checkBeatmapData($beatmapId, $phpDataObject)) {
+                $query = "SELECT id FROM vot4 WHERE map_id = :map_id";
+                $queryStatement = $phpDataObject -> prepare($query);
+                $queryStatement -> bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
+
+                // Execute the statement and fetch the data
+                if ($queryStatement->execute()) {
+                    error_log("Successfully retrieved data for beatmap ID: " . $beatmapId);
+                    // Fetch and return the result as an associative array
+                    return $queryStatement -> fetch(PDO::FETCH_ASSOC);
+                } 
+                else {
+                    error_log("Failed to retrieve data for beatmap ID: " . $beatmapId);
+                    $errorInfo = $queryStatement -> errorInfo();
+                    error_log("Database error: " . implode(", ", $errorInfo));
+                    return false;
+                }
+            }
+            return false; // Beatmap data not found in the database
+        }
+        catch (RequestException $exception) {
+            error_log("Database query failed: " . $exception -> getMessage());  // Log the exception message
+            return false;                                                       // An exception occurred during the API call
+        }
     }
 }
 
@@ -218,32 +251,44 @@ function getModTypeByIndex($arrayIndex, $modTypes) {
     return 'N/A';
 }
 
-foreach($beatmapIds as $arrayIndex => $beatmapId) {
+foreach ($beatmapIds as $arrayIndex => $beatmapId) {
     // Get the beatmap mod type based on index number in an array
     $modType = getModTypeByIndex($arrayIndex, $modTypes);
 
-    // Fetch the beatmap data from the API
+    // Fetch the beatmap data from the API or database
     $beatmapData = fetchBeatmapData($beatmapId);
-    
-    // die('<pre>' . print_r($beatmapData, true) . '</pre>');
 
     // If beatmap data is fetched successfully
-    if($beatmapData) {
-        // Check if the beatmap data already exists in the database 
-        if(!checkBeatmapData($beatmapData -> id, $phpDataObject)) {
-            // Insert new beatmap data
-            storeBeatmapData($beatmapData, $modType, $phpDataObject);
-        }
+    if ($beatmapData) {
+        // Check if the user is authenticated
+        $accessToken = $_COOKIE['vot_access_token'] ?? null;
+        if ($accessToken) {
+            // Check if the beatmap data already exists in the database
+            if (!checkBeatmapData($beatmapData -> id, $phpDataObject)) {
+                // Insert new beatmap data
+                storeBeatmapData($beatmapData, $modType, $phpDataObject);
+            } else {
+                // Update existing beatmap data
+                updateBeatmapData($beatmapData, $modType, $phpDataObject);
+            }
+
+            // Retrieve the beatmap data from the database
+            $retrievedBeatmapData = getBeatmapData($beatmapId, $phpDataObject);
+
+            // die('<pre>' . print_r($retrievedBeatmapData, true) . '</pre>');
+        } 
         else {
-            // Update existing beatmap data
-            updateBeatmapData($beatmapData, $modType, $phpDataObject);
+            // For unauthenticated users, directly retrieve the data from the database
+            $retrievedBeatmapData = getBeatmapData($beatmapId, $phpDataObject);
+
+            // die('<pre>' . print_r($retrievedBeatmapData, true) . '</pre>');
         }
 
-        // Retrieve the beatmap data from the database
-        $retrievedBeatmapData = getBeatmapData($beatmapId, $phpDataObject);
         // If data retrieval is successful, add it to the array
-        if($retrievedBeatmapData) {
+        if ($retrievedBeatmapData) {
             $beatmapDataArray[] = $retrievedBeatmapData;
+
+            // die('<pre>' . print_r($beatmapDataArray, true) . '</pre>');
         } 
         else {
             echo "Failed to retrieve beatmap data for ID: {$beatmapId}.\n";
@@ -253,9 +298,9 @@ foreach($beatmapIds as $arrayIndex => $beatmapId) {
 
 // Get beatmap data from database by beatmap IDs
 function getBeatmapData($mapId, $phpDataObject) {
-    $query = "SELECT * FROM vot4 WHERE map_id = :map_id";               // SQL query to select specific values form all columns in targeted table.
-    $queryStatement = $phpDataObject -> prepare($query);                // Prepare the SQL statement to prevent SQL injection
-    $queryStatement -> bindParam(":map_id", $mapId, PDO::PARAM_INT);    // Bind the beatmap data to the prepared statement
+    $query = "SELECT * FROM vot4 WHERE map_id = :map_id";
+    $queryStatement = $phpDataObject -> prepare($query);
+    $queryStatement -> bindParam(":map_id", $mapId, PDO::PARAM_INT);
 
     // Execute the statement and get the needed data in the database to display
     if ($queryStatement -> execute()) {
