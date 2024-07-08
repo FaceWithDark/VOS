@@ -37,6 +37,15 @@
             </p>
         </div>
 
+        <!--
+            TODO:
+            - To make this looks less like dumping information onto the page, this can be done with transition like a horizontal flip book.
+            - I have already setup the corresponding <div> to make this as a possible thing to do later on.
+            - I am so proud of my back-end thinking applied to the front-end sometimes.
+
+            Idea suggested date: 07/07/24
+            Starting on implementation: TBD
+        -->
         <div class="lower-general-information-box">
             <div class="general-rule-section">
                 <h2>General Rules</h2>
@@ -187,5 +196,18 @@
                 </div>
             </div>
         </div>
+
+    <!-- 
+        TODO:
+        - This is for future purpose (or might be not). If I am being lazy, this will be the one to be use:
+
+            <a href="https://osu.ppy.sh/community/forums/topics/1933154?n=1" style="display: flex; justify-content: center; align-items: center; margin-top: 35rem; font-size: 10rem;">XD</a>
+            
+        - However, I will still keeping the old implementation working with the (possibly) new implementation as well.
+        - In order to do that, an "option" button will be added. This means that it will depends on user's preference to use either of them or not.
+
+        Idea suggested date: 07/07/24
+        Starting on implementation: TBD
+    -->
     </section>
 </div>
