@@ -1,4 +1,4 @@
-/* Default colour for some elements. */
+/* Default colour for some elements */
 :root {
     --primary-colour: rgba(255, 20, 20, 1); /* Red */    
     --secondary-colour: rgba(204, 85, 0, 1); /* Orange */
@@ -6,7 +6,8 @@
     --accent-colour-alt: rgba(51, 51, 51, 1); /* Dark Grey */
     --background-colour: rgba(255, 255, 255, 1); /* Pure White */
 }
-    
+
+/* General body elements format accross all pages */
 body {
     box-sizing: border-box;
     display: flex;
@@ -15,7 +16,7 @@ body {
     font-family: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-/* Head title for each pages */
+/* Head title format for specifc pages */
 header h1 {
     display: flex;
     justify-content: center;
@@ -108,8 +109,8 @@ nav.active-button ~
 /* TOP NAVIGATION BAR WHEN EXPANDED */
 
 nav.active-button .top-navigation-bar {
-    -webkit-user-select: none; /* Safari compatability. */
-    user-select: none; /* Others broswer compatability. */
+    -webkit-user-select: none;  /* Safari compatability. */
+    user-select: none;          /* Others broswer compatability. */
 }
 
 nav.active-button .top-navigation-bar strong {
@@ -211,9 +212,11 @@ nav.active-button ul li a i {
 }
 
 
-/* LASTEST ANNOUNCEMENT BOX OF CONTENTS */
+/* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES*/
 
-.announcement-box {
+.announcement-box,
+.lower-general-information-box
+{
     background-color: rgba(220, 220, 220, 1);
     margin-bottom: 1.5rem;
     border-radius: 1.5rem;
@@ -237,33 +240,29 @@ nav.active-button ul li a i {
     padding-bottom: 1rem;
 }
 
+.announcement-box img {
+    padding: .25rem 0;
+}
+
 .youtube-iframe-container {
     position: relative;
     width: 100%;
     padding-bottom: 56.25%;
     height: auto;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
 }
 
-/* TODO: media queries when split or fullscreen. */
 .youtube-iframe-container iframe {
     position: absolute;
-    /* This is the config when split screen */
-
-    /* width: 75%;
-    height: 75%;
-    margin: 2.75rem 6rem;
-    overflow: hidden; */
-
-    /* This is the config when fullscreen */
-    width: 90%;
-    height: 90%;
-    margin: 2.75rem 5.5rem;
+    width: 95%;
+    height: 95%;
     overflow: hidden;
-} 
+}
 
 
-/* BOXES OF DIRECT LINKS ACROSS ALL PAGES. */
+/* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES */
 
 .direct-link-container,
 .mappool-card-container
