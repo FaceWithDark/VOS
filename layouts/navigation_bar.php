@@ -119,7 +119,7 @@
                 
             <?php else: ?>
                 <div class="failed-user-info">
-                    <img src="../assets/images/FaliedAuthenticationImage.gif" alt="Sus?" class="authentication-failed-image">
+                    <img src="../assets/images/FaliedAuthenticationImage.webp" alt="Sus?" class="authentication-failed-image">
                     <p>Sussy Baka</p>
                 </div>
 
