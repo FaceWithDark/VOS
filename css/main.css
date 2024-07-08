@@ -86,7 +86,8 @@ nav.active-button {
 .archived-page, 
 .staff-page,
 .song-page,
-.mappool-page
+.mappool-page,
+.vot-page
 {
     padding-top: 1rem;
     transition: margin-left 0.25s linear, width 0.25s linear;
@@ -99,7 +100,8 @@ nav.active-button ~
 .archived-page, 
 .staff-page,
 .song-page,
-.mappool-page
+.mappool-page,
+.vot-page
 {
     margin-left: .25rem;
     width: calc(100% - .25rem);
@@ -224,7 +226,9 @@ nav.active-button ul li a i {
     box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 0.2);
 }
 
-.announcement-box h2 {
+.announcement-box h2,
+.lower-general-information-box h2 
+{
     display: flex;
     justify-content: center;
     font-weight: bold;
@@ -232,7 +236,9 @@ nav.active-button ul li a i {
     color: var(--primary-colour);
 }
 
-.announcement-box p {
+.announcement-box p,
+.lower-general-information-box ul li
+{
     font-size: 1rem;
     font-weight: 500;
     color: var(--accent-colour);
@@ -371,4 +377,26 @@ body.dark-theme .mappool-card-container
 
 .beatmap-creator-row a {
     margin-left: .25rem;
+}
+
+
+/* VOT-SPECIFIC PAGE */
+
+.upper-general-information-box p {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--accent-colour);
+    padding: 1rem;
+}
+
+.lower-general-information-box h3 {
+    font-weight: bold;
+    color: var(--secondary-colour);
+    padding-left: .5rem;
+    padding-bottom: 1rem;
+}
+
+.lower-general-information-box ul li {
+    line-height: 1.275rem;
+    list-style: disc inside;
 }
