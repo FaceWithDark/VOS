@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 require_once '../layouts/navigation_bar.php';
+include_once '../modules/convertion/time_convertion.php';
 
 // Fetch beatmap data from the Osu! API
 function fetchBeatmapData($beatmapId) {
@@ -48,7 +49,7 @@ function fetchBeatmapData($beatmapId) {
             
             // Check if the beatmap data exists in the database
             if(checkBeatmapData($beatmapId, $phpDataObject)) {
-                $query = "SELECT id FROM vot4 WHERE map_id = :map_id";
+                $query = "SELECT id FROM vot4_qualifiers WHERE map_id = :map_id";
                 $queryStatement = $phpDataObject -> prepare($query);
                 $queryStatement -> bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
 
@@ -76,21 +77,24 @@ function fetchBeatmapData($beatmapId) {
 
 // Store new beatmap data into database
 function storeBeatmapData($beatmapData, $modType, $phpDataObject) {
+
+    $formattedTotalLength = integerToTimeFormat($beatmapData -> total_length);
+
     // SQL query to store beatmap data in the 'vot4' table
-    $query = "INSERT INTO vot4 (map_id, 
-                                total_length, 
-                                map_url, 
-                                cover_image_url, 
-                                title_unicode, 
-                                artist_unicode, 
-                                difficulty, 
-                                mapper, 
-                                difficulty_rating, 
-                                map_bpm, 
-                                overall_difficulty, 
-                                health_point, 
-                                amount_of_passes,
-                                mod_type) 
+    $query = "INSERT INTO vot4_qualifiers (map_id, 
+                                           total_length, 
+                                           map_url, 
+                                           cover_image_url, 
+                                           title_unicode, 
+                                           artist_unicode, 
+                                           difficulty, 
+                                           mapper, 
+                                           difficulty_rating, 
+                                           map_bpm, 
+                                           overall_difficulty, 
+                                           health_point, 
+                                           amount_of_passes,
+                                           mod_type) 
                      VALUES (:map_id, 
                              :total_length, 
                              :map_url, 
@@ -111,7 +115,7 @@ function storeBeatmapData($beatmapData, $modType, $phpDataObject) {
     
     // Bind the beatmap data to the prepared statement
     $queryStatement -> bindParam(":map_id", $beatmapData -> id);
-    $queryStatement -> bindParam(":total_length", $beatmapData -> total_length);
+    $queryStatement -> bindParam(":total_length", $formattedTotalLength);
     $queryStatement -> bindParam(":map_url", $beatmapData -> url);
     $queryStatement -> bindParam(":cover_image_url", $beatmapData -> beatmapset -> covers -> cover);
     $queryStatement -> bindParam(":title_unicode", $beatmapData -> beatmapset -> title_unicode);
@@ -140,7 +144,7 @@ function storeBeatmapData($beatmapData, $modType, $phpDataObject) {
 
 // Check if beatmap data already exists in the database
 function checkBeatmapData($beatmapId, $phpDataObject) {
-    $query = "SELECT id FROM vot4 WHERE map_id = :map_id";
+    $query = "SELECT id FROM vot4_qualifiers WHERE map_id = :map_id";
     $queryStatement = $phpDataObject -> prepare($query);
     $queryStatement -> bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
     $queryStatement -> execute();
@@ -150,8 +154,11 @@ function checkBeatmapData($beatmapId, $phpDataObject) {
 
 // Update existing beatmap data in the database with new data
 function updateBeatmapData($beatmapData, $modType, $phpDataObject) {
+
+    $formattedTotalLength = integerToTimeFormat($beatmapData -> total_length);
+
     // SQL query to update beatmap data in the 'vot4' table
-    $query = "UPDATE vot4 
+    $query = "UPDATE vot4_qualifiers 
               SET total_length = :total_length, 
                   map_url = :map_url, 
                   cover_image_url = :cover_image_url, 
@@ -172,7 +179,7 @@ function updateBeatmapData($beatmapData, $modType, $phpDataObject) {
     
     // Bind the beatmap data to the prepared statement
     $queryStatement -> bindParam(":map_id", $beatmapData -> id);
-    $queryStatement -> bindParam(":total_length", $beatmapData -> total_length);
+    $queryStatement -> bindParam(":total_length", $formattedTotalLength);
     $queryStatement -> bindParam(":map_url", $beatmapData -> url);
     $queryStatement -> bindParam(":cover_image_url", $beatmapData -> beatmapset -> covers -> cover);
     $queryStatement -> bindParam(":title_unicode", $beatmapData -> beatmapset -> title_unicode);
@@ -200,12 +207,41 @@ function updateBeatmapData($beatmapData, $modType, $phpDataObject) {
     }
 }
 
+// Get beatmap data from database by beatmap IDs
+function getBeatmapData($mapId, $phpDataObject) {
+    $query = "SELECT * FROM vot4_qualifiers WHERE map_id = :map_id";
+    $queryStatement = $phpDataObject -> prepare($query);
+    $queryStatement -> bindParam(":map_id", $mapId, PDO::PARAM_INT);
+
+    // Execute the statement and get the needed data in the database to display
+    if ($queryStatement -> execute()) {
+        error_log("Get data successfully for beatmap ID: " . $mapId);
+        // Fetch and return the result as an associative array
+        return $queryStatement -> fetch(PDO::FETCH_ASSOC);
+    } 
+    else {
+        error_log("Get data failed for beatmap ID: " . $mapId);
+        $errorInfo = $queryStatement -> errorInfo();
+        error_log("Error Info: " . implode(", ", $errorInfo));
+        return false;
+    }
+}
+
+// Get beatmap mod by array index
+function getModTypeByIndex($arrayIndex, $modTypes) {
+    foreach($modTypes as $modType => $arrayIndexes) {
+        if(in_array($arrayIndex, $arrayIndexes)) {
+            return $modType;
+        }
+    }
+    // None of the mod applied if index is not found
+    return 'N/A';
+}
+
 // Define beatmap IDs for which data will be fetched
 $beatmapIds = [ // VOT4 Qualifiers
                 3832435, 3167804, 4670818, 4353546, 3175478, 3412725, 4215511, 4670467, 2337091
               ];
-
-$beatmapDataArray = [];
 
 // Define a mapping of index ranges to beatmap mods
 $modTypes = [
@@ -240,16 +276,7 @@ $modTypes = [
     'TB' => []
 ];
 
-// Get beatmap mod by array index
-function getModTypeByIndex($arrayIndex, $modTypes) {
-    foreach($modTypes as $modType => $arrayIndexes) {
-        if(in_array($arrayIndex, $arrayIndexes)) {
-            return $modType;
-        }
-    }
-    // None of the mod applied if index is not found
-    return 'N/A';
-}
+$beatmapDataArray = [];
 
 foreach ($beatmapIds as $arrayIndex => $beatmapId) {
     // Get the beatmap mod type based on index number in an array
@@ -295,28 +322,6 @@ foreach ($beatmapIds as $arrayIndex => $beatmapId) {
         }
     }
 }
-
-// Get beatmap data from database by beatmap IDs
-function getBeatmapData($mapId, $phpDataObject) {
-    $query = "SELECT * FROM vot4 WHERE map_id = :map_id";
-    $queryStatement = $phpDataObject -> prepare($query);
-    $queryStatement -> bindParam(":map_id", $mapId, PDO::PARAM_INT);
-
-    // Execute the statement and get the needed data in the database to display
-    if ($queryStatement -> execute()) {
-        error_log("Get data successfully for beatmap ID: " . $mapId);
-        // Fetch and return the result as an associative array
-        return $queryStatement -> fetch(PDO::FETCH_ASSOC);
-    } 
-    else {
-        error_log("Get data failed for beatmap ID: " . $mapId);
-        $errorInfo = $queryStatement -> errorInfo();
-        error_log("Error Info: " . implode(", ", $errorInfo));
-        return false;
-    }
-}
-
-include_once '../modules/convertion/time_convertion.php';
 ?>
 
 <section>
