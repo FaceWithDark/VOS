@@ -1,6 +1,8 @@
 <?php
-    // Convert 'HH:MM:SS' format to seconds
-    function durationToSeconds($duration) {
-        $parts = explode(':', $duration);
-        return count($parts) === 3 ? ($parts[0] * 3600 + $parts[1] * 60 + $parts[2]) : 0;
+    // Convert integer to 'HH:MM:SS' format
+    function integerToTimeFormat($time) {
+        $hours = floor($time / 3600);
+        $minutes = floor(($time % 3600) / 60);
+        $seconds = $time % 60;
+        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
     }
