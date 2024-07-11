@@ -22,7 +22,7 @@
             </div>
 
             <div class="direct-link-container">
-                <a href="#">Challonge</a>
+                <a href="https://challonge.com/vot4">Challonge</a>
             </div>
 
             <div class="direct-link-container">
