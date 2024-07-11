@@ -48,7 +48,7 @@ function fetchBeatmapData($beatmapId) {
 }
 
 // Store new beatmap data into database
-function storeBeatmapData($beatmapData, $modType, $phpDataObject) {
+function storeBeatmapDataQualifiers($beatmapData, $modType, $phpDataObject) {
 
     $formattedTotalLength = integerToTimeFormat($beatmapData -> total_length);
 
@@ -115,7 +115,7 @@ function storeBeatmapData($beatmapData, $modType, $phpDataObject) {
 }
 
 // Check if beatmap data already exists in the database
-function checkBeatmapData($beatmapId, $phpDataObject) {
+function checkBeatmapDataQualifiers($beatmapId, $phpDataObject) {
     $query = "SELECT id FROM vot4_qualifiers WHERE map_id = :map_id";
     $queryStatement = $phpDataObject -> prepare($query);
     $queryStatement -> bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
@@ -125,7 +125,7 @@ function checkBeatmapData($beatmapId, $phpDataObject) {
 }
 
 // Update existing beatmap data in the database with new data
-function updateBeatmapData($beatmapData, $modType, $phpDataObject) {
+function updateBeatmapDataQualifiers($beatmapData, $modType, $phpDataObject) {
 
     $formattedTotalLength = integerToTimeFormat($beatmapData -> total_length);
 
@@ -180,7 +180,7 @@ function updateBeatmapData($beatmapData, $modType, $phpDataObject) {
 }
 
 // Get beatmap data from database by beatmap IDs
-function getBeatmapData($mapId, $phpDataObject) {
+function getBeatmapDataQualifiers($mapId, $phpDataObject) {
     $query = "SELECT * FROM vot4_qualifiers WHERE map_id = :map_id";
     $queryStatement = $phpDataObject -> prepare($query);
     $queryStatement -> bindParam(":map_id", $mapId, PDO::PARAM_INT);
@@ -416,17 +416,17 @@ foreach ($beatmapIds as $arrayIndex => $beatmapId) {
         if ($accessToken) {
             if($arrayIndex <= 8) {
                 // For 'Qualifiers' database table with AUTHENTICATED user's case
-                if (!checkBeatmapData($beatmapData -> id, $phpDataObject)) {
+                if (!checkBeatmapDataQualifiers($beatmapData -> id, $phpDataObject)) {
                     // Insert new beatmap data
-                    storeBeatmapData($beatmapData, $modType, $phpDataObject);
+                    storeBeatmapDataQualifiers($beatmapData, $modType, $phpDataObject);
                 } 
                 else {
                     // Update existing beatmap data
-                    updateBeatmapData($beatmapData, $modType, $phpDataObject);
+                    updateBeatmapDataQualifiers($beatmapData, $modType, $phpDataObject);
                 }
                     
                 // Retrieve the beatmap data from the database
-                $retrievedBeatmapData = getBeatmapData($beatmapId, $phpDataObject);
+                $retrievedBeatmapData = getBeatmapDataQualifiers($beatmapId, $phpDataObject);
             }
             else {
                 // For 'RO16' database table with AUTHENTICATED user's case
@@ -443,7 +443,7 @@ foreach ($beatmapIds as $arrayIndex => $beatmapId) {
         else {
             if($arrayIndex <= 8) {
                 // For 'Qualifier' database table with UNAUTHENTICATED user's case    
-                $retrievedBeatmapData = getBeatmapData($beatmapId, $phpDataObject);
+                $retrievedBeatmapData = getBeatmapDataQualifiers($beatmapId, $phpDataObject);
             }
             else {
                 // For 'RO16' database table with UNAUTHENTICATED user's case    
