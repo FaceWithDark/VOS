@@ -34,6 +34,18 @@ header h1 {
     flex-wrap: wrap;
 }
 
+/* Button container method */
+.button-container {
+    display: flex;
+    justify-content: end;
+}
+
+.button-container button {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+
 
 /* SIDEWAY NAVIGATION BAR */
 
