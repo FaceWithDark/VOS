@@ -357,111 +357,117 @@ function getModTypeByIndex($arrayIndex, $modTypes) {
     return 'N/A';
 }
 
-// Define beatmap IDs for which data will be fetched
-$beatmapIds = [ // VOT4 Qualifiers
-                3832435, 3167804, 4670818, 4353546, 3175478, 3412725, 4215511, 4670467, 2337091,
-                // VOT4 RO16
-                4679944, 2564433, 3789813, 4681218, 4681168, 3304046, 4251890, 4004134, 4458839, 3884457, 2417569, 4633213, 4682562, 4039947, 2035883
-];
-
-// Define a mapping of index ranges to beatmap mods
-$modTypes = [
-    // NM section
-    'NM1' => [0, 9],
-    'NM2' => [1, 10],
-    'NM3' => [2, 11],
-    'NM4' => [12],
-    'NM5' => [],
-    'NM6' => [],
-
-    // HD section
-    'HD1' => [3, 13],
-    'HD2' => [4, 14],
-
-    // HR section
-    'HR1' => [5, 15],
-    'HR2' => [6, 16],
-
-    // DT section
-    'DT1' => [7, 17],
-    'DT2' => [18],
-
-    // FM section
-    'FM1' => [8, 19],
-    'FM2' => [20],
-
-    // EZ section
-    'EZ' => [21],
-
-    // HDHR section
-    'HDHR' => [22],
-
-    // TB section
-    'TB' => [23]
-];
+// Get the round parameter from the URL
+$round = $_GET['round'] ?? 'qualifiers';
 
 $beatmapDataArray = [];
 
-foreach ($beatmapIds as $arrayIndex => $beatmapId) {
-    // Get the beatmap mod type based on index number in an array
-    $modType = getModTypeByIndex($arrayIndex, $modTypes);
+if($round) {
+    // Define beatmap IDs for which data will be fetched
+    $beatmapIds = [ // VOT4 Qualifiers
+                    3832435, 3167804, 4670818, 4353546, 3175478, 3412725, 4215511, 4670467, 2337091,
+                    // VOT4 RO16
+                    4679944, 2564433, 3789813, 4681218, 4681168, 3304046, 4251890, 4004134, 4458839, 3884457, 2417569, 4633213, 4682562, 4039947, 2035883
+    ];
 
-    // Fetch the beatmap data from the API or database
-    $beatmapData = fetchBeatmapData($beatmapId);
+    // Define a mapping of index ranges to beatmap mods
+    $modTypes = [
+        // NM section
+        'NM1' => [0, 9],
+        'NM2' => [1, 10],
+        'NM3' => [2, 11],
+        'NM4' => [12],
+        'NM5' => [],
+        'NM6' => [],
 
-    // If beatmap data is fetched successfully
-    if ($beatmapData) {
-        // Check if the user is authenticated
-        $accessToken = $_COOKIE['vot_access_token'] ?? null;
-        if ($accessToken) {
-            if($arrayIndex <= 8) {
-                // For 'Qualifiers' database table with AUTHENTICATED user's case
-                if (!checkBeatmapDataQualifiers($beatmapData -> id, $phpDataObject)) {
-                    // Insert new beatmap data
-                    storeBeatmapDataQualifiers($beatmapData, $modType, $phpDataObject);
-                } 
-                else {
-                    // Update existing beatmap data
-                    updateBeatmapDataQualifiers($beatmapData, $modType, $phpDataObject);
+        // HD section
+        'HD1' => [3, 13],
+        'HD2' => [4, 14],
+
+        // HR section
+        'HR1' => [5, 15],
+        'HR2' => [6, 16],
+
+        // DT section
+        'DT1' => [7, 17],
+        'DT2' => [18],
+
+        // FM section
+        'FM1' => [8, 19],
+        'FM2' => [20],
+
+        // EZ section
+        'EZ' => [21],
+
+        // HDHR section
+        'HDHR' => [22],
+
+        // TB section
+        'TB' => [23]
+    ];
+
+    foreach ($beatmapIds as $arrayIndex => $beatmapId) {
+        // Get the beatmap mod type based on index number in an array
+        $modType = getModTypeByIndex($arrayIndex, $modTypes);
+    
+        // Fetch the beatmap data from the API or database
+        $beatmapData = fetchBeatmapData($beatmapId);
+    
+        // If beatmap data is fetched successfully
+        if ($beatmapData) {
+            // Check if the user is authenticated
+            $accessToken = $_COOKIE['vot_access_token'] ?? null;
+            if ($accessToken) {
+                if($round === 'qualifiers' && $arrayIndex <= 8) {
+                    // For 'Qualifiers' database table with AUTHENTICATED user's case
+                    if (!checkBeatmapDataQualifiers($beatmapData -> id, $phpDataObject)) {
+                        // Insert new beatmap data
+                        storeBeatmapDataQualifiers($beatmapData, $modType, $phpDataObject);
+                    } 
+                    else {
+                        // Update existing beatmap data
+                        updateBeatmapDataQualifiers($beatmapData, $modType, $phpDataObject);
+                    }
+                        
+                    // Retrieve the beatmap data from the database
+                    $retrievedBeatmapData = getBeatmapDataQualifiers($beatmapId, $phpDataObject);
                 }
-                    
-                // Retrieve the beatmap data from the database
-                $retrievedBeatmapData = getBeatmapDataQualifiers($beatmapId, $phpDataObject);
+                elseif($round === 'ro16' && $arrayIndex > 8) {
+                    // For 'RO16' database table with AUTHENTICATED user's case
+                    if (!checkBeatmapDataRO16($beatmapData -> id, $phpDataObject)) {
+                        // Insert new beatmap data
+                        storeBeatmapDataRO16($beatmapData, $modType, $phpDataObject);
+                    } 
+                    else {
+                        // Update existing beatmap data
+                        updateBeatmapDataRO16($beatmapData, $modType, $phpDataObject);
+                    }
+                }
             }
             else {
-                // For 'RO16' database table with AUTHENTICATED user's case
-                if (!checkBeatmapDataRO16($beatmapData -> id, $phpDataObject)) {
-                    // Insert new beatmap data
-                    storeBeatmapDataRO16($beatmapData, $modType, $phpDataObject);
-                } 
-                else {
-                    // Update existing beatmap data
-                    updateBeatmapDataRO16($beatmapData, $modType, $phpDataObject);
+                if($round === 'qualifiers' && $arrayIndex <= 8) {
+                    // For 'Qualifier' database table with UNAUTHENTICATED user's case    
+                    $retrievedBeatmapData = getBeatmapDataQualifiers($beatmapId, $phpDataObject);
                 }
+                elseif($round === 'ro16' && $arrayIndex > 8) {
+                    // For 'RO16' database table with UNAUTHENTICATED user's case    
+                    $retrievedBeatmapData = getBeatmapDataRO16($beatmapId, $phpDataObject);
+                }            
             }
-        }
-        else {
-            if($arrayIndex <= 8) {
-                // For 'Qualifier' database table with UNAUTHENTICATED user's case    
-                $retrievedBeatmapData = getBeatmapDataQualifiers($beatmapId, $phpDataObject);
-            }
+    
+            // If data retrieval is successful, add it to the array
+            if ($retrievedBeatmapData) {
+                $beatmapDataArray[] = $retrievedBeatmapData;
+            } 
             else {
-                // For 'RO16' database table with UNAUTHENTICATED user's case    
-                $retrievedBeatmapData = getBeatmapDataRO16($beatmapId, $phpDataObject);
-            }            
+                error_log("Failed to retrieve beatmap data for ID: {$beatmapId}.");
+            }        
         }
-
-        // If data retrieval is successful, add it to the array
-        if ($retrievedBeatmapData) {
-            $beatmapDataArray[] = $retrievedBeatmapData;
-        } 
         else {
-            error_log("Failed to retrieve beatmap data for ID: {$beatmapId}.");
-        }        
+            error_log("Failed to fetch beatmap data for ID: {$beatmapId}.");
+        }
     }
-    else {
-        error_log("Failed to fetch beatmap data for ID: {$beatmapId}.");
-    }
+    die('<div class="warning-message" style="display: flex; justify-content: center; align-items: center; margin-left: 45rem; font-size: 5rem;">Please choose a valid button!</div>'); // TODO: This is an absolute temporary. Changed later (if I can).
 }
 ?>
 
@@ -474,36 +480,33 @@ foreach ($beatmapIds as $arrayIndex => $beatmapId) {
     </div>
 
     <div class="mappool-page">
-        <?php foreach($beatmapDataArray as $beatmapData): ?>
+        <?php if(!empty($beatmapDataArray)): ?>
             <!-- Dynamic beatmap display with correct mod type -->
-            <div class="mappool-card-container">
-                <h1><?= htmlspecialchars($beatmapData['mod_type']) ?></h1>
-                <br>
-                <a href="<?= ($beatmapData['map_url']); ?>"><img src="<?= htmlspecialchars($beatmapData['cover_image_url']); ?>" width="490px" alt="Beatmap Cover"></a>
-                <br><br>
-                <h2><?= htmlspecialchars($beatmapData['title_unicode']); ?> [<?= ($beatmapData['difficulty']); ?>]</h2>
-                <h3><?= htmlspecialchars($beatmapData['artist_unicode']); ?></h3>
-                <h4 class="beatmap-creator-row">
-                    Mapset by <a href="https://osu.ppy.sh/users/<?= htmlspecialchars($beatmapData['mapper']); ?>"><?= htmlspecialchars($beatmapData['mapper']); ?></a>
-                </h4>
-                <br>
-                <div class="beatmap-attribute-row">
-                    <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars(number_format((float)$beatmapData['difficulty_rating'], 2)); ?></p>
-                    <!-- 
-                        TODO: 
-                        - Take use of the gmdate("i:s", <timestamp>) function to display the actual timestamp for each beatmap IDs called 
-                        - Take adventage of the durationToSeconds() function as well
-                    -->
-                    <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= htmlspecialchars($beatmapData['total_length']); ?></p>
-                    <p><i class='bx bx-tachometer'></i> <?= ($beatmapData['map_bpm']); ?>bpm</p>
+            <?php foreach($beatmapDataArray as $beatmapData): ?>
+                <div class="mappool-card-container">
+                    <h1><?= htmlspecialchars($beatmapData['mod_type']) ?></h1>
+                    <br>
+                    <a href="<?= ($beatmapData['map_url']); ?>"><img src="<?= htmlspecialchars($beatmapData['cover_image_url']); ?>" width="490px" alt="Beatmap Cover"></a>
+                    <br><br>
+                    <h2><?= htmlspecialchars($beatmapData['title_unicode']); ?> [<?= ($beatmapData['difficulty']); ?>]</h2>
+                    <h3><?= htmlspecialchars($beatmapData['artist_unicode']); ?></h3>
+                    <h4 class="beatmap-creator-row">
+                        Mapset by <a href="https://osu.ppy.sh/users/<?= htmlspecialchars($beatmapData['mapper']); ?>"><?= htmlspecialchars($beatmapData['mapper']); ?></a>
+                    </h4>
+                    <br>
+                    <div class="beatmap-attribute-row">
+                        <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars(number_format((float)$beatmapData['difficulty_rating'], 2)); ?></p>
+                        <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= htmlspecialchars($beatmapData['total_length']); ?></p>
+                        <p><i class='bx bx-tachometer'></i> <?= ($beatmapData['map_bpm']); ?>bpm</p>
+                    </div>
+                    <br>
+                    <div class="beatmap-attribute-row">
+                        <p style="margin-right: 1rem;">OD: <?= htmlspecialchars(number_format((float)$beatmapData['overall_difficulty'], 2)); ?></p>
+                        <p style="margin-right: 1rem;">HP: <?= htmlspecialchars(number_format((float)$beatmapData['health_point'], 2)); ?></p>
+                        <p>Passed: <?= ($beatmapData['amount_of_passes']); ?></p>
+                    </div>
                 </div>
-                <br>
-                <div class="beatmap-attribute-row">
-                    <p style="margin-right: 1rem;">OD: <?= htmlspecialchars(number_format((float)$beatmapData['overall_difficulty'], 2)); ?></p>
-                    <p style="margin-right: 1rem;">HP: <?= htmlspecialchars(number_format((float)$beatmapData['health_point'], 2)); ?></p>
-                    <p>Passed: <?= ($beatmapData['amount_of_passes']); ?></p>
-                </div>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div> 
 </section>
