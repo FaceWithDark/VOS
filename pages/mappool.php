@@ -43,35 +43,7 @@ function fetchBeatmapData($beatmapId) {
         }
     }
     else {
-        // If not authenticated, fetch data from the database directly
-        try {
-            global $phpDataObject;
-            
-            // Check if the beatmap data exists in the database
-            if(checkBeatmapData($beatmapId, $phpDataObject)) {
-                $query = "SELECT id FROM vot4_qualifiers WHERE map_id = :map_id";
-                $queryStatement = $phpDataObject -> prepare($query);
-                $queryStatement -> bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
-
-                // Execute the statement and fetch the data
-                if ($queryStatement->execute()) {
-                    error_log("Successfully retrieved data for beatmap ID: " . $beatmapId);
-                    // Fetch and return the result as an associative array
-                    return $queryStatement -> fetch(PDO::FETCH_ASSOC);
-                } 
-                else {
-                    error_log("Failed to retrieve data for beatmap ID: " . $beatmapId);
-                    $errorInfo = $queryStatement -> errorInfo();
-                    error_log("Database error: " . implode(", ", $errorInfo));
-                    return false;
-                }
-            }
-            return false; // Beatmap data not found in the database
-        }
-        catch (RequestException $exception) {
-            error_log("Database query failed: " . $exception -> getMessage());  // Log the exception message
-            return false;                                                       // An exception occurred during the API call
-        }
+        die("This feature is temporary locked. Please authenticate and do things normally!");
     }
 }
 
