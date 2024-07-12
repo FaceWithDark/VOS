@@ -5,72 +5,69 @@
 
     require_once __DIR__ . '/../../vendor/autoload.php';
 
-    function exchangeCode($payloadData, $apiURL) {
+    // Determine the environment
+    $environment = getenv('ENV') ?: 'prod';
+
+    // Load the appropriate .env file based on the environment
+    $dotenv = Dotenv::createImmutable(__DIR__, ".env.$environment");
+    $dotenv->load();
+
+    function exchangeCode(array $payloadData, string $apiURL) {
         $client = new Client();
 
         try {
-            $respone = $client -> post($apiURL, [
-                'form_params' => $payloadData, 
-                'header' => [
+            $response = $client->post($apiURL, [
+                'form_params' => $payloadData,
+                'headers' => [
                     'Accept' => 'application/json',
-                    'Content-Type' => 'application/x-www-form-urlencoded', 
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ]
             ]);
 
-            if($respone -> getStatusCode() == 200) {
-                return json_decode($respone -> getBody() -> getContents());
+            if ($response->getStatusCode() == 200) {
+                return json_decode($response->getBody()->getContents());
             }
             return false;
-        }
-        catch(RequestException $exceptions) {
+        } catch (RequestException $exception) {
+            // Log the exception message for debugging
+            error_log($exception->getMessage());
             return false;
         }
     }
 
-    if(isset($_GET['error']) || !isset($_GET['code'])) {
+    // Check for errors in the query parameters
+    if (isset($_GET['error']) || !isset($_GET['code'])) {
         exit('Some error occurred');
     }
 
     $authorizationCode = $_GET['code'];
 
-    $dotenv = Dotenv::createImmutable(__DIR__);
-    $dotenv -> load();
-
-    // Debugging for token received from Osu!
-    // var_dump($_GET);
-
-    /**
-     * Let's exchange the code for an access token.
-     * For that, we need to send a request to GitHub.
-     * PHP supports cURL by default, by it's verbose - so let's use Guzzle.
-     */
-
+    // Prepare payload data for token exchange
     $payloadData = [
-    'client_id' => $_ENV['CLIENT_ID'],
-    'client_secret' => $_ENV['CLIENT_SECRET'],
-    'code' => $authorizationCode,
-    'grant_type' => 'authorization_code',
-    'redirect_uri' => 'https://phpstack-1257657-4517689.cloudwaysapps.com/modules/authentication/token_callback.php',
+        'client_id' => $_ENV['CLIENT_ID'],
+        'client_secret' => $_ENV['CLIENT_SECRET'],
+        'code' => $authorizationCode,
+        'grant_type' => 'authorization_code',
+        'redirect_uri' => $_ENV['CALLBACK_URL'],
     ];
 
     $apiURL = "https://osu.ppy.sh/oauth/token";
 
+    // Exchange the authorization code for an access token
     $tokenData = exchangeCode($payloadData, $apiURL);
 
-    if($tokenData == false) {
+    if ($tokenData === false) {
         exit('Error getting token');
     }
 
-    if(!empty($tokenData -> error)) {
-        exit($tokenData -> error);
+    if (!empty($tokenData->error)) {
+        exit($tokenData->error);
     }
-    
-    // Debugging for exchange token received from Osu!
-    // var_dump($tokenData);
 
-    if(!empty($tokenData -> access_token)) {
-        // The last arguement "true' - sets it as an HTTP-only cookie.
-        setcookie('vot_access_token', $tokenData -> access_token, time() + 86400, "/", "", false, true);
+    // Set the access token as an HTTP-only cookie
+    if (!empty($tokenData->access_token)) {
+        setcookie('vot_access_token', $tokenData->access_token, time() + 86400, "/", "", false, true);
         header('Location: ../../pages/index.php');
         exit();
     }
+?>

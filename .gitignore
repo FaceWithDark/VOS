@@ -1,37 +1,44 @@
-# Sus information.
-*.env
-
-# Website assets.
-assets/
-
-# Composer files.
+# Composer files
 vendor/
 
-# Database files.
+# Database files
 database/
 
-# Server static web configuration.
+# Server static web configuration
 *.htaccess
 
-# MacOS-specific CRUD.
+# MacOS-specific CRUD
 .DS_Store
 Thumbs.db
 Icon*
 desktop.ini
 
-# Dropbox Linux/MacOS files.
+# Ignore IDE/editor specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Dropbox Linux/MacOS files
 .dropbox*
 
-# Docker building files.
+# Sus information except the template one
+.env*
+!.env.example
+
+# Website assets
+assets/
+
+# Docker building files
 docker-compose.yml
-dockerfile
+Dockerfile
 .dockerignore
 
-# Markdown files.
+# Markdown files
 *.md
 
-# Except some of these markdown files.
+# Except some of these markdown files
 !README.md
 
-# .txt files.
+# .txt files
 *.txt

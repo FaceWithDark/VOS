@@ -1,8 +1,13 @@
 <?php
+    use Dotenv\Dotenv;
+
     require_once __DIR__ . '/../vendor/autoload.php';
 
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
+    // Determine the environment
+    $environment = getenv('ENV') ?: 'prod';
+
+    $dotenv = Dotenv::createImmutable(__DIR__, ".env.$environment");
+    $dotenv -> load();
 
     // Database configuration
     $serverHost = $_ENV['DATABASE_HOST'];
