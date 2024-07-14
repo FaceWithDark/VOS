@@ -505,15 +505,6 @@ if($tournamentRound) {
 else {
     die('<div class="warning-message" style="display: flex; justify-content: center; align-items: center; margin-left: 45rem; font-size: 5rem;">Please choose a valid button!</div>'); // TODO: This is an absolute temporary. Changed later (if I can).
 }
-
-/*
- * TODO:
- * - For the <form> tag thingy, well, I am not even perfectly handle all of those TODO's up there, how can I have the time to mind
- *   of stylishing this things anyways ?!?!?
- * 
- * - Because of that, users will have to bear with it for now. Again, one-man power cannot handle everything. I am not Linux 
- *   creator or such
- */
 ?>
 
 <section>
