@@ -259,7 +259,10 @@ nav.active-button ul li a i {
 }
 
 .announcement-box img {
-    padding: .25rem 0;
+    padding: .5rem 0;
+    padding-left: 1.75rem;
+    max-width: 95%;
+    height: auto;
 }
 
 .youtube-iframe-container {
@@ -393,6 +396,12 @@ body.dark-theme .mappool-card-container
 
 
 /* VOT-SPECIFIC PAGE */
+
+.upper-general-information-box img {
+    padding-left: 1.5rem;
+    max-width: 95%;
+    height: auto;
+}
 
 .upper-general-information-box p {
     font-size: 1rem;
