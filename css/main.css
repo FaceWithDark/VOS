@@ -50,15 +50,11 @@ header h1 {
 /* SIDEWAY NAVIGATION BAR */
 
 nav {
-    position: sticky;
-    top: 0;
     /* background-color: rgba(255, 20, 20, 0.5); */
     background-color: rgba(35, 35, 35, 1);
     width: 5rem;
     min-height: 100vh;
     transition: all 0.3s linear;
-    z-index: 1000;
-    flex-shrink: 0;
 }
 
 
@@ -181,7 +177,7 @@ nav.active-button .failed-user-info p
 
 nav ul {
     margin: 2rem 1.5rem;
-    line-height: 1.75rem;
+    line-height: 3rem;
 }
 
 nav ul li:not(:last-child) {
