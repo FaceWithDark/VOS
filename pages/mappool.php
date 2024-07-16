@@ -46,7 +46,7 @@ function fetchBeatmapData($beatmapId, $tournamentRound, $phpDataObject) {
         // If not authenticated, fetch data from the database directly
         try {
             // Determine the table to query based on the 'round' parameter
-            $tournamentTable = ($tournamentRound === 'ro16') ? 'vot4_ro16' : 'vot4_qualifiers';
+            $tournamentTable = "vot4_{$tournamentRound}";
 
             // Determine the table to query based on the 'round' parameter
             $query =  "SELECT id FROM $tournamentTable WHERE map_id = :map_id";
@@ -512,6 +512,7 @@ else {
         <form action="mappool.php" method="get">
             <button type="submit" name="round" value="qualifiers">Qualifiers</button>
             <button type="submit" name="round" value="ro16">RO16</button>
+            <button type="submit" name="round" value="quarterfinals">QF</button>
         </form>
     </div>
 
