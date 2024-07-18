@@ -46,7 +46,7 @@ function fetchStaffData($staffId) {
 
 
 // Store new staff data into database
-function storeStaffData($staffData, $phpDataObject) {
+function storeStaffData($staffData, $staffRole, $phpDataObject) {
     // SQL query to store staff data into the corresponding database table
     $query = "INSERT IGNORE INTO vot4_staff (staff_id,
                                              staff_username,
@@ -75,7 +75,7 @@ function storeStaffData($staffData, $phpDataObject) {
     $queryStatement -> bindParam(":staff_id", $staffData -> id);
     $queryStatement -> bindParam(":staff_username", $staffData -> username);
     $queryStatement -> bindParam(":staff_avatar_url", $staffData -> avatar_url);
-    $queryStatement -> bindParam(":staff_roles", $staffData -> need_an_array_for_this);                  // TODO: it is as what it is
+    $queryStatement -> bindParam(":staff_roles", $staffRole);
     $queryStatement -> bindParam(":staff_country_name", $staffData -> country -> name);
     $queryStatement -> bindParam(":staff_country_flag", $staffData -> many_approach_but_still_thinking); // TODO: it is as what it is
     
@@ -92,6 +92,18 @@ function storeStaffData($staffData, $phpDataObject) {
     }
 }
 
+// Get staff roles by array index
+function getStaffRoleByIndex($arrayIndex, $staffRoles) {
+    foreach($staffRoles as $staffRole => $arrayIndexes) {
+        if(in_array($arrayIndex, $arrayIndexes)) {
+            return $staffRole;
+        }
+    }
+    // None of the roles applied if index is not found
+    return 'N/A';
+}
+
+// Define staff IDs for which data will be fetched
 $staffIds = [ // Host
               9623142,
               // Mappooler
@@ -112,12 +124,48 @@ $staffIds = [ // Host
               10494860, 13456818
 ];
 
+// Define a mapping of index ranges to staff roles
+$staffRoles = [
+    'Host' => [0],
+    'Mappooler' => [1, 2, 3, 4],
+    'GFX / VFX' => [5, 6, 7, 8, 9],
+    'Mapper' => [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
+    'Playtester' => [27, 28, 29, 30, 31, 32],
+    'Referee' => [33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
+    'Streamer' => [43, 44, 45, 46, 47, 48],
+    'Commentator' => [49, 50, 51, 52, 53, 54],
+    'Statistician' => [55, 56]
+];
+
+// Initialize an empty array to map staff IDs to their roles
+$staffIdToRoles = [];
+
+// Iterate over an array of staff IDs to populate the empty array mapping
+foreach($staffIds as $staffIndex => $staffId) {
+    // Get the staff role for the current index received
+    $staffRole = getStaffRoleByIndex($staffIndex, $staffRoles);
+
+    // If the staff ID received is not set in the mapping, initialize it with an empty array (means nothing)
+    if(!isset($staffIdToRoles[$staffId])) {
+        $staffIdToRoles[$staffId] = [];
+    }
+
+    // Append the staff role to the staff ID's list of roles 
+    $staffIdToRoles[$staffId][] = $staffRole;
+}
+
+// Remove duplicate staff IDs to ensure each ID is processed only once
 $uniqueStaffIds = array_unique($staffIds);
 
-foreach($uniqueStaffIds as $staffId) {
+// Iterate over the unique staff IDs
+foreach($uniqueStaffIds as $arrayIndex => $staffId) {
+    // Combine the roles into a single string separated by commas
+    $staffRole = implode(', ', $staffIdToRoles[$staffId]);    
+
+    // Fetch the staff data from the API or database
     $staffData = fetchStaffData($staffId);
     if($staffData) {
-        storeStaffData($staffData, $phpDataObject);
+        storeStaffData($staffData, $staffRole, $phpDataObject);
     }
 }
 ?>
