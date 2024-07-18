@@ -11,12 +11,12 @@ require_once '../layouts/navigation_bar.php';
 // require '../layouts/configuration.php';
 
 // Fetch staff data from the Osu! API
-function fetchStaffData() {
+function fetchStaffData($staffId) {
     // Check if the user is authenticated by looking for the access token in cookies
     $accessToken = $_COOKIE['vot_access_token'] ?? null;
     if ($accessToken) {
         // If authenticated, construct the API URL for fetching beatmap data
-        $apiUrl = "https://osu.ppy.sh/api/v2/users/19817503/taiko?key=test";
+        $apiUrl = "https://osu.ppy.sh/api/v2/users/{$staffId}/taiko"; // TODO: 'key' parameter as optional
         $client = new Client();
     
         try {
@@ -48,30 +48,25 @@ function fetchStaffData() {
 // Store new staff data into database
 function storeStaffData($staffData, $phpDataObject) {
     // SQL query to store staff data into the corresponding database table
-    $query = "INSERT INTO vot4_staff (staff_id,
-                                      staff_username,
-                                      staff_avatar_url,
-                                      staff_roles,
-                                      staff_global_ranking,
-                                      staff_local_ranking,
-                                      staff_performance_point,
-                                      staff_accuracy,
-                                      staff_country_name,
-                                      staff_country_flag,
-                                      staff_current_location,
-                                      staff_tournament_badge)
+    $query = "INSERT IGNORE INTO vot4_staff (staff_id,
+                                             staff_username,
+                                             staff_avatar_url,
+                                             staff_roles,
+                                             staff_country_name,
+                                             staff_country_flag)
                      VALUES (:staff_id,
                              :staff_username,
                              :staff_avatar_url,
                              :staff_roles,
-                             :staff_global_ranking,
-                             :staff_local_ranking,
-                             :staff_performance_point,
-                             :staff_accuracy,
                              :staff_country_name,
-                             :staff_country_flag,
-                             :staff_current_location,
-                             :staff_tournament_badge);";
+                             :staff_country_flag)
+                     ON DUPLICATE KEY UPDATE
+                             staff_id = VALUES(staff_id),
+                             staff_username = VALUES(staff_username),
+                             staff_avatar_url = VALUES(staff_avatar_url),
+                             staff_roles = VALUES(staff_roles),
+                             staff_country_name = VALUES(staff_country_name),
+                             staff_country_flag = VALUES(staff_country_flag);";
     
     // Prepare the SQL statement to prevent SQL injection
     $queryStatement = $phpDataObject -> prepare($query);
@@ -81,14 +76,8 @@ function storeStaffData($staffData, $phpDataObject) {
     $queryStatement -> bindParam(":staff_username", $staffData -> username);
     $queryStatement -> bindParam(":staff_avatar_url", $staffData -> avatar_url);
     $queryStatement -> bindParam(":staff_roles", $staffData -> need_an_array_for_this);                  // TODO: it is as what it is
-    $queryStatement -> bindParam(":staff_global_ranking", $staffData -> statistics -> global_rank);
-    $queryStatement -> bindParam(":staff_local_ranking", $staffData -> statistics -> country_rank);
-    $queryStatement -> bindParam(":staff_performance_point", $staffData -> statistics -> pp);
-    $queryStatement -> bindParam(":staff_accuracy", $staffData -> statistics -> hit_accuracy);
     $queryStatement -> bindParam(":staff_country_name", $staffData -> country -> name);
     $queryStatement -> bindParam(":staff_country_flag", $staffData -> many_approach_but_still_thinking); // TODO: it is as what it is
-    $queryStatement -> bindParam(":staff_current_location", $staffData -> location);
-    $queryStatement -> bindParam(":staff_tournament_badge", $staffData -> badges -> image_url);          // TODO: need use-case for non-badge staff as well
     
     // Execute the statement and insert the data into database
     if ($queryStatement -> execute()) {
@@ -103,22 +92,34 @@ function storeStaffData($staffData, $phpDataObject) {
     }
 }
 
-$staffData = fetchStaffData();
-// die('<pre>' . print_r($staffData, true) . '</pre>');
+$staffIds = [ // Host
+              9623142,
+              // Mappooler
+              9623142, 26012543, 18397349, 11833538,
+              // GFX / VFX
+              16039831, 14083855, 13981991, 9912966, 14001000,
+              // Mapper
+              9623142, 16039831, 17302272, 7169208, 22522738, 22515524, 3724819, 8631719, 2865172, 3738344, 14520910, 17916791, 12510704, 2345156, 11056763, 1109122, 26190106,
+              // Playtester
+              9623142, 16039831, 2228401, 11411697, 13630137, 26012543,
+              // Referee
+              9623142, 21290592, 26012543, 17148657, 22515524, 13456818, 7109317, 10129901, 829469, 19207842,
+              // Streamer
+              13456818, 7789926, 15815791, 19817503, 11406987, 1926383,
+              // Commentator
+              9623142, 16039831, 21290592, 26012543, 24042710, 22069182,
+              // Statistician
+              10494860, 13456818
+];
 
-/*
- * The function above this comment are tested and worked. I will be doing proper data for those TODO's later on
- * 
- * For testing purposes:
-===============================================================================================================
+$uniqueStaffIds = array_unique($staffIds);
 
-        if($staffData) {
-            storeStaffData($staffData, $tempData, $phpDataObject);
-            die('<pre>' . print_r(storeStaffData($staffData, $tempData, $phpDataObject), true) . '</pre>');
-        }
-
-=============================================================================================================== 
- */
+foreach($uniqueStaffIds as $staffId) {
+    $staffData = fetchStaffData($staffId);
+    if($staffData) {
+        storeStaffData($staffData, $phpDataObject);
+    }
+}
 ?>
 
 <div class="staff-page">
