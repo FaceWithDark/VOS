@@ -98,6 +98,28 @@ function storeStaffData($staffData, $staffRole, $phpDataObject) {
 }
 
 
+// Get staff data from database by staff IDs
+function getStaffData($staffId, $phpDataObject) {
+
+    $query = "SELECT * FROM vot4_staff WHERE staff_id = :staff_id";
+    $queryStatement = $phpDataObject -> prepare($query);
+    $queryStatement -> bindParam(":staff_id", $staffId, PDO::PARAM_INT);
+
+    // Execute the statement and get the needed data in the database to display
+    if ($queryStatement -> execute()) {
+        error_log("Get data successfully for staff ID: " . $staffId);
+        // Fetch and return the result as an associative array
+        return $queryStatement -> fetch(PDO::FETCH_ASSOC);
+    } 
+    else {
+        error_log("Get data failed for staff ID: " . $staffId);
+        $errorInfo = $queryStatement -> errorInfo();
+        error_log("Error Info: " . implode(", ", $errorInfo));
+        return false;
+    }
+}
+
+
 // Get staff roles by array index
 function getStaffRoleByIndex($arrayIndex, $staffRoles) {
     foreach($staffRoles as $staffRole => $arrayIndexes) {
@@ -146,6 +168,8 @@ $staffRoles = [
 // Initialize an empty array to map staff IDs to their roles
 $staffIdToRoles = [];
 
+$staffDataArray = [];
+
 // Iterate over an array of staff IDs to populate the empty array mapping
 foreach($staffIds as $staffIndex => $staffId) {
     // Get the staff role for the current index received
@@ -172,6 +196,16 @@ foreach($uniqueStaffIds as $arrayIndex => $staffId) {
     $staffData = fetchStaffData($staffId);
     if($staffData) {
         storeStaffData($staffData, $staffRole, $phpDataObject);
+    }
+
+    $retrievedStaffData = getStaffData($staffId, $phpDataObject);
+
+    // If data retrieval is successful, add it to the array
+    if ($retrievedStaffData) {
+        $staffDataArray[] = $retrievedStaffData;
+    } 
+    else {
+        error_log("Failed to retrieve staff data for ID: {$beatmapId}.");
     }
 }
 ?>
