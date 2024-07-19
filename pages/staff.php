@@ -104,32 +104,6 @@ function getStaffRoleByIndex($arrayIndex, $staffRoles) {
     return 'N/A';
 }
 
-
-function fetchCountryFlagData() {
-    $apiUrl = "https://cdn.simplelocalize.io/public/v1/countries";
-    $client = new Client();
-
-    try {
-        $response = $client -> get($apiUrl, [
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ]
-        ]);
-
-        if($response -> getStatusCode() === 200) {
-            $flagData = $response -> getBody() -> getContents();
-            return $flagData;
-        }
-
-        return false;
-    }
-    catch(RequestException $exception) {
-        error_log("API request failed: " . $exception -> getMessage());
-        return false;
-    }
-}
-
 // Define staff IDs for which data will be fetched
 $staffIds = [ // Host
               9623142,
@@ -195,9 +169,6 @@ foreach($uniqueStaffIds as $arrayIndex => $staffId) {
         storeStaffData($staffData, $staffRole, $phpDataObject);
     }
 }
-
-$flagData = fetchCountryFlagData();
-// die('<pre>' . print_r($flagData, true) . '</pre>');
 ?>
 
 <div class="staff-page">
@@ -206,6 +177,23 @@ $flagData = fetchCountryFlagData();
     </header>
 
     <section>
+        <picture>
+        <source
+            type="image/webp"
+            srcset="https://flagcdn.com/16x12/ua.webp,
+            https://flagcdn.com/32x24/ua.webp 2x,
+            https://flagcdn.com/48x36/ua.webp 3x">
+        <source
+            type="image/png"
+            srcset="https://flagcdn.com/16x12/ua.png,
+            https://flagcdn.com/32x24/ua.png 2x,
+            https://flagcdn.com/48x36/ua.png 3x">
+        <img
+            src="https://flagcdn.com/16x12/ua.png"
+            width="16"
+            height="12"
+            alt="Ukraine">
+        </picture>
         <!-- TODO: 
                 - Include avatar and other related info in.
                 - PHP can handle this. Need to get data from osu! API only.
