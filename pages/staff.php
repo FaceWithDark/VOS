@@ -92,6 +92,7 @@ function storeStaffData($staffData, $staffRole, $phpDataObject) {
     }
 }
 
+
 // Get staff roles by array index
 function getStaffRoleByIndex($arrayIndex, $staffRoles) {
     foreach($staffRoles as $staffRole => $arrayIndexes) {
@@ -101,6 +102,32 @@ function getStaffRoleByIndex($arrayIndex, $staffRoles) {
     }
     // None of the roles applied if index is not found
     return 'N/A';
+}
+
+
+function fetchCountryFlagData() {
+    $apiUrl = "https://cdn.simplelocalize.io/public/v1/countries";
+    $client = new Client();
+
+    try {
+        $response = $client -> get($apiUrl, [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+
+        if($response -> getStatusCode() === 200) {
+            $flagData = $response -> getBody() -> getContents();
+            return $flagData;
+        }
+
+        return false;
+    }
+    catch(RequestException $exception) {
+        error_log("API request failed: " . $exception -> getMessage());
+        return false;
+    }
 }
 
 // Define staff IDs for which data will be fetched
@@ -168,6 +195,9 @@ foreach($uniqueStaffIds as $arrayIndex => $staffId) {
         storeStaffData($staffData, $staffRole, $phpDataObject);
     }
 }
+
+$flagData = fetchCountryFlagData();
+// die('<pre>' . print_r($flagData, true) . '</pre>');
 ?>
 
 <div class="staff-page">
