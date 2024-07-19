@@ -47,26 +47,31 @@ function fetchStaffData($staffId) {
 
 // Store new staff data into database
 function storeStaffData($staffData, $staffRole, $phpDataObject) {
+    
+    // Construct the flag URL using the country code as in lowercase letter
+    $countryCode = strtolower($staffData -> country_code);
+    $countryFlagUrl = "https://flagcdn.com/64x48/$countryCode.webp";
+
     // SQL query to store staff data into the corresponding database table
     $query = "INSERT IGNORE INTO vot4_staff (staff_id,
                                              staff_username,
                                              staff_avatar_url,
                                              staff_roles,
                                              staff_country_name,
-                                             staff_country_flag)
+                                             staff_country_flag_url)
                      VALUES (:staff_id,
                              :staff_username,
                              :staff_avatar_url,
                              :staff_roles,
                              :staff_country_name,
-                             :staff_country_flag)
+                             :staff_country_flag_url)
                      ON DUPLICATE KEY UPDATE
                              staff_id = VALUES(staff_id),
                              staff_username = VALUES(staff_username),
                              staff_avatar_url = VALUES(staff_avatar_url),
                              staff_roles = VALUES(staff_roles),
                              staff_country_name = VALUES(staff_country_name),
-                             staff_country_flag = VALUES(staff_country_flag);";
+                             staff_country_flag_url = VALUES(staff_country_flag_url);";
     
     // Prepare the SQL statement to prevent SQL injection
     $queryStatement = $phpDataObject -> prepare($query);
@@ -77,7 +82,7 @@ function storeStaffData($staffData, $staffRole, $phpDataObject) {
     $queryStatement -> bindParam(":staff_avatar_url", $staffData -> avatar_url);
     $queryStatement -> bindParam(":staff_roles", $staffRole);
     $queryStatement -> bindParam(":staff_country_name", $staffData -> country -> name);
-    $queryStatement -> bindParam(":staff_country_flag", $staffData -> many_approach_but_still_thinking); // TODO: it is as what it is
+    $queryStatement -> bindParam(":staff_country_flag_url", $countryFlagUrl);
     
     // Execute the statement and insert the data into database
     if ($queryStatement -> execute()) {
@@ -177,23 +182,6 @@ foreach($uniqueStaffIds as $arrayIndex => $staffId) {
     </header>
 
     <section>
-        <picture>
-        <source
-            type="image/webp"
-            srcset="https://flagcdn.com/16x12/ua.webp,
-            https://flagcdn.com/32x24/ua.webp 2x,
-            https://flagcdn.com/48x36/ua.webp 3x">
-        <source
-            type="image/png"
-            srcset="https://flagcdn.com/16x12/ua.png,
-            https://flagcdn.com/32x24/ua.png 2x,
-            https://flagcdn.com/48x36/ua.png 3x">
-        <img
-            src="https://flagcdn.com/16x12/ua.png"
-            width="16"
-            height="12"
-            alt="Ukraine">
-        </picture>
         <!-- TODO: 
                 - Include avatar and other related info in.
                 - PHP can handle this. Need to get data from osu! API only.
