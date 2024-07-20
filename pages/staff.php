@@ -50,7 +50,7 @@ function storeStaffData($staffData, $staffRole, $phpDataObject) {
     
     // Construct the flag URL using the country code as in lowercase letter
     $countryCode = strtolower($staffData -> country_code);
-    $countryFlagUrl = "https://flagcdn.com/64x48/$countryCode.webp";
+    $countryFlagUrl = "https://flagcdn.com/24x18/$countryCode.webp";
 
     // SQL query to store staff data into the corresponding database table
     $query = "INSERT IGNORE INTO vot4_staff (staff_id,
@@ -210,32 +210,21 @@ foreach($uniqueStaffIds as $arrayIndex => $staffId) {
 }
 ?>
 
-<div class="staff-page">
-    <header>
-        <h1>Our Lovely Staff 💖</h1>
-    </header>
+<section>
+    <div class="header-container">
+        <h1>Our Lovely Staff <i class='bx bxs-heart-circle'></i></h1>
+    </div>
 
-    <section>
-        <!-- TODO: 
-                - Include avatar and other related info in.
-                - PHP can handle this. Need to get data from osu! API only.
-        -->
-        <div class="mappool-card-container">
-            <h1><img src="#" alt="#">DeepInDark</h1>
-            <img src="#" alt="#">
-            <h2>Streamer</h2>            
-        </div>
-        
-        <div class="mappool-card-container">
-            <h1><img src="#" alt="#">ダビッド</h1>
-            <img src="#" alt="#">
-            <h2>Mappooler</h2>            
-        </div>
-        
-        <div class="mappool-card-container">
-            <h1><img src="#" alt="#">rin</h1>
-            <img src="#" alt="#">
-            <h2>Mapper</h2>            
-        </div>
-    </section>
-</div>
+    <div class="staff-page">
+        <?php if(!empty($staffDataArray)): ?>
+            <!-- Dynamic staff information display -->
+            <?php foreach($staffDataArray as $staffData): ?>
+                <div class="staff-card-container">
+                    <h1><img src="<?= htmlspecialchars($staffData['staff_country_flag_url']); ?>" alt="<?= htmlspecialchars($staffData['staff_country_name']); ?>"><?= htmlspecialchars($staffData['staff_username']); ?></h1>
+                    <img src="<?= htmlspecialchars($staffData['staff_avatar_url']); ?>" alt="<?= htmlspecialchars($staffData['staff_username']); ?>'s Avatar">
+                    <h2><?= htmlspecialchars($staffData['staff_roles'])?></h2>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</section>
