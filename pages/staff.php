@@ -98,6 +98,59 @@ function storeStaffData($staffData, $staffRole, $phpDataObject) {
 }
 
 
+// Check if staff data already exists in the database
+function checkStaffData($staffId, $phpDataObject) {
+    $query = "SELECT id FROM vot4_staff WHERE staff_id = :staff_id";
+    $queryStatement = $phpDataObject -> prepare($query);
+    $queryStatement -> bindParam(":staff_id", $staffId, PDO::PARAM_INT);
+    $queryStatement -> execute();
+
+    return $queryStatement -> fetchColumn() !== false;
+}
+
+
+// Update existing staff data in the database with new data
+function updateStaffData($staffData, $staffRole, $phpDataObject) {
+
+    // Construct the flag URL using the country code as in lowercase letter
+    $countryCode = strtolower($staffData -> country_code);
+    $countryFlagUrl = "https://flagcdn.com/24x18/$countryCode.webp";
+
+    // SQL query to update staff data
+    $query = "UPDATE vot4_staff SET
+                staff_username = :staff_username,
+                staff_avatar_url = :staff_avatar_url,
+                staff_roles = :staff_roles,
+                staff_country_name = :staff_country_name,
+                staff_country_flag_url = :staff_country_flag_url
+              WHERE staff_id = :staff_id";
+    
+    // Prepare the SQL statement to prevent SQL injection
+    $queryStatement = $phpDataObject -> prepare($query);
+    
+    // Bind the staff data to the prepared statement
+    $queryStatement -> bindParam(":staff_id", $staffData -> id);
+    $queryStatement -> bindParam(":staff_username", $staffData -> username);
+    $queryStatement -> bindParam(":staff_avatar_url", $staffData -> avatar_url);
+    $queryStatement -> bindParam(":staff_roles", $staffRole);
+    $queryStatement -> bindParam(":staff_country_name", $staffData -> country -> name);
+    $queryStatement -> bindParam(":staff_country_flag_url", $countryFlagUrl);
+
+
+    // Execute the statement and update the existen data in the database
+    if ($queryStatement -> execute()) {
+        error_log("Update successful for beatmap ID: " . $staffData -> id);
+        return $queryStatement -> rowCount() > 0;
+    } 
+    else {
+        error_log("Update failed for beatmap ID: " . $staffData -> id);
+        $errorInfo = $queryStatement -> errorInfo();
+        error_log("Error Info: " . implode(", ", $errorInfo));
+        return false;
+    }
+}
+
+
 // Get staff data from database by staff IDs
 function getStaffData($staffId, $phpDataObject) {
 
@@ -195,7 +248,15 @@ foreach($uniqueStaffIds as $arrayIndex => $staffId) {
     // Fetch the staff data from the API or database
     $staffData = fetchStaffData($staffId);
     if($staffData) {
-        storeStaffData($staffData, $staffRole, $phpDataObject);
+        if(!checkStaffData($staffId, $phpDataObject)) {
+            storeStaffData($staffData, $staffRole, $phpDataObject);
+        }
+        else {
+            updateStaffData($staffData, $staffRole, $phpDataObject);
+        }
+    }
+    else {
+        error_log("Failed to fetch staff data for ID: {$staffId}");
     }
 
     $retrievedStaffData = getStaffData($staffId, $phpDataObject);
@@ -205,7 +266,7 @@ foreach($uniqueStaffIds as $arrayIndex => $staffId) {
         $staffDataArray[] = $retrievedStaffData;
     } 
     else {
-        error_log("Failed to retrieve staff data for ID: {$beatmapId}.");
+        error_log("Failed to retrieve staff data for ID: {$staffId}.");
     }
 }
 ?>
