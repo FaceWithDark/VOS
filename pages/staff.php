@@ -64,14 +64,7 @@ function storeStaffData($staffData, $staffRole, $phpDataObject) {
                              :staff_avatar_url,
                              :staff_roles,
                              :staff_country_name,
-                             :staff_country_flag_url)
-                     ON DUPLICATE KEY UPDATE
-                             staff_id = VALUES(staff_id),
-                             staff_username = VALUES(staff_username),
-                             staff_avatar_url = VALUES(staff_avatar_url),
-                             staff_roles = VALUES(staff_roles),
-                             staff_country_name = VALUES(staff_country_name),
-                             staff_country_flag_url = VALUES(staff_country_flag_url);";
+                             :staff_country_flag_url)";
     
     // Prepare the SQL statement to prevent SQL injection
     $queryStatement = $phpDataObject -> prepare($query);
