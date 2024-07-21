@@ -53,12 +53,12 @@ function storeStaffData($staffData, $staffRole, $phpDataObject) {
     $countryFlagUrl = "https://flagcdn.com/24x18/$countryCode.webp";
 
     // SQL query to store staff data into the corresponding database table
-    $query = "INSERT IGNORE INTO vot4_staff (staff_id,
-                                             staff_username,
-                                             staff_avatar_url,
-                                             staff_roles,
-                                             staff_country_name,
-                                             staff_country_flag_url)
+    $query = "INSERT INTO vot4_staff (staff_id,
+                                      staff_username,
+                                      staff_avatar_url,
+                                      staff_roles,
+                                      staff_country_name,
+                                      staff_country_flag_url)
                      VALUES (:staff_id,
                              :staff_username,
                              :staff_avatar_url,
