@@ -11,7 +11,7 @@ require_once '../layouts/navigation_bar.php';
 // require '../layouts/configuration.php';
 
 // Fetch staff data from the Osu! API
-function fetchStaffData($staffId) {
+function fetchStaffData($staffId, $phpDataObject) {
     // Check if the user is authenticated by looking for the access token in cookies
     $accessToken = $_COOKIE['vot_access_token'] ?? null;
     if ($accessToken) {
@@ -40,6 +40,31 @@ function fetchStaffData($staffId) {
         catch (RequestException $exception) {
             error_log("API request failed: " . $exception -> getMessage());  // Log the exception message
             return false;                                                    // An exception occurred during the API call
+        }
+    }
+    else {
+        // If not authenticated, fetch data from the database directly
+        try {
+            // Determine the table to query based on the 'round' parameter
+            $query =  "SELECT id FROM vot4_staff WHERE staff_id = :staff_id";
+            $queryStatement = $phpDataObject -> prepare($query);
+            $queryStatement -> bindParam(":staff_id", $staffId, PDO::PARAM_INT);
+
+            // Execute the statement and fetch the data
+            if($queryStatement -> execute()) {
+                error_log("Successfully retrieved data for staff ID: " . $staffId);
+                return $queryStatement -> fetch(PDO::FETCH_ASSOC);
+            }
+            else {
+                error_log("Failed to retrieve data for staff ID: " . $staffId);
+                $errorInfo = $queryStatement -> errorInfo();
+                error_log("Database error: " . implode(", ", $errorInfo));  // Log the exception message
+                return false;                                               // An exception occurred during the database call
+            }
+        }
+        catch(RequestException $exception) {
+            error_log("Database query failed: " . $exception -> getMessage());
+            return false;
         }
     }
 }
@@ -239,27 +264,36 @@ foreach($uniqueStaffIds as $arrayIndex => $staffId) {
     $staffRole = implode(', ', $staffIdToRoles[$staffId]);    
 
     // Fetch the staff data from the API or database
-    $staffData = fetchStaffData($staffId);
+    $staffData = fetchStaffData($staffId, $phpDataObject);
     if($staffData) {
-        if(!checkStaffData($staffId, $phpDataObject)) {
-            storeStaffData($staffData, $staffRole, $phpDataObject);
+        // Check if the user is authenticated
+        $accessToken = $_COOKIE['vot_access_token'] ?? null;
+
+        if($accessToken) {
+            if(!checkStaffData($staffId, $phpDataObject)) {
+                storeStaffData($staffData, $staffRole, $phpDataObject);
+            }
+            else {
+                updateStaffData($staffData, $staffRole, $phpDataObject);
+            }
+            // Get stored data from the database after storing/updating the current stored data in the databse only in the case of user is authenticated
+            $retrievedStaffData = getStaffData($staffId, $phpDataObject);
         }
         else {
-            updateStaffData($staffData, $staffRole, $phpDataObject);
+            // Get stored data directly from the databse if user is not authenticated
+            $retrievedStaffData = getStaffData($staffId, $phpDataObject);
+        }
+
+        // If data retrieval is successful, add it to the array
+        if ($retrievedStaffData) {
+            $staffDataArray[] = $retrievedStaffData;
+        } 
+        else {
+            error_log("Failed to retrieve staff data for ID: " . $staffId);
         }
     }
     else {
-        error_log("Failed to fetch staff data for ID: {$staffId}");
-    }
-
-    $retrievedStaffData = getStaffData($staffId, $phpDataObject);
-
-    // If data retrieval is successful, add it to the array
-    if ($retrievedStaffData) {
-        $staffDataArray[] = $retrievedStaffData;
-    } 
-    else {
-        error_log("Failed to retrieve staff data for ID: {$staffId}.");
+        error_log("Failed to fetch staff data for ID: " . $staffId);
     }
 }
 ?>
