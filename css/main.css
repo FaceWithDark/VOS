@@ -26,6 +26,15 @@ header h1 {
     margin: 1.5rem 0;
 }
 
+.header-container {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    color: var(--primary-colour);
+    font-size: 1.75rem;
+    margin: 1.5rem 0;
+}
+
 /* Content wrapper method accross all the pages (except main). */
 .flex-container {
     display: flex;
@@ -282,7 +291,8 @@ nav.active-button ul li a i {
 /* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES */
 
 .direct-link-container,
-.mappool-card-container
+.mappool-card-container,
+.staff-card-container
 {
     background-color: rgba(220, 220, 220, 1);
     padding: 1rem;
@@ -293,7 +303,8 @@ nav.active-button ul li a i {
 }
 
 .direct-link-container:not(:first-child),
-.mappool-card-container:not(:first-child)
+.mappool-card-container:not(:first-child),
+.staff-card-container:not(:first-child)
 {
     margin-left: .75rem;
 }
@@ -347,7 +358,8 @@ body.dark-theme .announcement-box {
 }
 
 body.dark-theme .direct-link-container,
-body.dark-theme .mappool-card-container
+body.dark-theme .mappool-card-container,
+body.dark-theme .staff-card-container
 {
     background-color: var(--accent-colour-alt);
     border-right: 5px solid rgba(100, 100, 100, 1);
@@ -357,7 +369,9 @@ body.dark-theme .mappool-card-container
 
 /* NO-HEADER PAGES */
 
-.mappool-page {
+.mappool-page,
+.staff-page
+{
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
@@ -416,4 +430,22 @@ body.dark-theme .mappool-card-container
 .lower-general-information-box ul li {
     line-height: 1.275rem;
     list-style: disc inside;
+}
+
+
+/* CARD STYLE WITH HEADER PAGES */
+
+.staff-card-container h1,
+.staff-card-container h2
+{
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.staff-card-container img:nth-child(1) {
+    margin-right: .5rem;
+}
+.staff-card-container img:not(:first-child) {
+    padding: 1.25rem 0;
 }
