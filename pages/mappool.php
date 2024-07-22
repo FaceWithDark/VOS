@@ -356,7 +356,8 @@ if($tournamentRound) {
                         }
                         break;
                 }
-            } else {
+            } 
+            else {
                 switch ($tournamentRound) {
                     case 'qualifiers':
                         if ($arrayIndex <= 8) {
