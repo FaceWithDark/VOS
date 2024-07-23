@@ -40,9 +40,6 @@ Dockerfile
 # Except some of these markdown files
 !README.md
 
-# .txt files
-*.txt
-
 
 #               #
 #   C++ Stuff   #
@@ -77,3 +74,9 @@ cpp/x86/
 cpp/bld/
 cpp/Bin/
 cpp/Obj/
+
+# .txt files
+*.txt
+
+# Except some of these text files
+!CMakeLists.txt

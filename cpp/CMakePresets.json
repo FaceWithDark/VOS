@@ -9,12 +9,11 @@
         {
             "name": "ChatbotVOT",
             "displayName": "CopilotVOT",
-            "description": "This is the chatbot for VOT website. Powered by CMake with MinGW build.",
-            "generator": "Ninja",
+            "description": "This is the chatbot for VOT website. Powered by CMake.",
             "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
                 "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/cpp/install",
                 "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
                 "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
                 "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic",
@@ -25,7 +24,7 @@
     "buildPresets": [
         {
             "name": "ChatbotVOT(Build)",
-            "displayName": "CopilotVOT(Build)",
+            "displayName": "CopilotVOT (Build)",
             "description": "This is the build process for AI Chatbot.",
             "configurePreset": "ChatbotVOT"
         }
