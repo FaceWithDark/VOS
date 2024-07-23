@@ -263,43 +263,45 @@ if($tournamentRound) {
                     // VOT4 RO16
                     4679944, 2564433, 3789813, 4681218, 4681168, 3304046, 4251890, 4004134, 4458839, 3884457, 2417569, 4633213, 4682562, 4039947, 2035883,
                     // VOT4 QF
-                    3929726, 2420243, 4692866, 4692975, 4692897, 4690486, 4601035, 4040942, 3933082, 4692933, 4692544, 4692861, 3442056, 4692872, 4692888, 3308614
+                    3929726, 2420243, 4692866, 4692975, 4692897, 4690486, 4601035, 4040942, 3933082, 4692933, 4692544, 4692861, 3442056, 4692872, 4692888, 3308614,
+                    // VOT4 SF
+                    2570678, 1522643, 4045209, 4703925, 2740351, 4703951, 4703820, 1304997, 4703982, 2357140, 1857090, 1481895, 4703901, 4703867, 1905480, 2842189
     ];
 
     // Define a mapping of index ranges to beatmap mods
     $modTypes = [
     // NM section
-    'NM1' => [0, 9, 24],
-    'NM2' => [1, 10, 25],
-    'NM3' => [2, 11, 26],
-    'NM4' => [12, 27],
-    'NM5' => [28],
+    'NM1' => [0, 9, 24, 40],
+    'NM2' => [1, 10, 25, 41],
+    'NM3' => [2, 11, 26, 42],
+    'NM4' => [12, 27, 43],
+    'NM5' => [28, 44],
     'NM6' => [],
 
     // HD section
-    'HD1' => [3, 13, 29],
-    'HD2' => [4, 14, 30],
+    'HD1' => [3, 13, 29, 45],
+    'HD2' => [4, 14, 30, 46],
 
     // HR section
-    'HR1' => [5, 15, 31],
-    'HR2' => [6, 16, 32],
+    'HR1' => [5, 15, 31, 47],
+    'HR2' => [6, 16, 32, 48],
 
     // DT section
-    'DT1' => [7, 17, 33],
-    'DT2' => [18, 34],
+    'DT1' => [7, 17, 33, 49],
+    'DT2' => [18, 34, 50],
 
     // FM section
-    'FM1' => [8, 19, 35],
-    'FM2' => [20, 36],
+    'FM1' => [8, 19, 35, 51],
+    'FM2' => [20, 36, 52],
 
     // EZ section
-    'EZ' => [21, 37],
+    'EZ' => [21, 37, 53],
 
     // HDHR section
-    'HDHR' => [22, 38],
+    'HDHR' => [22, 38, 54],
 
     // TB section
-    'TB' => [23, 39]
+    'TB' => [23, 39, 55]
     ];
 
     foreach ($beatmapIds as $arrayIndex => $beatmapId) {
@@ -334,7 +336,7 @@ if($tournamentRound) {
                         }
                         break;
                     case 'ro16':
-                        if ($arrayIndex > 8 && $arrayIndex < 24) {
+                        if ($arrayIndex > 8 && $arrayIndex <= 23) {
                             // For 'RO16' database table with AUTHENTICATED user's case
                             if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
                                 storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
@@ -345,7 +347,18 @@ if($tournamentRound) {
                         }
                         break;
                     case 'quarterfinals':
-                        if ($arrayIndex >= 24 && $arrayIndex <= 39) {
+                        if ($arrayIndex > 23 && $arrayIndex <= 39) {
+                            // For 'Quarterfinals' database table with AUTHENTICATED user's case
+                            if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
+                                storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                            } else {
+                                updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                            }
+                            $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                        }
+                        break;
+                    case 'semifinals':
+                        if ($arrayIndex > 39 && $arrayIndex <= 55) {
                             // For 'Quarterfinals' database table with AUTHENTICATED user's case
                             if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
                                 storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
@@ -366,13 +379,19 @@ if($tournamentRound) {
                         }
                         break;
                     case 'ro16':
-                        if ($arrayIndex > 8 && $arrayIndex < 24) {
+                        if ($arrayIndex > 8 && $arrayIndex <= 23) {
                             // For 'RO16' database table with UNAUTHENTICATED user's case    
                             $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
                         }
                         break;
                     case 'quarterfinals':
-                        if ($arrayIndex >= 24 && $arrayIndex <= 39) {
+                        if ($arrayIndex > 23 && $arrayIndex <= 39) {
+                            // For 'Quarterfinals' database table with UNAUTHENTICATED user's case    
+                            $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                        }
+                        break;
+                    case 'semifinals':
+                        if ($arrayIndex > 39 && $arrayIndex <= 55) {
                             // For 'Quarterfinals' database table with UNAUTHENTICATED user's case    
                             $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
                         }
@@ -404,6 +423,7 @@ else {
             <button type="submit" name="round" value="qualifiers">Qualifiers</button>
             <button type="submit" name="round" value="ro16">RO16</button>
             <button type="submit" name="round" value="quarterfinals">QF</button>
+            <button type="submit" name="round" value="semifinals">SF</button>
         </form>
     </div>
 
