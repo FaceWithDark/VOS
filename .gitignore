@@ -42,3 +42,38 @@ Dockerfile
 
 # .txt files
 *.txt
+
+
+#               #
+#   C++ Stuff   #
+#               #
+
+# CMake specific files
+cpp/CMakeLists.txt.user
+cpp/CMakeCache.txt
+cpp/CMakeFiles/
+cpp/CMakeScripts/
+cpp/Testing/
+cpp/Makefile
+cpp/cmake_install.cmake
+cpp/install_manifest.txt
+cpp/compile_commands.json
+cpp/CTestTestfile.cmake
+cpp/_deps/
+cpp/CMakeUserPresets.json
+
+# Build output directory
+cpp/build/
+
+# Install directory
+cpp/install/
+
+# Visual Studio specific files
+cpp/.vs/
+cpp/Debug/
+cpp/Release/
+cpp/x64/
+cpp/x86/
+cpp/bld/
+cpp/Bin/
+cpp/Obj/
