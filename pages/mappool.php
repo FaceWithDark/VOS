@@ -359,7 +359,7 @@ if($tournamentRound) {
                         break;
                     case 'semifinals':
                         if ($arrayIndex > 39 && $arrayIndex <= 55) {
-                            // For 'Quarterfinals' database table with AUTHENTICATED user's case
+                            // For 'Semifinals' database table with AUTHENTICATED user's case
                             if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
                                 storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
                             } else {
@@ -392,7 +392,7 @@ if($tournamentRound) {
                         break;
                     case 'semifinals':
                         if ($arrayIndex > 39 && $arrayIndex <= 55) {
-                            // For 'Quarterfinals' database table with UNAUTHENTICATED user's case    
+                            // For 'Semifinals' database table with UNAUTHENTICATED user's case    
                             $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
                         }
                         break;
