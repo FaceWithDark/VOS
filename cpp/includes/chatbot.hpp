@@ -20,6 +20,7 @@ private:
     std::unordered_map<std::string, std::string> greetingKeywords;
     std::unordered_map<std::string, std::string> navigationKeywords;
     std::unordered_map<std::string, std::string> explanationKeywords;
+    std::unordered_map<std::string, std::string> troubleshootKeywords;
 };
 
 #endif

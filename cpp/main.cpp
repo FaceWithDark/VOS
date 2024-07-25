@@ -9,8 +9,9 @@ int main()
     /* Sample user input:
         std::string userInput = "Hi, VOT Copilot!";
         std::string userInput = "How do I get to the home page?";
+        std::string userInput = "what does dark / light mode do?";
     */
-    std::string userInput = "what does dark / light mode do?";
+   std::string userInput = "I am having issue with my account.";
 
     // Get the chatbot's response
     std::string chatbotResponse = votchatbot.getResponse(userInput);
