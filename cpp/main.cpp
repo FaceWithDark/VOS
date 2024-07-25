@@ -17,17 +17,30 @@ int main()
     // Store user input as string
     std::string userInput;
 
-    // Prompt user to type in for further use
-    std::cout << "Query: ";
+    // Keep running the chat
+    while (true)
+    {
+        // Prompt user to type in for further use
+        std::cout << "Query: ";
 
-    // Get user input and sent to chatbot to analyse it
-    std::getline(std::cin, userInput);
+        // Get user input and sent to chatbot to analyse it
+        std::getline(std::cin, userInput);
 
-    // Get the chatbot's response
-    std::string chatbotResponse = votchatbot.getResponse(userInput);
+        // Get the chatbot's response
+        std::string chatbotResponse = votchatbot.getResponse(userInput);
 
-    // Output the response
-    std::cout << chatbotResponse << std::endl;
+        // Output the response
+        std::cout << chatbotResponse << std::endl;
+
+        // Check if the response detected was a goodbye message
+        if(chatbotResponse.find("Goodbye") != std::string::npos ||
+           chatbotResponse.find("See you later") != std::string::npos
+           /* Add more conditions here. TODO: this is very hard-coded. Will find a better way than this later */)
+        {
+            // Exit the program
+            return 0;
+        }
+    }
     
     return 0;
 }
