@@ -31,6 +31,16 @@ VOTChatbot::VOTChatbot()
         {"problem", "To fix this problem. you need to"},
         {"hardtime", "To overcome this difficulty, you can"}
     };
+
+    // Initialise goodbye keywords and responses
+    goodbyeKeywords = {
+        {"exit", "You blyat"},
+        {"goodbye", "Goodbye"},
+        {"see you", "See you"},
+        {"see ya", "See ya"},
+        {"see yah", "See yah"},
+        {"see you later", "See you later"}
+    };
 }
 
 // Convert any uppercase string to lowercase string to support both typing format
@@ -87,6 +97,17 @@ std::string VOTChatbot::getResponse(const std::string& userInput)
             // Extract issue description from user input. For now, make it as a general comment first
             std::string issueName = "[detailed description on how to troubleshoot]"; // TODO: set an array of pages for this or maybe database method
             return fmt::format(" {}: {}.", keywordMatching.second, issueName);
+        }
+    }
+    
+    // Check if user's input have words that match the pre-defined goodbye keywords
+    for (const auto& keywordMatching : goodbyeKeywords)
+    {
+        if(lowerCaseUserInput.find(keywordMatching.first) != std::string::npos)
+        {
+            // Extract username from user input. For now, assume it is always 'User' first
+            std::string userGoodbyeName = "User"; // TODO: take the username from the database for this
+            return fmt::format(" {}, {}!", keywordMatching.second, userGoodbyeName);
         }
     }
     
