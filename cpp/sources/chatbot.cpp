@@ -10,6 +10,11 @@ VOTChatbot::VOTChatbot()
         {"hello", "Hello"},
         {"hey", "Hey"}
     };
+
+    navigationKeywords = {
+        {"how", "To get to"},
+        {"where", "You can find"}
+    };
 }
 
 // Convert any uppercase string to lowercase string to support both typing format
@@ -25,7 +30,7 @@ std::string VOTChatbot::getResponse(const std::string& userInput)
 {
     std::string lowerCaseUserInput = upperToLowerCase(userInput);
 
-    // Check if user's input have words that match the pre-defined greeting keywords 
+    // Check if user's input have words that match the pre-defined greeting keywords
     for (const auto& keywordMatching : greetingKeywords)
     {
         if(lowerCaseUserInput.find(keywordMatching.first) != std::string::npos)
@@ -35,6 +40,18 @@ std::string VOTChatbot::getResponse(const std::string& userInput)
             return fmt::format("{}, {}! How can I help you?", keywordMatching.second, userName);
         }
     }
+    
+    // Check if user's input have words that match the pre-defined navigation keywords
+    for (const auto& keywordMatching : navigationKeywords)
+    {
+        if(lowerCaseUserInput.find(keywordMatching.first) != std::string::npos)
+        {
+            // Extract page name from user input. For now, assume it is always 'Home Page' first
+            std::string pageName = "home page"; // TODO: set an array of pages for this or maybe database method
+            return fmt::format("{} the {}, you will have to follow these steps: [instructions].", keywordMatching.second, pageName);
+        }
+    }
+    
     
     // Not matching any at all
     return "I'm sorry, I didn't understand that. Could you please try asking something else?";
