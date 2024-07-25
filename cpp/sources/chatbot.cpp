@@ -5,17 +5,20 @@
 // Constructor to initialise the chatbot
 VOTChatbot::VOTChatbot()
 {
+    // Initialise greeting keywords and responses
     greetingKeywords = {
         {"hi", "Hi"},
         {"hello", "Hello"},
         {"hey", "Hey"}
     };
 
+    // Initialise navigation keywords and responses
     navigationKeywords = {
         {"how", "To get to"},
         {"where", "You can find"}
     };
 
+    // Initialise explanation keywords and responses
     explanationKeywords = {
         {"what", "allows you to"},
         {"how", "helps you to"},
