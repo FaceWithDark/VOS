@@ -23,6 +23,14 @@ VOTChatbot::VOTChatbot()
         {"what", "allows you to"},
         {"how", "helps you to"},
     };
+
+    // Initialise troubleshoot keywords and responses
+    troubleshootKeywords = {
+        {"trouble", "To troubleshoot this issue, you can"},
+        {"issue", "To resolve this issue, you should"},
+        {"problem", "To fix this problem. you need to"},
+        {"hardtime", "To overcome this difficulty, you can"}
+    };
 }
 
 // Convert any uppercase string to lowercase string to support both typing format
@@ -71,6 +79,16 @@ std::string VOTChatbot::getResponse(const std::string& userInput)
         }
     }
     
+    // Check if user's input have words that match the pre-defined troubleshoot keywords
+    for (const auto& keywordMatching : troubleshootKeywords)
+    {
+        if(lowerCaseUserInput.find(keywordMatching.first) != std::string::npos)
+        {
+            // Extract issue description from user input. For now, make it as a general comment first
+            std::string issueName = "[detailed description on how to troubleshoot]"; // TODO: set an array of pages for this or maybe database method
+            return fmt::format(" {}: {}.", keywordMatching.second, issueName);
+        }
+    }
     
     // Not matching any at all
     return "I'm sorry, I didn't understand that. Could you please try asking something else?";
