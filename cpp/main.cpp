@@ -1,24 +1,19 @@
 #include "chatbot.hpp"
 #include <iostream>
 
-int main() {
-    VOTChatbot vot_chatbot;
-    std::string query;
+int main()
+{
+    // Create an instance of the 'VOT Chatbot' class
+    VOTChatbot votchatbot;
 
-    while(true)
-    {
-        std::cout << "Enter your query: ";
-        std::getline(std::cin, query);
+    // Sample user input
+    std::string userInput = "Hi, VOT Copilot!";
 
-        if(query == "exit")
-        {
-            std::cout << "Goodbye!\n";
-            break;
-        }
+    // Get the chatbot's response
+    std::string chatbotResponse = votchatbot.getResponse(userInput);
 
-        std::string queryResponse = vot_chatbot.respondQuery(query);
-        std::cout << queryResponse << std::endl;
-    }
-
+    // Output the response
+    std::cout << chatbotResponse << std::endl;
+    
     return 0;
 }

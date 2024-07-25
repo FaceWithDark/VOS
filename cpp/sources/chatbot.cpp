@@ -1,58 +1,41 @@
 #include "chatbot.hpp"
+#include <algorithm>
 #include <fmt/core.h>
 
-VOTChatbot::VOTChatbot() 
+// Constructor to initialise the chatbot
+VOTChatbot::VOTChatbot()
 {
-    // Initialisation process
-    fmt::print("Initialising VOT chatbot...\n");
-
-    // Load pre-defined responses
-    predefinedResponses["Hello"] = "Hello! How can I assist you today?";
-    predefinedResponses["How do I get to the [page name]?"] = "You can get to [page name] by [action to get there]";
-
-    // Initialises queries with both case-sensitive and case-insensitve strings
-    greetingQuery = {"hi", "Hi", "hello", "Hello", "hey", "Hey"};
-    directionQuery = {"how do I get to the [page name]?", "How do I get to the [page name]?", "where is [page name]?", "Where is [page name]?"};
-
-    // Finish initialisation process
-    fmt::print("VOT Chatbot initialised successfully\n");
+    greetingKeywords = {
+        {"hi", "Hi"},
+        {"hello", "Hello"},
+        {"hey", "Hey"}
+    };
 }
 
-std::string VOTChatbot::respondQuery(const std::string& query) 
+// Convert any uppercase string to lowercase string to support both typing format
+std::string VOTChatbot::upperToLowerCase(const std::string& keywordString)
 {
-    return processQuery(query);
+    std::string lowerCaseKeywordString = keywordString;
+    std::transform(lowerCaseKeywordString.begin(), lowerCaseKeywordString.end(), lowerCaseKeywordString.begin(), ::tolower);
+    return lowerCaseKeywordString;
 }
 
-std::string VOTChatbot::processQuery(const std::string& query) 
+// Get the chatbot's response based on user input
+std::string VOTChatbot::getResponse(const std::string& userInput)
 {
-    // Check for greeting queries
-    if(isQueryMatch(greetingQuery, query)) 
-    {
-        return predefinedResponses["Hello"];
-    }
+    std::string lowerCaseUserInput = upperToLowerCase(userInput);
 
-    // Check for direction queries
-    if(isQueryMatch(directionQuery, query))
+    // Check if user's input have words that match the pre-defined greeting keywords 
+    for (const auto& keywordMatching : greetingKeywords)
     {
-        return predefinedResponses["How do I get to the [page name]?"];
-    }
-    
-    // Output error message if user ask questions that is/are not belongs to the queries
-    return fmt::format("I'm sorry, I don't understand the query: {}", query);
-}
-
-bool VOTChatbot::isQueryMatch(const std::vector<std::string>& queries, const std::string& query)
-{
-    // Iterate through each string in the queries vector
-    for(const auto& queryString : queries)
-    {
-        // Check if the current defined string matches the input query from the user
-        if(queryString == query)
+        if(lowerCaseUserInput.find(keywordMatching.first) != std::string::npos)
         {
-            // Found the matching query to get output
-            return true;
+            // Extract username from user input. For now, assume it is always 'User' first
+            std::string userName = "User"; // TODO: take the username from the database for this
+            return fmt::format("{}, {}! How can I help you?", keywordMatching.second, userName);
         }
     }
-    // No matching query found to get output
-    return false;
+    
+    // Not matching any at all
+    return "I'm sorry, I didn't understand that. Could you please try asking something else?";
 }
