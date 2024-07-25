@@ -21,7 +21,7 @@ VOTChatbot::VOTChatbot()
     // Initialise explanation keywords and responses
     explanationKeywords = {
         {"what", "allows you to"},
-        {"how", "helps you to"},
+        {"how", "helps you to"}
     };
 
     // Initialise troubleshoot keywords and responses
