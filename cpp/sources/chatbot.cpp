@@ -15,6 +15,11 @@ VOTChatbot::VOTChatbot()
         {"how", "To get to"},
         {"where", "You can find"}
     };
+
+    explanationKeywords = {
+        {"what", "allows you to"},
+        {"how", "helps you to"},
+    };
 }
 
 // Convert any uppercase string to lowercase string to support both typing format
@@ -49,6 +54,17 @@ std::string VOTChatbot::getResponse(const std::string& userInput)
             // Extract page name from user input. For now, assume it is always 'Home Page' first
             std::string pageName = "home page"; // TODO: set an array of pages for this or maybe database method
             return fmt::format("{} the {}, you will have to follow these steps: [instructions].", keywordMatching.second, pageName);
+        }
+    }
+    
+    // Check if user's input have words that match the pre-defined explanation keywords
+    for (const auto& keywordMatching : explanationKeywords)
+    {
+        if(lowerCaseUserInput.find(keywordMatching.first) != std::string::npos)
+        {
+            // Extract feature name from user input. For now, assume it is always 'Dark / Light Mode' first
+            std::string featureName = "dark / light mode"; // TODO: set an array of pages for this or maybe database method
+            return fmt::format(" {} {}: [explains to feature].", featureName, keywordMatching.second);
         }
     }
     

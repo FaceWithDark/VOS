@@ -19,6 +19,7 @@ private:
     // Pre-defined keywords and responses
     std::unordered_map<std::string, std::string> greetingKeywords;
     std::unordered_map<std::string, std::string> navigationKeywords;
+    std::unordered_map<std::string, std::string> explanationKeywords;
 };
 
 #endif
