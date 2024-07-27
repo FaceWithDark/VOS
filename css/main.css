@@ -292,7 +292,8 @@ nav.active-button ul li a i {
 
 .direct-link-container,
 .mappool-card-container,
-.staff-card-container
+.staff-card-container,
+.song-card-container
 {
     background-color: rgba(220, 220, 220, 1);
     padding: 1rem;
@@ -304,7 +305,8 @@ nav.active-button ul li a i {
 
 .direct-link-container:not(:first-child),
 .mappool-card-container:not(:first-child),
-.staff-card-container:not(:first-child)
+.staff-card-container:not(:first-child),
+.song-card-container:not(:first-child)
 {
     margin-left: .75rem;
 }
@@ -359,7 +361,8 @@ body.dark-theme .announcement-box {
 
 body.dark-theme .direct-link-container,
 body.dark-theme .mappool-card-container,
-body.dark-theme .staff-card-container
+body.dark-theme .staff-card-container,
+body.dark-theme .song-card-container
 {
     background-color: var(--accent-colour-alt);
     border-right: 5px solid rgba(100, 100, 100, 1);
@@ -370,14 +373,17 @@ body.dark-theme .staff-card-container
 /* NO-HEADER PAGES */
 
 .mappool-page,
-.staff-page
+.staff-page,
+.song-page
 {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
 }
 
-.mappool-card-container a {
+.mappool-card-container a,
+.song-card-container a
+{
     font-weight: bold;
     color: var(--accent-colour);
     -webkit-user-select: none; /* Safari compatability. */
@@ -387,6 +393,9 @@ body.dark-theme .staff-card-container
 .mappool-card-container h1,
 .mappool-card-container h2,
 .mappool-card-container h3,
+.song-card-container h1,
+.song-card-container h2,
+.song-card-container h3,
 .beatmap-creator-row,
 .beatmap-attribute-row
 {
@@ -395,7 +404,9 @@ body.dark-theme .staff-card-container
 }
 
 .mappool-card-container h1,
-.mappool-card-container h2
+.mappool-card-container h2,
+.song-card-container h1,
+.song-card-container h2
 {
     font-weight: bold;
 }
