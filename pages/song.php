@@ -12,12 +12,12 @@ include_once '../modules/convertion/time_convertion.php';
 // require '../layouts/configuration.php';
 
 // Fetch custom song data from the Osu! API
-function fetchCustomSongData() {
+function fetchCustomSongData($customSongId) {
     // Check if the user is authenticated by looking for the access token in cookies
     $accessToken = $_COOKIE['vot_access_token'] ?? null;
     if ($accessToken) {
         // If authenticated, construct the API URL for fetching beatmap data
-        $apiUrl = "https://osu.ppy.sh/api/v2/beatmaps/4235709";
+        $apiUrl = "https://osu.ppy.sh/api/v2/beatmaps/{$customSongId}";
         $client = new Client();
     
         try {
@@ -119,11 +119,17 @@ function storeCustomSongData($customSongData, $phpDataObject) {
 }
 
 
-$customSongData = fetchCustomSongData();
-// die('<pre>' . print_r($customSongData, true) . '</pre>');
+$customSongIds = [ // VOT3  // VOT4
+                   4235709, 4692888
+                 ];
 
-if($customSongData) {
-    $storedCustomSongData = storeCustomSongData($customSongData, $phpDataObject);
+foreach($customSongIds as $customSongId) {
+    $customSongData = fetchCustomSongData($customSongId);
+    // die('<pre>' . print_r($customSongData, true) . '</pre>');
+    
+    if($customSongData) {
+        $storedCustomSongData = storeCustomSongData($customSongData, $phpDataObject);
+    }
 }
 ?>
 
