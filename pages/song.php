@@ -45,9 +45,86 @@ function fetchCustomSongData() {
     }
 }
 
-$customSongData = fetchCustomSongData();
-die('<pre>' . print_r($customSongData, true) . '</pre>');
 
+// Store new custom song data into database
+function storeCustomSongData($customSongData, $phpDataObject) {
+    $formattedTotalLength = integerToTimeFormat($customSongData -> total_length);
+
+    // SQL query to store custom song data in the 'vot4_custom_song' table
+    $query = "INSERT IGNORE INTO vot4_custom_song (tournament_title, 
+                                            tournament_round, 
+                                            mod_type, 
+                                            custom_song_id, 
+                                            custom_song_url,
+                                            total_length, 
+                                            cover_image_url, 
+                                            title_unicode,
+                                            artist_unicode,
+                                            difficulty, 
+                                            mapper, 
+                                            difficulty_rating, 
+                                            map_bpm, 
+                                            overall_difficulty, 
+                                            health_point, 
+                                            amount_of_passes) 
+                     VALUES (:tournament_title, 
+                             :tournament_round, 
+                             :mod_type,
+                             :custom_song_id,
+                             :custom_song_url,
+                             :total_length,
+                             :cover_image_url, 
+                             :title_unicode, 
+                             :artist_unicode, 
+                             :difficulty, 
+                             :mapper, 
+                             :difficulty_rating, 
+                             :map_bpm, 
+                             :overall_difficulty, 
+                             :health_point, 
+                             :amount_of_passes);";
+    
+    // Prepare the SQL statement to prevent SQL injection
+    $queryStatement = $phpDataObject -> prepare($query);
+    
+    // Bind the beatmap data to the prepared statement
+    $queryStatement -> bindParam(":tournament_title", $customSongData -> need_array_or_so_for_this); // TODO: it is as what it is
+    $queryStatement -> bindParam(":tournament_round", $customSongData -> need_array_or_so_for_this); // TODO: it is as what it is
+    $queryStatement -> bindParam(":mod_type", $customSongData -> need_array_or_so_for_this);         // TODO: it is as what it is
+    $queryStatement -> bindParam(":custom_song_id", $customSongData -> id);
+    $queryStatement -> bindParam(":custom_song_url", $customSongData -> url);    
+    $queryStatement -> bindParam(":total_length", $formattedTotalLength);
+    $queryStatement -> bindParam(":cover_image_url", $customSongData -> beatmapset -> covers -> cover);
+    $queryStatement -> bindParam(":title_unicode", $customSongData -> beatmapset -> title_unicode);
+    $queryStatement -> bindParam(":artist_unicode", $customSongData -> beatmapset -> artist_unicode);
+    $queryStatement -> bindParam(":difficulty", $customSongData -> version);
+    $queryStatement -> bindParam(":mapper", $customSongData -> beatmapset -> creator);
+    $queryStatement -> bindParam(":difficulty_rating", $customSongData -> difficulty_rating);
+    $queryStatement -> bindParam(":map_bpm", $customSongData -> bpm);
+    $queryStatement -> bindParam(":overall_difficulty", $customSongData -> accuracy);
+    $queryStatement -> bindParam(":health_point", $customSongData -> drain);
+    $queryStatement -> bindParam(":amount_of_passes", $customSongData -> passcount);
+
+    // Execute the statement and insert the data into database
+    if ($queryStatement -> execute()) {
+        error_log("Insert successful for custom song ID: " . $customSongData -> id);
+        return $queryStatement -> rowCount() > 0;
+    } 
+    else {
+        error_log("Insert failed for custom song ID: " . $customSongData -> id);
+        $errorInfo = $queryStatement -> errorInfo();
+        error_log("Error Info: " . implode(", ", $errorInfo));
+        return false;
+    }
+}
+
+
+$customSongData = fetchCustomSongData();
+// die('<pre>' . print_r($customSongData, true) . '</pre>');
+
+if($customSongData) {
+    $storedCustomSongData = storeCustomSongData($customSongData, $phpDataObject);
+}
 ?>
 
 <section>
