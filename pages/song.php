@@ -12,7 +12,7 @@ include_once '../modules/convertion/time_convertion.php';
 // require '../layouts/configuration.php';
 
 // Fetch custom song data from the Osu! API
-function fetchCustomSongData($customSongId) {
+function fetchCustomSongData($customSongId, $phpDataObject) {
     // Check if the user is authenticated by looking for the access token in cookies
     $accessToken = $_COOKIE['vot_access_token'] ?? null;
     if ($accessToken) {
@@ -41,6 +41,30 @@ function fetchCustomSongData($customSongId) {
         catch (RequestException $exception) {
             error_log("API request failed: " . $exception -> getMessage());  // Log the exception message
             return false;                                                    // An exception occurred during the API call
+        }
+    }
+    else {
+        try {
+            // Determine the table to query based on the 'round' parameter
+            $query = "SELECT id FROM vot4_custom_song WHERE custom_song_id = :custom_song_id";
+            $queryStatement = $phpDataObject -> prepare($query);
+            $queryStatement -> bindParam(":custom_song_id", $customSongId, PDO::PARAM_INT);
+
+            // Execute the statement and fetch the data
+            if($queryStatement -> execute()) {
+                error_log("Successfully retrieved data for custom song ID: " . $customSongId);
+                return $queryStatement -> fetch(PDO::FETCH_ASSOC);
+            }
+            else {
+                error_log("Failed to retrieve data for custom song ID: " . $customSongId);
+                $errorInfo = $queryStatement -> errorInfo();
+                error_log("Database error: " . implode(", ", $errorInfo));  // Log the exception message
+                return false;                                               // An exception occurred during the database call
+            }
+        }
+        catch(RequestException $exception) {
+            error_log("Database query failed: " . $exception -> getMessage());
+            return false;
         }
     }
 }
@@ -227,7 +251,7 @@ $modTypes = ['NM', 'HD', 'HR', 'DT', 'FM', 'EZ', 'HDHR', 'TB'];
 $customSongDataArray = [];
 
 foreach($customSongIds as $customSongId) {
-    $customSongData = fetchCustomSongData($customSongId);
+    $customSongData = fetchCustomSongData($customSongId, $phpDataObject);
     // die('<pre>' . print_r($customSongData, true) . '</pre>');
 
     if($customSongData) {
@@ -255,26 +279,35 @@ foreach($customSongIds as $customSongId) {
 
         // Stored the fetched data in the database with the tournament title, round, and mod type
         if($tournamentTitle && $tournamentRound && $modType) {
-            if(!checkCustomSongData($customSongId, $phpDataObject)) {
-                storeCustomSongData($customSongData, $tournamentTitle, $tournamentRound, $modType, $phpDataObject);
+            // Check if the user is authenticated
+            $accessToken = $_COOKIE['vot_access_token'] ?? null;
+
+            if($accessToken) {
+                if(!checkCustomSongData($customSongId, $phpDataObject)) {
+                    storeCustomSongData($customSongData, $tournamentTitle, $tournamentRound, $modType, $phpDataObject);
+                }
+                else {
+                    updateCustomSongData($customSongData, $tournamentTitle, $tournamentRound, $modType, $phpDataObject);
+                }
+                // Get stored data from the database after storing/updating the current stored data in the databse only in the case of user is authenticated
+                $retrievedCustomSongData = getCustomSongData($customSongId, $phpDataObject);
             }
             else {
-                updateCustomSongData($customSongData, $tournamentTitle, $tournamentRound, $modType, $phpDataObject);
+                // Get stored data directly from the databse if user is not authenticated
+                $retrievedCustomSongData = getCustomSongData($customSongId, $phpDataObject);
+            }
+            
+            // If data retrieval is successful, add it to the array
+            if($retrievedCustomSongData) {
+                $customSongDataArray[] = $retrievedCustomSongData;
+            }
+            else {
+                error_log("Failed to retrieve custom song data for ID: " . $customSongId);
             }
         }
         else {
             error_log("Failed to fetch custom song data for ID: " . $customSongId);
         }
-    }
-
-    $retrievedCustomSongData = getCustomSongData($customSongId, $phpDataObject);
-    
-    // If data retrieval is successful, add it to the array
-    if($retrievedCustomSongData) {
-        $customSongDataArray[] = $retrievedCustomSongData;
-    }
-    else {
-        error_log("Failed to retrieve custom song data for ID: " . $customSongId);
     }
 }
 ?>
