@@ -47,8 +47,10 @@ function fetchCustomSongData($customSongId) {
 
 
 // Store new custom song data into database
-function storeCustomSongData($customSongData, $phpDataObject) {
+function storeCustomSongData($customSongData, $tournamentTitle, $phpDataObject) {
     $formattedTotalLength = integerToTimeFormat($customSongData -> total_length);
+    // Add the tournament titile as a custom parameter to the fetched data 
+    $customSongData -> tournament_title = $tournamentTitle;
 
     // SQL query to store custom song data in the 'vot4_custom_song' table
     $query = "INSERT IGNORE INTO vot4_custom_song (tournament_title, 
@@ -88,7 +90,7 @@ function storeCustomSongData($customSongData, $phpDataObject) {
     $queryStatement = $phpDataObject -> prepare($query);
     
     // Bind the beatmap data to the prepared statement
-    $queryStatement -> bindParam(":tournament_title", $customSongData -> need_array_or_so_for_this); // TODO: it is as what it is
+    $queryStatement -> bindParam(":tournament_title", $tournamentTitle);
     $queryStatement -> bindParam(":tournament_round", $customSongData -> need_array_or_so_for_this); // TODO: it is as what it is
     $queryStatement -> bindParam(":mod_type", $customSongData -> need_array_or_so_for_this);         // TODO: it is as what it is
     $queryStatement -> bindParam(":custom_song_id", $customSongData -> id);
@@ -123,12 +125,33 @@ $customSongIds = [ // VOT3  // VOT4
                    4235709, 4692888
                  ];
 
+$tournamentTitles = [ 'VOT3', 'VOT4' ];
+
 foreach($customSongIds as $customSongId) {
     $customSongData = fetchCustomSongData($customSongId);
     // die('<pre>' . print_r($customSongData, true) . '</pre>');
-    
+
     if($customSongData) {
-        $storedCustomSongData = storeCustomSongData($customSongData, $phpDataObject);
+        // Define a variable for storing tournament title correspondingly
+        $tournamentTitle = '';
+
+        // Loop thorugh the tournament titles to assign the corresponding titles based on the conditions
+        foreach($tournamentTitles as $tournamentTitle) {
+            // TODO: this's purely hard-coded. Will optimise later on (maybe)
+            if($tournamentTitle === 'VOT3' && $customSongId == '4235709') {
+                $tournamentTitle = 'VOT3';
+                break;
+            }
+            else if($tournamentTitle === 'VOT4' && $customSongId == '4692888') {
+                $tournamentTitle = 'VOT4';
+                break;
+            }
+        }
+
+        // Stored the fetched data in the database with the tournament title
+        if($tournamentTitle) {
+            $storedCustomSongData = storeCustomSongData($customSongData, $tournamentTitle, $phpDataObject);
+        }
     }
 }
 ?>
