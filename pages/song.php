@@ -55,7 +55,7 @@ function storeCustomSongData($customSongData, $tournamentTitle, $tournamentRound
     $customSongData -> mod_type = $modType;
 
     // SQL query to store custom song data in the 'vot4_custom_song' table
-    $query = "INSERT IGNORE INTO vot4_custom_song (tournament_title, 
+    $query = "INSERT INTO vot4_custom_song (tournament_title, 
                                             tournament_round, 
                                             mod_type, 
                                             custom_song_id, 
@@ -123,6 +123,79 @@ function storeCustomSongData($customSongData, $tournamentTitle, $tournamentRound
 }
 
 
+// Check if custom song data already exists in the database
+function checkCustomSongData($customSongId, $phpDataObject) {
+    $query = "SELECT id FROM vot4_custom_song WHERE custom_song_id = :custom_song_id";
+    $queryStatement = $phpDataObject -> prepare($query);
+    $queryStatement -> bindParam(":custom_song_id", $customSongId, PDO::PARAM_INT);
+    $queryStatement -> execute();
+
+    return $queryStatement -> fetchColumn() !== false;
+}
+
+
+// Update existing custom song data in the database with new data
+function updateCustomSongData($customSongData, $tournamentTitle, $tournamentRound, $modType, $phpDataObject) {
+    $formattedTotalLength = integerToTimeFormat($customSongData -> total_length);
+    // Add the tournament title, round, and mod type as custom parameters to the fetched data 
+    $customSongData -> tournament_title = $tournamentTitle;
+    $customSongData -> tournament_round = $tournamentRound;
+    $customSongData -> mod_type = $modType;
+
+    // SQL query to update custom song data in the 'vot4_custom_song' table
+    $query = "UPDATE vot4_custom_song 
+              SET tournament_title = :tournament_title, 
+                  tournament_round = :tournament_round, 
+                  mod_type = :mod_type,
+                  custom_song_url = :custom_song_url,
+                  total_length = :total_length,
+                  cover_image_url = :cover_image_url, 
+                  title_unicode = :title_unicode, 
+                  artist_unicode = :artist_unicode, 
+                  difficulty = :difficulty, 
+                  mapper = :mapper, 
+                  difficulty_rating = :difficulty_rating, 
+                  map_bpm = :map_bpm, 
+                  overall_difficulty = :overall_difficulty, 
+                  health_point = :health_point, 
+                  amount_of_passes = :amount_of_passes
+              WHERE custom_song_id = :custom_song_id;";
+    
+    // Prepare the SQL statement to prevent SQL injection
+    $queryStatement = $phpDataObject -> prepare($query);
+    
+    // Bind the beatmap data to the prepared statement
+    $queryStatement -> bindParam(":tournament_title", $tournamentTitle);
+    $queryStatement -> bindParam(":tournament_round", $tournamentRound);
+    $queryStatement -> bindParam(":mod_type", $modType);
+    $queryStatement -> bindParam(":custom_song_id", $customSongData -> id);
+    $queryStatement -> bindParam(":custom_song_url", $customSongData -> url);    
+    $queryStatement -> bindParam(":total_length", $formattedTotalLength);
+    $queryStatement -> bindParam(":cover_image_url", $customSongData -> beatmapset -> covers -> cover);
+    $queryStatement -> bindParam(":title_unicode", $customSongData -> beatmapset -> title_unicode);
+    $queryStatement -> bindParam(":artist_unicode", $customSongData -> beatmapset -> artist_unicode);
+    $queryStatement -> bindParam(":difficulty", $customSongData -> version);
+    $queryStatement -> bindParam(":mapper", $customSongData -> beatmapset -> creator);
+    $queryStatement -> bindParam(":difficulty_rating", $customSongData -> difficulty_rating);
+    $queryStatement -> bindParam(":map_bpm", $customSongData -> bpm);
+    $queryStatement -> bindParam(":overall_difficulty", $customSongData -> accuracy);
+    $queryStatement -> bindParam(":health_point", $customSongData -> drain);
+    $queryStatement -> bindParam(":amount_of_passes", $customSongData -> passcount);
+
+
+    // Execute the statement and update the existen data in the database
+    if ($queryStatement -> execute()) {
+        error_log("Update successful for custom song ID: " . $customSongData -> id);
+        return $queryStatement -> rowCount() > 0;
+    } 
+    else {
+        error_log("Update failed for custom song ID: " . $customSongData -> id);
+        $errorInfo = $queryStatement -> errorInfo();
+        error_log("Error Info: " . implode(", ", $errorInfo));
+        return false;
+    }
+}
+
 // Get custom song data from database by beatmap IDs
 function getCustomSongData($customSongId, $phpDataObject) {
     $query = "SELECT * FROM vot4_custom_song WHERE custom_song_id = :custom_song_id";
@@ -182,7 +255,15 @@ foreach($customSongIds as $customSongId) {
 
         // Stored the fetched data in the database with the tournament title, round, and mod type
         if($tournamentTitle && $tournamentRound && $modType) {
-            $storedCustomSongData = storeCustomSongData($customSongData, $tournamentTitle, $tournamentRound, $modType, $phpDataObject);
+            if(!checkCustomSongData($customSongId, $phpDataObject)) {
+                storeCustomSongData($customSongData, $tournamentTitle, $tournamentRound, $modType, $phpDataObject);
+            }
+            else {
+                updateCustomSongData($customSongData, $tournamentTitle, $tournamentRound, $modType, $phpDataObject);
+            }
+        }
+        else {
+            error_log("Failed to fetch custom song data for ID: " . $customSongId);
         }
     }
 
