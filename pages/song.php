@@ -204,81 +204,33 @@ foreach($customSongIds as $customSongId) {
     </div>
 
     <div class="song-page">
-        <!-- TODO: 
-            - Include song's image and other related info in.
-            - PHP can handle this. Need to get data from osu! API only.
-            - Direct link will be change to Soundclound link (if there is one).
-        -->                
-        <div class="song-card-container">
-            <h1>VOT3 - Semifinals - HD1</h1>
-            <br>
-            <a href="https://osu.ppy.sh/beatmapsets/2032103#taiko/4235709"><img src="" width="490px" alt="Beatmap Cover"></a>
-            <br><br>
-            <h2>ILFK [davidminh & njshift's Terrestrial Oni]</h2>
-            <h3>SectorJack & Edolmary</h3>
-            <h4 class="beatmap-creator-row">
-                Mapset by <a href="https://osu.ppy.sh/users/9623142">davidminh0111</a>
-            </h4>
-            <br>
-            <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;"><i class='bx bx-star'></i>abc</p>
-                <p style="margin-right: 1rem;"><i class='bx bx-timer'></i>abc</p>
-                <p><i class='bx bx-tachometer'></i>abc bpm</p>
-            </div>
-            <br>
-            <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;">OD: abc</p>
-                <p style="margin-right: 1rem;">HP: abc</p>
-                <p>Passed: abc</p>
-            </div>
-        </div>
-
-        <div class="song-card-container">
-            <h1>abc</h1>
-            <br>
-            <a href="#"><img src="" width="490px" alt="Beatmap Cover"></a>
-            <br><br>
-            <h2>abc</h2>
-            <h3>abc</h3>
-            <h4 class="beatmap-creator-row">
-                Mapset by <a href="#">abc</a>
-            </h4>
-            <br>
-            <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;"><i class='bx bx-star'></i>abc</p>
-                <p style="margin-right: 1rem;"><i class='bx bx-timer'></i>abc</p>
-                <p><i class='bx bx-tachometer'></i>abc bpm</p>
-            </div>
-            <br>
-            <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;">OD: abc</p>
-                <p style="margin-right: 1rem;">HP: abc</p>
-                <p>Passed: abc</p>
-            </div>
-        </div>
-
-        <div class="song-card-container">
-            <h1>abc</h1>
-            <br>
-            <a href="#"><img src="" width="490px" alt="Beatmap Cover"></a>
-            <br><br>
-            <h2>abc</h2>
-            <h3>abc</h3>
-            <h4 class="beatmap-creator-row">
-                Mapset by <a href="#">abc</a>
-            </h4>
-            <br>
-            <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;"><i class='bx bx-star'></i>abc</p>
-                <p style="margin-right: 1rem;"><i class='bx bx-timer'></i>abc</p>
-                <p><i class='bx bx-tachometer'></i>abc bpm</p>
-            </div>
-            <br>
-            <div class="beatmap-attribute-row">
-                <p style="margin-right: 1rem;">OD: abc</p>
-                <p style="margin-right: 1rem;">HP: abc</p>
-                <p>Passed: abc</p>
-            </div>
-        </div>
+        <?php if(!empty($customSongDataArray)): ?>
+            <!-- Dynamic custom song information display -->
+            <?php foreach($customSongDataArray as $customSongData): ?>              
+                <div class="song-card-container">
+                    <h1><?= htmlspecialchars($customSongData['tournament_title']); ?> - <?= htmlspecialchars($customSongData['tournament_round']); ?> - <?= htmlspecialchars($customSongData['mod_type']); ?></h1>
+                    <br>
+                    <a href="<?= htmlspecialchars($customSongData['custom_song_url']); ?>"><img src="<?= htmlspecialchars($customSongData['cover_image_url']); ?>" width="490px" alt="Beatmap Cover"></a>
+                    <br><br>
+                    <h2><?= htmlspecialchars($customSongData['title_unicode']); ?> [<?= ($customSongData['difficulty']); ?>]</h2>
+                    <h3><?=  htmlspecialchars($customSongData['artist_unicode']); ?></h3>
+                    <h4 class="beatmap-creator-row">
+                        Mapset by <a href="https://osu.ppy.sh/users/<?= htmlspecialchars($customSongData['mapper']); ?>"><?= htmlspecialchars($customSongData['mapper']); ?></a>
+                    </h4>
+                    <br>
+                    <div class="beatmap-attribute-row">
+                        <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars(number_format((float)$customSongData['difficulty_rating'], 2)); ?></p>
+                        <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= htmlspecialchars($customSongData['total_length']); ?></p>
+                        <p><i class='bx bx-tachometer'></i> <?= ($customSongData['map_bpm']); ?>bpm</p>
+                    </div>
+                    <br>
+                    <div class="beatmap-attribute-row">
+                        <p style="margin-right: 1rem;">OD: <?= htmlspecialchars(number_format((float)$customSongData['overall_difficulty'], 2)); ?></p>
+                        <p style="margin-right: 1rem;">HP: <?= htmlspecialchars(number_format((float)$customSongData['health_point'], 2)); ?></p>
+                        <p>Passed: <?= ($customSongData['amount_of_passes']); ?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </section>
