@@ -123,6 +123,26 @@ function storeCustomSongData($customSongData, $tournamentTitle, $tournamentRound
 }
 
 
+// Get custom song data from database by beatmap IDs
+function getCustomSongData($customSongId, $phpDataObject) {
+    $query = "SELECT * FROM vot4_custom_song WHERE custom_song_id = :custom_song_id";
+    $queryStatement = $phpDataObject -> prepare($query);
+    $queryStatement -> bindParam(":custom_song_id", $customSongId, PDO::PARAM_INT);
+
+    // Execute the statement and get the needed data in the database to display
+    if ($queryStatement -> execute()) {
+        error_log("Get data successfully for custom song ID: " . $customSongId);
+        // Fetch and return the result as an associative array
+        return $queryStatement -> fetch(PDO::FETCH_ASSOC);
+    } 
+    else {
+        error_log("Get data failed for custom song ID: " . $customSongId);
+        $errorInfo = $queryStatement -> errorInfo();
+        error_log("Error Info: " . implode(", ", $errorInfo));
+        return false;
+    }
+}
+
 $customSongIds = [ // VOT3  // VOT4
                    4235709, 4692888
                  ];
@@ -130,6 +150,8 @@ $customSongIds = [ // VOT3  // VOT4
 $tournamentTitles = [ 'VOT3', 'VOT4' ];
 $tournamentRounds = ['Qualifiers', 'RO16', 'Quarterfinals', 'Semifinals', 'Finals', 'Grandfinals'];
 $modTypes = ['NM', 'HD', 'HR', 'DT', 'FM', 'EZ', 'HDHR', 'TB'];
+
+$customSongDataArray = [];
 
 foreach($customSongIds as $customSongId) {
     $customSongData = fetchCustomSongData($customSongId);
@@ -162,6 +184,16 @@ foreach($customSongIds as $customSongId) {
         if($tournamentTitle && $tournamentRound && $modType) {
             $storedCustomSongData = storeCustomSongData($customSongData, $tournamentTitle, $tournamentRound, $modType, $phpDataObject);
         }
+    }
+
+    $retrievedCustomSongData = getCustomSongData($customSongId, $phpDataObject);
+    
+    // If data retrieval is successful, add it to the array
+    if($retrievedCustomSongData) {
+        $customSongDataArray[] = $retrievedCustomSongData;
+    }
+    else {
+        error_log("Failed to retrieve custom song data for ID: " . $customSongId);
     }
 }
 ?>
