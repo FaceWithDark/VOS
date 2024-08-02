@@ -34,7 +34,13 @@ set_target_properties(vot_copilot PROPERTIES
 )
 
 # Set the path to the 'fmt' library's configuration file for CMake to find
-set(fmt_DIR "$ENV{VCPKG_ROOT}/packages/fmt_x64-mingw-dynamic/share/fmt/fmt-config.cmake")
+if(WIN32)
+    set(fmt_DIR "$ENV{VCPKG_ROOT}/packages/fmt_x64-mingw-dynamic/share/fmt/fmt-config.cmake")
+elseif(UNIX)
+    set(fmt_DIR "$ENV{PATH}/packages/fmt_x64-linux/share/fmt/fmt-config.cmake")
+else()
+    message(FATAL_ERROR "Unsupported operating system. Please set the correct OS environment variable.")
+endif()
 
 # Locate the 'fmt' package required for the project using vcpkg's configuration
 find_package(fmt CONFIG REQUIRED)
