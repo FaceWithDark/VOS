@@ -8,11 +8,32 @@ if [ -z "$ENV" ]; then
   exit 1
 fi
 
+# Define the .env file based on the environment
+ENV_FILE=".env.$ENV"
+
+# Check if the .env file exists
+if [ ! -f "$ENV_FILE" ]; then
+  echo "Environment file $ENV_FILE not found."
+  exit 1
+fi
+
+# Load the environment variables from the .env file
+export $(grep -v '^#' "$ENV_FILE" | xargs)
+
+# Validate required environment variables
+REQUIRED_VARS=("DATABASE_NAME" "DATABASE_USER" "DATABASE_PASSWORD" "DATABASE_ROOT_PASSWORD")
+for var in "${REQUIRED_VARS[@]}"; do
+  if [ -z "${!var}" ]; then
+    echo "Required environment variable $var is not set."
+    exit 1
+  fi
+done
+
 # Export the environment variable
 export ENV
 
 # Shutdown Docker Compose
-echo "Shutting down Docker Compose for environment: $ENV"
+echo "Shutting down for environment: $ENV"
 docker-compose down
 
 # Clean up unused Docker images
