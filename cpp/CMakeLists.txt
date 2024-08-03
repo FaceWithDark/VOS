@@ -11,17 +11,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Enable the output of compile commands for tools like linters
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Detect if different types of build system is available and set the generator accordingly
-if(EXISTS "${CMAKE_MAKE_PROGRAM}" AND "${CMAKE_MAKE_PROGRAM}" MATCHES "ninja")
-    set(CMAKE_GENERATOR "Ninja")
-elseif(EXISTS "${CMAKE_MAKE_PROGRAM}" AND "${CMAKE_MAKE_PROGRAM}" MATCHES "mingw32-make")
-    set(CMAKE_GENERATOR "MinGW Makefiles")
-elseif(EXISTS "${CMAKE_MAKE_PROGRAM}" AND "${CMAKE_MAKE_PROGRAM}" MATCHES "make")
-    set(CMAKE_GENERATOR "MSYS Makefiles")
-else()
-    message(FATAL_ERROR "No suitable build system found. Please install Ninja, MinGW, or MSYS.")
-endif()
-
 # Declare an executable target built from the main implement cpp file
 add_executable(vot_copilot main.cpp
                            sources/chatbot.cpp
