@@ -267,43 +267,45 @@ if($tournamentRound) {
                     // VOT4 SF
                     2570678, 1522643, 4045209, 4703925, 4391479, 4703951, 4703820, 1304997, 4703982, 2357140, 1857090, 1481895, 4703901, 4703867, 1905480, 2842189,
                     // VOT4 Finals
-                    4713617, 4661263, 4713766, 4713758, 3097038, 3478511, 3751523, 4713647, 4713657, 4291576, 4713685, 4713797, 3229451, 4171742, 4713759, 2680005, 4713744
+                    4713617, 4661263, 4713766, 4713758, 3097038, 3478511, 3751523, 4713647, 4713657, 4291576, 4713685, 4713797, 3229451, 4171742, 4713759, 2680005, 4713744,
+                    // VOT4 GF
+                    4724365, 4724288,4724373, 4724201, 4724631, 4724364, 4724014, 4724403, 4724343, 4724484, 4724344, 4724852, 4724391, 4724289, 4724408, 4724720, 4724485
     ];
 
     // Define a mapping of index ranges to beatmap mods
     $modTypes = [
     // NM section
-    'NM1' => [0, 9, 24, 40, 56],
-    'NM2' => [1, 10, 25, 41, 57],
-    'NM3' => [2, 11, 26, 42, 58],
-    'NM4' => [12, 27, 43, 59],
-    'NM5' => [28, 44, 60],
-    'NM6' => [61],
+    'NM1' => [0, 9, 24, 40, 56, 73],
+    'NM2' => [1, 10, 25, 41, 57, 74],
+    'NM3' => [2, 11, 26, 42, 58, 75],
+    'NM4' => [12, 27, 43, 59, 76],
+    'NM5' => [28, 44, 60, 77],
+    'NM6' => [61, 78],
 
     // HD section
-    'HD1' => [3, 13, 29, 45, 62],
-    'HD2' => [4, 14, 30, 46, 63],
+    'HD1' => [3, 13, 29, 45, 62, 79],
+    'HD2' => [4, 14, 30, 46, 63, 80],
 
     // HR section
-    'HR1' => [5, 15, 31, 47, 64],
-    'HR2' => [6, 16, 32, 48, 65],
+    'HR1' => [5, 15, 31, 47, 64, 81],
+    'HR2' => [6, 16, 32, 48, 65, 82],
 
     // DT section
-    'DT1' => [7, 17, 33, 49, 66],
-    'DT2' => [18, 34, 50, 67],
+    'DT1' => [7, 17, 33, 49, 66, 83],
+    'DT2' => [18, 34, 50, 67, 84],
 
     // FM section
-    'FM1' => [8, 19, 35, 51, 68],
-    'FM2' => [20, 36, 52, 69],
+    'FM1' => [8, 19, 35, 51, 68, 85],
+    'FM2' => [20, 36, 52, 69, 86],
 
     // EZ section
-    'EZ' => [21, 37, 53, 70],
+    'EZ' => [21, 37, 53, 70, 87],
 
     // HDHR section
-    'HDHR' => [22, 38, 54, 71],
+    'HDHR' => [22, 38, 54, 71, 88],
 
     // TB section
-    'TB' => [23, 39, 55, 72]
+    'TB' => [23, 39, 55, 72, 89]
     ];
 
     foreach ($beatmapIds as $arrayIndex => $beatmapId) {
@@ -381,6 +383,17 @@ if($tournamentRound) {
                             $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
                         }
                         break;
+                    case 'grandfinals':
+                        if ($arrayIndex > 72 && $arrayIndex <= 89) {
+                            // For 'Grandfinals' database table with AUTHENTICATED user's case
+                            if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
+                                storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                            } else {
+                                updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                            }
+                            $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                        }
+                        break;
                 }
             } 
             else {
@@ -415,6 +428,12 @@ if($tournamentRound) {
                             $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
                         }
                         break;
+                    case 'grandfinals':
+                        if ($arrayIndex > 72 && $arrayIndex <= 89) {
+                            // For 'Grandfinals' database table with UNAUTHENTICATED user's case    
+                            $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                        }
+                        break;
                 }
             }
     
@@ -444,6 +463,7 @@ else {
             <button type="submit" name="round" value="quarterfinals">QF</button>
             <button type="submit" name="round" value="semifinals">SF</button>
             <button type="submit" name="round" value="finals">Finals</button>
+            <button type="submit" name="round" value="grandfinals">GF</button>
         </form>
     </div>
 
