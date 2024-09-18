@@ -24,7 +24,8 @@
             </div>
 
             <div class="direct-link-container">
-                <a href="https://docs.google.com/spreadsheets/d/17O6J2lPWZWVvozOhT3OiumRrmFn_9wRlLQrwOHP2B-k/edit#gid=0">
+                <!-- <a href="https://docs.google.com/spreadsheets/d/17O6J2lPWZWVvozOhT3OiumRrmFn_9wRlLQrwOHP2B-k/edit#gid=0"> -->
+                <a href="mappool.php">
                     Vietnam osu!taiko Tournament 3
                 </a>
             </div>
