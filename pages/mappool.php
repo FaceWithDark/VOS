@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -11,38 +11,37 @@ require_once '../layouts/navigation_bar.php';
 include_once '../modules/convertion/time_convertion.php';
 
 // Fetch beatmap data from the Osu! API
-function fetchBeatmapData($beatmapId, $tournamentRound, $phpDataObject) {
+function fetchBeatmapData($beatmapId, $tournamentRound, $phpDataObject)
+{
     // Check if the user is authenticated by looking for the access token in cookies
     $accessToken = $_COOKIE['vot_access_token'] ?? null;
     if ($accessToken) {
         // If authenticated, construct the API URL for fetching beatmap data
         $apiUrl = "https://osu.ppy.sh/api/v2/beatmaps/{$beatmapId}";
         $client = new Client();
-    
+
         try {
             // Make a GET request to the Osu! API with the access token
-            $response = $client -> get($apiUrl, [
+            $response = $client->get($apiUrl, [
                 'headers' => [
                     'Authorization' => "Bearer {$accessToken}",
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
                 ]
             ]);
-            
+
             // Return the beatmap data if it is a 200 status 
             if ($response->getStatusCode() === 200) {
-                $apiData = json_decode($response -> getBody() -> getContents());
+                $apiData = json_decode($response->getBody()->getContents());
                 return $apiData;
             }
             // API call did not return a 200 status
             return false;
-        } 
-        catch (RequestException $exception) {
-            error_log("API request failed: " . $exception -> getMessage());  // Log the exception message
+        } catch (RequestException $exception) {
+            error_log("API request failed: " . $exception->getMessage());  // Log the exception message
             return false;                                                    // An exception occurred during the API call
         }
-    }
-    else {
+    } else {
         // If not authenticated, fetch data from the database directly
         try {
             // Determine the table to query based on the 'round' parameter
@@ -50,23 +49,21 @@ function fetchBeatmapData($beatmapId, $tournamentRound, $phpDataObject) {
 
             // Determine the table to query based on the 'round' parameter
             $query =  "SELECT id FROM $tournamentTable WHERE map_id = :map_id";
-            $queryStatement = $phpDataObject -> prepare($query);
-            $queryStatement -> bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
+            $queryStatement = $phpDataObject->prepare($query);
+            $queryStatement->bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
 
             // Execute the statement and fetch the data
-            if($queryStatement -> execute()) {
+            if ($queryStatement->execute()) {
                 error_log("Successfully retrieved data for beatmap ID: " . $beatmapId);
-                return $queryStatement -> fetch(PDO::FETCH_ASSOC);
-            }
-            else {
+                return $queryStatement->fetch(PDO::FETCH_ASSOC);
+            } else {
                 error_log("Failed to retrieve data for beatmap ID: " . $beatmapId);
-                $errorInfo = $queryStatement -> errorInfo();
+                $errorInfo = $queryStatement->errorInfo();
                 error_log("Database error: " . implode(", ", $errorInfo));  // Log the exception message
                 return false;                                               // An exception occurred during the database call
             }
-        }
-        catch(RequestException $exception) {
-            error_log("Database query failed: " . $exception -> getMessage());
+        } catch (RequestException $exception) {
+            error_log("Database query failed: " . $exception->getMessage());
             return false;
         }
     }
@@ -74,8 +71,9 @@ function fetchBeatmapData($beatmapId, $tournamentRound, $phpDataObject) {
 
 
 // Store new beatmap data into database
-function storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject) {
-    $formattedTotalLength = integerToTimeFormat($beatmapData -> total_length);
+function storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject)
+{
+    $formattedTotalLength = integerToTimeFormat($beatmapData->total_length);
 
     // Determine the table to unsert data based on the 'round' parameter
     $tournamentTable = "vot4_{$tournamentRound}";
@@ -109,34 +107,33 @@ function storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObje
                              :health_point, 
                              :amount_of_passes,
                              :mod_type);";
-    
+
     // Prepare the SQL statement to prevent SQL injection
-    $queryStatement = $phpDataObject -> prepare($query);
-    
+    $queryStatement = $phpDataObject->prepare($query);
+
     // Bind the beatmap data to the prepared statement
-    $queryStatement -> bindParam(":map_id", $beatmapData -> id);
-    $queryStatement -> bindParam(":total_length", $formattedTotalLength);
-    $queryStatement -> bindParam(":map_url", $beatmapData -> url);
-    $queryStatement -> bindParam(":cover_image_url", $beatmapData -> beatmapset -> covers -> cover);
-    $queryStatement -> bindParam(":title_unicode", $beatmapData -> beatmapset -> title_unicode);
-    $queryStatement -> bindParam(":artist_unicode", $beatmapData -> beatmapset -> artist_unicode);
-    $queryStatement -> bindParam(":difficulty", $beatmapData -> version);
-    $queryStatement -> bindParam(":mapper", $beatmapData -> beatmapset -> creator);
-    $queryStatement -> bindParam(":difficulty_rating", $beatmapData -> difficulty_rating);
-    $queryStatement -> bindParam(":map_bpm", $beatmapData -> bpm);
-    $queryStatement -> bindParam(":overall_difficulty", $beatmapData -> accuracy);
-    $queryStatement -> bindParam(":health_point", $beatmapData -> drain);
-    $queryStatement -> bindParam(":amount_of_passes", $beatmapData -> passcount);
-    $queryStatement -> bindParam(":mod_type", $modType);
-    
+    $queryStatement->bindParam(":map_id", $beatmapData->id);
+    $queryStatement->bindParam(":total_length", $formattedTotalLength);
+    $queryStatement->bindParam(":map_url", $beatmapData->url);
+    $queryStatement->bindParam(":cover_image_url", $beatmapData->beatmapset->covers->cover);
+    $queryStatement->bindParam(":title_unicode", $beatmapData->beatmapset->title_unicode);
+    $queryStatement->bindParam(":artist_unicode", $beatmapData->beatmapset->artist_unicode);
+    $queryStatement->bindParam(":difficulty", $beatmapData->version);
+    $queryStatement->bindParam(":mapper", $beatmapData->beatmapset->creator);
+    $queryStatement->bindParam(":difficulty_rating", $beatmapData->difficulty_rating);
+    $queryStatement->bindParam(":map_bpm", $beatmapData->bpm);
+    $queryStatement->bindParam(":overall_difficulty", $beatmapData->accuracy);
+    $queryStatement->bindParam(":health_point", $beatmapData->drain);
+    $queryStatement->bindParam(":amount_of_passes", $beatmapData->passcount);
+    $queryStatement->bindParam(":mod_type", $modType);
+
     // Execute the statement and insert the data into database
-    if ($queryStatement -> execute()) {
-        error_log("Insert successful for beatmap ID: " . $beatmapData -> id);
-        return $queryStatement -> rowCount() > 0;
-    } 
-    else {
-        error_log("Insert failed for beatmap ID: " . $beatmapData -> id);
-        $errorInfo = $queryStatement -> errorInfo();
+    if ($queryStatement->execute()) {
+        error_log("Insert successful for beatmap ID: " . $beatmapData->id);
+        return $queryStatement->rowCount() > 0;
+    } else {
+        error_log("Insert failed for beatmap ID: " . $beatmapData->id);
+        $errorInfo = $queryStatement->errorInfo();
         error_log("Error Info: " . implode(", ", $errorInfo));
         return false;
     }
@@ -144,22 +141,24 @@ function storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObje
 
 
 // Check if beatmap data already exists in the database
-function checkBeatmapData($beatmapId, $tournamentRound, $phpDataObject) {
+function checkBeatmapData($beatmapId, $tournamentRound, $phpDataObject)
+{
     // Determine the table to unsert data based on the 'round' parameter
     $tournamentTable = "vot4_{$tournamentRound}";
 
     $query = "SELECT id FROM $tournamentTable WHERE map_id = :map_id";
-    $queryStatement = $phpDataObject -> prepare($query);
-    $queryStatement -> bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
-    $queryStatement -> execute();
+    $queryStatement = $phpDataObject->prepare($query);
+    $queryStatement->bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
+    $queryStatement->execute();
 
-    return $queryStatement -> fetchColumn() !== false;
+    return $queryStatement->fetchColumn() !== false;
 }
 
 
 // Update existing beatmap data in the database with new data
-function updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject) {
-    $formattedTotalLength = integerToTimeFormat($beatmapData -> total_length);
+function updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject)
+{
+    $formattedTotalLength = integerToTimeFormat($beatmapData->total_length);
 
     // Determine the table to unsert data based on the 'round' parameter
     $tournamentTable = "vot4_{$tournamentRound}";
@@ -180,35 +179,34 @@ function updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObj
                   amount_of_passes = :amount_of_passes,
                   mod_type = :mod_type
               WHERE map_id = :map_id;";
-    
+
     // Prepare the SQL statement to prevent SQL injection
-    $queryStatement = $phpDataObject -> prepare($query);
-    
+    $queryStatement = $phpDataObject->prepare($query);
+
     // Bind the beatmap data to the prepared statement
-    $queryStatement -> bindParam(":map_id", $beatmapData -> id);
-    $queryStatement -> bindParam(":total_length", $formattedTotalLength);
-    $queryStatement -> bindParam(":map_url", $beatmapData -> url);
-    $queryStatement -> bindParam(":cover_image_url", $beatmapData -> beatmapset -> covers -> cover);
-    $queryStatement -> bindParam(":title_unicode", $beatmapData -> beatmapset -> title_unicode);
-    $queryStatement -> bindParam(":artist_unicode", $beatmapData -> beatmapset -> artist_unicode);
-    $queryStatement -> bindParam(":difficulty", $beatmapData -> version);
-    $queryStatement -> bindParam(":mapper", $beatmapData -> beatmapset -> creator);
-    $queryStatement -> bindParam(":difficulty_rating", $beatmapData -> difficulty_rating);
-    $queryStatement -> bindParam(":map_bpm", $beatmapData -> bpm);
-    $queryStatement -> bindParam(":overall_difficulty", $beatmapData -> accuracy);
-    $queryStatement -> bindParam(":health_point", $beatmapData -> drain);
-    $queryStatement -> bindParam(":amount_of_passes", $beatmapData -> passcount);
-    $queryStatement -> bindParam(":mod_type", $modType);
+    $queryStatement->bindParam(":map_id", $beatmapData->id);
+    $queryStatement->bindParam(":total_length", $formattedTotalLength);
+    $queryStatement->bindParam(":map_url", $beatmapData->url);
+    $queryStatement->bindParam(":cover_image_url", $beatmapData->beatmapset->covers->cover);
+    $queryStatement->bindParam(":title_unicode", $beatmapData->beatmapset->title_unicode);
+    $queryStatement->bindParam(":artist_unicode", $beatmapData->beatmapset->artist_unicode);
+    $queryStatement->bindParam(":difficulty", $beatmapData->version);
+    $queryStatement->bindParam(":mapper", $beatmapData->beatmapset->creator);
+    $queryStatement->bindParam(":difficulty_rating", $beatmapData->difficulty_rating);
+    $queryStatement->bindParam(":map_bpm", $beatmapData->bpm);
+    $queryStatement->bindParam(":overall_difficulty", $beatmapData->accuracy);
+    $queryStatement->bindParam(":health_point", $beatmapData->drain);
+    $queryStatement->bindParam(":amount_of_passes", $beatmapData->passcount);
+    $queryStatement->bindParam(":mod_type", $modType);
 
 
     // Execute the statement and update the existen data in the database
-    if ($queryStatement -> execute()) {
-        error_log("Update successful for beatmap ID: " . $beatmapData -> id);
-        return $queryStatement -> rowCount() > 0;
-    } 
-    else {
-        error_log("Update failed for beatmap ID: " . $beatmapData -> id);
-        $errorInfo = $queryStatement -> errorInfo();
+    if ($queryStatement->execute()) {
+        error_log("Update successful for beatmap ID: " . $beatmapData->id);
+        return $queryStatement->rowCount() > 0;
+    } else {
+        error_log("Update failed for beatmap ID: " . $beatmapData->id);
+        $errorInfo = $queryStatement->errorInfo();
         error_log("Error Info: " . implode(", ", $errorInfo));
         return false;
     }
@@ -216,23 +214,23 @@ function updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObj
 
 
 // Get beatmap data from database by beatmap IDs
-function getBeatmapData($mapId, $tournamentRound, $phpDataObject) {
+function getBeatmapData($mapId, $tournamentRound, $phpDataObject)
+{
     // Determine the table to unsert data based on the 'round' parameter
     $tournamentTable = "vot4_{$tournamentRound}";
 
     $query = "SELECT * FROM $tournamentTable WHERE map_id = :map_id";
-    $queryStatement = $phpDataObject -> prepare($query);
-    $queryStatement -> bindParam(":map_id", $mapId, PDO::PARAM_INT);
+    $queryStatement = $phpDataObject->prepare($query);
+    $queryStatement->bindParam(":map_id", $mapId, PDO::PARAM_INT);
 
     // Execute the statement and get the needed data in the database to display
-    if ($queryStatement -> execute()) {
+    if ($queryStatement->execute()) {
         error_log("Get data successfully for beatmap ID: " . $mapId);
         // Fetch and return the result as an associative array
-        return $queryStatement -> fetch(PDO::FETCH_ASSOC);
-    } 
-    else {
+        return $queryStatement->fetch(PDO::FETCH_ASSOC);
+    } else {
         error_log("Get data failed for beatmap ID: " . $mapId);
-        $errorInfo = $queryStatement -> errorInfo();
+        $errorInfo = $queryStatement->errorInfo();
         error_log("Error Info: " . implode(", ", $errorInfo));
         return false;
     }
@@ -240,9 +238,10 @@ function getBeatmapData($mapId, $tournamentRound, $phpDataObject) {
 
 
 // Get beatmap mod by array index
-function getModTypeByIndex($arrayIndex, $modTypes) {
-    foreach($modTypes as $modType => $arrayIndexes) {
-        if(in_array($arrayIndex, $arrayIndexes)) {
+function getModTypeByIndex($arrayIndex, $modTypes)
+{
+    foreach ($modTypes as $modType => $arrayIndexes) {
+        if (in_array($arrayIndex, $arrayIndexes)) {
             return $modType;
         }
     }
@@ -250,71 +249,161 @@ function getModTypeByIndex($arrayIndex, $modTypes) {
     return 'N/A';
 }
 
-
 // Get the 'round' parameter from the URL
 $tournamentRound = $_GET['round'] ?? 'qualifiers';
+$tournamentName = $_GET['name'] ?? 'vot4';
 
 $beatmapDataArray = [];
 
-if($tournamentRound) {
+if ($tournamentRound) {
     // Define beatmap IDs for which data will be fetched
-    $beatmapIds = [ // VOT4 Qualifiers
-                    3832435, 3167804, 4670818, 4353546, 3175478, 3412725, 4215511, 4670467, 2337091,
-                    // VOT4 RO16
-                    4679944, 2564433, 3789813, 4681218, 4681168, 3304046, 4251890, 4004134, 4458839, 3884457, 2417569, 4633213, 4682562, 4039947, 2035883,
-                    // VOT4 QF
-                    3929726, 2420243, 4692866, 4692975, 4692897, 4690486, 4601035, 4040942, 3933082, 4692933, 4692544, 4692861, 3442056, 4692872, 4692888, 3308614,
-                    // VOT4 SF
-                    2570678, 1522643, 4045209, 4703925, 4391479, 4703951, 4703820, 1304997, 4703982, 2357140, 1857090, 1481895, 4703901, 4703867, 1905480, 2842189,
-                    // VOT4 Finals
-                    4713617, 4661263, 4713766, 4713758, 3097038, 3478511, 3751523, 4713647, 4713657, 4291576, 4713685, 4713797, 3229451, 4171742, 4713759, 2680005, 4713744,
-                    // VOT4 GF
-                    4724365, 4724288,4724373, 4724201, 4724631, 4724364, 4724014, 4724403, 4724343, 4724484, 4724344, 4724852, 4724391, 4724289, 4724408, 4724720, 4724485
+    $beatmapIds = [
+        // VOT4 Qualifiers
+        3832435,
+        3167804,
+        4670818,
+        4353546,
+        3175478,
+        3412725,
+        4215511,
+        4670467,
+        2337091,
+
+        // VOT4 RO16
+        4679944,
+        2564433,
+        3789813,
+        4681218,
+        4681168,
+        3304046,
+        4251890,
+        4004134,
+        4458839,
+        3884457,
+        2417569,
+        4633213,
+        4682562,
+        4039947,
+        2035883,
+
+        // VOT4 QF
+        3929726,
+        2420243,
+        4692866,
+        4692975,
+        4692897,
+        4690486,
+        4601035,
+        4040942,
+        3933082,
+        4692933,
+        4692544,
+        4692861,
+        3442056,
+        4692872,
+        4692888,
+        3308614,
+
+        // VOT4 SF
+        2570678,
+        1522643,
+        4045209,
+        4703925,
+        4391479,
+        4703951,
+        4703820,
+        1304997,
+        4703982,
+        2357140,
+        1857090,
+        1481895,
+        4703901,
+        4703867,
+        1905480,
+        2842189,
+
+        // VOT4 Finals
+        4713617,
+        4661263,
+        4713766,
+        4713758,
+        3097038,
+        3478511,
+        3751523,
+        4713647,
+        4713657,
+        4291576,
+        4713685,
+        4713797,
+        3229451,
+        4171742,
+        4713759,
+        2680005,
+        4713744,
+
+        // VOT4 GF
+        4724365,
+        4724288,
+        4724373,
+        4724201,
+        4724631,
+        4724364,
+        4724014,
+        4724403,
+        4724343,
+        4724484,
+        4724344,
+        4724852,
+        4724391,
+        4724289,
+        4724408,
+        4724720,
+        4724485
     ];
 
     // Define a mapping of index ranges to beatmap mods
     $modTypes = [
-    // NM section
-    'NM1' => [0, 9, 24, 40, 56, 73],
-    'NM2' => [1, 10, 25, 41, 57, 74],
-    'NM3' => [2, 11, 26, 42, 58, 75],
-    'NM4' => [12, 27, 43, 59, 76],
-    'NM5' => [28, 44, 60, 77],
-    'NM6' => [61, 78],
+        // NM section
+        'NM1' => [0, 9, 24, 40, 56, 73],
+        'NM2' => [1, 10, 25, 41, 57, 74],
+        'NM3' => [2, 11, 26, 42, 58, 75],
+        'NM4' => [12, 27, 43, 59, 76],
+        'NM5' => [28, 44, 60, 77],
+        'NM6' => [61, 78],
 
-    // HD section
-    'HD1' => [3, 13, 29, 45, 62, 79],
-    'HD2' => [4, 14, 30, 46, 63, 80],
+        // HD section
+        'HD1' => [3, 13, 29, 45, 62, 79],
+        'HD2' => [4, 14, 30, 46, 63, 80],
 
-    // HR section
-    'HR1' => [5, 15, 31, 47, 64, 81],
-    'HR2' => [6, 16, 32, 48, 65, 82],
+        // HR section
+        'HR1' => [5, 15, 31, 47, 64, 81],
+        'HR2' => [6, 16, 32, 48, 65, 82],
 
-    // DT section
-    'DT1' => [7, 17, 33, 49, 66, 83],
-    'DT2' => [18, 34, 50, 67, 84],
+        // DT section
+        'DT1' => [7, 17, 33, 49, 66, 83],
+        'DT2' => [18, 34, 50, 67, 84],
 
-    // FM section
-    'FM1' => [8, 19, 35, 51, 68, 85],
-    'FM2' => [20, 36, 52, 69, 86],
+        // FM section
+        'FM1' => [8, 19, 35, 51, 68, 85],
+        'FM2' => [20, 36, 52, 69, 86],
 
-    // EZ section
-    'EZ' => [21, 37, 53, 70, 87],
+        // EZ section
+        'EZ' => [21, 37, 53, 70, 87],
 
-    // HDHR section
-    'HDHR' => [22, 38, 54, 71, 88],
+        // HDHR section
+        'HDHR' => [22, 38, 54, 71, 88],
 
-    // TB section
-    'TB' => [23, 39, 55, 72, 89]
+        // TB section
+        'TB' => [23, 39, 55, 72, 89]
     ];
 
     foreach ($beatmapIds as $arrayIndex => $beatmapId) {
         // Get the beatmap mod type based on index number in an array
         $modType = getModTypeByIndex($arrayIndex, $modTypes);
-    
+
         // Fetch the beatmap data from the API or database
         $beatmapData = fetchBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
-    
+
         if ($beatmapData) {
             /*
              * TODO:
@@ -325,13 +414,13 @@ if($tournamentRound) {
 
             // Check if the user is authenticated
             $accessToken = $_COOKIE['vot_access_token'] ?? null;
-            
+
             if ($accessToken) {
                 switch ($tournamentRound) {
                     case 'qualifiers':
                         if ($arrayIndex <= 8) {
                             // For 'Qualifiers' database table with AUTHENTICATED user's case 
-                            if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
+                            if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
                                 storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
                             } else {
                                 updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
@@ -342,7 +431,7 @@ if($tournamentRound) {
                     case 'ro16':
                         if ($arrayIndex > 8 && $arrayIndex <= 23) {
                             // For 'RO16' database table with AUTHENTICATED user's case
-                            if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
+                            if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
                                 storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
                             } else {
                                 updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
@@ -353,7 +442,7 @@ if($tournamentRound) {
                     case 'quarterfinals':
                         if ($arrayIndex > 23 && $arrayIndex <= 39) {
                             // For 'Quarterfinals' database table with AUTHENTICATED user's case
-                            if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
+                            if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
                                 storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
                             } else {
                                 updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
@@ -364,7 +453,7 @@ if($tournamentRound) {
                     case 'semifinals':
                         if ($arrayIndex > 39 && $arrayIndex <= 55) {
                             // For 'Semifinals' database table with AUTHENTICATED user's case
-                            if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
+                            if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
                                 storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
                             } else {
                                 updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
@@ -375,7 +464,7 @@ if($tournamentRound) {
                     case 'finals':
                         if ($arrayIndex > 55 && $arrayIndex <= 72) {
                             // For 'Semifinals' database table with AUTHENTICATED user's case
-                            if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
+                            if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
                                 storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
                             } else {
                                 updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
@@ -386,7 +475,7 @@ if($tournamentRound) {
                     case 'grandfinals':
                         if ($arrayIndex > 72 && $arrayIndex <= 89) {
                             // For 'Grandfinals' database table with AUTHENTICATED user's case
-                            if (!checkBeatmapData($beatmapData -> id, $tournamentRound, $phpDataObject)) {
+                            if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
                                 storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
                             } else {
                                 updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
@@ -395,8 +484,7 @@ if($tournamentRound) {
                         }
                         break;
                 }
-            } 
-            else {
+            } else {
                 switch ($tournamentRound) {
                     case 'qualifiers':
                         if ($arrayIndex <= 8) {
@@ -436,21 +524,18 @@ if($tournamentRound) {
                         break;
                 }
             }
-    
+
             // If data retrieval is successful, add it to the array
             if ($retrievedBeatmapData) {
                 $beatmapDataArray[] = $retrievedBeatmapData;
-            } 
-            else {
+            } else {
                 error_log("Failed to retrieve beatmap data for ID: {$beatmapId}.");
             }
-        }
-        else {
+        } else {
             error_log("Failed to fetch beatmap data for ID: {$beatmapId}.");
         }
     }
-}
-else {
+} else {
     die('<div class="warning-message" style="display: flex; justify-content: center; align-items: center; margin-left: 45rem; font-size: 5rem;">Please choose a valid button!</div>'); // TODO: This is an absolute temporary. Changed later (if I can).
 }
 ?>
@@ -458,6 +543,9 @@ else {
 <section>
     <div class="button-container">
         <form action="mappool.php" method="get">
+            <!-- This allows the URL to have more than 1 field showed at the same time -->
+            <input type="hidden" name="name" value="<?= $tournamentName; ?>">
+            <!-- Sent the corresponding tournament round fields to the website for fetching stored data -->
             <button type="submit" name="round" value="qualifiers">Qualifiers</button>
             <button type="submit" name="round" value="ro16">RO16</button>
             <button type="submit" name="round" value="quarterfinals">QF</button>
@@ -468,9 +556,9 @@ else {
     </div>
 
     <div class="mappool-page">
-        <?php if(!empty($beatmapDataArray)): ?>
-        <!-- Dynamic beatmap display with correct mod type -->
-            <?php foreach($beatmapDataArray as $beatmapData): ?>
+        <?php if (!empty($beatmapDataArray)): ?>
+            <!-- Dynamic beatmap display with correct mod type -->
+            <?php foreach ($beatmapDataArray as $beatmapData): ?>
                 <div class="mappool-card-container">
                     <h1><?= htmlspecialchars($beatmapData['mod_type']) ?></h1>
                     <br>
@@ -496,5 +584,5 @@ else {
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
-    </div> 
+    </div>
 </section>
