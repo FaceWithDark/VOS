@@ -11,7 +11,7 @@ require_once '../layouts/navigation_bar.php';
 include_once '../modules/convertion/time_convertion.php';
 
 // Fetch beatmap data from the Osu! API
-function fetchBeatmapData($beatmapId, $tournamentRound, $phpDataObject)
+function fetchBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject)
 {
     // Check if the user is authenticated by looking for the access token in cookies
     $accessToken = $_COOKIE['vot_access_token'] ?? null;
@@ -44,10 +44,9 @@ function fetchBeatmapData($beatmapId, $tournamentRound, $phpDataObject)
     } else {
         // If not authenticated, fetch data from the database directly
         try {
-            // Determine the table to query based on the 'round' parameter
-            $tournamentTable = "vot4_{$tournamentRound}";
+            // Call the correct tournament database table based on the GET request
+            $tournamentTable = "{$tournamentName}_{$tournamentRound}";
 
-            // Determine the table to query based on the 'round' parameter
             $query =  "SELECT id FROM $tournamentTable WHERE map_id = :map_id";
             $queryStatement = $phpDataObject->prepare($query);
             $queryStatement->bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
@@ -71,14 +70,13 @@ function fetchBeatmapData($beatmapId, $tournamentRound, $phpDataObject)
 
 
 // Store new beatmap data into database
-function storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject)
+function storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject)
 {
     $formattedTotalLength = integerToTimeFormat($beatmapData->total_length);
 
-    // Determine the table to unsert data based on the 'round' parameter
-    $tournamentTable = "vot4_{$tournamentRound}";
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_{$tournamentRound}";
 
-    // SQL query to store beatmap data in the 'vot4_qualifiers' table
     $query = "INSERT INTO $tournamentTable (map_id, 
                                            total_length, 
                                            map_url, 
@@ -141,10 +139,10 @@ function storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObje
 
 
 // Check if beatmap data already exists in the database
-function checkBeatmapData($beatmapId, $tournamentRound, $phpDataObject)
+function checkBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject)
 {
-    // Determine the table to unsert data based on the 'round' parameter
-    $tournamentTable = "vot4_{$tournamentRound}";
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_{$tournamentRound}";
 
     $query = "SELECT id FROM $tournamentTable WHERE map_id = :map_id";
     $queryStatement = $phpDataObject->prepare($query);
@@ -156,14 +154,13 @@ function checkBeatmapData($beatmapId, $tournamentRound, $phpDataObject)
 
 
 // Update existing beatmap data in the database with new data
-function updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject)
+function updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject)
 {
     $formattedTotalLength = integerToTimeFormat($beatmapData->total_length);
 
-    // Determine the table to unsert data based on the 'round' parameter
-    $tournamentTable = "vot4_{$tournamentRound}";
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_{$tournamentRound}";
 
-    // SQL query to update beatmap data in the 'vot4_qualifiers' table
     $query = "UPDATE $tournamentTable 
               SET total_length = :total_length, 
                   map_url = :map_url, 
@@ -214,10 +211,10 @@ function updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObj
 
 
 // Get beatmap data from database by beatmap IDs
-function getBeatmapData($mapId, $tournamentRound, $phpDataObject)
+function getBeatmapData($mapId, $tournamentName, $tournamentRound, $phpDataObject)
 {
-    // Determine the table to unsert data based on the 'round' parameter
-    $tournamentTable = "vot4_{$tournamentRound}";
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_{$tournamentRound}";
 
     $query = "SELECT * FROM $tournamentTable WHERE map_id = :map_id";
     $queryStatement = $phpDataObject->prepare($query);
@@ -249,15 +246,15 @@ function getModTypeByIndex($arrayIndex, $modTypes)
     return 'N/A';
 }
 
-// Get fields data from the URL
-$tournamentRound = $_GET['round'] ?? 'qualifiers';
+// Retrieve tournament-related data from GET request
 $tournamentName = $_GET['name'] ?? 'vot4';
+$tournamentRound = $_GET['round'] ?? 'qualifiers';
 
 $beatmapDataArray = [];
 
-// Check for correct tournament name get selected from archive papge
+// Check for correct GET request for tournament name
 if ($tournamentName) {
-    // Check for correct tournament round get selected from the button
+    // Check for correct GET request for tournament round
     if ($tournamentRound) {
         // Define beatmap IDs for which data will be fetched
         $beatmapIds = [
@@ -405,7 +402,7 @@ if ($tournamentName) {
             $modType = getModTypeByIndex($arrayIndex, $modTypes);
 
             // Fetch the beatmap data from the API or database
-            $beatmapData = fetchBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+            $beatmapData = fetchBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
 
             if ($beatmapData) {
                 /*
@@ -423,62 +420,62 @@ if ($tournamentName) {
                     switch ($tournamentRound) {
                         case 'qualifiers':
                             if ($arrayIndex <= 8) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
+                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                         case 'ro16':
                             if ($arrayIndex > 8 && $arrayIndex <= 23) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
+                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                         case 'quarterfinals':
                             if ($arrayIndex > 23 && $arrayIndex <= 39) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
+                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                         case 'semifinals':
                             if ($arrayIndex > 39 && $arrayIndex <= 55) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
+                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                         case 'finals':
                             if ($arrayIndex > 55 && $arrayIndex <= 72) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
+                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                         case 'grandfinals':
                             if ($arrayIndex > 72 && $arrayIndex <= 89) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
+                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentRound, $phpDataObject);
+                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                                 }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                     }
@@ -487,32 +484,32 @@ if ($tournamentName) {
                     switch ($tournamentRound) {
                         case 'qualifiers':
                             if ($arrayIndex <= 8) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                         case 'ro16':
                             if ($arrayIndex > 8 && $arrayIndex <= 23) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                         case 'quarterfinals':
                             if ($arrayIndex > 23 && $arrayIndex <= 39) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                         case 'semifinals':
                             if ($arrayIndex > 39 && $arrayIndex <= 55) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                         case 'finals':
                             if ($arrayIndex > 55 && $arrayIndex <= 72) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                         case 'grandfinals':
                             if ($arrayIndex > 72 && $arrayIndex <= 89) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentRound, $phpDataObject);
+                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                             }
                             break;
                     }
