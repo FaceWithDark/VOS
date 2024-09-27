@@ -43,28 +43,7 @@ function fetchBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDat
         }
     } else {
         // If not authenticated, fetch data from the database directly
-        try {
-            // Call the correct tournament database table based on the GET request
-            $tournamentTable = "{$tournamentName}_{$tournamentRound}";
-
-            $query =  "SELECT id FROM $tournamentTable WHERE map_id = :map_id";
-            $queryStatement = $phpDataObject->prepare($query);
-            $queryStatement->bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
-
-            // Execute the statement and fetch the data
-            if ($queryStatement->execute()) {
-                error_log("Successfully retrieved data for beatmap ID: " . $beatmapId);
-                return $queryStatement->fetch(PDO::FETCH_ASSOC);
-            } else {
-                error_log("Failed to retrieve data for beatmap ID: " . $beatmapId);
-                $errorInfo = $queryStatement->errorInfo();
-                error_log("Database error: " . implode(", ", $errorInfo));  // Log the exception message
-                return false;                                               // An exception occurred during the database call
-            }
-        } catch (RequestException $exception) {
-            error_log("Database query failed: " . $exception->getMessage());
-            return false;
-        }
+        return getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
     }
 }
 
@@ -233,19 +212,6 @@ function getBeatmapData($mapId, $tournamentName, $tournamentRound, $phpDataObjec
     }
 }
 
-
-// Get beatmap mod by array index
-function getModTypeByIndex($arrayIndex, $modTypes)
-{
-    foreach ($modTypes as $modType => $arrayIndexes) {
-        if (in_array($arrayIndex, $arrayIndexes)) {
-            return $modType;
-        }
-    }
-    // None of the mod applied if index is not found
-    return 'N/A';
-}
-
 // Retrieve tournament-related data from GET request
 $tournamentName = $_GET['name'] ?? 'vot4';
 $tournamentRound = $_GET['round'] ?? 'qualifiers';
@@ -256,263 +222,36 @@ $beatmapDataArray = [];
 if ($tournamentName) {
     // Check for correct GET request for tournament round
     if ($tournamentRound) {
-        // Define beatmap IDs for which data will be fetched
-        $beatmapIds = [
-            // VOT4 Qualifiers
-            3832435,
-            3167804,
-            4670818,
-            4353546,
-            3175478,
-            3412725,
-            4215511,
-            4670467,
-            2337091,
+        // Read beatmap IDs and mod types from JSON file
+        $jsonData = json_decode(file_get_contents('../data/beatmap.json'), true);
+        $beatmapDataArray = $jsonData[$tournamentName][$tournamentRound] ?? [];
 
-            // VOT4 RO16
-            4679944,
-            2564433,
-            3789813,
-            4681218,
-            4681168,
-            3304046,
-            4251890,
-            4004134,
-            4458839,
-            3884457,
-            2417569,
-            4633213,
-            4682562,
-            4039947,
-            2035883,
-
-            // VOT4 QF
-            3929726,
-            2420243,
-            4692866,
-            4692975,
-            4692897,
-            4690486,
-            4601035,
-            4040942,
-            3933082,
-            4692933,
-            4692544,
-            4692861,
-            3442056,
-            4692872,
-            4692888,
-            3308614,
-
-            // VOT4 SF
-            2570678,
-            1522643,
-            4045209,
-            4703925,
-            4391479,
-            4703951,
-            4703820,
-            1304997,
-            4703982,
-            2357140,
-            1857090,
-            1481895,
-            4703901,
-            4703867,
-            1905480,
-            2842189,
-
-            // VOT4 Finals
-            4713617,
-            4661263,
-            4713766,
-            4713758,
-            3097038,
-            3478511,
-            3751523,
-            4713647,
-            4713657,
-            4291576,
-            4713685,
-            4713797,
-            3229451,
-            4171742,
-            4713759,
-            2680005,
-            4713744,
-
-            // VOT4 GF
-            4724365,
-            4724288,
-            4724373,
-            4724201,
-            4724631,
-            4724364,
-            4724014,
-            4724403,
-            4724343,
-            4724484,
-            4724344,
-            4724852,
-            4724391,
-            4724289,
-            4724408,
-            4724720,
-            4724485
-        ];
-
-        // Define a mapping of index ranges to beatmap mods
-        $modTypes = [
-            // NM section
-            'NM1' => [0, 9, 24, 40, 56, 73],
-            'NM2' => [1, 10, 25, 41, 57, 74],
-            'NM3' => [2, 11, 26, 42, 58, 75],
-            'NM4' => [12, 27, 43, 59, 76],
-            'NM5' => [28, 44, 60, 77],
-            'NM6' => [61, 78],
-
-            // HD section
-            'HD1' => [3, 13, 29, 45, 62, 79],
-            'HD2' => [4, 14, 30, 46, 63, 80],
-
-            // HR section
-            'HR1' => [5, 15, 31, 47, 64, 81],
-            'HR2' => [6, 16, 32, 48, 65, 82],
-
-            // DT section
-            'DT1' => [7, 17, 33, 49, 66, 83],
-            'DT2' => [18, 34, 50, 67, 84],
-
-            // FM section
-            'FM1' => [8, 19, 35, 51, 68, 85],
-            'FM2' => [20, 36, 52, 69, 86],
-
-            // EZ section
-            'EZ' => [21, 37, 53, 70, 87],
-
-            // HDHR section
-            'HDHR' => [22, 38, 54, 71, 88],
-
-            // TB section
-            'TB' => [23, 39, 55, 72, 89]
-        ];
-
-        foreach ($beatmapIds as $arrayIndex => $beatmapId) {
-            // Get the beatmap mod type based on index number in an array
-            $modType = getModTypeByIndex($arrayIndex, $modTypes);
+        foreach ($beatmapDataArray as $beatmapData) {
+            $beatmapId = $beatmapData['id'];
+            $modType = $beatmapData['mod'];
 
             // Fetch the beatmap data from the API or database
             $beatmapData = fetchBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
 
+            // Check if the data fetching is successful
             if ($beatmapData) {
-                /*
-                 * TODO:
-                 * - I don't think this is the way to fix the same beatmap duplication bug but for now, it works
-                 * - Maybe to actually handle this bug, I have to work on the 'null' case properly
-                 */
-                $retrievedBeatmapData = null;
-
                 // Check if the user is authenticated
                 $accessToken = $_COOKIE['vot_access_token'] ?? null;
 
                 if ($accessToken) {
-                    // Apply corresponding conditions for different cases of tournament round value get called
-                    switch ($tournamentRound) {
-                        case 'qualifiers':
-                            if ($arrayIndex <= 8) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                        case 'ro16':
-                            if ($arrayIndex > 8 && $arrayIndex <= 23) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                        case 'quarterfinals':
-                            if ($arrayIndex > 23 && $arrayIndex <= 39) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                        case 'semifinals':
-                            if ($arrayIndex > 39 && $arrayIndex <= 55) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                        case 'finals':
-                            if ($arrayIndex > 55 && $arrayIndex <= 72) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                        case 'grandfinals':
-                            if ($arrayIndex > 72 && $arrayIndex <= 89) {
-                                if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
-                                    storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                } else {
-                                    updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
-                                }
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
+                    // Check if the beatmap data already exists in the database
+                    if (!checkBeatmapData($beatmapData->id, $tournamentName, $tournamentRound, $phpDataObject)) {
+                        // If not, store the beatmap data in the database
+                        storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
+                    } else {
+                        // If yes, update the existing beatmap data in the database
+                        updateBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRound, $phpDataObject);
                     }
+                    // Get the beatmap data from the database
+                    $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                 } else {
-                    // Apply corresponding conditions for different cases of tournament round value NOT get called
-                    switch ($tournamentRound) {
-                        case 'qualifiers':
-                            if ($arrayIndex <= 8) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                        case 'ro16':
-                            if ($arrayIndex > 8 && $arrayIndex <= 23) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                        case 'quarterfinals':
-                            if ($arrayIndex > 23 && $arrayIndex <= 39) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                        case 'semifinals':
-                            if ($arrayIndex > 39 && $arrayIndex <= 55) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                        case 'finals':
-                            if ($arrayIndex > 55 && $arrayIndex <= 72) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                        case 'grandfinals':
-                            if ($arrayIndex > 72 && $arrayIndex <= 89) {
-                                $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
-                            }
-                            break;
-                    }
+                    // Get the beatmap data directly from the database without additional checking
+                    $retrievedBeatmapData = getBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject);
                 }
 
                 // If data retrieval is successful, add it to the array
@@ -553,26 +292,26 @@ if ($tournamentName) {
             <!-- Dynamic beatmap display with correct mod type -->
             <?php foreach ($beatmapDataArray as $beatmapData): ?>
                 <div class="mappool-card-container">
-                    <h1><?= htmlspecialchars($beatmapData['mod_type']) ?></h1>
+                    <h1><?= isset($beatmapData['mod_type']) ? htmlspecialchars($beatmapData['mod_type']) : 'N/A' ?></h1>
                     <br>
-                    <a href="<?= ($beatmapData['map_url']); ?>"><img src="<?= htmlspecialchars($beatmapData['cover_image_url']); ?>" width="490px" alt="Beatmap Cover"></a>
+                    <a href="<?= isset($beatmapData['map_url']) ? $beatmapData['map_url'] : '' ?>"><img src="<?= isset($beatmapData['cover_image_url']) ? htmlspecialchars($beatmapData['cover_image_url']) : '' ?>" width="490px" alt="Beatmap Cover"></a>
                     <br><br>
-                    <h2><?= htmlspecialchars($beatmapData['title_unicode']); ?> [<?= ($beatmapData['difficulty']); ?>]</h2>
-                    <h3><?= htmlspecialchars($beatmapData['artist_unicode']); ?></h3>
+                    <h2><?= isset($beatmapData['title_unicode']) ? htmlspecialchars($beatmapData['title_unicode']) : '' ?> [<?= isset($beatmapData['difficulty']) ? $beatmapData['difficulty'] : '' ?>]</h2>
+                    <h3><?= isset($beatmapData['artist_unicode']) ? htmlspecialchars($beatmapData['artist_unicode']) : '' ?></h3>
                     <h4 class="beatmap-creator-row">
-                        Mapset by <a href="https://osu.ppy.sh/users/<?= htmlspecialchars($beatmapData['mapper']); ?>"><?= htmlspecialchars($beatmapData['mapper']); ?></a>
+                        Mapset by <a href="https://osu.ppy.sh/users/<?= isset($beatmapData['mapper']) ? htmlspecialchars($beatmapData['mapper']) : '' ?>"><?= isset($beatmapData['mapper']) ? htmlspecialchars($beatmapData['mapper']) : '' ?></a>
                     </h4>
                     <br>
                     <div class="beatmap-attribute-row">
-                        <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars(number_format((float)$beatmapData['difficulty_rating'], 2)); ?></p>
-                        <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= htmlspecialchars($beatmapData['total_length']); ?></p>
-                        <p><i class='bx bx-tachometer'></i> <?= ($beatmapData['map_bpm']); ?>bpm</p>
+                        <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= isset($beatmapData['difficulty_rating']) ? htmlspecialchars(number_format((float)$beatmapData['difficulty_rating'], 2)) : '' ?></p>
+                        <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= isset($beatmapData['total_length']) ? htmlspecialchars($beatmapData['total_length']) : '' ?></p>
+                        <p><i class='bx bx-tachometer'></i> <?= isset($beatmapData['map_bpm']) ? $beatmapData['map_bpm'] : '' ?>bpm</p>
                     </div>
                     <br>
                     <div class="beatmap-attribute-row">
-                        <p style="margin-right: 1rem;">OD: <?= htmlspecialchars(number_format((float)$beatmapData['overall_difficulty'], 2)); ?></p>
-                        <p style="margin-right: 1rem;">HP: <?= htmlspecialchars(number_format((float)$beatmapData['health_point'], 2)); ?></p>
-                        <p>Passed: <?= ($beatmapData['amount_of_passes']); ?></p>
+                        <p style="margin-right: 1rem;">OD: <?= isset($beatmapData['overall_difficulty']) ? htmlspecialchars(number_format((float)$beatmapData['overall_difficulty'], 2)) : '' ?></p>
+                        <p style="margin-right: 1rem;">HP: <?= isset($beatmapData['health_point']) ? htmlspecialchars(number_format((float)$beatmapData['health_point'], 2)) : '' ?></p>
+                        <p>Passed: <?= isset($beatmapData['amount_of_passes']) ? $beatmapData['amount_of_passes'] : '' ?></p>
                     </div>
                 </div>
             <?php endforeach; ?>
