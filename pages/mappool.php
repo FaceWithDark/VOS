@@ -330,7 +330,7 @@ if ($tournamentName) {
                         <div class="beatmap-attribute-row">
                             <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars(isset($beatmapData['difficulty_rating']) ? number_format((float)$beatmapData['difficulty_rating'], 2) : 'NULL'); ?></p>
                             <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= htmlspecialchars(isset($beatmapData['total_length']) ? $beatmapData['total_length'] : 'NULL'); ?></p>
-                            <p style="margin-right: 1rem;"><i class='bx bx-tachometer'></i> <?= htmlspecialchars(isset($beatmapData['map_bpm']) ? number_format((float)$beatmapData['map_bpm'], 2) : 'NULL'); ?>bpm</p>
+                            <p><i class='bx bx-tachometer'></i> <?= htmlspecialchars(isset($beatmapData['map_bpm']) ? number_format((float)$beatmapData['map_bpm'], 2) : 'NULL'); ?>bpm</p>
                         </div>
 
                         <br>
