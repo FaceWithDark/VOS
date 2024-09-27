@@ -213,20 +213,20 @@ function getBeatmapData($mapId, $tournamentName, $tournamentRound, $phpDataObjec
 }
 
 // Retrieve tournament-related data from GET request
-$tournamentName = $_GET['name'] ?? 'vot4';
-$tournamentRound = $_GET['round'] ?? 'qualifiers';
+$tournamentName = $_GET['name'] ?? 'NULL';
+$tournamentRound = $_GET['round'] ?? 'NULL';
 
-$beatmapDataArray = [];
+$beatmapDatas = [];
 
 // Check for correct GET request for tournament name
 if ($tournamentName) {
     // Check for correct GET request for tournament round
     if ($tournamentRound) {
         // Read beatmap IDs and mod types from JSON file
-        $jsonData = json_decode(file_get_contents('../data/beatmap.json'), true);
-        $beatmapDataArray = $jsonData[$tournamentName][$tournamentRound] ?? [];
+        $beatmapJsonData = json_decode(file_get_contents('../data/beatmap.json'), true);
+        $beatmapJsonDatas = $beatmapJsonData[$tournamentName][$tournamentRound] ?? [];
 
-        foreach ($beatmapDataArray as $beatmapData) {
+        foreach ($beatmapJsonDatas as $beatmapData) {
             $beatmapId = $beatmapData['id'];
             $modType = $beatmapData['mod'];
 
@@ -256,7 +256,7 @@ if ($tournamentName) {
 
                 // If data retrieval is successful, add it to the array
                 if ($retrievedBeatmapData) {
-                    $beatmapDataArray[] = $retrievedBeatmapData;
+                    $beatmapDatas[] = $retrievedBeatmapData;
                 } else {
                     error_log("Failed to retrieve beatmap data for ID: {$beatmapId}.");
                 }
@@ -265,10 +265,10 @@ if ($tournamentName) {
             }
         }
     } else {
-        die('<div class="warning-message" style="display: flex; justify-content: center; align-items: center; margin-left: 45rem; font-size: 5rem;">Please choose a valid button!</div>'); // TODO: This is an absolute temporary. Changed later (if I can).
+        die('<div style="display: flex; justify-content: center; align-items: center; margin-left: 45rem; font-size: 5rem;">Please choose a valid button!</div>'); // TODO: This is an absolute temporary. Changed later (if I can).
     }
 } else {
-    die('<div class="warning-message" style="display: flex; justify-content: center; align-items: center; margin-left: 45rem; font-size: 5rem;">Please choose a valid button!</div>'); // TODO: This is an absolute temporary. Changed later (if I can).
+    die('<div style="display: flex; justify-content: center; align-items: center; margin-left: 45rem; font-size: 5rem;">Please choose a valid button!</div>'); // TODO: This is an absolute temporary. Changed later (if I can).
 }
 ?>
 
@@ -288,32 +288,60 @@ if ($tournamentName) {
     </div>
 
     <div class="mappool-page">
-        <?php if (!empty($beatmapDataArray)): ?>
+        <!-- Check if there's beatmap data to show to end-user and any of the tournament rounds' button is clicked -->
+        <?php if (!empty($beatmapDatas) && isset($tournamentRound)): ?>
             <!-- Dynamic beatmap display with correct mod type -->
-            <?php foreach ($beatmapDataArray as $beatmapData): ?>
-                <div class="mappool-card-container">
-                    <h1><?= isset($beatmapData['mod_type']) ? htmlspecialchars($beatmapData['mod_type']) : 'N/A' ?></h1>
-                    <br>
-                    <a href="<?= isset($beatmapData['map_url']) ? $beatmapData['map_url'] : '' ?>"><img src="<?= isset($beatmapData['cover_image_url']) ? htmlspecialchars($beatmapData['cover_image_url']) : '' ?>" width="490px" alt="Beatmap Cover"></a>
-                    <br><br>
-                    <h2><?= isset($beatmapData['title_unicode']) ? htmlspecialchars($beatmapData['title_unicode']) : '' ?> [<?= isset($beatmapData['difficulty']) ? $beatmapData['difficulty'] : '' ?>]</h2>
-                    <h3><?= isset($beatmapData['artist_unicode']) ? htmlspecialchars($beatmapData['artist_unicode']) : '' ?></h3>
-                    <h4 class="beatmap-creator-row">
-                        Mapset by <a href="https://osu.ppy.sh/users/<?= isset($beatmapData['mapper']) ? htmlspecialchars($beatmapData['mapper']) : '' ?>"><?= isset($beatmapData['mapper']) ? htmlspecialchars($beatmapData['mapper']) : '' ?></a>
-                    </h4>
-                    <br>
-                    <div class="beatmap-attribute-row">
-                        <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= isset($beatmapData['difficulty_rating']) ? htmlspecialchars(number_format((float)$beatmapData['difficulty_rating'], 2)) : '' ?></p>
-                        <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= isset($beatmapData['total_length']) ? htmlspecialchars($beatmapData['total_length']) : '' ?></p>
-                        <p><i class='bx bx-tachometer'></i> <?= isset($beatmapData['map_bpm']) ? $beatmapData['map_bpm'] : '' ?>bpm</p>
+            <?php foreach ($beatmapDatas as $beatmapData): ?>
+                <!-- Check if any of these API key values exist in the fetched beatmap data -->
+                <?php if (
+                    isset($beatmapData['mod_type'])           ||
+                    isset($beatmapData['map_url'])            ||
+                    isset($beatmapData['cover_image_url'])    ||
+                    isset($beatmapData['title_unicode'])      ||
+                    isset($beatmapData['difficulty'])         ||
+                    isset($beatmapData['artist_unicode'])     ||
+                    isset($beatmapData['mapper'])             ||
+                    isset($beatmapData['difficulty_rating'])  ||
+                    isset($beatmapData['total_length'])       ||
+                    isset($beatmapData['map_bpm'])            ||
+                    isset($beatmapData['overall_difficulty']) ||
+                    isset($beatmapData['health_point'])       ||
+                    isset($beatmapData['amount_of_passes'])
+                ): ?>
+                    <div class="mappool-card-container">
+                        <h1><?= htmlspecialchars(isset($beatmapData['mod_type']) ? $beatmapData['mod_type'] : 'NULL'); ?></h1>
+
+                        <br>
+
+                        <a href="<?= isset($beatmapData['map_url']) ? $beatmapData['map_url'] : '#'; ?>">
+                            <img src="<?= htmlspecialchars(isset($beatmapData['cover_image_url']) ? $beatmapData['cover_image_url'] : 'NULL'); ?>" width="490px" alt="Beatmap Cover">
+                        </a>
+
+                        <br><br>
+
+                        <h2><?= htmlspecialchars(isset($beatmapData['title_unicode']) ? $beatmapData['title_unicode'] : 'NULL'); ?> [<?= isset($beatmapData['difficulty']) ? $beatmapData['difficulty'] : 'NULL'; ?>]</h2>
+                        <h3><?= htmlspecialchars(isset($beatmapData['artist_unicode']) ? $beatmapData['artist_unicode'] : 'NULL'); ?></h3>
+                        <h4 class="beatmap-creator-row">
+                            Mapset by <a href="https://osu.ppy.sh/users/<?= htmlspecialchars(isset($beatmapData['mapper']) ? $beatmapData['mapper'] : '#'); ?>"><?= htmlspecialchars(isset($beatmapData['mapper']) ? $beatmapData['mapper'] : 'NULL'); ?></a>
+                        </h4>
+
+                        <br>
+
+                        <div class="beatmap-attribute-row">
+                            <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars(isset($beatmapData['difficulty_rating']) ? number_format((float)$beatmapData['difficulty_rating'], 2) : 'NULL'); ?></p>
+                            <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= htmlspecialchars(isset($beatmapData['total_length']) ? $beatmapData['total_length'] : 'NULL'); ?></p>
+                            <p style="margin-right: 1rem;"><i class='bx bx-tachometer'></i> <?= htmlspecialchars(isset($beatmapData['map_bpm']) ? number_format((float)$beatmapData['map_bpm'], 2) : 'NULL'); ?>bpm</p>
+                        </div>
+
+                        <br>
+
+                        <div class="beatmap-attribute-row">
+                            <p style="margin-right: 1rem;">OD: <?= htmlspecialchars(isset($beatmapData['overall_difficulty']) ? number_format((float)$beatmapData['overall_difficulty'], 2) : 'NULL'); ?></p>
+                            <p style="margin-right: 1rem;">HP: <?= htmlspecialchars(isset($beatmapData['health_point']) ? number_format((float)$beatmapData['health_point'], 2) : 'NULL'); ?></p>
+                            <p>Passed: <?= isset($beatmapData['amount_of_passes']) ? $beatmapData['amount_of_passes'] : 'NULL'; ?></p>
+                        </div>
                     </div>
-                    <br>
-                    <div class="beatmap-attribute-row">
-                        <p style="margin-right: 1rem;">OD: <?= isset($beatmapData['overall_difficulty']) ? htmlspecialchars(number_format((float)$beatmapData['overall_difficulty'], 2)) : '' ?></p>
-                        <p style="margin-right: 1rem;">HP: <?= isset($beatmapData['health_point']) ? htmlspecialchars(number_format((float)$beatmapData['health_point'], 2)) : '' ?></p>
-                        <p>Passed: <?= isset($beatmapData['amount_of_passes']) ? $beatmapData['amount_of_passes'] : '' ?></p>
-                    </div>
-                </div>
+                <?php endif; ?>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
