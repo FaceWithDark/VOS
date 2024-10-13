@@ -1,0 +1,22 @@
+{
+  "vot3": {
+    "semifinals": [
+      {
+        "map_id": 3934128,
+        "total_length": "00:03:20",
+        "map_url": "https://osu.ppy.sh/beatmaps/1907809",
+        "cover_image_url": "../assets/images/vot3_semifinal_nm5_image.webp",
+        "title_unicode": "Lullaby",
+        "artist_unicode": "Snail's House",
+        "difficulty": "a mimir",
+        "mapper": "[Zeth]",
+        "difficulty_rating": 3.92,
+        "map_bpm": 57,
+        "overall_difficulty": 6.00,
+        "health_point": 6.00,
+        "amount_of_passes": null,
+        "mod_type": "NM5"
+      }
+    ]
+  }
+}
