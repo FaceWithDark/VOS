@@ -212,6 +212,172 @@ function getBeatmapData($mapId, $tournamentName, $tournamentRound, $phpDataObjec
     }
 }
 
+// Fetch deleted beatmap data from JSON file
+function fetchDeletedBeatmapData($tournamentName, $tournamentRound)
+{
+    // Read deleted beatmap data from JSON file
+    $deletedBeatmapJsonData = json_decode(file_get_contents('../data/deleted_beatmap.json'), true);
+    $deletedBeatmapJsonDatas = $deletedBeatmapJsonData[$tournamentName][$tournamentRound] ?? [];
+
+    return $deletedBeatmapJsonDatas;
+}
+
+// Store new deleted beatmap data into database
+function storeDeletedBeatmapData($beatmapData, $tournamentName, $tournamentRound, $phpDataObject)
+{
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_{$tournamentRound}";
+
+    $query = "INSERT INTO $tournamentTable (map_id,
+                                           total_length,
+                                           map_url,
+                                           cover_image_url,
+                                           title_unicode,
+                                           artist_unicode,
+                                           difficulty,
+                                           mapper,
+                                           difficulty_rating,
+                                           map_bpm,
+                                           overall_difficulty,
+                                           health_point,
+                                           amount_of_passes,
+                                           mod_type)
+                     VALUES (:map_id,
+                             :total_length,
+                             :map_url,
+                             :cover_image_url,
+                             :title_unicode,
+                             :artist_unicode,
+                             :difficulty,
+                             :mapper,
+                             :difficulty_rating,
+                             :map_bpm,
+                             :overall_difficulty,
+                             :health_point,
+                             :amount_of_passes,
+                             :mod_type);";
+
+    // Prepare the SQL statement to prevent SQL injection
+    $queryStatement = $phpDataObject->prepare($query);
+
+    // Bind the beatmap data to the prepared statement
+    $queryStatement->bindParam(":map_id", $beatmapData['map_id']);
+    $queryStatement->bindParam(":total_length", $beatmapData['total_length']);
+    $queryStatement->bindParam(":map_url", $beatmapData['map_url']);
+    $queryStatement->bindParam(":cover_image_url", $beatmapData['cover_image_url']);
+    $queryStatement->bindParam(":title_unicode", $beatmapData['title_unicode']);
+    $queryStatement->bindParam(":artist_unicode", $beatmapData['artist_unicode']);
+    $queryStatement->bindParam(":difficulty", $beatmapData['difficulty']);
+    $queryStatement->bindParam(":mapper", $beatmapData['mapper']);
+    $queryStatement->bindParam(":difficulty_rating", $beatmapData['difficulty_rating']);
+    $queryStatement->bindParam(":map_bpm", $beatmapData['map_bpm']);
+    $queryStatement->bindParam(":overall_difficulty", $beatmapData['overall_difficulty']);
+    $queryStatement->bindParam(":health_point", $beatmapData['health_point']);
+    $queryStatement->bindParam(":amount_of_passes", $beatmapData['amount_of_passes']);
+    $queryStatement->bindParam(":mod_type", $beatmapData['mod_type']);
+
+    // Execute the statement and insert the data into database
+    if ($queryStatement->execute()) {
+        error_log("Insert successful for deleted beatmap ID: " . $beatmapData['map_id']);
+        return $queryStatement->rowCount() > 0;
+    } else {
+        error_log("Insert failed for deleted beatmap ID: " . $beatmapData['map_id']);
+        $errorInfo = $queryStatement->errorInfo();
+        error_log("Error Info: " . implode(", ", $errorInfo));
+        return false;
+    }
+}
+
+// Check if deleted beatmap data already exists in the database
+function checkDeletedBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject)
+{
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_{$tournamentRound}";
+
+    $query = "SELECT id FROM $tournamentTable WHERE map_id = :map_id";
+    $queryStatement = $phpDataObject->prepare($query);
+    $queryStatement->bindParam(":map_id", $beatmapId, PDO::PARAM_INT);
+    $queryStatement->execute();
+
+    return $queryStatement->fetchColumn() !== false;
+}
+
+// Update existing deleted beatmap data in the database with new data
+function updateDeletedBeatmapData($beatmapData, $tournamentName, $tournamentRound, $phpDataObject)
+{
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_{$tournamentRound}";
+
+    $query = "UPDATE $tournamentTable
+              SET total_length = :total_length,
+                  map_url = :map_url,
+                  cover_image_url = :cover_image_url,
+                  title_unicode = :title_unicode,
+                  artist_unicode = :artist_unicode,
+                  difficulty = :difficulty,
+                  mapper = :mapper,
+                  difficulty_rating = :difficulty_rating,
+                  map_bpm = :map_bpm,
+                  overall_difficulty = :overall_difficulty,
+                  health_point = :health_point,
+                  amount_of_passes = :amount_of_passes,
+                  mod_type = :mod_type
+              WHERE map_id = :map_id;";
+
+    // Prepare the SQL statement to prevent SQL injection
+    $queryStatement = $phpDataObject->prepare($query);
+
+    // Bind the beatmap data to the prepared statement
+    $queryStatement->bindParam(":map_id", $beatmapData['map_id']);
+    $queryStatement->bindParam(":total_length", $beatmapData['total_length']);
+    $queryStatement->bindParam(":map_url", $beatmapData['map_url']);
+    $queryStatement->bindParam(":cover_image_url", $beatmapData['cover_image_url']);
+    $queryStatement->bindParam(":title_unicode", $beatmapData['title_unicode']);
+    $queryStatement->bindParam(":artist_unicode", $beatmapData['artist_unicode']);
+    $queryStatement->bindParam(":difficulty", $beatmapData['difficulty']);
+    $queryStatement->bindParam(":mapper", $beatmapData['mapper']);
+    $queryStatement->bindParam(":difficulty_rating", $beatmapData['difficulty_rating']);
+    $queryStatement->bindParam(":map_bpm", $beatmapData['map_bpm']);
+    $queryStatement->bindParam(":overall_difficulty", $beatmapData['overall_difficulty']);
+    $queryStatement->bindParam(":health_point", $beatmapData['health_point']);
+    $queryStatement->bindParam(":amount_of_passes", $beatmapData['amount_of_passes']);
+    $queryStatement->bindParam(":mod_type", $beatmapData['mod_type']);
+
+    // Execute the statement and update the existen data in the database
+    if ($queryStatement->execute()) {
+        error_log("Update successful for deleted beatmap ID: " . $beatmapData['map_id']);
+        return $queryStatement->rowCount() > 0;
+    } else {
+        error_log("Update failed for deleted beatmap ID: " . $beatmapData['map_id']);
+        $errorInfo = $queryStatement->errorInfo();
+        error_log("Error Info: " . implode(", ", $errorInfo));
+        return false;
+    }
+}
+
+// Get deleted beatmap data from database by beatmap IDs
+function getDeletedBeatmapData($mapId, $tournamentName, $tournamentRound, $phpDataObject)
+{
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_{$tournamentRound}";
+
+    $query = "SELECT * FROM $tournamentTable WHERE map_id = :map_id";
+    $queryStatement = $phpDataObject->prepare($query);
+    $queryStatement->bindParam(":map_id", $mapId, PDO::PARAM_INT);
+
+    // Execute the statement and get the needed data in the database to display
+    if ($queryStatement->execute()) {
+        error_log("Get data successfully for deleted beatmap ID: " . $mapId);
+        // Fetch and return the result as an associative array
+        return $queryStatement->fetch(PDO::FETCH_ASSOC);
+    } else {
+        error_log("Get data failed for deleted beatmap ID: " . $mapId);
+        $errorInfo = $queryStatement->errorInfo();
+        error_log("Error Info: " . implode(", ", $errorInfo));
+        return false;
+    }
+}
+
 // Retrieve tournament-related data from GET request
 $tournamentName = $_GET['name'] ?? 'NULL';
 $tournamentRound = $_GET['round'] ?? 'NULL';
@@ -261,7 +427,32 @@ if ($tournamentName) {
                     error_log("Failed to retrieve beatmap data for ID: {$beatmapId}.");
                 }
             } else {
-                error_log("Failed to fetch beatmap data for ID: {$beatmapId}.");
+                // If data fetching is not successful, try to fetch deleted beatmap data from JSON file
+                $deletedBeatmapDatas = fetchDeletedBeatmapData($tournamentName, $tournamentRound);
+
+                foreach ($deletedBeatmapDatas as $deletedBeatmapData) {
+                    // Check if deleted beatmap IDs in JSON file for deleted ones are the same as deleted beatmap IDs in JSON file for working ones.
+                    if ($deletedBeatmapData['map_id'] == $beatmapId) {
+                        // Check if the deleted beatmap data already exists in the database
+                        if (!checkDeletedBeatmapData($deletedBeatmapData['map_id'], $tournamentName, $tournamentRound, $phpDataObject)) {
+                            // If not, store the deleted beatmap data in the database
+                            storeDeletedBeatmapData($deletedBeatmapData, $tournamentName, $tournamentRound, $phpDataObject);
+                        } else {
+                            // If yes, update the existing deleted beatmap data in the database
+                            updateDeletedBeatmapData($deletedBeatmapData, $tournamentName, $tournamentRound, $phpDataObject);
+                        }
+                        // Get the deleted beatmap data from the database
+                        $retrievedDeletedBeatmapData = getDeletedBeatmapData($deletedBeatmapData['map_id'], $tournamentName, $tournamentRound, $phpDataObject);
+
+                        // If data retrieval is successful, add it to the array
+                        if ($retrievedDeletedBeatmapData) {
+                            $beatmapDatas[] = $retrievedDeletedBeatmapData;
+                        } else {
+                            error_log("Failed to retrieve deleted beatmap data for ID: {$beatmapId}.");
+                        }
+                        break;
+                    }
+                }
             }
         }
     } else {
