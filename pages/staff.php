@@ -51,12 +51,12 @@ function fetchStaffData($staffId, $tournamentName, $phpDataObject)
 // Store new staff data into database
 function storeStaffData($staffData, $staffRole, $tournamentName, $phpDataObject)
 {
-    // Call the correct tournament database table based on the GET request
-    $tournamentTable = "{$tournamentName}_staff";
-
     // Construct the flag URL using the country code as in lowercase letter
     $countryCode = strtolower($staffData->country_code);
     $countryFlagUrl = "https://flagcdn.com/24x18/$countryCode.webp";
+
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_staff";
 
     $query = "INSERT INTO $tournamentTable (staff_id,
                                             staff_username,
@@ -96,14 +96,15 @@ function storeStaffData($staffData, $staffRole, $tournamentName, $phpDataObject)
 
 
 // Check if staff data already exists in the database
-function checkStaffData($staffId, $tournamentName, $phpDataObject)
+function checkStaffData($staffId, $tournamentName, $staffRole, $phpDataObject)
 {
     // Call the correct tournament database table based on the GET request
     $tournamentTable = "{$tournamentName}_staff";
 
-    $query = "SELECT id FROM $tournamentName WHERE staff_id = :staff_id";
+    $query = "SELECT id FROM $tournamentTable WHERE staff_id = :staff_id AND staff_roles = :staff_roles";
     $queryStatement = $phpDataObject->prepare($query);
     $queryStatement->bindParam(":staff_id", $staffId, PDO::PARAM_INT);
+    $queryStatement->bindParam(":staff_roles", $staffRole, PDO::PARAM_STR);
     $queryStatement->execute();
 
     return $queryStatement->fetchColumn() !== false;
@@ -113,12 +114,13 @@ function checkStaffData($staffId, $tournamentName, $phpDataObject)
 // Update existing staff data in the database with new data
 function updateStaffData($staffData, $staffRole, $tournamentName, $phpDataObject)
 {
-    // Call the correct tournament database table based on the GET request
-    $tournamentTable = "{$tournamentName}_staff";
 
     // Construct the flag URL using the country code as in lowercase letter
     $countryCode = strtolower($staffData->country_code);
     $countryFlagUrl = "https://flagcdn.com/24x18/$countryCode.webp";
+
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_staff";
 
     $query = "UPDATE $tournamentTable
               SET staff_username = :staff_username,
@@ -175,163 +177,61 @@ function getStaffData($staffId, $tournamentName, $phpDataObject)
         return false;
     }
 }
-
-
-// Get staff roles by array index
-function getStaffRoleByIndex($arrayIndex, $staffRoles)
-{
-    foreach ($staffRoles as $staffRole => $arrayIndexes) {
-        if (in_array($arrayIndex, $arrayIndexes)) {
-            return $staffRole;
-        }
-    }
-    // None of the roles applied if index is not found
-    return 'N/A';
-}
-
-// Define staff IDs for which data will be fetched
-$staffIds = [ // Host
-    9623142,
-    // Mappooler
-    9623142,
-    26012543,
-    18397349,
-    11833538,
-    // GFX / VFX
-    16039831,
-    14083855,
-    13981991,
-    9912966,
-    14001000,
-    // Mapper
-    9623142,
-    16039831,
-    17302272,
-    7169208,
-    22522738,
-    22515524,
-    3724819,
-    8631719,
-    2865172,
-    3738344,
-    14520910,
-    17916791,
-    12510704,
-    2345156,
-    11056763,
-    1109122,
-    26190106,
-    // Playtester
-    9623142,
-    16039831,
-    2228401,
-    11411697,
-    13630137,
-    26012543,
-    // Referee
-    9623142,
-    21290592,
-    26012543,
-    17148657,
-    22515524,
-    13456818,
-    7109317,
-    10129901,
-    829469,
-    19207842,
-    // Streamer
-    13456818,
-    7789926,
-    15815791,
-    19817503,
-    11406987,
-    1926383,
-    // Commentator
-    9623142,
-    16039831,
-    21290592,
-    26012543,
-    24042710,
-    22069182,
-    // Statistician
-    10494860,
-    13456818
-];
-
-// Define a mapping of index ranges to staff roles
-$staffRoles = [
-    'Host' => [0],
-    'Mappooler' => [1, 2, 3, 4],
-    'GFX / VFX' => [5, 6, 7, 8, 9],
-    'Mapper' => [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
-    'Playtester' => [27, 28, 29, 30, 31, 32],
-    'Referee' => [33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
-    'Streamer' => [43, 44, 45, 46, 47, 48],
-    'Commentator' => [49, 50, 51, 52, 53, 54],
-    'Statistician' => [55, 56]
-];
-
 // Retrieve tournament-related data from GET request
-$tournamentName = $_GET['name'] ?? 'vot4';
+$tournamentName = $_GET['name'] ?? 'NULL';
 
-// Initialize an empty array to map staff IDs to their roles
-$staffIdToRoles = [];
-
-$staffDataArray = [];
+$staffDatas = [];
 
 // Check for correct GET request for tournament name
 if ($tournamentName) {
-    // Iterate over an array of staff IDs to populate the empty array mapping
-    foreach ($staffIds as $staffIndex => $staffId) {
-        // Get the staff role for the current index received
-        $staffRole = getStaffRoleByIndex($staffIndex, $staffRoles);
+    // Read staff IDs from JSON file
+    $staffJsonData = json_decode(file_get_contents('../data/staff.json'), true);
+    $staffJsonDatas = $staffJsonData[$tournamentName] ?? [];
 
-        // If the staff ID received is not set in the mapping, initialize it with an empty array (means nothing)
-        if (!isset($staffIdToRoles[$staffId])) {
-            $staffIdToRoles[$staffId] = [];
-        }
-
-        // Append the staff role to the staff ID's list of roles 
-        $staffIdToRoles[$staffId][] = $staffRole;
-    }
-
-    // Remove duplicate staff IDs to ensure each ID is processed only once
-    $uniqueStaffIds = array_unique($staffIds);
-
-    // Iterate over the unique staff IDs
-    foreach ($uniqueStaffIds as $arrayIndex => $staffId) {
-        // Combine the roles into a single string separated by commas
-        $staffRole = implode(', ', $staffIdToRoles[$staffId]);
+    foreach ($staffJsonDatas as $staffData) {
+        $staffId = $staffData['id'];
+        $staffRoles = $staffData['roles'];
 
         // Fetch the staff data from the API or database
         $staffData = fetchStaffData($staffId, $tournamentName, $phpDataObject);
+
+        // Check if the data fetching is successful
         if ($staffData) {
             // Check if the user is authenticated
             $accessToken = $_COOKIE['vot_access_token'] ?? null;
 
             if ($accessToken) {
-                if (!checkStaffData($staffId, $tournamentName, $phpDataObject)) {
-                    storeStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
-                } else {
-                    updateStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
+                foreach ($staffRoles as $staffRole) {
+                    // Check if the staff data already exists in the database
+                    if (!checkStaffData($staffData->id, $tournamentName, $staffRole, $phpDataObject)) {
+                        // If not, store the staff data in the database
+                        storeStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
+                    } else {
+                        // If yes, update the existing staff data in the database
+                        updateStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
+                        break;
+                    }
                 }
-                // Get stored data from the database after storing/updating the current stored data in the databse only in the case of user is authenticated
+                // Get the staff data from the database
                 $retrievedStaffData = getStaffData($staffId, $tournamentName, $phpDataObject);
             } else {
-                // Get stored data directly from the databse if user is not authenticated
+                // Get the staff data directly from the database without additional checking
                 $retrievedStaffData = getStaffData($staffId, $tournamentName, $phpDataObject);
             }
 
             // If data retrieval is successful, add it to the array
             if ($retrievedStaffData) {
-                $staffDataArray[] = $retrievedStaffData;
+                $staffDatas[] = $retrievedStaffData;
             } else {
-                error_log("Failed to retrieve staff data for ID: " . $staffId);
+                error_log("Failed to retrieve staff data for ID: {$staffId}.");
             }
         } else {
-            error_log("Failed to fetch staff data for ID: " . $staffId);
+            error_log("Failed to fetch staff data for ID: {$staffId}.");
+            break;
         }
     }
+} else {
+    die('<div style="display: flex; justify-content: center; align-items: center; margin-left: 45rem; font-size: 5rem;">Please choose a valid button!</div>'); // TODO: This is an absolute temporary. Changed later (if I can).
 }
 ?>
 
@@ -345,9 +245,9 @@ if ($tournamentName) {
     </div>
 
     <div class="staff-page">
-        <?php if (!empty($staffDataArray)): ?>
+        <?php if (!empty($staffDatas)): ?>
             <!-- Dynamic staff information display -->
-            <?php foreach ($staffDataArray as $staffData): ?>
+            <?php foreach ($staffDatas as $staffData): ?>
                 <div class="staff-card-container">
                     <h1><img src="<?= htmlspecialchars($staffData['staff_country_flag_url']); ?>" alt="<?= htmlspecialchars($staffData['staff_country_name']); ?>"><?= htmlspecialchars($staffData['staff_username']); ?></h1>
                     <img src="<?= htmlspecialchars($staffData['staff_avatar_url']); ?>" alt="<?= htmlspecialchars($staffData['staff_username']); ?>'s Avatar">
