@@ -320,8 +320,12 @@ foreach ($uniqueStaffIds as $arrayIndex => $staffId) {
 ?>
 
 <section>
-    <div class="header-container">
-        <h1>Our Lovely Staff <i class='bx bxs-heart-circle'></i></h1>
+    <div class="button-container">
+        <form action="staff.php" method="get">
+            <!-- Sent the corresponding tournament name fields to the website for fetching stored data -->
+            <button type="submit" name="name" value="vot3">VOT3</button>
+            <button type="submit" name="name" value="vot4">VOT4</button>
+        </form>
     </div>
 
     <div class="staff-page">
