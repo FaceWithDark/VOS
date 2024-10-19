@@ -38,8 +38,8 @@ function fetchBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDat
             // API call did not return a 200 status
             return false;
         } catch (RequestException $exception) {
-            error_log("API request failed: " . $exception->getMessage());  // Log the exception message
-            return false;                                                    // An exception occurred during the API call
+            error_log("API request failed: " . $exception->getMessage());
+            return false;
         }
     } else {
         // If not authenticated, fetch data from the database directly
@@ -56,32 +56,32 @@ function storeBeatmapData($beatmapData, $modType, $tournamentName, $tournamentRo
     // Call the correct tournament database table based on the GET request
     $tournamentTable = "{$tournamentName}_{$tournamentRound}";
 
-    $query = "INSERT INTO $tournamentTable (map_id, 
-                                           total_length, 
-                                           map_url, 
-                                           cover_image_url, 
-                                           title_unicode, 
-                                           artist_unicode, 
-                                           difficulty, 
-                                           mapper, 
-                                           difficulty_rating, 
-                                           map_bpm, 
-                                           overall_difficulty, 
-                                           health_point, 
+    $query = "INSERT INTO $tournamentTable (map_id,
+                                           total_length,
+                                           map_url,
+                                           cover_image_url,
+                                           title_unicode,
+                                           artist_unicode,
+                                           difficulty,
+                                           mapper,
+                                           difficulty_rating,
+                                           map_bpm,
+                                           overall_difficulty,
+                                           health_point,
                                            amount_of_passes,
-                                           mod_type) 
-                     VALUES (:map_id, 
-                             :total_length, 
-                             :map_url, 
-                             :cover_image_url, 
-                             :title_unicode, 
-                             :artist_unicode, 
-                             :difficulty, 
-                             :mapper, 
-                             :difficulty_rating, 
-                             :map_bpm, 
-                             :overall_difficulty, 
-                             :health_point, 
+                                           mod_type)
+                     VALUES (:map_id,
+                             :total_length,
+                             :map_url,
+                             :cover_image_url,
+                             :title_unicode,
+                             :artist_unicode,
+                             :difficulty,
+                             :mapper,
+                             :difficulty_rating,
+                             :map_bpm,
+                             :overall_difficulty,
+                             :health_point,
                              :amount_of_passes,
                              :mod_type);";
 
