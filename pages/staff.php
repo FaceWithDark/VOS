@@ -8,9 +8,10 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 require_once '../layouts/navigation_bar.php';
+//require '../layouts/configuration.php';
 
 // Fetch staff data from the Osu! API
-function fetchStaffData($staffId, $phpDataObject)
+function fetchStaffData($staffId, $tournamentName, $phpDataObject)
 {
     // Check if the user is authenticated by looking for the access token in cookies
     $accessToken = $_COOKIE['vot_access_token'] ?? null;
@@ -42,26 +43,27 @@ function fetchStaffData($staffId, $phpDataObject)
         }
     } else {
         // If not authenticated, fetch data from the database directly
-        return getStaffData($staffId, $phpDataObject);
+        return getStaffData($staffId, $tournamentName, $phpDataObject);
     }
 }
 
 
 // Store new staff data into database
-function storeStaffData($staffData, $staffRole, $phpDataObject)
+function storeStaffData($staffData, $staffRole, $tournamentName, $phpDataObject)
 {
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_staff";
 
     // Construct the flag URL using the country code as in lowercase letter
     $countryCode = strtolower($staffData->country_code);
     $countryFlagUrl = "https://flagcdn.com/24x18/$countryCode.webp";
 
-    // SQL query to store staff data into the corresponding database table
-    $query = "INSERT INTO vot4_staff (staff_id,
-                                      staff_username,
-                                      staff_avatar_url,
-                                      staff_roles,
-                                      staff_country_name,
-                                      staff_country_flag_url)
+    $query = "INSERT INTO $tournamentTable (staff_id,
+                                            staff_username,
+                                            staff_avatar_url,
+                                            staff_roles,
+                                            staff_country_name,
+                                            staff_country_flag_url)
                      VALUES (:staff_id,
                              :staff_username,
                              :staff_avatar_url,
@@ -94,9 +96,12 @@ function storeStaffData($staffData, $staffRole, $phpDataObject)
 
 
 // Check if staff data already exists in the database
-function checkStaffData($staffId, $phpDataObject)
+function checkStaffData($staffId, $tournamentName, $phpDataObject)
 {
-    $query = "SELECT id FROM vot4_staff WHERE staff_id = :staff_id";
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_staff";
+
+    $query = "SELECT id FROM $tournamentName WHERE staff_id = :staff_id";
     $queryStatement = $phpDataObject->prepare($query);
     $queryStatement->bindParam(":staff_id", $staffId, PDO::PARAM_INT);
     $queryStatement->execute();
@@ -106,19 +111,21 @@ function checkStaffData($staffId, $phpDataObject)
 
 
 // Update existing staff data in the database with new data
-function updateStaffData($staffData, $staffRole, $phpDataObject)
+function updateStaffData($staffData, $staffRole, $tournamentName, $phpDataObject)
 {
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_staff";
+
     // Construct the flag URL using the country code as in lowercase letter
     $countryCode = strtolower($staffData->country_code);
     $countryFlagUrl = "https://flagcdn.com/24x18/$countryCode.webp";
 
-    // SQL query to update staff data
-    $query = "UPDATE vot4_staff SET
-                staff_username = :staff_username,
-                staff_avatar_url = :staff_avatar_url,
-                staff_roles = :staff_roles,
-                staff_country_name = :staff_country_name,
-                staff_country_flag_url = :staff_country_flag_url
+    $query = "UPDATE $tournamentTable
+              SET staff_username = :staff_username,
+                  staff_avatar_url = :staff_avatar_url,
+                  staff_roles = :staff_roles,
+                  staff_country_name = :staff_country_name,
+                  staff_country_flag_url = :staff_country_flag_url
               WHERE staff_id = :staff_id";
 
     // Prepare the SQL statement to prevent SQL injection
@@ -147,9 +154,12 @@ function updateStaffData($staffData, $staffRole, $phpDataObject)
 
 
 // Get staff data from database by staff IDs
-function getStaffData($staffId, $phpDataObject)
+function getStaffData($staffId, $tournamentName, $phpDataObject)
 {
-    $query = "SELECT * FROM vot4_staff WHERE staff_id = :staff_id";
+    // Call the correct tournament database table based on the GET request
+    $tournamentTable = "{$tournamentName}_staff";
+
+    $query = "SELECT * FROM $tournamentTable WHERE staff_id = :staff_id";
     $queryStatement = $phpDataObject->prepare($query);
     $queryStatement->bindParam(":staff_id", $staffId, PDO::PARAM_INT);
 
@@ -262,7 +272,7 @@ $staffRoles = [
 ];
 
 // Retrieve tournament-related data from GET request
-$tournamentName = $_GET['name'] ?? 'NULL';
+$tournamentName = $_GET['name'] ?? 'vot4';
 
 // Initialize an empty array to map staff IDs to their roles
 $staffIdToRoles = [];
@@ -294,22 +304,22 @@ if ($tournamentName) {
         $staffRole = implode(', ', $staffIdToRoles[$staffId]);
 
         // Fetch the staff data from the API or database
-        $staffData = fetchStaffData($staffId, $phpDataObject);
+        $staffData = fetchStaffData($staffId, $tournamentName, $phpDataObject);
         if ($staffData) {
             // Check if the user is authenticated
             $accessToken = $_COOKIE['vot_access_token'] ?? null;
 
             if ($accessToken) {
-                if (!checkStaffData($staffId, $phpDataObject)) {
-                    storeStaffData($staffData, $staffRole, $phpDataObject);
+                if (!checkStaffData($staffId, $tournamentName, $phpDataObject)) {
+                    storeStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
                 } else {
-                    updateStaffData($staffData, $staffRole, $phpDataObject);
+                    updateStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
                 }
                 // Get stored data from the database after storing/updating the current stored data in the databse only in the case of user is authenticated
-                $retrievedStaffData = getStaffData($staffId, $phpDataObject);
+                $retrievedStaffData = getStaffData($staffId, $tournamentName, $phpDataObject);
             } else {
                 // Get stored data directly from the databse if user is not authenticated
-                $retrievedStaffData = getStaffData($staffId, $phpDataObject);
+                $retrievedStaffData = getStaffData($staffId, $tournamentName, $phpDataObject);
             }
 
             // If data retrieval is successful, add it to the array
