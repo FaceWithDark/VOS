@@ -261,60 +261,66 @@ $staffRoles = [
     'Statistician' => [55, 56]
 ];
 
+// Retrieve tournament-related data from GET request
+$tournamentName = $_GET['name'] ?? 'NULL';
+
 // Initialize an empty array to map staff IDs to their roles
 $staffIdToRoles = [];
 
 $staffDataArray = [];
 
-// Iterate over an array of staff IDs to populate the empty array mapping
-foreach ($staffIds as $staffIndex => $staffId) {
-    // Get the staff role for the current index received
-    $staffRole = getStaffRoleByIndex($staffIndex, $staffRoles);
+// Check for correct GET request for tournament name
+if ($tournamentName) {
+    // Iterate over an array of staff IDs to populate the empty array mapping
+    foreach ($staffIds as $staffIndex => $staffId) {
+        // Get the staff role for the current index received
+        $staffRole = getStaffRoleByIndex($staffIndex, $staffRoles);
 
-    // If the staff ID received is not set in the mapping, initialize it with an empty array (means nothing)
-    if (!isset($staffIdToRoles[$staffId])) {
-        $staffIdToRoles[$staffId] = [];
+        // If the staff ID received is not set in the mapping, initialize it with an empty array (means nothing)
+        if (!isset($staffIdToRoles[$staffId])) {
+            $staffIdToRoles[$staffId] = [];
+        }
+
+        // Append the staff role to the staff ID's list of roles 
+        $staffIdToRoles[$staffId][] = $staffRole;
     }
 
-    // Append the staff role to the staff ID's list of roles 
-    $staffIdToRoles[$staffId][] = $staffRole;
-}
+    // Remove duplicate staff IDs to ensure each ID is processed only once
+    $uniqueStaffIds = array_unique($staffIds);
 
-// Remove duplicate staff IDs to ensure each ID is processed only once
-$uniqueStaffIds = array_unique($staffIds);
+    // Iterate over the unique staff IDs
+    foreach ($uniqueStaffIds as $arrayIndex => $staffId) {
+        // Combine the roles into a single string separated by commas
+        $staffRole = implode(', ', $staffIdToRoles[$staffId]);
 
-// Iterate over the unique staff IDs
-foreach ($uniqueStaffIds as $arrayIndex => $staffId) {
-    // Combine the roles into a single string separated by commas
-    $staffRole = implode(', ', $staffIdToRoles[$staffId]);
+        // Fetch the staff data from the API or database
+        $staffData = fetchStaffData($staffId, $phpDataObject);
+        if ($staffData) {
+            // Check if the user is authenticated
+            $accessToken = $_COOKIE['vot_access_token'] ?? null;
 
-    // Fetch the staff data from the API or database
-    $staffData = fetchStaffData($staffId, $phpDataObject);
-    if ($staffData) {
-        // Check if the user is authenticated
-        $accessToken = $_COOKIE['vot_access_token'] ?? null;
-
-        if ($accessToken) {
-            if (!checkStaffData($staffId, $phpDataObject)) {
-                storeStaffData($staffData, $staffRole, $phpDataObject);
+            if ($accessToken) {
+                if (!checkStaffData($staffId, $phpDataObject)) {
+                    storeStaffData($staffData, $staffRole, $phpDataObject);
+                } else {
+                    updateStaffData($staffData, $staffRole, $phpDataObject);
+                }
+                // Get stored data from the database after storing/updating the current stored data in the databse only in the case of user is authenticated
+                $retrievedStaffData = getStaffData($staffId, $phpDataObject);
             } else {
-                updateStaffData($staffData, $staffRole, $phpDataObject);
+                // Get stored data directly from the databse if user is not authenticated
+                $retrievedStaffData = getStaffData($staffId, $phpDataObject);
             }
-            // Get stored data from the database after storing/updating the current stored data in the databse only in the case of user is authenticated
-            $retrievedStaffData = getStaffData($staffId, $phpDataObject);
-        } else {
-            // Get stored data directly from the databse if user is not authenticated
-            $retrievedStaffData = getStaffData($staffId, $phpDataObject);
-        }
 
-        // If data retrieval is successful, add it to the array
-        if ($retrievedStaffData) {
-            $staffDataArray[] = $retrievedStaffData;
+            // If data retrieval is successful, add it to the array
+            if ($retrievedStaffData) {
+                $staffDataArray[] = $retrievedStaffData;
+            } else {
+                error_log("Failed to retrieve staff data for ID: " . $staffId);
+            }
         } else {
-            error_log("Failed to retrieve staff data for ID: " . $staffId);
+            error_log("Failed to fetch staff data for ID: " . $staffId);
         }
-    } else {
-        error_log("Failed to fetch staff data for ID: " . $staffId);
     }
 }
 ?>
