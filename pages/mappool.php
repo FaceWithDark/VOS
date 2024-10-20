@@ -10,6 +10,7 @@ use GuzzleHttp\Exception\RequestException;
 require_once '../layouts/navigation_bar.php';
 include_once '../modules/convertion/time_convertion.php';
 
+
 // Fetch beatmap data from the Osu! API
 function fetchBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject)
 {
@@ -212,6 +213,7 @@ function getBeatmapData($mapId, $tournamentName, $tournamentRound, $phpDataObjec
     }
 }
 
+
 // Fetch deleted beatmap data from JSON file
 function fetchDeletedBeatmapData($tournamentName, $tournamentRound)
 {
@@ -221,6 +223,7 @@ function fetchDeletedBeatmapData($tournamentName, $tournamentRound)
 
     return $deletedBeatmapJsonDatas;
 }
+
 
 // Store new deleted beatmap data into database
 function storeDeletedBeatmapData($beatmapData, $tournamentName, $tournamentRound, $phpDataObject)
@@ -288,6 +291,7 @@ function storeDeletedBeatmapData($beatmapData, $tournamentName, $tournamentRound
     }
 }
 
+
 // Check if deleted beatmap data already exists in the database
 function checkDeletedBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject)
 {
@@ -301,6 +305,7 @@ function checkDeletedBeatmapData($beatmapId, $tournamentName, $tournamentRound, 
 
     return $queryStatement->fetchColumn() !== false;
 }
+
 
 // Update existing deleted beatmap data in the database with new data
 function updateDeletedBeatmapData($beatmapData, $tournamentName, $tournamentRound, $phpDataObject)
@@ -354,6 +359,7 @@ function updateDeletedBeatmapData($beatmapData, $tournamentName, $tournamentRoun
         return false;
     }
 }
+
 
 // Get deleted beatmap data from database by beatmap IDs
 function getDeletedBeatmapData($mapId, $tournamentName, $tournamentRound, $phpDataObject)
@@ -483,56 +489,39 @@ if ($tournamentName) {
         <?php if (!empty($beatmapDatas) && isset($tournamentRound)): ?>
             <!-- Dynamic beatmap display with correct mod type -->
             <?php foreach ($beatmapDatas as $beatmapData): ?>
-                <!-- Check if any of these API key values exist in the fetched beatmap data -->
-                <?php if (
-                    isset($beatmapData['mod_type'])           ||
-                    isset($beatmapData['map_url'])            ||
-                    isset($beatmapData['cover_image_url'])    ||
-                    isset($beatmapData['title_unicode'])      ||
-                    isset($beatmapData['difficulty'])         ||
-                    isset($beatmapData['artist_unicode'])     ||
-                    isset($beatmapData['mapper'])             ||
-                    isset($beatmapData['difficulty_rating'])  ||
-                    isset($beatmapData['total_length'])       ||
-                    isset($beatmapData['map_bpm'])            ||
-                    isset($beatmapData['overall_difficulty']) ||
-                    isset($beatmapData['health_point'])       ||
-                    isset($beatmapData['amount_of_passes'])
-                ): ?>
-                    <div class="mappool-card-container">
-                        <h1><?= htmlspecialchars(isset($beatmapData['mod_type']) ? $beatmapData['mod_type'] : 'NULL'); ?></h1>
+                <div class="mappool-card-container">
+                    <h1><?= htmlspecialchars(isset($beatmapData['mod_type']) ? $beatmapData['mod_type'] : 'NULL'); ?></h1>
 
-                        <br>
+                    <br>
 
-                        <a href="<?= isset($beatmapData['map_url']) ? $beatmapData['map_url'] : '#'; ?>">
-                            <img src="<?= htmlspecialchars(isset($beatmapData['cover_image_url']) ? $beatmapData['cover_image_url'] : 'NULL'); ?>" width="490px" alt="Beatmap Cover">
-                        </a>
+                    <a href="<?= isset($beatmapData['map_url']) ? $beatmapData['map_url'] : '#'; ?>">
+                        <img src="<?= htmlspecialchars(isset($beatmapData['cover_image_url']) ? $beatmapData['cover_image_url'] : 'NULL'); ?>" width="490px" alt="Beatmap Cover">
+                    </a>
 
-                        <br><br>
+                    <br><br>
 
-                        <h2><?= htmlspecialchars(isset($beatmapData['title_unicode']) ? $beatmapData['title_unicode'] : 'NULL'); ?> [<?= isset($beatmapData['difficulty']) ? $beatmapData['difficulty'] : 'NULL'; ?>]</h2>
-                        <h3><?= htmlspecialchars(isset($beatmapData['artist_unicode']) ? $beatmapData['artist_unicode'] : 'NULL'); ?></h3>
-                        <h4 class="beatmap-creator-row">
-                            Mapset by <a href="https://osu.ppy.sh/users/<?= htmlspecialchars(isset($beatmapData['mapper']) ? $beatmapData['mapper'] : '#'); ?>"><?= htmlspecialchars(isset($beatmapData['mapper']) ? $beatmapData['mapper'] : 'NULL'); ?></a>
-                        </h4>
+                    <h2><?= htmlspecialchars(isset($beatmapData['title_unicode']) ? $beatmapData['title_unicode'] : 'NULL'); ?> [<?= isset($beatmapData['difficulty']) ? $beatmapData['difficulty'] : 'NULL'; ?>]</h2>
+                    <h3><?= htmlspecialchars(isset($beatmapData['artist_unicode']) ? $beatmapData['artist_unicode'] : 'NULL'); ?></h3>
+                    <h4 class="beatmap-creator-row">
+                        Mapset by <a href="https://osu.ppy.sh/users/<?= htmlspecialchars(isset($beatmapData['mapper']) ? $beatmapData['mapper'] : '#'); ?>"><?= htmlspecialchars(isset($beatmapData['mapper']) ? $beatmapData['mapper'] : 'NULL'); ?></a>
+                    </h4>
 
-                        <br>
+                    <br>
 
-                        <div class="beatmap-attribute-row">
-                            <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars(isset($beatmapData['difficulty_rating']) ? number_format((float)$beatmapData['difficulty_rating'], 2) : 'NULL'); ?></p>
-                            <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= htmlspecialchars(isset($beatmapData['total_length']) ? $beatmapData['total_length'] : 'NULL'); ?></p>
-                            <p><i class='bx bx-tachometer'></i> <?= htmlspecialchars(isset($beatmapData['map_bpm']) ? number_format((float)$beatmapData['map_bpm'], 2) : 'NULL'); ?>bpm</p>
-                        </div>
-
-                        <br>
-
-                        <div class="beatmap-attribute-row">
-                            <p style="margin-right: 1rem;">OD: <?= htmlspecialchars(isset($beatmapData['overall_difficulty']) ? number_format((float)$beatmapData['overall_difficulty'], 2) : 'NULL'); ?></p>
-                            <p style="margin-right: 1rem;">HP: <?= htmlspecialchars(isset($beatmapData['health_point']) ? number_format((float)$beatmapData['health_point'], 2) : 'NULL'); ?></p>
-                            <p>Passed: <?= isset($beatmapData['amount_of_passes']) ? $beatmapData['amount_of_passes'] : 'NULL'; ?></p>
-                        </div>
+                    <div class="beatmap-attribute-row">
+                        <p style="margin-right: 1rem;"><i class='bx bx-star'></i> <?= htmlspecialchars(isset($beatmapData['difficulty_rating']) ? number_format((float)$beatmapData['difficulty_rating'], 2) : 'NULL'); ?></p>
+                        <p style="margin-right: 1rem;"><i class='bx bx-timer'></i> <?= htmlspecialchars(isset($beatmapData['total_length']) ? $beatmapData['total_length'] : 'NULL'); ?></p>
+                        <p><i class='bx bx-tachometer'></i> <?= htmlspecialchars(isset($beatmapData['map_bpm']) ? number_format((float)$beatmapData['map_bpm'], 2) : 'NULL'); ?>bpm</p>
                     </div>
-                <?php endif; ?>
+
+                    <br>
+
+                    <div class="beatmap-attribute-row">
+                        <p style="margin-right: 1rem;">OD: <?= htmlspecialchars(isset($beatmapData['overall_difficulty']) ? number_format((float)$beatmapData['overall_difficulty'], 2) : 'NULL'); ?></p>
+                        <p style="margin-right: 1rem;">HP: <?= htmlspecialchars(isset($beatmapData['health_point']) ? number_format((float)$beatmapData['health_point'], 2) : 'NULL'); ?></p>
+                        <p>Passed: <?= isset($beatmapData['amount_of_passes']) ? $beatmapData['amount_of_passes'] : 'NULL'; ?></p>
+                    </div>
+                </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
