@@ -176,6 +176,7 @@ function getStaffData($staffId, $tournamentName, $phpDataObject)
         return false;
     }
 }
+
 // Retrieve tournament-related data from GET request
 $tournamentName = $_GET['name'] ?? 'NULL';
 
