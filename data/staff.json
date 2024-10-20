@@ -2,263 +2,171 @@
   "vot4": [
     {
       "id": 9623142,
-      "roles": [
-        "Host",
-        "Mapper",
-        "Playtester",
-        "Referee",
-        "Commentator"
-      ]
+      "role": "Host, Mappooler, GFX / VFX, Mapper, Playtester, Referee, Commentator"
     },
     {
       "id": 26012543,
-      "roles": [
-        "Mappooler",
-        "Playtester",
-        "Referee",
-        "Commentator"
-      ]
+      "role": "Mappooler, Referee"
     },
     {
       "id": 18397349,
-      "roles": [
-        "Mappooler"
-      ]
+      "role": "Mappooler"
     },
     {
       "id": 11833538,
-      "roles": [
-        "Mappooler"
-      ]
+      "role": "Mappooler, Mapper"
     },
     {
       "id": 16039831,
-      "roles": [
-        "GFX / VFX",
-        "Mapper",
-        "Playtester",
-        "Commentator"
-      ]
+      "role": "GFX / VFX, Mapper, Playtester, Commentator"
     },
     {
       "id": 14083855,
-      "roles": [
-        "GFX / VFX"
-      ]
+      "role": "GFX / VFX"
     },
     {
       "id": 13981991,
-      "roles": [
-        "GFX / VFX",
-        "Mapper"
-      ]
+      "role": "GFX / VFX"
     },
     {
       "id": 9912966,
-      "roles": [
-        "GFX / VFX"
-      ]
+      "role": "GFX / VFX"
     },
     {
       "id": 14001000,
-      "roles": [
-        "GFX / VFX"
-      ]
+      "role": "GFX / VFX"
     },
     {
       "id": 17302272,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 7169208,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 22522738,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 22515524,
-      "roles": [
-        "Mapper",
-        "Referee"
-      ]
+      "role": "Mapper, Referee"
     },
     {
       "id": 3724819,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 8631719,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 2865172,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 3738344,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 14520910,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 17916791,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 12510704,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 2345156,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 11056763,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 1109122,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 26190106,
-      "roles": [
-        "Mapper"
-      ]
+      "role": "Mapper"
     },
     {
       "id": 2228401,
-      "roles": [
-        "Playtester"
-      ]
+      "role": "Playtester"
     },
     {
       "id": 11411697,
-      "roles": [
-        "Playtester"
-      ]
+      "role": "Playtester"
     },
     {
       "id": 13630137,
-      "roles": [
-        "Playtester"
-      ]
+      "role": "Playtester"
     },
     {
-      "id": 17148657,
-      "roles": [
-        "Referee"
-      ]
-    },
-    {
-      "id": 13456818,
-      "roles": [
-        "Referee",
-        "Streamer",
-        "Statistician"
-      ]
-    },
-    {
-      "id": 7109317,
-      "roles": [
-        "Referee"
-      ]
-    },
-    {
-      "id": 10129901,
-      "roles": [
-        "Referee"
-      ]
-    },
-    {
-      "id": 829469,
-      "roles": [
-        "Referee"
-      ]
+      "id": 21290592,
+      "role": "Referee, Commentator"
     },
     {
       "id": 19207842,
-      "roles": [
-        "Referee"
-      ]
+      "role": "Referee"
+    },
+    {
+      "id": 17148657,
+      "role": "Referee"
+    },
+    {
+      "id": 7109317,
+      "role": "Referee"
+    },
+    {
+      "id": 10129901,
+      "role": "Referee"
+    },
+    {
+      "id": 829469,
+      "role": "Referee"
+    },
+    {
+      "id": 13456818,
+      "role": "Streamer, Statistician"
     },
     {
       "id": 7789926,
-      "roles": [
-        "Streamer"
-      ]
+      "role": "Streamer"
     },
     {
       "id": 15815791,
-      "roles": [
-        "Streamer"
-      ]
+      "role": "Streamer"
     },
     {
       "id": 19817503,
-      "roles": [
-        "Streamer"
-      ]
-    },
-    {
-      "id": 11406987,
-      "roles": [
-        "Streamer"
-      ]
-    },
-    {
-      "id": 1926383,
-      "roles": [
-        "Streamer"
-      ]
-    },
-    {
-      "id": 24042710,
-      "roles": [
-        "Commentator"
-      ]
+      "role": "Streamer"
     },
     {
       "id": 22069182,
-      "roles": [
-        "Commentator"
-      ]
+      "role": "Streamer, Commentator"
+    },
+    {
+      "id": 20569104,
+      "role": "Streamer"
+    },
+    {
+      "id": 18916920,
+      "role": "Streamer"
+    },
+    {
+      "id": 24042710,
+      "role": "Commentator"
     },
     {
       "id": 10494860,
-      "roles": [
-        "Statistician"
-      ]
+      "role": "Statistician"
     }
   ]
 }
