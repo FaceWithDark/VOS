@@ -241,13 +241,14 @@ if ($tournamentName) {
     </div>
 
     <div class="staff-page">
-        <?php if (!empty($staffDatas)): ?>
+        <!-- Check if there's staff data to show to end-user and any of the tournament names' button is clicked -->
+        <?php if (!empty($staffDatas) && isset($tournamentName)): ?>
             <!-- Dynamic staff information display -->
             <?php foreach ($staffDatas as $staffData): ?>
                 <div class="staff-card-container">
-                    <h1><img src="<?= htmlspecialchars($staffData['staff_country_flag_url']); ?>" alt="<?= htmlspecialchars($staffData['staff_country_name']); ?>"><?= htmlspecialchars($staffData['staff_username']); ?></h1>
-                    <img src="<?= htmlspecialchars($staffData['staff_avatar_url']); ?>" alt="<?= htmlspecialchars($staffData['staff_username']); ?>'s Avatar">
-                    <h2><?= htmlspecialchars($staffData['staff_roles']) ?></h2>
+                    <h1><img src="<?= htmlspecialchars(isset($staffData['staff_country_flag_url']) ? $staffData['staff_country_flag_url'] : "NULL"); ?>" alt="<?= htmlspecialchars(isset($staffData['staff_country_name']) ? $staffData['staff_country_name'] : "NULL"); ?>"><?= htmlspecialchars(isset($staffData['staff_username']) ? $staffData['staff_username'] : "NULL"); ?></h1>
+                    <img src="<?= htmlspecialchars(isset($staffData['staff_avatar_url']) ? $staffData['staff_avatar_url'] : "NULL"); ?>" alt="<?= htmlspecialchars(isset($staffData['staff_username']) ? $staffData['staff_username'] : "NULL"); ?>'s Avatar">
+                    <h2><?= htmlspecialchars(isset($staffData['staff_roles']) ? $staffData['staff_roles'] : "NULL") ?></h2>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
