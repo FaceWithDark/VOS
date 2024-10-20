@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 require_once '../layouts/navigation_bar.php';
-//require '../layouts/configuration.php';
+
 
 // Fetch staff data from the Osu! API
 function fetchStaffData($staffId, $tournamentName, $phpDataObject)
@@ -96,15 +96,14 @@ function storeStaffData($staffData, $staffRole, $tournamentName, $phpDataObject)
 
 
 // Check if staff data already exists in the database
-function checkStaffData($staffId, $tournamentName, $staffRole, $phpDataObject)
+function checkStaffData($staffId, $tournamentName, $phpDataObject)
 {
     // Call the correct tournament database table based on the GET request
     $tournamentTable = "{$tournamentName}_staff";
 
-    $query = "SELECT id FROM $tournamentTable WHERE staff_id = :staff_id AND staff_roles = :staff_roles";
+    $query = "SELECT id FROM $tournamentTable WHERE staff_id = :staff_id";
     $queryStatement = $phpDataObject->prepare($query);
     $queryStatement->bindParam(":staff_id", $staffId, PDO::PARAM_INT);
-    $queryStatement->bindParam(":staff_roles", $staffRole, PDO::PARAM_STR);
     $queryStatement->execute();
 
     return $queryStatement->fetchColumn() !== false;
@@ -190,7 +189,7 @@ if ($tournamentName) {
 
     foreach ($staffJsonDatas as $staffData) {
         $staffId = $staffData['id'];
-        $staffRoles = $staffData['roles'];
+        $staffRole = $staffData['role'];
 
         // Fetch the staff data from the API or database
         $staffData = fetchStaffData($staffId, $tournamentName, $phpDataObject);
@@ -201,16 +200,13 @@ if ($tournamentName) {
             $accessToken = $_COOKIE['vot_access_token'] ?? null;
 
             if ($accessToken) {
-                foreach ($staffRoles as $staffRole) {
-                    // Check if the staff data already exists in the database
-                    if (!checkStaffData($staffData->id, $tournamentName, $staffRole, $phpDataObject)) {
-                        // If not, store the staff data in the database
-                        storeStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
-                    } else {
-                        // If yes, update the existing staff data in the database
-                        updateStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
-                        break;
-                    }
+                // Check if the staff data already exists in the database
+                if (!checkStaffData($staffData->id, $tournamentName, /*$staffRole,*/ $phpDataObject)) {
+                    // If not, store the staff data in the database
+                    storeStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
+                } else {
+                    // If yes, update the existing staff data in the database
+                    updateStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
                 }
                 // Get the staff data from the database
                 $retrievedStaffData = getStaffData($staffId, $tournamentName, $phpDataObject);
