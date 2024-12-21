@@ -1,0 +1,3 @@
+[submodule "VOS-Chatbot"]
+	path = VOS-Chatbot
+	url = https://github.com/FaceWithDark/VOS-Chatbot.git
