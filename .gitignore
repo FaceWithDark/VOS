@@ -1,11 +1,8 @@
-# Composer files
-vendor/
+# Composer
+**/vendor
 
-# Database files
-database/
-
-# Server static web configuration
-*.htaccess
+# Database
+db/
 
 # MacOS-specific CRUD
 .DS_Store
@@ -22,20 +19,31 @@ desktop.ini
 # Dropbox Linux/MacOS files
 .dropbox*
 
-# Sus information except the template one
-.env*
-!.env.example
+# Server static web configuration
+*.htaccess
+.htaccess.*
+!.htaccess.example
 
-# Website assets
-assets/
+# NGINX
+*.conf
+.conf.*
+!.conf.example
+
+# PHP
+*.ini
+.ini.*
+!.ini.conf
+
+# Sus information except the template one
+*.env
+.env.*
+!.env.example
 
 # Docker building files
 docker-compose.yml
-Dockerfile
+!docker.compose.yml.example
+
+*Dockerfile
+!Dockerfile.example
+
 .dockerignore
-
-# Markdown files
-*.md
-
-# Except some of these markdown files
-!README.md
