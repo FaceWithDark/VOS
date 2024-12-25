@@ -40,8 +40,8 @@ desktop.ini
 !.env.example
 
 # Docker building files
-docker-compose.yml
-!docker.compose.yml.example
+docker-compose.yaml
+!docker.compose.yaml.example
 
 *Dockerfile
 !Dockerfile.example
