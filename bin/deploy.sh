@@ -9,7 +9,7 @@ if [ -z "$ENV" ]; then
 fi
 
 # Define the .env file based on the environment
-ENV_FILE=".env.$ENV"
+ENV_FILE="../src/private/.env.$ENV"
 
 # Check if the .env file exists
 if [ ! -f "$ENV_FILE" ]; then
@@ -34,6 +34,6 @@ export ENV
 
 # Run Docker Compose with the specified environment
 echo "Deploying for environment: $ENV"
-docker-compose up -d --build
+docker-compose up --build -d
 
 echo "Deployed successfully for environment: $ENV"
