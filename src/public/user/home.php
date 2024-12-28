@@ -1,12 +1,12 @@
 <?php
-    require_once '../layouts/navigation_bar.php';
+require_once '../../private/config/navigation_bar.php';
 ?>
 
 <section class="tournament-news">
     <div class="announcement-box" id="latest-news">
         <h2>VIETNAMESE OSU!TAIKO TOURNAMENT</h2>
         <p>Welcome to the website of the biggest vietnamese osu!taiko tournament battlefield ! In here, you can look at everything related to VOT, with pages for all our current and past tournaments!</p>
-        
+
         <div class="youtube-iframe-container">
             <iframe width="560" height="315" src="https://www.youtube.com/embed/Y1-gjfcoJnU?autoplay=1&amp;showinfo=0&amp;controls=0&amp;autohide=1&amp;mute=1&amp;loop=1" title="VOT4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
@@ -33,7 +33,7 @@
     </div>
 
     <div class="announcement-box">
-    <a href="#">
+        <a href="#">
             <h2>VIETNAMESE OSU!TAIKO TOURNAMENT 2</h2>
             <img src="../assets/images/VOT2.webp" alt="VOT2 Banner">
             <p>
@@ -43,7 +43,7 @@
     </div>
 
     <div class="announcement-box">
-    <a href="#">
+        <a href="#">
             <h2>VIETNAMESE OSU!TAIKO TOURNAMENT 1</h2>
             <img src="" alt="VOT1 Banner">
             <p>
