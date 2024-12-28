@@ -4,27 +4,27 @@
 ENV=$1
 
 if [ -z "$ENV" ]; then
-  echo "No environment specified. Use 'dev', 'stage', or 'prod'."
+  echo "Please use one of the following accepted environment names: 'dev', 'stage', and 'prod'!"
   exit 1
 fi
 
-# Define the .env file based on the environment
-ENV_FILE="../src/private/.env.$ENV"
+# Define the docker-compose.env file based on the environment
+ENV_FILE="../docker-compose.env-$ENV"
 
-# Check if the .env file exists
+# Check if the docker-compose.env file exists
 if [ ! -f "$ENV_FILE" ]; then
-  echo "Environment file $ENV_FILE not found."
+  echo "Requested environment file: $ENV_FILE not found! Consider create one on your own using the same file format and try again."
   exit 1
 fi
 
-# Load the environment variables from the .env file
+# Load the environment variables from the docker-compose.env file
 export $(grep -v '^#' "$ENV_FILE" | xargs)
 
 # Validate required environment variables
-REQUIRED_VARS=("DATABASE_NAME" "DATABASE_USER" "DATABASE_PASSWORD" "DATABASE_ROOT_PASSWORD")
-for var in "${REQUIRED_VARS[@]}"; do
-  if [ -z "${!var}" ]; then
-    echo "Required environment variable $var is not set."
+ENV_VARS=("DATABASE_ROOT_PASSWORD" "DATABASE_NAME" "DATABASE_USER" "DATABASE_PASSWORD")
+for env_var in "${ENV_VARS[@]}"; do
+  if [ -z "${!env_var}" ]; then
+    echo "Required environment variable: $var is not set!"
     exit 1
   fi
 done
@@ -33,7 +33,7 @@ done
 export ENV
 
 # Shutdown Docker Compose
-echo "Shutting down for environment: $ENV"
+echo "Shutting down Docker for '$ENV' stage..."
 docker-compose down
 
 # Clean up unused Docker images
@@ -68,4 +68,4 @@ docker image prune -f --filter "dangling=true"
 echo "Removing all unused local volumes..."
 docker volume prune -f
 
-echo "Docker session for environment $ENV has been shut down and thoroughly cleaned up."
+echo "Docker session for stage '$ENV' has been shut down and cleaned!"

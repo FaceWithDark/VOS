@@ -32,8 +32,15 @@ done
 # Export the environment variable
 export ENV
 
+# Shutdown Docker Compose
+echo "Shutting down Docker for '$ENV' stage..."
+docker-compose down
+
+echo "Docker session for stage '$ENV' has been shut down! Waiting for rebuild..."
+
 # Run Docker Compose with the specified environment
-echo "Setting up Docker for '$ENV' stage..."
+echo "Rebuild for '$ENV' stage..."
 docker-compose up --build -d
 
-echo "Setting up successfully for '$ENV' stage!"
+echo "Rebuild successfully for '$ENV' stage!"
+
