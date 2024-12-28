@@ -22,36 +22,28 @@ desktop.ini
 
 # Server static web configuration
 *.htaccess
-.htaccess.*
 *.htaccess.*
-.htaccess-*
 *.htaccess-*
 !.htaccess.example
 !.htaccess-example
 
 # NGINX
 *.conf
-.conf.*
 *.conf.*
-.conf-*
 *.conf-*
 !.conf.example
 !.conf-example
 
 # PHP
 *.ini
-.ini.*
 *.ini.*
-.ini-*
 *.ini-*
 !.ini.example
 !.ini-example
 
 # Sus information except the template one
 *.env
-.env.*
 *.env.*
-.env-*
 *.env-*
 !.env.example
 !.env-example
