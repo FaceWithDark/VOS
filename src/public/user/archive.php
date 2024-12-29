@@ -1,5 +1,5 @@
 <?php
-require_once '../layouts/navigation_bar.php';
+require_once '../templates/navigation_bar.php';
 ?>
 
 <div class="archived-page">

@@ -2,11 +2,13 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
+require_once __DIR__ . '/../../private/vendor/autoload.php';
+
 // Sent another request to fetch the user's profile details incl name, avatar, etc. 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
-require 'configuration.php';
+require '../../private/config/configuration.php';
 
 // Fetch user data from the Osu! API
 function getUserDetail()
@@ -53,17 +55,15 @@ $userData = getUserDetail();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VOT</title>
 
-    <link rel="stylesheet" type="text/css" href="../../public/assets/css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../../public/assets/css/main.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="../assets/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/main.css">
+    <link rel='stylesheet' type="text/css" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
 
     <!-- Favicon images compatibility across mobile/desktop. -->
-    <link rel="apple-touch-icon" sizes="512x512" href="../../public/assets/ico/android-chrome-512x512.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="../../public/assets/ico/android-chrome-192x192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="../../public/assets/ico/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../../public/assets/ico/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../../public/assets/ico/favicon-16x16.png">
-    <link rel="manifest" href="../../public/assets/ico/site.webmanifest">
+    <link rel="browser-web-icon" type="image/png" sizes="32x32" href="../assets/ico/favicon-32x32.png">
+    <link rel="browser-web-icon" type="image/png" sizes="16x16" href="../assets/ico/favicon-16x16.png">
+    <link rel="android-web-manifest" type="application/manifest+json" href="../assets/ico/site.webmanifest">
+    <link rel="ios-web-icon" type="image/png" sizes="180x180" href="../assets/ico/apple-touch-icon.png">
 </head>
 
 <body>
@@ -82,28 +82,28 @@ $userData = getUserDetail();
 
             <ul>
                 <li>
-                    <a href="../pages/index.php">
+                    <a href="../user/home.php">
                         <i class="bx bxs-grid-alt"></i>
                         <p>Home</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../pages/archive.php">
+                    <a href="../user/archive.php">
                         <i class="bx bxs-box"></i>
                         <p>Archive<p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../pages/staff.php">
+                    <a href="../user/staff.php">
                         <i class="bx bxs-phone"></i>
                         <p>Staff</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../pages/song.php">
+                    <a href="../user/song.php">
                         <i class="bx bxs-music"></i>
                         <p>Song</p>
                     </a>
@@ -124,7 +124,7 @@ $userData = getUserDetail();
 
         <?php else: ?>
             <div class="failed-user-info">
-                <img src="../assets/images/FaliedAuthenticationImage.webp" alt="Sus?" class="authentication-failed-image">
+                <img src="../assets/img/FaliedAuthenticationImage.webp" alt="Sus?" class="authentication-failed-image">
                 <p>Sussy Baka</p>
             </div>
 
@@ -137,28 +137,28 @@ $userData = getUserDetail();
                 </li>
 
                 <li>
-                    <a href="../pages/index.php">
+                    <a href="../user/home.php">
                         <i class="bx bxs-grid-alt"></i>
                         <p>Home</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../pages/archive.php">
+                    <a href="../user/archive.php">
                         <i class="bx bxs-box"></i>
                         <p>Archive</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../pages/staff.php">
+                    <a href="../user/staff.php">
                         <i class="bx bxs-phone"></i>
                         <p>Staff</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../pages/song.php">
+                    <a href="../user/song.php">
                         <i class="bx bxs-music"></i>
                         <p>Song</p>
                     </a>
@@ -172,7 +172,7 @@ $userData = getUserDetail();
         <?php endif; ?>
     </nav>
 
-    <script src="../../public/assets/js/activeButton.js" type="text/javascript"></script>
+    <script src="../assets/js/activeButton.js" type="text/javascript"></script>
 </body>
 
 </html>
