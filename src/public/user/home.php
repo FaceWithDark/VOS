@@ -1,5 +1,5 @@
 <?php
-require_once '../../private/config/navigation_bar.php';
+require_once '../templates/navigation_bar.php';
 ?>
 
 <section class="tournament-news">

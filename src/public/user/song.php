@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../private/vendor/autoload.php';
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
-require_once '../layouts/navigation_bar.php';
+require_once '../templates/navigation_bar.php';
 include_once '../modules/convertion/time_convertion.php';
 
 // Fetch custom song data from the Osu! API

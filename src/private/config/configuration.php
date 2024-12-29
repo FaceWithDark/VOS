@@ -31,7 +31,7 @@ try {
 
     // Handling if SQL execution test is correct or not
     if ($queryStatement->execute()) {
-        error_log("Statement executed!", 0);
+        error_log("Statement executed!!", 0);
         return true;
     } else {
         error_log("Statement not executed!!", 0);
