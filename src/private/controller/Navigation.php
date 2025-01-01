@@ -2,7 +2,9 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../private/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+#echo "Current directory for navigation_bar.php page: " . __DIR__ . '<br>';
 
 // Sent another request to fetch the user's profile details incl name, avatar, etc. 
 use GuzzleHttp\Client;
@@ -55,15 +57,15 @@ $userData = getUserDetail();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VOT</title>
 
-    <link rel="stylesheet" type="text/css" href="../assets/css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/../assets/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/../assets/css/main.css">
     <link rel='stylesheet' type="text/css" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
 
     <!-- Favicon images compatibility across mobile/desktop. -->
-    <link rel="browser-web-icon" type="image/png" sizes="32x32" href="../assets/ico/favicon-32x32.png">
-    <link rel="browser-web-icon" type="image/png" sizes="16x16" href="../assets/ico/favicon-16x16.png">
-    <link rel="android-web-manifest" type="application/manifest+json" href="../assets/ico/site.webmanifest">
-    <link rel="ios-web-icon" type="image/png" sizes="180x180" href="../assets/ico/apple-touch-icon.png">
+    <link rel="browser-web-icon" type="image/png" sizes="32x32" href="/../assets/ico/favicon-32x32.png">
+    <link rel="browser-web-icon" type="image/png" sizes="16x16" href="/../assets/ico/favicon-16x16.png">
+    <link rel="android-web-manifest" type="application/manifest+json" href="/../assets/ico/site.webmanifest">
+    <link rel="ios-web-icon" type="image/png" sizes="180x180" href="/../assets/ico/apple-touch-icon.png">
 </head>
 
 <body>
@@ -82,35 +84,35 @@ $userData = getUserDetail();
 
             <ul>
                 <li>
-                    <a href="../user/home.php">
+                    <a href="/../user/home.php">
                         <i class="bx bxs-grid-alt"></i>
                         <p>Home</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../user/archive.php">
+                    <a href="/../user/archive.php">
                         <i class="bx bxs-box"></i>
                         <p>Archive<p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../user/staff.php">
+                    <a href="/../user/staff.php">
                         <i class="bx bxs-phone"></i>
                         <p>Staff</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../user/song.php">
+                    <a href="/../user/song.php">
                         <i class="bx bxs-music"></i>
                         <p>Song</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../modules/user/logout.php">
+                    <a href="/../modules/user/logout.php">
                         <i class='bx bx-user-minus'></i>
                         <p>Logout</p>
                     </a>
@@ -124,41 +126,41 @@ $userData = getUserDetail();
 
         <?php else: ?>
             <div class="failed-user-info">
-                <img src="../assets/img/FaliedAuthenticationImage.webp" alt="Sus?" class="authentication-failed-image">
+                <img src="/../assets/img/FaliedAuthenticationImage.webp" alt="Sus?" class="authentication-failed-image">
                 <p>Sussy Baka</p>
             </div>
 
             <ul>
                 <li>
-                    <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID'] ?>&redirect_uri=<?= $_ENV['CALLBACK_URL'] ?>&response_type=code&scope=public+identify&state=randomise">
+                    <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID']; ?>&redirect_uri=<?= $_ENV['CALLBACK_URL']; ?>&response_type=code&scope=public+identify&state=randomise">
                         <i class='bx bx-user-plus'></i>
                         <p>Login</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../user/home.php">
+                    <a href="/../user/home.php">
                         <i class="bx bxs-grid-alt"></i>
                         <p>Home</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../user/archive.php">
+                    <a href="/../user/archive.php">
                         <i class="bx bxs-box"></i>
                         <p>Archive</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../user/staff.php">
+                    <a href="/../user/staff.php">
                         <i class="bx bxs-phone"></i>
                         <p>Staff</p>
                     </a>
                 </li>
 
                 <li>
-                    <a href="../user/song.php">
+                    <a href="/../user/song.php">
                         <i class="bx bxs-music"></i>
                         <p>Song</p>
                     </a>
@@ -172,7 +174,7 @@ $userData = getUserDetail();
         <?php endif; ?>
     </nav>
 
-    <script src="../assets/js/activeButton.js" type="text/javascript"></script>
+    <script src="/../assets/js/activeButton.js" type="text/javascript"></script>
 </body>
 
 </html>

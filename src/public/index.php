@@ -2,5 +2,6 @@
 <p style="display: flex; justify-content: end; align-items: end; font-weight: bold;"><a href="user/home.php">Home Page</a></p>
 
 <?php
+#echo "Current directory for entry point page: " . __DIR__ . '<br>';
 phpinfo();
 ?>

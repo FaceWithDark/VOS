@@ -1,5 +1,6 @@
 <?php
-require_once '../templates/navigation_bar.php';
+require_once '../../private/controller/Navigation.php';
+#echo "Current directory for public home.php page: " . __DIR__ . '<br>';
 ?>
 
 <section class="tournament-news">
