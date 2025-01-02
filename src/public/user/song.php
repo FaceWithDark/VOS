@@ -1,14 +1,12 @@
 <?php
-
+# Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../private/vendor/autoload.php';
+require_once '../../private/controller/VotController.php';
+include_once '../modules/convertion/time_convertion.php';
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-
-require_once '../templates/navigation_bar.php';
-include_once '../modules/convertion/time_convertion.php';
 
 // Fetch custom song data from the Osu! API
 function fetchCustomSongData($customSongId, $phpDataObject)

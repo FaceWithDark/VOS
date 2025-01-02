@@ -1,5 +1,8 @@
 <?php
-require_once '../templates/navigation_bar.php';
+# Not so much like static types, but at least it does feel better having this here
+declare(strict_types=1);
+
+require_once '../../private/controller/VotController.php';
 ?>
 
 <div class="archived-page">

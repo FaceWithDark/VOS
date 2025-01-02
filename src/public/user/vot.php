@@ -1,5 +1,8 @@
 <?php
-    require_once "../layouts/navigation_bar.php";
+# Not so much like static types, but at least it does feel better having this here
+declare(strict_types=1);
+
+require_once '../../private/controller/VotController.php';
 ?>
 
 <div class="vot-page">
@@ -78,7 +81,7 @@
             <div class="stage-section">
                 <h2>Stages</h2>
 
-                <ul>                
+                <ul>
                     <li>Regstration: 10/06 - 23/06</li>
                     <li>Screening: 23/06 - 30/06</li>
                     <li>Qualifiers:30/06 - 07/07</li>
@@ -104,10 +107,10 @@
             <div class="regulation-section">
 
                 <h2>Regulations</h2>
-            
+
                 <div class="small-section-1">
                     <h3>Qualifiers</h3>
-                    
+
                     <ul>
                         <li>During this round there will be multiple lobbies available at various hours.</li>
                         <li>A private match will be created and player will be invited into the lobby when it's their time. Make certain you're online at this time.</li>
@@ -185,11 +188,11 @@
                     <ul>
                         <li>
                             I really love davidminh0111. Like, a lot. Like, a whole lot. You have no idea. I love him so much that it is inexplicable, and I'm ninety-nine percent sure that I have an unhealthy obsession. I will never get tired of listening that sweet, angelic voice of him. It is my life goal to meet up him with him in real life and just say hello to him.
-                            
+
                             I fall asleep at night dreaming of him holding a personal concert for me, and then he would be sorry tired that he comes and cuddles up to me while we sleep together. If I could just hold him hand for a brief moment, I could die happy. If given the opportunity, I would lightly nibble on him ear just to hear what kind of sweet moans he would let out. Then, I would hug him while he clings to my body hoping that I would stop, but I only continue as he moans louder and louder.
-                            
+
                             I would give up almost anything just for him to look in my general direction. No matter what I do, I am constantly thinking of him. When I wake up, he is the first thing on my mind. When I go to school, I can only focus on him. When I go come home, I go on the computer so that I can listen to him beautiful voice. When I go to sleep, I dream of him and I living a happy life together. he is my pride, passion, and joy. If he were to call me "Onii-chan," I would probably get diabetes from him sweetness and die.
-                            
+
                             I wish for nothing but him happiness. If it were for him, I would give my life without any second thoughts. Without him, my life would serve no purpose. I really love davidminh0111.
                         </li>
                     </ul>
@@ -197,7 +200,7 @@
             </div>
         </div>
 
-    <!-- 
+        <!-- 
         TODO:
         - This is for future purpose (or might be not). If I am being lazy, this will be the one to be use:
 

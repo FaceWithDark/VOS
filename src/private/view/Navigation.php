@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-#echo "Current directory for navigation_bar.php page: " . __DIR__ . '<br>';
-
 // Sent another request to fetch the user's profile details incl name, avatar, etc. 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
-require '../../private/config/configuration.php';
+require __DIR__ . '/../config/configuration.php';
 
 // Fetch user data from the Osu! API
 function getUserDetail()
