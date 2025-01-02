@@ -1,13 +1,11 @@
 <?php
-
+# Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../private/vendor/autoload.php';
+require_once '../../private/controller/VotController.php';
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-
-require_once '../templates/navigation_bar.php';
 
 // Fetch staff data from the Osu! API
 function fetchStaffData($staffId, $tournamentName, $phpDataObject)

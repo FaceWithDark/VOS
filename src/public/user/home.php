@@ -1,6 +1,8 @@
 <?php
-require_once '../../private/controller/Navigation.php';
-#echo "Current directory for public home.php page: " . __DIR__ . '<br>';
+# Not so much like static types, but at least it does feel better having this here
+declare(strict_types=1);
+
+require_once '../../private/controller/VotController.php';
 ?>
 
 <section class="tournament-news">
