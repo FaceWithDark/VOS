@@ -56,8 +56,8 @@ if ($tokenData !== false) {
     // echo ('Token received');
     // Set the access token as an HTTP-only cookie
     if (!empty($tokenData->access_token)) {
-        setcookie('vot_access_token', $tokenData->access_token, time() + 86400, "/", "", false, true);
-        exit(header('Location: /user/home.php', true, 301));
+        setcookie('vot_access_token', $tokenData->access_token, time() + 86400, '/', '', false, true);
+        exit(header('Location: /user/Home.php', true, 302));
     }
 } else {
     exit('Error getting token');
