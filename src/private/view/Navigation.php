@@ -87,7 +87,7 @@ $userData = getUserDetail();
                 </li>
 
                 <li>
-                    <a href="/../user/archive.php">
+                    <a href="/../user/Archive.php">
                         <i class="bx bxs-box"></i>
                         <p>Archive<p>
                     </a>
@@ -142,7 +142,7 @@ $userData = getUserDetail();
                 </li>
 
                 <li>
-                    <a href="/../user/archive.php">
+                    <a href="/../user/Archive.php">
                         <i class="bx bxs-box"></i>
                         <p>Archive</p>
                     </a>
