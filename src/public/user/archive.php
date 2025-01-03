@@ -11,7 +11,7 @@ require_once '../../private/controller/VotController.php';
     </header>
 
     <section>
-        <form action="mappool.php" method="get">
+        <form action="Mappool.php" method="get">
             <div class="flex-container">
 
                 <div class="direct-link-container">

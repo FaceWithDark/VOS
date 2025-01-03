@@ -5,7 +5,7 @@
         "map_id": 3934128,
         "total_length": "00:03:20",
         "map_url": "https://osu.ppy.sh/beatmaps/1907809",
-        "cover_image_url": "../assets/images/vot3_semifinal_nm5_image.webp",
+        "cover_image_url": "../../public/assets/img/VOT3 Semifinal NM5.webp",
         "title_unicode": "Lullaby",
         "artist_unicode": "Snail's House",
         "difficulty": "a mimir",
