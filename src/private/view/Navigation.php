@@ -8,7 +8,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
-require __DIR__ . '/../config/configuration.php';
+require __DIR__ . '/../config/Configuration.php';
 
 // Fetch user data from the Osu! API
 function getUserDetail()
@@ -36,15 +36,13 @@ function getUserDetail()
         // API call did not return a 200 status
         return false;
     } catch (RequestException $exception) {
-        error_log($exception->getMessage());  // Log the exception message
-        return false;                           // An exception occurred during the API call
+        error_log($exception->getMessage()); // Log the exception message
+        return false;                        // An exception occurred during the API call
     }
 }
 
 // Get user data from the API call
 $userData = getUserDetail();
-
-// die('<pre>' . print_r($userData, true) . '</pre>');
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +80,7 @@ $userData = getUserDetail();
 
             <ul>
                 <li>
-                    <a href="/../user/home.php">
+                    <a href="/../user/Home.php">
                         <i class="bx bxs-grid-alt"></i>
                         <p>Home</p>
                     </a>
@@ -110,7 +108,7 @@ $userData = getUserDetail();
                 </li>
 
                 <li>
-                    <a href="/../modules/user/logout.php">
+                    <a href="/../admin/LogOutInterface.php">
                         <i class='bx bx-user-minus'></i>
                         <p>Logout</p>
                     </a>
@@ -137,7 +135,7 @@ $userData = getUserDetail();
                 </li>
 
                 <li>
-                    <a href="/../user/home.php">
+                    <a href="/../user/Home.php">
                         <i class="bx bxs-grid-alt"></i>
                         <p>Home</p>
                     </a>
