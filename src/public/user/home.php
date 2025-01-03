@@ -18,7 +18,7 @@ require_once '../../private/controller/VotController.php';
     <div class="announcement-box">
         <a href="vot.php">
             <h2>VIETNAMESE OSU!TAIKO TOURNAMENT 4</h2>
-            <img src="../assets/images/VOT4.webp" alt="VOT4 Banner">
+            <img src="/../assets/img/VOT4.webp" alt="VOT4 Banner">
             <p>
                 The Vietnamese osu!taiko Tournament, a cornerstone event in the Vietnamese osu!taiko community. It is our 1v1 tournament for Vietnamese players with no rank restrictions, open to all skill levels. The players will first compete in Qualifiers. Then, they will progress through a Double-elimination Bracket, keeping the competitive syndrome burning until the very last crowning glory - the Grand Finals! Are you ready to make history in the Vietnamese osu!taiko scene? VOT4 is calling, and it's time to answer! Let the drums roll and may the best taiko player win!
             </p>
@@ -28,7 +28,7 @@ require_once '../../private/controller/VotController.php';
     <div class="announcement-box">
         <a href="#">
             <h2>VIETNAMESE OSU!TAIKO TOURNAMENT 3</h2>
-            <img src="../assets/images/VOT3.webp" alt="VOT3 Banner">
+            <img src="/../assets/img/VOT3.webp" alt="VOT3 Banner">
             <p>
                 The Vietnamese osu!taiko Tournament, a cornerstone event in the Vietnamese osu!taiko community. It is our 1v1 tournament for Vietnamese players with no rank restrictions, open to all skill levels. The players will first compete in Qualifiers. Then, they will progress through a Double-elimination Bracket, keeping the competitive syndrome burning until the very last crowning glory - the Grand Finals! Are you ready to make history in the Vietnamese osu!taiko scene? VOT3 is calling, and it's time to answer! Let the drums roll and may the best taiko player win!
             </p>
@@ -38,7 +38,7 @@ require_once '../../private/controller/VotController.php';
     <div class="announcement-box">
         <a href="#">
             <h2>VIETNAMESE OSU!TAIKO TOURNAMENT 2</h2>
-            <img src="../assets/images/VOT2.webp" alt="VOT2 Banner">
+            <img src="/../assets/img/VOT2.webp" alt="VOT2 Banner">
             <p>
                 The Vietnamese osu!taiko Tournament, a cornerstone event in the Vietnamese osu!taiko community. It is our 1v1 tournament for Vietnamese players with no rank restrictions, open to all skill levels. The players will first compete in Qualifiers. Then, they will progress through a Double-elimination Bracket, keeping the competitive syndrome burning until the very last crowning glory - the Grand Finals! Are you ready to make history in the Vietnamese osu!taiko scene? VOT2 is calling, and it's time to answer! Let the drums roll and may the best taiko player win!
             </p>
@@ -48,7 +48,7 @@ require_once '../../private/controller/VotController.php';
     <div class="announcement-box">
         <a href="#">
             <h2>VIETNAMESE OSU!TAIKO TOURNAMENT 1</h2>
-            <img src="" alt="VOT1 Banner">
+            <img src="/../assets/img/VOT1.webp" alt="VOT1 Banner">
             <p>
                 The Vietnamese osu!taiko Tournament, a cornerstone event in the Vietnamese osu!taiko community. It is our 1v1 tournament for Vietnamese players with no rank restrictions, open to all skill levels. The players will first compete in Qualifiers. Then, they will progress through a Double-elimination Bracket, keeping the competitive syndrome burning until the very last crowning glory - the Grand Finals! Are you ready to make history in the Vietnamese osu!taiko scene? VOT1 is calling, and it's time to answer! Let the drums roll and may the best taiko player win!
             </p>
