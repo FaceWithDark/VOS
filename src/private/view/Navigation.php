@@ -101,7 +101,7 @@ $userData = getUserDetail();
                 </li>
 
                 <li>
-                    <a href="/../user/song.php">
+                    <a href="/../user/Song.php">
                         <i class="bx bxs-music"></i>
                         <p>Song</p>
                     </a>
@@ -156,7 +156,7 @@ $userData = getUserDetail();
                 </li>
 
                 <li>
-                    <a href="/../user/song.php">
+                    <a href="/../user/Song.php">
                         <i class="bx bxs-music"></i>
                         <p>Song</p>
                     </a>
