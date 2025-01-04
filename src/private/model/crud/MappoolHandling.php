@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 include_once __DIR__ . '/../../controller/utility/MappoolDurationFormat.php';
 
-// Sent another request to fetch the user's profile details incl name, avatar, etc. 
+// START: strictly needed code lines to enabling Composer package usages
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+// END: strictly needed code lines to enabling Composer package usages
 
 // Fetch beatmap data from the Osu! API
 function fetchBeatmapData($beatmapId, $tournamentName, $tournamentRound, $phpDataObject)
