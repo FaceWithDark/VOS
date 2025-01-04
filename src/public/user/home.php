@@ -16,7 +16,8 @@ require_once '../../private/controller/VotController.php';
     </div>
 
     <div class="announcement-box">
-        <a href="vot.php">
+        <!-- TODO: sent query parameters with this redirect to indicate it's the Landing page of which tournament? -->
+        <a href="Landing.php">
             <h2>VIETNAMESE OSU!TAIKO TOURNAMENT 4</h2>
             <img src="/../assets/img/VOT4.webp" alt="VOT4 Banner">
             <p>
