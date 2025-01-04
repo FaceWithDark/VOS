@@ -4,27 +4,34 @@
 ENV=$1
 
 if [ -z "$ENV" ]; then
-  echo "Please use one of the following accepted environment names: 'dev', 'stage', and 'prod'!"
+  echo "Please use one of the following accepted build phases: 'dev', 'stage', and 'prod'!"
   exit 1
 fi
 
-# Define the docker-compose.env file based on the environment
-ENV_FILE="../docker-compose.env-$ENV"
+# Define Docker-needed configuration files based on the environment
+ENV_FILE="../docker-compose.$ENV.env"
+YAML_FILE="../docker-compose.$ENV.yaml"
 
-# Check if the docker-compose.env file exists
+# Make sure the script found .env file based on the environment
 if [ ! -f "$ENV_FILE" ]; then
   echo "Requested environment file: $ENV_FILE not found! Consider create one on your own using the same file format and try again."
   exit 1
 fi
 
-# Load the environment variables from the docker-compose.env file
+# Make sure the script found .yaml file based on the environment
+if [ ! -f "$YAML_FILE" ]; then
+  echo "Requested YAML file: $YAML_FILE not found! Consider create one on your own using the same file format and try again."
+  exit 1
+fi
+
+# Load needed variables from the environment file based on the environment
 export $(grep -v '^#' "$ENV_FILE" | xargs)
 
 # Validate required environment variables
 ENV_VARS=("DATABASE_ROOT_PASSWORD" "DATABASE_NAME" "DATABASE_USER" "DATABASE_PASSWORD")
 for env_var in "${ENV_VARS[@]}"; do
   if [ -z "${!env_var}" ]; then
-    echo "Required environment variable: $var is not set!"
+    echo "Required environment variable: '$env_var' is not set!"
     exit 1
   fi
 done
@@ -33,7 +40,7 @@ done
 export ENV
 
 # Run Docker Compose with the specified environment
-echo "Setting up Docker for '$ENV' stage..."
-docker-compose up --build -d
+echo "Setting up Docker for '$ENV' phase..."
+docker-compose -f "$YAML_FILE" up --build -d
 
-echo "Setting up successfully for '$ENV' stage!"
+echo "Setting up successfully for '$ENV' phase!"
