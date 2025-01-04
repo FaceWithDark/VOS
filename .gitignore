@@ -22,40 +22,47 @@ desktop.ini
 
 # Server static web configuration
 *.htaccess
-*.htaccess.*
-*.htaccess-*
-!.htaccess.example
-!.htaccess-example
+*.*.htaccess
+*-*.htaccess
+!example.htaccess
 
 # NGINX
 *.conf
-*.conf.*
-*.conf-*
-!.conf.example
-!.conf-example
+*.*.conf
+*-*.conf
+!example.conf
 
 # PHP
 *.ini
-*.ini.*
-*.ini-*
-!.ini.example
-!.ini-example
+*.*ini
+*-*ini
+!example.ini
 
 # Sus information except the template one
 *.env
-*.env.*
-*.env-*
-!.env.example
-!.env-example
+*.*.env
+*-*.env
+!example.env
 
 # Docker building files
-docker-compose.yaml
-docker-compose.yml
-!docker-compose.yaml.example
-!docker-compose.yaml-example
+*docker-compose.yaml
+*docker-compose.*.yaml
+*docker-compose-*.yaml
 
+*docker-compose.yml
+*docker-compose.*.yml
+*docker-compose-*.yml
+
+!docker-compose.example.yaml
+!docker-compose-example.yaml
+
+!docker-compose.example.yml
+!docker-compose-example.yml
+
+# Ref: https://docs.docker.com/build/concepts/dockerfile/#filename
 *Dockerfile
-!Dockerfile.example
-!Dockerfile-example
+*.Dockerfile
+
+!example.Dockerfile
 
 .dockerignore
