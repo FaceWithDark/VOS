@@ -94,7 +94,7 @@ $userData = getUserDetail();
                 </li>
 
                 <li>
-                    <a href="/../user/staff.php">
+                    <a href="/../user/Staff.php">
                         <i class="bx bxs-phone"></i>
                         <p>Staff</p>
                     </a>
@@ -149,7 +149,7 @@ $userData = getUserDetail();
                 </li>
 
                 <li>
-                    <a href="/../user/staff.php">
+                    <a href="/../user/Staff.php">
                         <i class="bx bxs-phone"></i>
                         <p>Staff</p>
                     </a>
