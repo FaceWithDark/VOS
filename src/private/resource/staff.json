@@ -1,8 +1,82 @@
 {
+  "vot3": [
+    {
+      "id": 9623142,
+      "role": "Host, Mappooler, Custom Mapper, Playtester, Referee, Commentator"
+    },
+    {
+      "id": 16039831,
+      "role": "Host, Mappooler, Designer, Custom Mapper, Playtester, Commentator"
+    },
+    {
+      "id": 16688499,
+      "role": "Host, Mappooler, Designer, Custom Mapper, Playtester, Referee, Streamer, Commentator"
+    },
+    {
+      "id": 7169208,
+      "role": "Custom Mapper"
+    },
+    {
+      "id": 22522738,
+      "role": "Custom Mapper"
+    },
+    {
+      "id": 22515524,
+      "role": "Custom Mapper, Playtester, Referee"
+    },
+    {
+      "id": 8301957,
+      "role": "Custom Mapper"
+    },
+    {
+      "id": 6291741,
+      "role": "Custom Mapper"
+    },
+    {
+      "id": 10547864,
+      "role": "Composer"
+    },
+    {
+      "id": 11411697,
+      "role": "Playtester"
+    },
+    {
+      "id": 26012543,
+      "role": "Referee, Commentator"
+    },
+    {
+      "id": 17148657,
+      "role": "Referee"
+    },
+    {
+      "id": 19787040,
+      "role": "Referee"
+    },
+    {
+      "id": 13456818,
+      "role": "Referee"
+    },
+    {
+      "id": 7789926,
+      "role": "Streamer"
+    },
+    {
+      "id": 15815791,
+      "role": "Streamer"
+    },
+    {
+      "id": 21290592,
+      "role": "Commentator"
+    },
+    {
+      "id": 10494860,
+      "role": "Commentator"
+    }
+  ],
   "vot4": [
     {
       "id": 9623142,
-      "role": "Host, Mappooler, GFX / VFX, Mapper, Playtester, Referee, Commentator"
+      "role": "Host, Mappooler, GFX / VFX, Custom Mapper, Playtester, Referee, Commentator"
     },
     {
       "id": 26012543,
@@ -14,11 +88,11 @@
     },
     {
       "id": 11833538,
-      "role": "Mappooler, Mapper"
+      "role": "Mappooler, Custom Mapper"
     },
     {
       "id": 16039831,
-      "role": "GFX / VFX, Mapper, Playtester, Commentator"
+      "role": "GFX / VFX, Custom Mapper, Playtester, Commentator"
     },
     {
       "id": 14083855,
@@ -38,63 +112,63 @@
     },
     {
       "id": 17302272,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 7169208,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 22522738,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 22515524,
-      "role": "Mapper, Referee"
+      "role": "Custom Mapper, Referee"
     },
     {
       "id": 3724819,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 8631719,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 2865172,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 3738344,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 14520910,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 17916791,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 12510704,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 2345156,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 11056763,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 1109122,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 26190106,
-      "role": "Mapper"
+      "role": "Custom Mapper"
     },
     {
       "id": 2228401,
