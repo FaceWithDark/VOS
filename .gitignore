@@ -53,11 +53,8 @@ desktop.ini
 *docker-compose.*.yml
 *docker-compose-*.yml
 
-!docker-compose.example.yaml
-!docker-compose-example.yaml
-
-!docker-compose.example.yml
-!docker-compose-example.yml
+!example.yaml
+!example.yml
 
 # Ref: https://docs.docker.com/build/concepts/dockerfile/#filename
 *Dockerfile
