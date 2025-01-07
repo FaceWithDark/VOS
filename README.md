@@ -1,15 +1,13 @@
-# Project Title
-
-An osu!taiko website created mainly for up-to-date Vietnamese tournaments related to Taiko mode for osu!.
-
-## Requirements
-
-- PHP 8.0+
-- MySQL 8.0+
+# VOT
+<p align="center" width="100%">
+    <img src="src/public/assets/img/VOT.png" alt="VOT Image" width="50%" height="auto">
+    <br>
+    Vietnamese <a href="https://osu.ppy.sh/">osu!</a> website dedicated to Taiko mode.
+</p>
 
 ## Getting Started
 
-- TODO: Proper environment setup for PHP ecosystem and writing guides for setting it up for other devs wanted to help with.
+Go to this well-written [setup guide](doc/SETUP.md) on how to setup the development environment as quickly as you can.
 
 ## Contributing
 

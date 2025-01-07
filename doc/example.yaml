@@ -1,0 +1,73 @@
+services:
+  # **Side note before customising this file:                                                        #
+  # ------------------------------------------------------------------------------------------------ #
+  # - In my YAML file, I have set to use a custom name for each containers as I find myself          #
+  #   feeling uneasy with the default name generated when execute the corresponding                  #
+  #   'docker-compose' command.                                                                      #
+  #                                                                                                  #
+  # - If you're good with the default name, feel free to not include 'container_name: <custom-name>' #
+  #   key in every container block.                                                                  #
+
+  # PHP setup
+  vot-app:
+    build:
+      context: .
+      dockerfile: ./docker/php/${ENV}.Dockerfile
+
+    env_file:
+      - path: docker-compose.${ENV}.env
+        required: true
+        format: raw
+
+    volumes:
+      - ./src/private/vendor:/var/www/private/vendor # Cool trick utilising Docker's caching feature
+      - ./src:/var/www
+
+    restart: unless-stopped
+
+  # NGINX setup
+  vot-web:
+    image: nginx:latest
+
+    depends_on:
+      # Extra safe when running the container
+      - vot-app
+
+    ports:
+      # Feel free to change it to other port mapping if you're uneasy with the number.
+      - "8081:80"  # HTTP
+      - "8444:443" # SSL/TLS
+
+    volumes:
+      - ./docker/nginx/default.${ENV}.conf:/etc/nginx/conf.d/default.conf
+      - ./src:/var/www
+
+    restart: unless-stopped
+
+  # MariaDB setup
+  vot-db:
+    # Latest LTS version of MariaDB
+    image: mariadb:11.6.2
+
+    depends_on:
+      # Extra safe when running the container
+      - vot-web
+
+    ports:
+      # Feel free to change it to other port mapping if you're uneasy with the number.
+      - "3307:3306"
+
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+    environment:
+      # The other 3 can be omitted but I don't feel like so, sorry.
+      - MARIADB_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${DATABASE_NAME}
+      - MARIADB_USER=${DATABASE_USER}
+      - MARIADB_PASSWORD=${DATABASE_PASSWORD}
+
+    restart: unless-stopped
+
+volumes:
+  mariadb_data: {}
