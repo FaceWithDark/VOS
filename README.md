@@ -1,27 +1,9 @@
 # VOT
-<style>
-    .vot-image {
-        display: block;
-        margin: 1.5rem auto;
-        width: 50%;
-        height: auto;
-    }
-
-    .vot-text {
-        display: flex; 
-        justify-content: center; 
-        align-items: center;
-        font-weight: bold;
-    }
-
-    .vot-link {
-        margin: 0 .25rem;
-    }
-</style>
-
-<img src="src/public/assets/img/VOT.png" alt="VOT Image" class="vot-image">
-
-<p class="vot-text">Vietnamese <a href="https://osu.ppy.sh/" class="vot-link">osu!</a> website dedicated to Taiko mode.</p>
+<p align="center" width="100%">
+    <img src="src/public/assets/img/VOT.png" alt="VOT Image" width="50%" height="auto">
+    <br>
+    Vietnamese <a href="https://osu.ppy.sh/">osu!</a> website dedicated to Taiko mode.
+</p>
 
 ## Getting Started
 
