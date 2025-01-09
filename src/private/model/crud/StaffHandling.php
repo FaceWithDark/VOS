@@ -201,7 +201,7 @@ if ($tournamentName) {
 
             if ($accessToken) {
                 // Check if the staff data already exists in the database
-                if (!checkStaffData($staffData->id, $tournamentName, /*$staffRole,*/ $phpDataObject)) {
+                if (!checkStaffData($staffData->id, $tournamentName, $phpDataObject)) {
                     // If not, store the staff data in the database
                     storeStaffData($staffData, $staffRole, $tournamentName, $phpDataObject);
                 } else {
