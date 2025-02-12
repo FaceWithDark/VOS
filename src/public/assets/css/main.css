@@ -83,7 +83,6 @@ header h1 {
  */
 
 nav {
-    /* background-color: rgba(255, 20, 20, 0.5); */
     position: fixed;
     background-color: rgba(35, 35, 35, 1);
     width: 5rem;
@@ -92,13 +91,13 @@ nav {
 }
 
 /* Navigation Bar (Top Section) */
-.top-navigation-bar {
+.top-navigation-section {
     display: flex;
     justify-content: space-evenly;
     padding: 1rem 1rem 1rem 0;
 }
 
-.top-navigation-bar strong {
+.top-navigation-section strong {
     transition: all 0.15s linear;
     opacity: 0;
 }
@@ -108,7 +107,7 @@ nav.active-button {
     flex-shrink: 0;
 }
 
-.top-navigation-bar #click-button {
+.top-navigation-section #click-button {
     position: absolute;
     font-size: 1.175rem;
     margin-left: 1.25rem;
@@ -122,25 +121,25 @@ nav.active-button~.tournament-news,
 .song-page,
 .mappool-page,
 .vot-page {
-    margin-left: .25rem;
-    width: calc(100% - .25rem);
+    margin-left: 13rem;
+    width: calc(100% - 13rem);
 }
 
-nav.active-button .top-navigation-bar {
+nav.active-button .top-navigation-section {
     /* Safari compatability. */
     -webkit-user-select: none;
     /* Others broswer compatability. */
     user-select: none;
 }
 
-nav.active-button .top-navigation-bar strong {
+nav.active-button .top-navigation-section strong {
     font-weight: bold;
     text-wrap: nowrap;
     color: var(--background-colour);
     opacity: 1;
 }
 
-nav.active-button .top-navigation-bar #click-button {
+nav.active-button .top-navigation-section #click-button {
     margin-left: 9.5rem;
     transition: margin-left 0.3s linear;
 }
@@ -153,35 +152,34 @@ nav.active-button .top-navigation-bar #click-button {
 .vot-page {
     padding-top: 1rem;
     transition: margin-left 0.25s linear, width 0.25s linear;
-    width: calc(100% - .25rem);
-    margin-left: .25rem;
+    width: calc(100% - 7rem);
+    margin-left: 7rem;
 }
 
 /* Navigation Bar (First Middle Section) */
-.user-info,
-.failed-user-info {
+.middle-navigation-first-section {
     display: flex;
     align-items: center;
     margin: 1rem 0;
 }
 
-.user-info .user-image,
-.failed-user-info .authentication-failed-image {
+.middle-navigation-first-section .user-image,
+.middle-navigation-first-section .authentication-failed-image {
     width: 3.125rem;
     border-radius: 100%;
     border: 1px solid var(--accent-colour-alt);
     margin-left: .5rem;
 }
 
-.user-info p,
-.failed-user-info p {
+.middle-navigation-first-section p,
+.middle-navigation-first-section p {
     opacity: 0;
     text-wrap: nowrap;
     transition: 0.3s linear;
 }
 
-nav.active-button .user-info p,
-nav.active-button .failed-user-info p {
+nav.active-button .middle-navigation-first-section p,
+nav.active-button .middle-navigation-first-section p {
     opacity: 1;
     font-weight: 600;
     color: var(--background-colour);
@@ -190,16 +188,16 @@ nav.active-button .failed-user-info p {
 
 
 /* Navigation Bar (Second Middle Section) */
-nav ul {
+.middle-navigation-second-section ul {
     margin: 2rem 1.5rem;
     line-height: 3rem;
 }
 
-nav ul li:not(:last-child) {
+.middle-navigation-second-section ul li:not(:last-child) {
     margin-bottom: 7.25rem;
 }
 
-nav ul li a {
+.middle-navigation-second-section ul li a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -208,17 +206,17 @@ nav ul li a {
     padding: 0.15rem 0;
 }
 
-nav ul li a i {
+.middle-navigation-second-section ul li a i {
     position: absolute;
     font-size: 1.2rem;
 }
 
-nav ul li a p {
+.middle-navigation-second-section ul li a p {
     opacity: 0;
     text-wrap: nowrap;
 }
 
-nav ul li a:hover {
+.middle-navigation-second-section ul li a:hover {
     background-color: var(--secondary-colour);
     color: var(var(--background-colour));
     border-radius: 4rem;
@@ -235,15 +233,15 @@ nav.active-button ul li a i {
 
 /* Navigation Bar (Bottom Section) */
 
-nav ul li #dark-mode,
-nav ul li #light-mode {
+.bottom-navigation-section ul li #dark-mode,
+.bottom-navigation-section ul li #light-mode {
     justify-content: center;
     color: var(--background-colour);
     padding: 0.15rem 0;
     font-size: 1.2rem;
 }
 
-nav ul li:last-child {
+.bottom-navigation-section ul li:last-child {
     margin-top: 8.5rem;
 }
 
@@ -286,8 +284,8 @@ body.dark-theme {
 body.dark-theme nav ul li a,
 body.dark-theme nav.active-button .top-navigation-bar strong,
 body.dark-theme .top-navigation-bar #click-button,
-body.dark-theme nav.active-button .user-info p,
-body.dark-theme nav.active-button .failed-user-info p,
+body.dark-theme nav.active-button .middle-navigation-first-section p,
+body.dark-theme nav.active-button .middle-navigation-first-section p,
 body.dark-theme nav ul li #dark-mode,
 body.dark-theme nav ul li #light-mode {
     color: var(--accent-colour);
