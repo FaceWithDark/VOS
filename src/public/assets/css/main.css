@@ -1,10 +1,23 @@
-/* Default colour for some elements */
 :root {
-    --primary-colour: rgba(255, 20, 20, 1); /* Red */    
-    --secondary-colour: rgba(204, 85, 0, 1); /* Orange */
-    --accent-colour: rgba(0, 0, 0, 1); /* Black */
-    --accent-colour-alt: rgba(51, 51, 51, 1); /* Dark Grey */
-    --background-colour: rgba(255, 255, 255, 1); /* Pure White */
+    /*
+     *                          LIGHT MODE
+     * ===========================================================
+     *
+     * Colour pallete used for VOT website (Light Mode). In order:
+     *
+     *  - Red
+     *  - Orange
+     *  - Black
+     *  - Dark grey
+     *  - Pure white
+     *
+     */
+
+    --primary-colour: rgba(255, 20, 20, 1);
+    --secondary-colour: rgba(204, 85, 0, 1);
+    --accent-colour: rgba(0, 0, 0, 1);
+    --accent-colour-alt: rgba(51, 51, 51, 1);
+    --background-colour: rgba(255, 255, 255, 1);
 }
 
 /* General body elements format accross all pages */
@@ -56,31 +69,45 @@ header h1 {
 }
 
 
-/* SIDEWAY NAVIGATION BAR */
+/*              VERTICAL NAVIGATION BAR (LIGHT MODE)
+ * ============================================================
+ *
+ * This element will be divided into 4 main <div> tags for the
+ * sake of front-end whatever crap's maintainability. In order:
+ *
+ *  + top-nav-section
+ *  + middle-nav-first-section
+ *  + middle-nav-second-section
+ *  + bottom-nav-section
+ *
+ */
 
 nav {
-    /* background-color: rgba(255, 20, 20, 0.5); */
+    position: fixed;
     background-color: rgba(35, 35, 35, 1);
     width: 5rem;
     min-height: 100vh;
     transition: all 0.3s linear;
 }
 
-
-/* TOP NAVIGATION BAR */
-
-.top-navigation-bar {
+/* Navigation Bar (Top Section) */
+.top-navigation-section {
     display: flex;
     justify-content: space-evenly;
     padding: 1rem 1rem 1rem 0;
 }
 
-.top-navigation-bar strong {
+.top-navigation-section strong {
     transition: all 0.15s linear;
     opacity: 0;
 }
 
-.top-navigation-bar #click-button {
+nav.active-button {
+    width: 11rem;
+    flex-shrink: 0;
+}
+
+.top-navigation-section #click-button {
     position: absolute;
     font-size: 1.175rem;
     margin-left: 1.25rem;
@@ -88,93 +115,71 @@ nav {
     cursor: pointer;
 }
 
-
-/* EXPANDED NAVIGATION BAR */
-
-nav.active-button {
-    width: 11rem;
-    flex-shrink: 0;
-}
-
-
-/* MAIN CONTENT DYNAMIC RESIZE WITH NAVIGATION BAR */
-
-.tournament-news, 
-.archived-page, 
+nav.active-button~.tournament-news,
+.archived-page,
 .staff-page,
 .song-page,
 .mappool-page,
-.vot-page
-{
-    padding-top: 1rem;
-    transition: margin-left 0.25s linear, width 0.25s linear;
-    width: calc(100% - .25rem);
-    margin-left: .25rem;
+.vot-page {
+    margin-left: 13rem;
+    width: calc(100% - 13rem);
 }
 
-nav.active-button ~ 
-.tournament-news, 
-.archived-page, 
-.staff-page,
-.song-page,
-.mappool-page,
-.vot-page
-{
-    margin-left: .25rem;
-    width: calc(100% - .25rem);
+nav.active-button .top-navigation-section {
+    /* Safari compatability. */
+    -webkit-user-select: none;
+    /* Others broswer compatability. */
+    user-select: none;
 }
 
-
-/* TOP NAVIGATION BAR WHEN EXPANDED */
-
-nav.active-button .top-navigation-bar {
-    -webkit-user-select: none;  /* Safari compatability. */
-    user-select: none;          /* Others broswer compatability. */
-}
-
-nav.active-button .top-navigation-bar strong {
+nav.active-button .top-navigation-section strong {
     font-weight: bold;
     text-wrap: nowrap;
     color: var(--background-colour);
     opacity: 1;
 }
 
-nav.active-button .top-navigation-bar #click-button {
+nav.active-button .top-navigation-section #click-button {
     margin-left: 9.5rem;
     transition: margin-left 0.3s linear;
-} 
+}
 
+.tournament-news,
+.archived-page,
+.staff-page,
+.song-page,
+.mappool-page,
+.vot-page {
+    padding-top: 1rem;
+    transition: margin-left 0.25s linear, width 0.25s linear;
+    width: calc(100% - 7rem);
+    margin-left: 7rem;
+}
 
-/* USER AUTHENTICATED/UNAUTHENTICATED INFOMATION */
-
-.user-info, 
-.failed-user-info 
-{
+/* Navigation Bar (First Middle Section) */
+.middle-navigation-first-section {
     display: flex;
     align-items: center;
     margin: 1rem 0;
 }
 
-.user-info .user-image, 
-.failed-user-info .authentication-failed-image 
-{
-    width: 3.125rem; 
+.middle-navigation-first-section .user-image,
+.middle-navigation-first-section .authentication-failed-image {
+    width: 3.125rem;
     border-radius: 100%;
     border: 1px solid var(--accent-colour-alt);
     margin-left: .5rem;
 }
 
-.user-info p, 
-.failed-user-info p 
-{
+.middle-navigation-first-section p,
+.middle-navigation-first-section p {
     opacity: 0;
     text-wrap: nowrap;
     transition: 0.3s linear;
 }
 
-nav.active-button .user-info p, 
-nav.active-button .failed-user-info p 
-{
+nav.active-button .middle-navigation-first-section p,
+nav.active-button .middle-navigation-first-section p {
     opacity: 1;
     font-weight: 600;
     color: var(--background-colour);
@@ -182,18 +187,17 @@ nav.active-button .failed-user-info p
 }
 
 
-/* NAVIGATION LINKS */
-
-nav ul {
+/* Navigation Bar (Second Middle Section) */
+.middle-navigation-second-section ul {
     margin: 2rem 1.5rem;
     line-height: 3rem;
 }
 
-nav ul li:not(:last-child) {
+.middle-navigation-second-section ul li:not(:last-child) {
     margin-bottom: 7.25rem;
 }
 
-nav ul li a {
+.middle-navigation-second-section ul li a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -202,24 +206,21 @@ nav ul li a {
     padding: 0.15rem 0;
 }
 
-nav ul li a i {
+.middle-navigation-second-section ul li a i {
     position: absolute;
     font-size: 1.2rem;
 }
 
-nav ul li a p {
+.middle-navigation-second-section ul li a p {
     opacity: 0;
     text-wrap: nowrap;
 }
 
-nav ul li a:hover {
+.middle-navigation-second-section ul li a:hover {
     background-color: var(--secondary-colour);
     color: var(var(--background-colour));
     border-radius: 4rem;
 }
-
-
-/* NAVIGATION LINKS WHEN EXPANDED */
 
 nav.active-button ul li a p {
     opacity: 1;
@@ -230,12 +231,87 @@ nav.active-button ul li a i {
     position: relative;
 }
 
+/* Navigation Bar (Bottom Section) */
+
+.bottom-navigation-section ul li #dark-mode,
+.bottom-navigation-section ul li #light-mode {
+    justify-content: center;
+    color: var(--background-colour);
+    padding: 0.15rem 0;
+    font-size: 1.2rem;
+}
+
+.bottom-navigation-section ul li:last-child {
+    margin-top: 8.5rem;
+}
+
+
+/*                          DARK MODE
+ * ==========================================================
+ *
+ * Colour pallete used for VOT website (Dark Mode). In order:
+ *
+ *  - Slightly desaturated red
+ *  - Orange
+ *  - Pure white
+ *  - Lighter dark grey
+ *  - Slightly desaturated black
+ *
+ */
+
+body.dark-theme {
+    --primary-colour: rgba(255, 20, 20, 0.8);
+    --secondary-colour: rgba(204, 85, 0, 1);
+    --accent-colour: rgba(255, 255, 255, 1);
+    --accent-colour-alt: rgba(150, 150, 150, 1);
+    --background-colour: rgba(0, 0, 0, 0.8);
+}
+
+
+/*              VERTICAL NAVIGATION BAR (LIGHT MODE)
+ * ============================================================
+ *
+ * This element will be divided into 4 main <div> tags for the
+ * sake of front-end whatever crap's maintainability. In order:
+ *
+ *  + top-nav-section
+ *  + middle-nav-first-section
+ *  + middle-nav-second-section
+ *  + bottom-nav-section
+ *
+ */
+
+body.dark-theme nav ul li a,
+body.dark-theme nav.active-button .top-navigation-bar strong,
+body.dark-theme .top-navigation-bar #click-button,
+body.dark-theme nav.active-button .middle-navigation-first-section p,
+body.dark-theme nav.active-button .middle-navigation-first-section p,
+body.dark-theme nav ul li #dark-mode,
+body.dark-theme nav ul li #light-mode {
+    color: var(--accent-colour);
+}
+
+/* Other layout's dark mode customisation (TODO: Give a name for this) */
+body.dark-theme .announcement-box {
+    background-color: var(--accent-colour-alt);
+    border-right: 5px solid rgba(100, 100, 100, 1);
+    box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
+}
+
+body.dark-theme .direct-link-container,
+body.dark-theme .mappool-card-container,
+body.dark-theme .staff-card-container,
+body.dark-theme .song-card-container {
+    background-color: var(--accent-colour-alt);
+    border-right: 5px solid rgba(100, 100, 100, 1);
+    box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
+}
+
 
 /* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES*/
 
 .announcement-box,
-.lower-general-information-box
-{
+.lower-general-information-box {
     background-color: rgba(220, 220, 220, 1);
     margin: 0 3rem 1.5rem 1.25rem;
     border-radius: 1.5rem;
@@ -244,8 +320,7 @@ nav.active-button ul li a i {
 }
 
 .announcement-box h2,
-.lower-general-information-box h2 
-{
+.lower-general-information-box h2 {
     display: flex;
     justify-content: center;
     font-weight: bold;
@@ -254,8 +329,7 @@ nav.active-button ul li a i {
 }
 
 .announcement-box p,
-.lower-general-information-box ul li
-{
+.lower-general-information-box ul li {
     font-size: 1rem;
     font-weight: 500;
     color: var(--accent-colour);
@@ -293,8 +367,7 @@ nav.active-button ul li a i {
 .direct-link-container,
 .mappool-card-container,
 .staff-card-container,
-.song-card-container
-{
+.song-card-container {
     background-color: rgba(220, 220, 220, 1);
     padding: 1rem;
     margin-bottom: 1.5rem;
@@ -306,8 +379,7 @@ nav.active-button ul li a i {
 .direct-link-container:not(:first-child),
 .mappool-card-container:not(:first-child),
 .staff-card-container:not(:first-child),
-.song-card-container:not(:first-child)
-{
+.song-card-container:not(:first-child) {
     margin-left: .75rem;
 }
 
@@ -315,79 +387,30 @@ nav.active-button ul li a i {
     font-weight: bold;
     font-size: 0.85rem;
     color: var(--accent-colour);
-    -webkit-user-select: none; /* Safari compatability. */
-    user-select: none; /* Others broswer compatability. */
+    /* Safari compatability. */
+    -webkit-user-select: none;
+    /* Others broswer compatability. */
+    user-select: none;
 }
-
-/* DARK/LIGHT MODE TOGGLE ICON */
-
-nav ul li #dark-mode, nav ul li #light-mode {
-    justify-content: center;
-    color: var(--background-colour);
-    padding: 0.15rem 0;
-    font-size: 1.2rem;
-}
-
-nav ul li:last-child {
-    margin-top: 8.5rem;
-}
-
-
-/* DARK MODE */
-
-body.dark-theme {
-    --primary-colour: rgba(255, 20, 20, 0.8); /* Slightly desaturated red */
-    --secondary-colour: rgba(204, 85, 0, 1); /* Orange */
-    --accent-colour: rgba(255, 255, 255, 1); /* Pure White */
-    --accent-colour-alt: rgba(150, 150, 150, 1); /* Lighter dark grey */
-    --background-colour: rgba(0, 0, 0, 0.8); /* Slightly desaturated black */
-}
-
-body.dark-theme nav ul li a,
-body.dark-theme nav.active-button .top-navigation-bar strong,
-body.dark-theme .top-navigation-bar #click-button,
-body.dark-theme nav.active-button .user-info p, 
-body.dark-theme nav.active-button .failed-user-info p,
-body.dark-theme nav ul li #dark-mode, 
-body.dark-theme nav ul li #light-mode {
-    color: var(--accent-colour);
-}
-
-body.dark-theme .announcement-box {
-    background-color: var(--accent-colour-alt);
-    border-right: 5px solid rgba(100, 100, 100, 1);
-    box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
-}
-
-body.dark-theme .direct-link-container,
-body.dark-theme .mappool-card-container,
-body.dark-theme .staff-card-container,
-body.dark-theme .song-card-container
-{
-    background-color: var(--accent-colour-alt);
-    border-right: 5px solid rgba(100, 100, 100, 1);
-    box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
-}
-
 
 /* NO-HEADER PAGES */
 
 .mappool-page,
 .staff-page,
-.song-page
-{
+.song-page {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
 }
 
 .mappool-card-container a,
-.song-card-container a
-{
+.song-card-container a {
     font-weight: bold;
     color: var(--accent-colour);
-    -webkit-user-select: none; /* Safari compatability. */
-    user-select: none; /* Others broswer compatability. */
+    -webkit-user-select: none;
+    /* Safari compatability. */
+    user-select: none;
+    /* Others broswer compatability. */
 }
 
 .mappool-card-container h1,
@@ -397,8 +420,7 @@ body.dark-theme .song-card-container
 .song-card-container h2,
 .song-card-container h3,
 .beatmap-creator-row,
-.beatmap-attribute-row
-{
+.beatmap-attribute-row {
     display: flex;
     justify-content: center;
 }
@@ -406,8 +428,7 @@ body.dark-theme .song-card-container
 .mappool-card-container h1,
 .mappool-card-container h2,
 .song-card-container h1,
-.song-card-container h2
-{
+.song-card-container h2 {
     font-weight: bold;
 }
 
@@ -447,8 +468,7 @@ body.dark-theme .song-card-container
 /* CARD STYLE WITH HEADER PAGES */
 
 .staff-card-container h1,
-.staff-card-container h2
-{
+.staff-card-container h2 {
     display: flex;
     justify-content: center;
     font-weight: bold;
@@ -457,6 +477,7 @@ body.dark-theme .song-card-container
 .staff-card-container img:nth-child(1) {
     margin-right: .5rem;
 }
+
 .staff-card-container img:not(:first-child) {
     padding: 1.25rem 0;
 }
