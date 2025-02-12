@@ -3,4 +3,6 @@
 declare(strict_types=1);
 
 // TODO: Make this like a General File Manager (GFM). Therefore, proper handling needed
-include_once __DIR__ . '/../view/Navigation.php';
+require_once __DIR__ . '/../view/Navigation.php';
+
+//require_once 'admin/AuthorisationSystem.php';
