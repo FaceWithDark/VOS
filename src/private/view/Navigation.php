@@ -66,107 +66,121 @@ $userData = getUserDetail();
 
 <body>
     <nav>
-        <div class="top-navigation-bar">
+        <div class="top-navigation-section">
             <strong><i class="bx bxs-navigation">VOT</i></strong>
             <i class="bx bx-menu" id="click-button"></i>
         </div>
 
         <?php if ($userData): ?>
-            <div class="user-info">
+            <div class="middle-navigation-first-section">
                 <!-- TODO: Access this information from SQL using PHP (maybe not). -->
                 <img src="<?= htmlspecialchars($userData->avatar_url); ?>" alt="<?= htmlspecialchars($userData->username); ?>" class="user-image">
                 <p><?= htmlspecialchars($userData->username); ?></p>
             </div>
 
-            <ul>
-                <li>
-                    <a href="/../user/Home.php">
-                        <i class="bx bxs-grid-alt"></i>
-                        <p>Home</p>
-                    </a>
-                </li>
+            <div class="middle-navigation-second-section">
+                <ul>
+                    <li>
+                        <a href="/../user/Home.php">
+                            <i class="bx bxs-grid-alt"></i>
+                            <p>Home</p>
+                        </a>
+                    </li>
 
-                <li>
-                    <a href="/../user/Archive.php">
-                        <i class="bx bxs-box"></i>
-                        <p>Archive<p>
-                    </a>
-                </li>
+                    <li>
+                        <a href="/../user/Archive.php">
+                            <i class="bx bxs-box"></i>
+                            <p>Archive<p>
+                        </a>
+                    </li>
 
-                <li>
-                    <a href="/../user/Staff.php">
-                        <i class="bx bxs-phone"></i>
-                        <p>Staff</p>
-                    </a>
-                </li>
+                    <li>
+                        <a href="/../user/Staff.php">
+                            <i class="bx bxs-phone"></i>
+                            <p>Staff</p>
+                        </a>
+                    </li>
 
-                <li>
-                    <a href="/../user/Song.php">
-                        <i class="bx bxs-music"></i>
-                        <p>Song</p>
-                    </a>
-                </li>
+                    <li>
+                        <a href="/../user/Song.php">
+                            <i class="bx bxs-music"></i>
+                            <p>Song</p>
+                        </a>
+                    </li>
 
-                <li>
-                    <a href="/../admin/LogOutInterface.php">
-                        <i class='bx bx-user-minus'></i>
-                        <p>Logout</p>
-                    </a>
-                </li>
+                    <li>
+                        <a href="/../admin/LogOutInterface.php">
+                            <i class='bx bx-user-minus'></i>
+                            <p>Logout</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                <li>
-                    <i class='bx bxs-moon' id="dark-mode"></i>
-                    <i class='bx bxs-sun' id="light-mode"></i>
-                </li>
-            </ul>
+            <div class="bottom-navigation-section">
+                <ul>
+                    <li>
+                        <i class='bx bxs-moon' id="dark-mode"></i>
+                        <i class='bx bxs-sun' id="light-mode"></i>
+                    </li>
+                </ul>
+            </div>
 
         <?php else: ?>
-            <div class="failed-user-info">
+            <div class="middle-navigation-first-section">
                 <img src="/../assets/img/Authentication Failed.webp" alt="Sus?" class="authentication-failed-image">
                 <p>Sussy Baka</p>
             </div>
 
-            <ul>
-                <li>
-                    <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID']; ?>&redirect_uri=<?= $_ENV['CALLBACK_URL']; ?>&response_type=code&scope=public+identify&state=randomise">
-                        <i class='bx bx-user-plus'></i>
-                        <p>Login</p>
-                    </a>
-                </li>
+            <div class="middle-navigation-second-section">
+                <ul>
+                    <li>
+                        <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $_ENV['CLIENT_ID']; ?>&redirect_uri=<?= $_ENV['CALLBACK_URL']; ?>&response_type=code&scope=public+identify&state=randomise">
+                            <i class='bx bx-user-plus'></i>
+                            <p>Login</p>
+                        </a>
+                    </li>
 
-                <li>
-                    <a href="/../user/Home.php">
-                        <i class="bx bxs-grid-alt"></i>
-                        <p>Home</p>
-                    </a>
-                </li>
+                    <li>
+                        <a href="/../user/Home.php">
+                            <i class="bx bxs-grid-alt"></i>
+                            <p>Home</p>
+                        </a>
+                    </li>
 
-                <li>
-                    <a href="/../user/Archive.php">
-                        <i class="bx bxs-box"></i>
-                        <p>Archive</p>
-                    </a>
-                </li>
+                    <li>
+                        <a href="/../user/Archive.php">
+                            <i class="bx bxs-box"></i>
+                            <p>Archive</p>
+                        </a>
+                    </li>
 
-                <li>
-                    <a href="/../user/Staff.php">
-                        <i class="bx bxs-phone"></i>
-                        <p>Staff</p>
-                    </a>
-                </li>
+                    <li>
+                        <a href="/../user/Staff.php">
+                            <i class="bx bxs-phone"></i>
+                            <p>Staff</p>
+                        </a>
+                    </li>
 
-                <li>
-                    <a href="/../user/Song.php">
-                        <i class="bx bxs-music"></i>
-                        <p>Song</p>
-                    </a>
-                </li>
+                    <li>
+                        <a href="/../user/Song.php">
+                            <i class="bx bxs-music"></i>
+                            <p>Song</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                <li>
-                    <i class='bx bxs-moon' id="dark-mode"></i>
-                    <i class='bx bxs-sun' id="light-mode"></i>
-                </li>
-            </ul>
+
+            <div class="bottom-navigation-section">
+                <ul>
+                    <li>
+                        <i class='bx bxs-moon' id="dark-mode"></i>
+                        <i class='bx bxs-sun' id="light-mode"></i>
+                    </li>
+                </ul>
+            </div>
+
         <?php endif; ?>
     </nav>
 
