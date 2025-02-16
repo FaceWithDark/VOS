@@ -104,7 +104,7 @@ function storeUserData(
 
 
 // Check if user data already exists in the database
-function checkUserData(string $userId, string $userTable, object $phpDataObject): bool
+function checkUserData(int $userId, string $userTable, object $phpDataObject): bool
 {
     $query = "SELECT userId FROM $userTable WHERE userId = :userId";
     $queryStatement = $phpDataObject->prepare($query);
