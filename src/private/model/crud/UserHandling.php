@@ -55,7 +55,7 @@ function fetchUserData(int $userId, string $userTable, object $phpDataObject): o
 
 // Store new staff data into database
 function storeUserData(
-    object $userData,
+    object | array $userFetchData,
     string $userFlagSize,
     string $userFlagFormat,
     string $userTable,
@@ -63,7 +63,7 @@ function storeUserData(
     object $phpDataObject
 ): bool {
     // Construct the flag URL using the country code as in lowercase letter
-    $userCountryCode = strtolower($userData->country_code);
+    $userCountryCode = strtolower($userFetchData->country_code);
     $userCountryFlag = "https://flagcdn.com/$userFlagSize/$userCountryCode.$userFlagFormat";
 
     $query = "INSERT INTO $userTable (userId,
@@ -83,19 +83,19 @@ function storeUserData(
     $queryStatement = $phpDataObject->prepare($query);
 
     // Bind the staff data to the prepared statement
-    $queryStatement->bindParam(":userId",          $userData->id,            PDO::PARAM_INT);
-    $queryStatement->bindParam(":userName",        $userData->username,      PDO::PARAM_STR, 100);
-    $queryStatement->bindParam(":userImage",       $userData->avatar_url,    PDO::PARAM_STR, 255);
-    $queryStatement->bindParam(":userCountryName", $userData->country->name, PDO::PARAM_STR, 100);
+    $queryStatement->bindParam(":userId",          $userFetchData->id,            PDO::PARAM_INT);
+    $queryStatement->bindParam(":userName",        $userFetchData->username,      PDO::PARAM_STR, 100);
+    $queryStatement->bindParam(":userImage",       $userFetchData->avatar_url,    PDO::PARAM_STR, 255);
+    $queryStatement->bindParam(":userCountryName", $userFetchData->country->name, PDO::PARAM_STR, 100);
     $queryStatement->bindParam(":userCountryFlag", $userCountryFlag,         PDO::PARAM_STR, 255);
     $queryStatement->bindParam(":userRole",        $userRole,                PDO::PARAM_STR, 10);
 
     // Execute the statement and insert the data into database
     if ($queryStatement->execute()) {
-        error_log("Insert successful for user ID: " . $userData->id);
+        error_log("Insert successful for user ID: " . $userFetchData->id);
         return $queryStatement->rowCount() > 0;
     } else {
-        error_log("Insert failed for user ID: " . $userData->id);
+        error_log("Insert failed for user ID: " . $userFetchData->id);
         $errorInfo = $queryStatement->errorInfo();
         error_log("Error Info: " . implode(", ", $errorInfo));
         return false;
@@ -104,7 +104,7 @@ function storeUserData(
 
 
 // Check if user data already exists in the database
-function checkUserData(string $userId, string $userTable, object $phpDataObject): bool
+function checkUserData(int $userId, string $userTable, object $phpDataObject): bool
 {
     $query = "SELECT userId FROM $userTable WHERE userId = :userId";
     $queryStatement = $phpDataObject->prepare($query);
@@ -118,7 +118,7 @@ function checkUserData(string $userId, string $userTable, object $phpDataObject)
 // Update existing user data in the database with new data
 // TODO: Switch this to VIEW query so I don't accidentally damage the stored data
 function updateUserData(
-    object $userData,
+    object | array $userFetchData,
     string $userFlagSize,
     string $userFlagFormat,
     string $userTable,
@@ -126,7 +126,7 @@ function updateUserData(
     object $phpDataObject
 ): bool {
     // Construct the flag URL using the country code as in lowercase letter
-    $userCountryCode = strtolower($userData->country_code);
+    $userCountryCode = strtolower($userFetchData->country_code);
     $userCountryFlag = "https://flagcdn.com/$userFlagSize/$userCountryCode.$userFlagFormat";
 
     $query = "UPDATE $userTable
@@ -142,19 +142,19 @@ function updateUserData(
 
 
     // Bind the staff data to the prepared statement
-    $queryStatement->bindParam(":userId",          $userData->id,            PDO::PARAM_INT);
-    $queryStatement->bindParam(":userName",        $userData->username,      PDO::PARAM_STR, 100);
-    $queryStatement->bindParam(":userImage",       $userData->avatar_url,    PDO::PARAM_STR, 255);
-    $queryStatement->bindParam(":userCountryName", $userData->country->name, PDO::PARAM_STR, 100);
+    $queryStatement->bindParam(":userId",          $userFetchData->id,            PDO::PARAM_INT);
+    $queryStatement->bindParam(":userName",        $userFetchData->username,      PDO::PARAM_STR, 100);
+    $queryStatement->bindParam(":userImage",       $userFetchData->avatar_url,    PDO::PARAM_STR, 255);
+    $queryStatement->bindParam(":userCountryName", $userFetchData->country->name, PDO::PARAM_STR, 100);
     $queryStatement->bindParam(":userCountryFlag", $userCountryFlag,         PDO::PARAM_STR, 255);
     $queryStatement->bindParam(":userRole",        $userRole,                PDO::PARAM_STR, 10);
 
     // Execute the statement and update the existen data in the database
     if ($queryStatement->execute()) {
-        error_log("Update successful for user ID: " . $userData->id);
+        error_log("Update successful for user ID: " . $userFetchData->id);
         return $queryStatement->rowCount() > 0;
     } else {
-        error_log("Update failed for user ID: " . $userData->id);
+        error_log("Update failed for user ID: " . $userFetchData->id);
         $errorInfo = $queryStatement->errorInfo();
         error_log("Error Info: " . implode(", ", $errorInfo));
         return false;
@@ -187,37 +187,49 @@ function getUserData(int $userId, string $userTable, object $phpDataObject): arr
  *
  *      $userJsonData = json_decode(file_get_contents(__DIR__ . '/../../resource/User.json'));
  *
- *      $userId = $userJsonData->id;
- *      echo $userId;
- *      $userRole = $userJsonData->role;
- *      echo $userRole;
+ *      // Reason why '[]' is used instead of 'list()': https://www.php.net/manual/en/function.list.php
+ *      foreach ($userJsonData as [$userData]) {
+ *          $userId = $userData->id;
+ *          echo $userId;
+ *          $userRole = $userData->role;
+ *          echo $userRole;
+ *      }
  */
 
 // Read user IDs from JSON file
 $userJsonData = json_decode(file_get_contents(__DIR__ . '/../../resource/User.json'), true);
 
-$userId = $userJsonData['id'];
-$userRole = $userJsonData['role'];
+foreach ($userJsonData as $userData) {
+    // Reference: https://www.php.net/manual/en/control-structures.for.php
+    $userDataSize = count($userData);
 
-$userData = fetchUserData($userId, $userTable, $phpDataObject);
+    for ($userDataIndex = 0; $userDataIndex < $userDataSize; ++$userDataIndex) {
+        $userId = $userData[$userDataIndex]['id'];
+        //echo ("User ID, in order: {$userId}" . '<br>');
+        $userRole = $userData[$userDataIndex]['role'];
+        //echo ("User ID, in order: {$userRole}" . '<br>');
 
-if ($userData == true) {
-    // Make sure user's cookie is there for use
-    $userAccessToken = $_COOKIE['vot_access_token'] ?? null;
+        $userFetchData = fetchUserData($userId, $userTable, $phpDataObject);
 
-    if ($userAccessToken == true) {
-        (!checkUserData($userId, $userTable, $phpDataObject))
-            ? storeUserData($userData, $userFlagSize, $userFlagFormat, $userTable, $userRole, $phpDataObject)
-            : updateUserData($userData, $userFlagSize, $userFlagFormat, $userTable, $userRole, $phpDataObject);
+        if ($userFetchData == true) {
+            // Make sure user's cookie is there for use
+            $userAccessToken = $_COOKIE['vot_access_token'] ?? null;
 
-        // Fetch newly stored user data from the database (a.k.a live data)
-        $fetchUserData = getUserData($userId, $userTable, $phpDataObject);
-    } else {
-        // Fetch previously stored user data from the database (a.k.a local data)
-        $fetchUserData = getUserData($userId, $userTable, $phpDataObject);
-        //echo $fetchUserData['userId'];
+            if ($userAccessToken == true) {
+                (!checkUserData($userId, $userTable, $phpDataObject))
+                    ? storeUserData($userFetchData, $userFlagSize, $userFlagFormat, $userTable, $userRole, $phpDataObject)
+                    : updateUserData($userFetchData, $userFlagSize, $userFlagFormat, $userTable, $userRole, $phpDataObject);
+
+                // Fetch newly stored user data from the database (a.k.a live data)
+                $userReceiveData = getUserData($userId, $userTable, $phpDataObject);
+            } else {
+                // Fetch previously stored user data from the database (a.k.a local data)
+                $userReceiveData = getUserData($userId, $userTable, $phpDataObject);
+                //echo $userReceiveData['userId'];
+            }
+        } else {
+            error_log("Fetch data failed for user ID: " . $userId);
+            exit("Error 404: Data Not Found");
+        }
     }
-} else {
-    error_log("Fetch data failed for user ID: " . $userId);
-    exit("Error 404: Data Not Found");
 }
