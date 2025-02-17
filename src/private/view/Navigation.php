@@ -73,9 +73,11 @@ $userData = getUserDetail();
 
         <?php if ($userData): ?>
             <div class="middle-navigation-first-section">
-                <!-- TODO: Access this information from SQL using PHP (maybe not). -->
-                <img src="<?= htmlspecialchars($userData->avatar_url); ?>" alt="<?= htmlspecialchars($userData->username); ?>" class="user-image">
-                <p><?= htmlspecialchars($userData->username); ?></p>
+                <a href="/../user/UserSetting.php">
+                    <!-- TODO: Access this information from SQL using PHP (maybe not). -->
+                    <img src="<?= htmlspecialchars($userData->avatar_url); ?>" alt="<?= htmlspecialchars($userData->username); ?>" class="user-image">
+                    <p><?= htmlspecialchars($userData->username); ?></p>
+                </a>
             </div>
 
             <div class="middle-navigation-second-section">
