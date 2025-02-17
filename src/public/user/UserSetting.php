@@ -44,12 +44,6 @@ $fetchAdminRole = $adminRoleStatement->fetchAll(PDO::FETCH_DEFAULT);
 $fetchHostRole = $hostRoleStatement->fetchAll(PDO::FETCH_DEFAULT);
 $fetchUserRole = $userRoleStatement->fetchAll(PDO::FETCH_DEFAULT);
 
-/*
-echo ('<pre>' . print_r($fetchAdminRole, true) . '</pre>');
-echo ('<pre>' . print_r($fetchHostRole, true) . '</pre>');
-echo ('<pre>' . print_r($fetchUserRole, true) . '</pre>');
-*/
-
 foreach ($fetchAdminRole as $adminRoleData) {
     $adminFetchedData = $adminRoleData['userRole'];
 }
