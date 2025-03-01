@@ -467,17 +467,26 @@ body.dark-theme .song-card-container {
 
 /* CARD STYLE WITH HEADER PAGES */
 
+.staff-card-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    width: 25rem;
+    word-wrap: break-word;
+}
+
 .staff-card-container h1,
 .staff-card-container h2 {
-    display: flex;
-    justify-content: center;
     font-weight: bold;
 }
 
 .staff-card-container img:nth-child(1) {
-    margin-right: .5rem;
+    margin: 0 .25rem;
 }
 
-.staff-card-container img:not(:first-child) {
+.staff-card-container img:nth-child(2) {
+    min-width: 300px;
+    min-height: 240px;
     padding: 1.25rem 0;
 }
