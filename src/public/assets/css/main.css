@@ -338,20 +338,20 @@ body.dark-theme .song-card-container {
 }
 
 .announcement-box img {
-    padding: .5rem 0;
-    padding-left: 1.75rem;
-    max-width: 95%;
+    position: relative;
+    width: 100%;
     height: auto;
+    padding: .75rem 0;
 }
 
 .youtube-iframe-container {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
-    height: auto;
-    overflow: hidden;
     display: flex;
     justify-content: center;
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding-bottom: 56.25%;
+    overflow: hidden;
 }
 
 .youtube-iframe-container iframe {
