@@ -36,7 +36,7 @@ require_once '../../private/model/crud/MappoolHandling.php';
                     </a>
 
                     <h2>
-                        <?= htmlspecialchars(isset($beatmapData['title_unicode']) ? $beatmapData['title_unicode'] : 'NULL'); ?> [<?= isset($beatmapData['difficulty']) ? $beatmapData['difficulty'] : 'NULL'; ?>]
+                        <?= htmlspecialchars(isset($beatmapData['title_unicode']) ? $beatmapData['title_unicode'] : 'NULL'); ?> [<?= htmlspecialchars(isset($beatmapData['difficulty']) ? $beatmapData['difficulty'] : 'NULL'); ?>]
                     </h2>
 
                     <h3>
