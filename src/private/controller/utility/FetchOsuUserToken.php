@@ -7,8 +7,31 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
+include __DIR__ . '/../utility/ReadEnvironmentFile.php';
+
+// TODO: defined as constant variables in a global-used file and include back to here
+$clientIdValue
+    = getenv(name: 'CLIENT_ID', local_only: true)
+    ?: getenv(name: 'CLIENT_ID');
+
+$clientSecretValue
+    = getenv(name: 'CLIENT_SECRET', local_only: true)
+    ?: getenv(name: 'CLIENT_SECRET');
+
+$clientAuthorisationCodeValue
+    = $_GET['code'];
+
+$clintAuthorisationGrantValue
+    = 'authorization_code';
+
+$clientRedirectValue
+    = getenv(name: 'CALLBACK_URL', local_only: true)
+    ?: getenv(name: 'CALLBACK_URL');
+
+
 function exchangeCode(array $payloadData, string $apiURL)
 {
+
     $client = new Client();
 
     try {
@@ -36,15 +59,13 @@ if (isset($_GET['error']) || !isset($_GET['code'])) {
     exit('Some error occurred');
 }
 
-$authorizationCode = $_GET['code'];
-
 // Prepare payload data for token exchange
 $payloadData = [
-    'client_id'     => $_ENV['CLIENT_ID'],
-    'client_secret' => $_ENV['CLIENT_SECRET'],
-    'code'          => $authorizationCode,
-    'grant_type'    => 'authorization_code',
-    'redirect_uri'  => $_ENV['CALLBACK_URL'],
+    'client_id'     => $clientIdValue,
+    'client_secret' => $clientSecretValue,
+    'code'          => $clientAuthorisationCodeValue,
+    'grant_type'    => $clintAuthorisationGrantValue,
+    'redirect_uri'  => $clientRedirectValue
 ];
 
 $apiURL = "https://osu.ppy.sh/oauth/token";
