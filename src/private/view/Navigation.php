@@ -57,13 +57,17 @@ $userData = getUserDetail();
 
     <title>VOT</title>
 
-    <!-- CSS file -->
-    <link rel="stylesheet" type="text/css" href="/../assets/css/reset.css" />
-    <link rel="stylesheet" type="text/css" href="/../assets/css/main.css" />
+    <!-- CSS files -->
+    <link rel="stylesheet" type="text/css" href="/../assets/css/TagReset.css" />
+    <link rel="stylesheet" type="text/css" href="/../assets/css/Global.css" />
+    <link rel="stylesheet" type="text/css" href="/../assets/css/Navigation.css" />
+    <link rel="stylesheet" type="text/css" href="/../assets/css/ThemeSwitch.css" />
+
+    <!-- Icon file -->
     <link rel='stylesheet' type="text/css" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' />
 
     <!-- JS file -->
-    <script src="/../assets/js/themeSwitchButton.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/../assets/js/themeSwitchButton.js"></script>
 
     <!-- Browser compatible -->
     <link rel="icon" type="image/png" sizes="96x96" href="/../assets/ico/favicon-96x96.png" />

@@ -1,0 +1,237 @@
+/* VOT'S LIGHT MODE LAYOUT */
+body.light-theme {
+	background-color: var(--light-background-colour);
+	color: var(--light-text-color);
+	transition: background-color 0.25s, color 0.25s;
+}
+
+/* 'Landing' page's styling methods */
+body.light-theme header h1 {
+	color: var(--light-accent-colour);
+}
+
+/* 'Song' page's styling methods */
+body.light-theme section div.header-container {
+	color: var(--light-primary-colour);
+}
+
+/* Navigation Bar (Top Section) [Light] */
+body.light-theme nav div.top-navigation-section #click-button {
+	color: var(--light-background-colour);
+}
+
+body.light-theme nav.active-button div.top-navigation-section strong {
+	color: var(--light-background-colour);
+}
+
+/* Navigation Bar (First Middle Section) [Light] */
+body.light-theme nav div.middle-navigation-first-section img.user-image,
+body.light-theme nav div.middle-navigation-first-section img.authentication-failed-image {
+	border: 1px solid var(--light-alt-accent-colour);
+}
+
+body.light-theme nav.active-button div.middle-navigation-first-section p {
+	color: var(--light-background-colour);
+}
+
+/* Navigation Bar (Second Middle Section) [Light] */
+body.light-theme nav div.middle-navigation-second-section ul li a {
+	color: var(--light-background-colour);
+}
+
+body.light-theme nav div.middle-navigation-second-section ul li a:hover {
+	background-color: var(--light-secondary-colour);
+	color: var(var(--light-background-colour));
+}
+
+/* Navigation Bar (Bottom Section) [Light] */
+body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
+	background: var(--light-secondary-colour);
+}
+
+
+/* VOT'S SYSTEM MODE LAYOUT */
+@media (prefers-color-scheme: light) {
+	body.system-theme {
+		background-color: var(--light-background-colour);
+		color: var(--light-text-color);
+	}
+
+	/* 'Landing' page's styling methods */
+	body.system-theme header h1 {
+		color: var(--light-accent-colour);
+	}
+
+	/* 'Song' page's styling methods */
+	body.system-theme section div.header-container {
+		color: var(--light-primary-colour);
+	}
+
+	/* Navigation Bar (Top Section) [System - Light] */
+	body.system-theme nav div.top-navigation-section #click-button {
+		color: var(--light-background-colour);
+	}
+
+	body.system-theme nav.active-button div.top-navigation-section strong {
+		color: var(--light-background-colour);
+	}
+
+	/* Navigation Bar (First Middle Section) [System - Light] */
+	body.system-theme nav div.middle-navigation-first-section img.user-image,
+	body.system-theme nav div.middle-navigation-first-section img.authentication-failed-image {
+		border: 1px solid var(--light-alt-accent-colour);
+	}
+
+	body.system-theme nav.active-button div.middle-navigation-first-section p {
+		color: var(--light-background-colour);
+	}
+
+	/* Navigation Bar (Second Middle Section) [System Light] */
+	body.system-theme nav div.middle-navigation-second-section ul li a {
+		color: var(--light-background-colour);
+	}
+
+	body.system-theme nav div.middle-navigation-second-section ul li a:hover {
+		background-color: var(--light-secondary-colour);
+		color: var(var(--light-background-colour));
+	}
+
+	/* Navigation Bar (Bottom Section) [System - Light] */
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray {
+		background: var(--light-secondary-colour);
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	body.system-theme {
+		background-color: var(--dark-background-colour);
+		color: var(--dark-text-color);
+	}
+
+	/* 'Landing' page's styling methods */
+	body.system-theme header h1 {
+		color: var(--dark-accent-colour);
+	}
+
+	/* 'Song' page's styling methods */
+	body.system-theme section div.header-container {
+		color: var(--dark-primary-colour);
+	}
+
+	/* Navigation Bar (Top Section) [System - Dark] */
+	body.system-theme nav div.top-navigation-section #click-button {
+		color: var(--dark-background-colour);
+	}
+
+	body.system-theme nav.active-button div.top-navigation-section strong {
+		color: var(--dark-background-colour);
+	}
+
+	/* Navigation Bar (First Middle Section) [System - Dark] */
+	body.system-theme nav div.middle-navigation-first-section img.user-image,
+	body.system-theme nav div.middle-navigation-first-section img.authentication-failed-image {
+		border: 1px solid var(--dark-alt-accent-colour);
+	}
+
+	body.system-theme nav.active-button div.middle-navigation-first-section p {
+		color: var(--dark-background-colour);
+	}
+
+	/* Navigation Bar (Second Middle Section) [System - Dark] */
+	body.system-theme nav div.middle-navigation-second-section ul li a {
+		color: var(--dark-background-colour);
+	}
+
+	body.system-theme nav div.middle-navigation-second-section ul li a:hover {
+		background-color: var(--dark-secondary-colour);
+		color: var(var(--dark-background-colour));
+	}
+
+	/* Navigation Bar (Bottom Section) [System - Dark] */
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray {
+		background: var(--dark-secondary-colour);
+	}
+
+	/* Other layout's dark mode customisation (TODO: Give a name for this) */
+	body.system-theme .announcement-box {
+		background-color: var(--dark-alt-accent-colour);
+		border-right: 5px solid rgba(100, 100, 100, 1);
+		box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
+	}
+
+	body.system-theme .direct-link-container,
+	body.system-theme .mappool-card-container,
+	body.system-theme .staff-card-container,
+	body.system-theme .song-card-container {
+		background-color: var(--dark-alt-accent-colour);
+		border-right: 5px solid rgba(100, 100, 100, 1);
+		box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
+	}
+}
+
+
+/* VOT'S DARK MODE LAYOUT */
+body.dark-theme {
+	background-color: var(--dark-background-colour);
+	color: var(--dark-text-color);
+}
+
+/* 'Landing' page's styling methods */
+body.dark-theme header h1 {
+	color: var(--dark-accent-colour);
+}
+
+/* 'Song' page's styling methods */
+body.dark-theme section div.header-container {
+	color: var(--dark-primary-colour);
+}
+
+/* Navigation Bar (Top Section) [Dark] */
+body.dark-theme nav div.top-navigation-section #click-button {
+	color: var(--dark-background-colour);
+}
+
+body.dark-theme nav.active-button div.top-navigation-section strong {
+	color: var(--dark-background-colour);
+}
+
+/* Navigation Bar (First Middle Section) [Dark] */
+body.dark-theme nav div.middle-navigation-first-section img.user-image,
+body.dark-theme nav div.middle-navigation-first-section img.authentication-failed-image {
+	border: 1px solid var(--dark-alt-accent-colour);
+}
+
+body.dark-theme nav.active-button div.middle-navigation-first-section p {
+	color: var(--dark-background-colour);
+}
+
+/* Navigation Bar (Second Middle Section) [Dark] */
+body.dark-theme nav div.middle-navigation-second-section ul li a {
+	color: var(--dark-background-colour);
+}
+
+body.dark-theme nav div.middle-navigation-second-section ul li a:hover {
+	background-color: var(--dark-secondary-colour);
+	color: var(var(--dark-background-colour));
+}
+
+/* Navigation Bar (Bottom Section) [Dark] */
+body.dark-theme nav div.bottom-navigation-section div.vot-theme-tray {
+	background: var(--dark-secondary-colour);
+}
+
+/* Other layout's dark mode customisation (TODO: Give a name for this) */
+body.dark-theme .announcement-box {
+	background-color: var(--dark-alt-accent-colour);
+	border-right: 5px solid rgba(100, 100, 100, 1);
+	box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
+}
+
+body.dark-theme .direct-link-container,
+body.dark-theme .mappool-card-container,
+body.dark-theme .staff-card-container,
+body.dark-theme .song-card-container {
+	background-color: var(--dark-alt-accent-colour);
+	border-right: 5px solid rgba(100, 100, 100, 1);
+	box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
+}

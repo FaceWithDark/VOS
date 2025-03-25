@@ -1,0 +1,153 @@
+/*					 VERTICAL NAVIGATION BAR
+ * ============================================================
+ * This element will be divided into 4 main <div> tags for the
+ * sake of front-end whatever crap's maintainability. In order:
+ *  + top-nav-section
+ *  + middle-nav-first-section
+ *  + middle-nav-second-section
+ *  + bottom-nav-section
+ */
+
+/* Navigation Bar (Top Section) [General] */
+body nav div.top-navigation-section {
+	display: flex;
+	justify-content: space-evenly;
+	padding: 1rem 1rem 1rem 0;
+}
+
+body nav div.top-navigation-section strong {
+	transition: all 0.15s linear;
+	opacity: 0;
+}
+
+body nav.active-button {
+	width: 11rem;
+	flex-shrink: 0;
+}
+
+body nav div.top-navigation-section #click-button {
+	position: absolute;
+	font-size: 1.175rem;
+	margin-left: 1.25rem;
+	cursor: pointer;
+}
+
+body nav.active-button~body section.tournament-news,
+body div.archived-page,
+body div.staff-page,
+body div.song-page,
+body div.mappool-page,
+body div.vot-page {
+	margin-left: 13rem;
+	width: calc(100% - 13rem);
+}
+
+body nav.active-button div.top-navigation-section {
+	/* Safari compatability. */
+	-webkit-user-select: none;
+	/* Others broswer compatability. */
+	user-select: none;
+}
+
+body nav.active-button div.top-navigation-section strong {
+	font-weight: bold;
+	text-wrap: nowrap;
+	opacity: 1;
+}
+
+body nav.active-button div.top-navigation-section #click-button {
+	margin-left: 9.5rem;
+	transition: margin-left 0.3s linear;
+}
+
+body section.tournament-news,
+body div.archived-page,
+body div.staff-page,
+body div.song-page,
+body div.mappool-page,
+body div.vot-page {
+	padding-top: 1rem;
+	transition: margin-left 0.25s linear, width 0.25s linear;
+	width: calc(100% - 7rem);
+	margin-left: 7rem;
+}
+
+/* Navigation Bar (First Middle Section) [General] */
+body nav div.middle-navigation-first-section {
+	display: flex;
+	align-items: center;
+	margin: 1rem 0;
+}
+
+body nav div.middle-navigation-first-section img.user-image,
+body nav div.middle-navigation-first-section img.authentication-failed-image {
+	width: 3.125rem;
+	border-radius: 100%;
+	margin-left: .5rem;
+}
+
+body nav div.middle-navigation-first-section p {
+	opacity: 0;
+	text-wrap: nowrap;
+	transition: 0.3s linear;
+}
+
+body nav.active-button div.middle-navigation-first-section p {
+	opacity: 1;
+	font-weight: 600;
+	margin-left: 1rem;
+}
+
+
+/* Navigation Bar (Second Middle Section) [General] */
+body nav div.middle-navigation-second-section ul {
+	margin: 2rem 1.5rem;
+	line-height: 3rem;
+}
+
+body nav div.middle-navigation-second-section ul li:not(:last-child) {
+	margin-bottom: 7.25rem;
+}
+
+body nav div.middle-navigation-second-section ul li a {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: all 0.1s linear;
+	padding: 0.15rem 0;
+}
+
+body nav div.middle-navigation-second-section ul li a i {
+	position: absolute;
+	font-size: 1.2rem;
+}
+
+body nav div.middle-navigation-second-section ul li a p {
+	opacity: 0;
+	text-wrap: nowrap;
+}
+
+body nav div.middle-navigation-second-section ul li a:hover {
+	border-radius: 4rem;
+}
+
+body nav.active-button ul li a p {
+	opacity: 1;
+	margin-left: 1.5rem;
+}
+
+body nav.active-button ul li a i {
+	position: relative;
+}
+
+/* Navigation Bar (Bottom Section) [General] */
+body nav div.bottom-navigation-section {
+	margin-top: 8.5rem;
+}
+
+body nav div.bottom-navigation-section div.vot-theme-tray {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border-radius: 1.25rem;
+}
