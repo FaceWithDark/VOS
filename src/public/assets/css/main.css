@@ -1,55 +1,75 @@
 :root {
+    /* GLOBAL FONT */
+    --global-font: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+
     /*
      *                          LIGHT MODE
      * ===========================================================
-     *
      * Colour pallete used for VOT website (Light Mode). In order:
-     *
-     *  - Red
-     *  - Orange
-     *  - Black
-     *  - Dark grey
-     *  - Pure white
-     *
+     *  + Red
+     *  + Orange
+     *  + Black
+     *  + Dark grey
+     *  + Pure white
      */
+    --light-primary-colour: rgba(255, 20, 20, 1);
+    --light-secondary-colour: rgba(204, 85, 0, 1);
+    --light-accent-colour: rgba(0, 0, 0, 1);
+    --light-alt-accent-colour: rgba(51, 51, 51, 1);
+    --light-background-colour: rgba(255, 255, 255, 1);
 
-    --primary-colour: rgba(255, 20, 20, 1);
-    --secondary-colour: rgba(204, 85, 0, 1);
-    --accent-colour: rgba(0, 0, 0, 1);
-    --accent-colour-alt: rgba(51, 51, 51, 1);
-    --background-colour: rgba(255, 255, 255, 1);
+
+    /*                          DARK MODE
+     * ==========================================================
+     * Colour pallete used for VOT website (Dark Mode). In order:
+     *  + Slightly desaturated red
+     *  + Orange
+     *  + Pure white
+     *  + Lighter dark grey
+     *  + Slightly desaturated black
+     */
+    --dark-primary-colour: rgba(255, 20, 20, 0.8);
+    --dark-secondary-colour: rgba(204, 85, 0, 1);
+    --dark-accent-colour: rgba(255, 255, 255, 1);
+    --dark-alt-accent-colour: rgba(150, 150, 150, 1);
+    --dark-background-colour: rgba(0, 0, 0, 0.8);
 }
 
-/* General body elements format accross all pages */
+
+/* GLOBAL STYING FOR SOME ELEMENTS */
 body {
-    box-sizing: border-box;
     display: flex;
-    background-color: var(--background-colour);
-    /* TODO: May need this to be a global variable but for now, it's fine. */
-    font-family: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    transition: background-color 0.25s, color 0.25s;
 }
 
-/* Head title format for specifc pages */
 header h1 {
     display: flex;
     justify-content: center;
     font-weight: bold;
-    color: var(--primary-colour);
     font-size: 1.75rem;
     margin: 1.5rem 0;
 }
 
-.header-container {
+nav {
+    position: fixed;
+    background-color: rgba(35, 35, 35, 1);
+    width: 5rem;
+    min-height: 100vh;
+    transition: all 0.3s linear;
+}
+
+div.header-container {
     display: flex;
     justify-content: center;
     font-weight: bold;
-    color: var(--primary-colour);
+    color: var(--light-primary-colour);
     font-size: 1.75rem;
     margin: 1.5rem 0;
 }
 
 /* Content wrapper method accross all the pages (except main). */
-.flex-container {
+div.flex-container {
     display: flex;
     text-align: center;
     justify-content: space-around;
@@ -57,12 +77,12 @@ header h1 {
 }
 
 /* Button container method */
-.button-container {
+div.button-container {
     display: flex;
     justify-content: end;
 }
 
-.button-container button {
+div.button-container button {
     font-size: 1.5rem;
     margin-top: 1rem;
     margin-right: 1rem;
@@ -82,22 +102,14 @@ header h1 {
  *
  */
 
-nav {
-    position: fixed;
-    background-color: rgba(35, 35, 35, 1);
-    width: 5rem;
-    min-height: 100vh;
-    transition: all 0.3s linear;
-}
-
 /* Navigation Bar (Top Section) */
-.top-navigation-section {
+nav div.top-navigation-section {
     display: flex;
     justify-content: space-evenly;
     padding: 1rem 1rem 1rem 0;
 }
 
-.top-navigation-section strong {
+nav div.top-navigation-section strong {
     transition: all 0.15s linear;
     opacity: 0;
 }
@@ -107,49 +119,49 @@ nav.active-button {
     flex-shrink: 0;
 }
 
-.top-navigation-section #click-button {
+nav div.top-navigation-section #click-button {
     position: absolute;
     font-size: 1.175rem;
     margin-left: 1.25rem;
-    color: var(--background-colour);
+    color: var(--light-background-colour);
     cursor: pointer;
 }
 
-nav.active-button~.tournament-news,
-.archived-page,
-.staff-page,
-.song-page,
-.mappool-page,
-.vot-page {
+nav.active-button~section.tournament-news,
+div.archived-page,
+div.staff-page,
+div.song-page,
+div.mappool-page,
+div.vot-page {
     margin-left: 13rem;
     width: calc(100% - 13rem);
 }
 
-nav.active-button .top-navigation-section {
+nav.active-button div.top-navigation-section {
     /* Safari compatability. */
     -webkit-user-select: none;
     /* Others broswer compatability. */
     user-select: none;
 }
 
-nav.active-button .top-navigation-section strong {
+nav.active-button div.top-navigation-section strong {
     font-weight: bold;
     text-wrap: nowrap;
-    color: var(--background-colour);
+    color: var(--light-background-colour);
     opacity: 1;
 }
 
-nav.active-button .top-navigation-section #click-button {
+nav.active-button div.top-navigation-section #click-button {
     margin-left: 9.5rem;
     transition: margin-left 0.3s linear;
 }
 
-.tournament-news,
-.archived-page,
-.staff-page,
-.song-page,
-.mappool-page,
-.vot-page {
+section.tournament-news,
+div.archived-page,
+div.staff-page,
+div.song-page,
+div.mappool-page,
+div.vot-page {
     padding-top: 1rem;
     transition: margin-left 0.25s linear, width 0.25s linear;
     width: calc(100% - 7rem);
@@ -157,68 +169,68 @@ nav.active-button .top-navigation-section #click-button {
 }
 
 /* Navigation Bar (First Middle Section) */
-.middle-navigation-first-section {
+div.middle-navigation-first-section {
     display: flex;
     align-items: center;
     margin: 1rem 0;
 }
 
-.middle-navigation-first-section .user-image,
-.middle-navigation-first-section .authentication-failed-image {
+div.middle-navigation-first-section img.user-image,
+div.middle-navigation-first-section img.authentication-failed-image {
     width: 3.125rem;
     border-radius: 100%;
-    border: 1px solid var(--accent-colour-alt);
+    border: 1px solid var(--light-alt-accent-colour);
     margin-left: .5rem;
 }
 
-.middle-navigation-first-section p,
-.middle-navigation-first-section p {
+div.middle-navigation-first-section p,
+div.middle-navigation-first-section p {
     opacity: 0;
     text-wrap: nowrap;
     transition: 0.3s linear;
 }
 
-nav.active-button .middle-navigation-first-section p,
-nav.active-button .middle-navigation-first-section p {
+nav.active-button div.middle-navigation-first-section p,
+nav.active-button div.middle-navigation-first-section p {
     opacity: 1;
     font-weight: 600;
-    color: var(--background-colour);
+    color: var(--light-background-colour);
     margin-left: 1rem;
 }
 
 
 /* Navigation Bar (Second Middle Section) */
-.middle-navigation-second-section ul {
+div.middle-navigation-second-section ul {
     margin: 2rem 1.5rem;
     line-height: 3rem;
 }
 
-.middle-navigation-second-section ul li:not(:last-child) {
+div.middle-navigation-second-section ul li:not(:last-child) {
     margin-bottom: 7.25rem;
 }
 
-.middle-navigation-second-section ul li a {
+div.middle-navigation-second-section ul li a {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--background-colour);
+    color: var(--light-background-colour);
     transition: all 0.1s linear;
     padding: 0.15rem 0;
 }
 
-.middle-navigation-second-section ul li a i {
+div.middle-navigation-second-section ul li a i {
     position: absolute;
     font-size: 1.2rem;
 }
 
-.middle-navigation-second-section ul li a p {
+div.middle-navigation-second-section ul li a p {
     opacity: 0;
     text-wrap: nowrap;
 }
 
-.middle-navigation-second-section ul li a:hover {
-    background-color: var(--secondary-colour);
-    color: var(var(--background-colour));
+div.middle-navigation-second-section ul li a:hover {
+    background-color: var(--light-secondary-colour);
+    color: var(var(--light-background-colour));
     border-radius: 4rem;
 }
 
@@ -232,43 +244,271 @@ nav.active-button ul li a i {
 }
 
 /* Navigation Bar (Bottom Section) */
-
-.bottom-navigation-section ul li #dark-mode,
-.bottom-navigation-section ul li #light-mode {
-    justify-content: center;
-    color: var(--background-colour);
-    padding: 0.15rem 0;
-    font-size: 1.2rem;
-}
-
-.bottom-navigation-section ul li:last-child {
+div.bottom-navigation-section {
     margin-top: 8.5rem;
 }
 
+div.bottom-navigation-section div.vot-theme-tray {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: var(--light-secondary-colour);
+    border-radius: 1.25rem;
+}
 
-/*                          DARK MODE
- * ==========================================================
- *
- * Colour pallete used for VOT website (Dark Mode). In order:
- *
- *  - Slightly desaturated red
- *  - Orange
- *  - Pure white
- *  - Lighter dark grey
- *  - Slightly desaturated black
- *
- */
+/* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES*/
 
-body.dark-theme {
-    --primary-colour: rgba(255, 20, 20, 0.8);
-    --secondary-colour: rgba(204, 85, 0, 1);
-    --accent-colour: rgba(255, 255, 255, 1);
-    --accent-colour-alt: rgba(150, 150, 150, 1);
-    --background-colour: rgba(0, 0, 0, 0.8);
+div.announcement-box,
+div.lower-general-information-box {
+    background-color: rgba(220, 220, 220, 1);
+    margin: 0 3rem 1.5rem 1.25rem;
+    border-radius: 1.5rem;
+    border-right: 5px solid rgba(100, 100, 100, 0.5);
+    box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 0.2);
+}
+
+div.announcement-box h2,
+div.lower-general-information-box h2 {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    padding: 1rem 0;
+    color: var(--light-primary-colour);
+}
+
+div.announcement-box p,
+div.lower-general-information-box ul li {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--light-accent-colour);
+    padding-left: .5rem;
+    padding-bottom: 1rem;
+}
+
+div.announcement-box img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: .75rem 0;
+}
+
+div.youtube-iframe-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+}
+
+div.youtube-iframe-container iframe {
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    overflow: hidden;
 }
 
 
-/*              VERTICAL NAVIGATION BAR (LIGHT MODE)
+/* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES */
+
+div.direct-link-container,
+div.mappool-card-container,
+div.staff-card-container,
+div.song-card-container {
+    background-color: rgba(220, 220, 220, 1);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 1.5rem;
+    border-right: 5px solid rgba(100, 100, 100, 0.5);
+    box-shadow: 0.25rem 0.25rem 0.25rem 0 rgba(0, 0, 0, 0.2);
+}
+
+div.direct-link-container:not(:first-child),
+div.mappool-card-container:not(:first-child),
+div.staff-card-container:not(:first-child),
+div.song-card-container:not(:first-child) {
+    margin-left: .75rem;
+}
+
+div.direct-link-container a {
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: var(--light-accent-colour);
+    /* Safari compatability. */
+    -webkit-user-select: none;
+    /* Others broswer compatability. */
+    user-select: none;
+}
+
+/* NO-HEADER PAGES */
+
+div.mappool-page,
+div.staff-page,
+div.song-page {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+div.mappool-page div.mappool-card-container,
+div.song-page div.song-card-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    width: 30rem;
+    word-wrap: break-word;
+}
+
+div.mappool-page div.mappool-card-container h1,
+div.mappool-page div.mappool-card-container h2,
+div.song-page div.song-card-container h1,
+div.song-page div.song-card-container h2 {
+    font-weight: bold;
+}
+
+div.mappool-page div.mappool-card-container a,
+div.song-page div.song-card-container a {
+    color: var(--light-accent-colour);
+    /* Safari compatability. */
+    -webkit-user-select: none;
+    /* Others broswer compatability. */
+    user-select: none;
+    font-weight: bold;
+    padding: 1rem 0;
+}
+
+div.mappool-page div.mappool-card-container a img,
+div.song-page div.song-card-container a img {
+    width: 100%;
+    height: auto;
+}
+
+div.mappool-page div.mappool-card-container h3,
+div.song-page div.song-card-container h3 {
+    padding-top: .75rem;
+}
+
+div.mappool-page div.mappool-card-container div.beatmap-attribute-row,
+div.song-page div.song-card-container div.beatmap-attribute-row {
+    display: flex;
+    justify-content: space-evenly;
+    padding: .75rem 0;
+}
+
+div.mappool-page div.mappool-card-container div.beatmap-attribute-row p,
+div.song-page div.song-card-container div.beatmap-attribute-row p {
+    font-weight: 500;
+}
+
+
+/* VOT-SPECIFIC PAGE */
+
+div.upper-general-information-box img {
+    padding-left: 1.5rem;
+    max-width: 95%;
+    height: auto;
+}
+
+div.upper-general-information-box p {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--light-accent-colour);
+    padding: 1rem;
+}
+
+div.lower-general-information-box h3 {
+    font-weight: bold;
+    color: var(--light-secondary-colour);
+    padding-left: .5rem;
+    padding-bottom: 1rem;
+}
+
+div.lower-general-information-box ul li {
+    line-height: 1.275rem;
+    list-style: disc inside;
+}
+
+
+/* CARD STYLE WITH HEADER PAGES */
+
+div.staff-card-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    width: 25rem;
+    word-wrap: break-word;
+}
+
+div.staff-card-container h1,
+div.staff-card-container h2 {
+    font-weight: bold;
+}
+
+div.staff-card-container img:nth-child(1) {
+    margin: 0 .25rem;
+}
+
+div.staff-card-container img:nth-child(2) {
+    min-width: 300px;
+    min-height: 240px;
+    padding: 1.25rem 0;
+}
+
+
+/* VOT'S LIGHT MODE LAYOUT */
+body.light-theme {
+    background-color: var(--light-background-colour);
+    color: var(--light-text-color);
+    transition: background-color 0.25s, color 0.25s;
+}
+
+body.light-theme header h1 {
+    color: var(--light-accent-colour);
+}
+
+body.light-theme div.vot-theme-tray {
+    background: coral;
+    border-radius: 1.25rem;
+}
+
+
+/* VOT'S SYSTEM MODE LAYOUT */
+@media (prefers-color-scheme: dark) {
+    body.system-theme {
+        background-color: var(--dark-background-colour);
+        color: var(--dark-text-color);
+    }
+
+    body.system-theme div.vot-theme-tray {
+        background: coral;
+        border-radius: 1.25rem;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    body.system-theme {
+        background-color: var(--light-background-colour);
+        color: var(--light-text-color);
+    }
+
+    body.system-theme div.vot-theme-tray {
+        background: coral;
+        border-radius: 1.25rem;
+    }
+}
+
+
+/* VOT'S DARK MODE LAYOUT */
+body.dark-theme {
+    background-color: var(--dark-background-colour);
+    color: var(--dark-text-color);
+}
+
+
+/*              VERTICAL NAVIGATION BAR (DARK MODE)
  * ============================================================
  *
  * This element will be divided into 4 main <div> tags for the
@@ -288,12 +528,17 @@ body.dark-theme nav.active-button .middle-navigation-first-section p,
 body.dark-theme nav.active-button .middle-navigation-first-section p,
 body.dark-theme nav ul li #dark-mode,
 body.dark-theme nav ul li #light-mode {
-    color: var(--accent-colour);
+    color: var(--dark-accent-colour);
+}
+
+body.dark-theme div.vot-theme-tray {
+    background: coral;
+    border-radius: 1.25rem;
 }
 
 /* Other layout's dark mode customisation (TODO: Give a name for this) */
 body.dark-theme .announcement-box {
-    background-color: var(--accent-colour-alt);
+    background-color: var(--dark-alt-accent-colour);
     border-right: 5px solid rgba(100, 100, 100, 1);
     box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
 }
@@ -302,209 +547,7 @@ body.dark-theme .direct-link-container,
 body.dark-theme .mappool-card-container,
 body.dark-theme .staff-card-container,
 body.dark-theme .song-card-container {
-    background-color: var(--accent-colour-alt);
+    background-color: var(--dark-alt-accent-colour);
     border-right: 5px solid rgba(100, 100, 100, 1);
     box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 1.15);
-}
-
-
-/* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES*/
-
-.announcement-box,
-.lower-general-information-box {
-    background-color: rgba(220, 220, 220, 1);
-    margin: 0 3rem 1.5rem 1.25rem;
-    border-radius: 1.5rem;
-    border-right: 5px solid rgba(100, 100, 100, 0.5);
-    box-shadow: 0.45rem 0.45rem 0.45rem 0 rgba(0, 0, 0, 0.2);
-}
-
-.announcement-box h2,
-.lower-general-information-box h2 {
-    display: flex;
-    justify-content: center;
-    font-weight: bold;
-    padding: 1rem 0;
-    color: var(--primary-colour);
-}
-
-.announcement-box p,
-.lower-general-information-box ul li {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--accent-colour);
-    padding-left: .5rem;
-    padding-bottom: 1rem;
-}
-
-.announcement-box img {
-    position: relative;
-    width: 100%;
-    height: auto;
-    padding: .75rem 0;
-}
-
-.youtube-iframe-container {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    width: 100%;
-    height: auto;
-    padding-bottom: 56.25%;
-    overflow: hidden;
-}
-
-.youtube-iframe-container iframe {
-    position: absolute;
-    width: 95%;
-    height: 95%;
-    overflow: hidden;
-}
-
-
-/* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES */
-
-.direct-link-container,
-.mappool-card-container,
-.staff-card-container,
-.song-card-container {
-    background-color: rgba(220, 220, 220, 1);
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 1.5rem;
-    border-right: 5px solid rgba(100, 100, 100, 0.5);
-    box-shadow: 0.25rem 0.25rem 0.25rem 0 rgba(0, 0, 0, 0.2);
-}
-
-.direct-link-container:not(:first-child),
-.mappool-card-container:not(:first-child),
-.staff-card-container:not(:first-child),
-.song-card-container:not(:first-child) {
-    margin-left: .75rem;
-}
-
-.direct-link-container a {
-    font-weight: bold;
-    font-size: 0.85rem;
-    color: var(--accent-colour);
-    /* Safari compatability. */
-    -webkit-user-select: none;
-    /* Others broswer compatability. */
-    user-select: none;
-}
-
-/* NO-HEADER PAGES */
-
-.mappool-page,
-.staff-page,
-.song-page {
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-}
-
-.mappool-page .mappool-card-container,
-.song-page .song-card-container {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    width: 30rem;
-    word-wrap: break-word;
-}
-
-.mappool-page .mappool-card-container h1,
-.mappool-page .mappool-card-container h2,
-.song-page .song-card-container h1,
-.song-page .song-card-container h2 {
-    font-weight: bold;
-}
-
-.mappool-page .mappool-card-container a,
-.song-page .song-card-container a {
-    color: var(--accent-colour);
-    /* Safari compatability. */
-    -webkit-user-select: none;
-    /* Others broswer compatability. */
-    user-select: none;
-    font-weight: bold;
-    padding: 1rem 0;
-}
-
-.mappool-page .mappool-card-container a img,
-.song-page .song-card-container a img {
-    width: 100%;
-    height: auto;
-}
-
-.mappool-page .mappool-card-container h3,
-.song-page .song-card-container h3 {
-    padding-top: .75rem;
-}
-
-.mappool-page .mappool-card-container .beatmap-attribute-row,
-.song-page .song-card-container .beatmap-attribute-row {
-    display: flex;
-    justify-content: space-evenly;
-    padding: .75rem 0;
-}
-
-.mappool-page .mappool-card-container .beatmap-attribute-row p,
-.song-page .song-card-container .beatmap-attribute-row p {
-    font-weight: 500;
-}
-
-
-/* VOT-SPECIFIC PAGE */
-
-.upper-general-information-box img {
-    padding-left: 1.5rem;
-    max-width: 95%;
-    height: auto;
-}
-
-.upper-general-information-box p {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--accent-colour);
-    padding: 1rem;
-}
-
-.lower-general-information-box h3 {
-    font-weight: bold;
-    color: var(--secondary-colour);
-    padding-left: .5rem;
-    padding-bottom: 1rem;
-}
-
-.lower-general-information-box ul li {
-    line-height: 1.275rem;
-    list-style: disc inside;
-}
-
-
-/* CARD STYLE WITH HEADER PAGES */
-
-.staff-card-container {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    width: 25rem;
-    word-wrap: break-word;
-}
-
-.staff-card-container h1,
-.staff-card-container h2 {
-    font-weight: bold;
-}
-
-.staff-card-container img:nth-child(1) {
-    margin: 0 .25rem;
-}
-
-.staff-card-container img:nth-child(2) {
-    min-width: 300px;
-    min-height: 240px;
-    padding: 1.25rem 0;
 }

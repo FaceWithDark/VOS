@@ -62,6 +62,9 @@ $userData = getUserDetail();
     <link rel="stylesheet" type="text/css" href="/../assets/css/main.css" />
     <link rel='stylesheet' type="text/css" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' />
 
+    <!-- JS file -->
+    <script src="/../assets/js/themeSwitchButton.js" type="text/javascript"></script>
+
     <!-- Browser compatible -->
     <link rel="icon" type="image/png" sizes="96x96" href="/../assets/ico/favicon-96x96.png" />
     <link rel="icon" type="image/svg+xml" href="/../assets/ico/favicon.svg" />
@@ -178,14 +181,12 @@ $userData = getUserDetail();
                 </ul>
             </div>
 
-
             <div class="bottom-navigation-section">
-                <ul>
-                    <li>
-                        <i class='bx bxs-moon' id="dark-mode"></i>
-                        <i class='bx bxs-sun' id="light-mode"></i>
-                    </li>
-                </ul>
+                <div class="vot-theme-tray">
+                    <i class='bx bxs-sun' id="light-theme"></i>
+                    <i class='bx bx-desktop' id="system-theme"></i>
+                    <i class='bx bxs-moon' id="dark-theme"></i>
+                </div>
             </div>
 
         <?php else: ?>
@@ -241,17 +242,14 @@ $userData = getUserDetail();
             </div>
 
             <div class="bottom-navigation-section">
-                <ul>
-                    <li>
-                        <i class='bx bxs-moon' id="dark-mode"></i>
-                        <i class='bx bxs-sun' id="light-mode"></i>
-                    </li>
-                </ul>
+                <div class="vot-theme-tray">
+                    <i class='bx bxs-sun' id="light-theme"></i>
+                    <i class='bx bx-desktop' id="system-theme"></i>
+                    <i class='bx bxs-moon' id="dark-theme"></i>
+                </div>
             </div>
         <?php endif; ?>
     </nav>
-
-    <script src="/../assets/js/activeButton.js" type="text/javascript"></script>
 </body>
 
 </html>
