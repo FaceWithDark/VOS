@@ -37,6 +37,6 @@ echo "Completed shutting down Docker session for phase <$BUILD_STAGE>. Waiting f
 
 # Getting Docker Compose up again
 echo "Rebuild for <$BUILD_STAGE> phase..."
-docker-compose -f "$YAML_FILE" up --build -d
+docker-compose -f "$YAML_FILE" --env-file "$ENV_FILE" up --build -d
 
 echo "Completed rebuild for <$BUILD_STAGE> phase."
