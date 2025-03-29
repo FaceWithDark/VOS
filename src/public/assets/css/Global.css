@@ -17,7 +17,7 @@
 	--light-secondary-colour: hsl(var(--light-secondary-colour-hue) var(--light-secondary-colour-saturation) var(--light-secondary-colour-lightness) / var(--light-secondary-colour-alpha));
 	--light-accent-colour: hsl(var(--light-accent-colour-hue) var(--light-accent-colour-saturation) var(--light-accent-colour-lightness) / var(--light-accent-colour-alpha));
 	--light-background-colour: hsl(var(--light-background-colour-hue) var(--light-background-colour-saturation) var(--light-background-colour-lightness) / var(--light-background-colour-alpha));
-	--navigation-colour: hsl(var(--navigation-colour-hue) var(--navigation-colour-saturation) var(--navigation-colour-lightness) / var(--navigation-colour-alpha));
+	--light-navigation-colour: hsl(var(--light-navigation-colour-hue) var(--light-navigation-colour-saturation) var(--light-navigation-colour-lightness) / var(--light-navigation-colour-alpha));
 
 	/* Dynamic colour pallete modification for special cases */
 	--light-primary-colour-hue: 0;
@@ -40,10 +40,10 @@
 	--light-background-colour-lightness: 100%;
 	--light-background-colour-alpha: 1.0;
 
-	--navigation-colour-hue: 0;
-	--navigation-colour-saturation: 0%;
-	--navigation-colour-lightness: 13.5%;
-	--navigation-colour-alpha: 1.0;
+	--light-navigation-colour-hue: 0;
+	--light-navigation-colour-saturation: 0%;
+	--light-navigation-colour-lightness: 5.5%;
+	--light-navigation-colour-alpha: 1.0;
 
 
 	/*                          DARK MODE
@@ -60,6 +60,7 @@
 	--dark-secondary-colour: hsl(var(--dark-secondary-colour-hue) var(--dark-secondary-colour-saturation) var(--dark-secondary-colour-lightness) / var(--dark-secondary-colour-alpha));
 	--dark-accent-colour: hsl(var(--dark-accent-colour-hue) var(--dark-accent-colour-saturation) var(--dark-accent-colour-lightness) / var(--dark-accent-colour-alpha));
 	--dark-background-colour: hsl(var(--dark-background-colour-hue) var(--dark-background-colour-saturation) var(--dark-background-colour-lightness) / var(--dark-background-colour-alpha));
+	--dark-navigation-colour: hsl(var(--dark-navigation-colour-hue) var(--dark-navigation-colour-saturation) var(--dark-navigation-colour-lightness) / var(--dark-navigation-colour-alpha));
 
 	/* dynamic colour pallete modification for special cases */
 	--dark-primary-colour-hue: 0;
@@ -81,6 +82,11 @@
 	--dark-background-colour-saturation: 0%;
 	--dark-background-colour-lightness: 0%;
 	--dark-background-colour-alpha: 0.8;
+
+	--dark-navigation-colour-hue: 0;
+	--dark-navigation-colour-saturation: 0%;
+	--dark-navigation-colour-lightness: 3.5%;
+	--dark-navigation-colour-alpha: 1.0;
 }
 
 
@@ -96,13 +102,6 @@ body header h1 {
 	font-weight: bold;
 	font-size: 1.75rem;
 	margin: 1.5rem 0;
-}
-
-nav {
-	position: fixed;
-	width: 5rem;
-	min-height: 100vh;
-	transition: all 0.3s linear;
 }
 
 /* 'Song' page's styling methods */

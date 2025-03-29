@@ -67,7 +67,7 @@ body.light-theme div.vot-page section div.lower-general-information-box h3 {
 
 /* Navigation Bar [Light] */
 body.light-theme nav {
-	background-color: var(--navigation-colour);
+	background-color: var(--light-navigation-colour);
 }
 
 /* Navigation Bar (Top Section) [Light] */
@@ -174,7 +174,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 
 	/* Navigation Bar [System - Light] */
 	body.system-theme nav {
-		background-color: var(--navigation-colour);
+		background-color: var(--light-navigation-colour);
 	}
 
 	/* Navigation Bar (Top Section) [System - Light] */
@@ -280,7 +280,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 
 	/* Navigation Bar [System - Dark] */
 	body.system-theme nav {
-		background-color: var(--navigation-colour);
+		background-color: var(--dark-navigation-colour);
 	}
 
 	/* Navigation Bar (Top Section) [System - Dark] */
@@ -387,7 +387,7 @@ body.dark-theme div.vot-page section div.lower-general-information-box h3 {
 
 /* Navigation Bar [Dark] */
 body.dark-theme nav {
-	background-color: var(--navigation-colour);
+	background-color: var(--dark-navigation-colour);
 }
 
 /* Navigation Bar (Top Section) [Dark] */
