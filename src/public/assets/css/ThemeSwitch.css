@@ -33,7 +33,7 @@ body.light-theme div.vot-page section div.lower-general-information-box ul li {
 }
 
 /* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES [Light] */
-body.light-theme div.vot-page section div.flex-container div.direct-link-container,
+body.light-theme section div.flex-container div.direct-link-container,
 body.light-theme section div.mappool-page div.mappool-card-container,
 body.light-theme section div.staff-page div.staff-card-container,
 body.light-theme section div.song-page div.song-card-container {
@@ -141,7 +141,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 	}
 
 	/* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES [System - Light] */
-	body.system-theme div.vot-page section div.flex-container div.direct-link-container,
+	body.system-theme section div.flex-container div.direct-link-container,
 	body.system-theme section div.mappool-page div.mappool-card-container,
 	body.system-theme section div.staff-page div.staff-card-container,
 	body.system-theme section div.song-page div.song-card-container {
@@ -247,7 +247,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 	}
 
 	/* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES [System - Dark] */
-	body.system-theme div.vot-page section div.flex-container div.direct-link-container,
+	body.system-theme section div.flex-container div.direct-link-container,
 	body.system-theme section div.mappool-page div.mappool-card-container,
 	body.system-theme section div.staff-page div.staff-card-container,
 	body.system-theme section div.song-page div.song-card-container {
@@ -354,7 +354,7 @@ body.dark-theme div.vot-page section div.lower-general-information-box ul li {
 }
 
 /* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES [Dark] */
-body.dark-theme div.vot-page section div.flex-container div.direct-link-container,
+body.dark-theme section div.flex-container div.direct-link-container,
 body.dark-theme section div.mappool-page div.mappool-card-container,
 body.dark-theme section div.staff-page div.staff-card-container,
 body.dark-theme section div.song-page div.song-card-container {

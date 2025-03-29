@@ -183,7 +183,7 @@ body section div.announcement-box div.youtube-iframe-container iframe {
 
 
 /* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES */
-body div.vot-page section div.flex-container div.direct-link-container,
+body section div.flex-container div.direct-link-container,
 body section div.mappool-page div.mappool-card-container,
 body section div.staff-page div.staff-card-container,
 body section div.song-page div.song-card-container {
@@ -192,7 +192,7 @@ body section div.song-page div.song-card-container {
 	border-radius: 1.5rem;
 }
 
-body div.vot-page section div.flex-container div.direct-link-container:not(:first-child),
+body section div.flex-container div.direct-link-container:not(:first-child),
 body section div.mappool-page div.mappool-card-container:not(:first-child),
 body section div.staff-page div.staff-card-container:not(:first-child),
 body section div.song-page div.song-card-container:not(:first-child) {
