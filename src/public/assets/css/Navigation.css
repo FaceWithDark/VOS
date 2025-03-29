@@ -8,6 +8,14 @@
  *  + bottom-nav-section
  */
 
+/* Navigation Bar [General] */
+body nav {
+	position: fixed;
+	width: 5rem;
+	min-height: 100vh;
+	transition: all 0.3s linear;
+}
+
 /* Navigation Bar (Top Section) [General] */
 body nav div.top-navigation-section {
 	display: flex;
