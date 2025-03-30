@@ -19,28 +19,34 @@ body nav {
 /* Navigation Bar (Top Section) [General] */
 body nav div.top-navigation-section {
 	display: flex;
-	justify-content: space-evenly;
-	padding: 1rem 1rem 1rem 0;
+	justify-content: center;
+	padding: 1rem 0;
 }
 
+body nav div.top-navigation-section #collapsible-icon {
+	font-size: 1.175rem;
+	cursor: pointer;
+}
+
+/*
 body nav div.top-navigation-section strong {
 	transition: all 0.15s linear;
 	opacity: 0;
 }
+*/
 
-body nav.active-button {
+body nav.expanded {
 	width: 11rem;
 	flex-shrink: 0;
 }
 
-body nav div.top-navigation-section #click-button {
-	position: absolute;
-	font-size: 1.175rem;
-	margin-left: 1.25rem;
-	cursor: pointer;
+body nav.collapsed {
+	position: fixed;
+	width: 5rem;
+	min-height: 100vh;
 }
 
-body nav.active-button~body section.tournament-news,
+body nav.expanded~body section.tournament-news,
 body div.archived-page,
 body div.staff-page,
 body div.song-page,
@@ -50,20 +56,20 @@ body div.vot-page {
 	width: calc(100% - 13rem);
 }
 
-body nav.active-button div.top-navigation-section {
+body nav.expanded div.top-navigation-section {
 	/* Safari compatability. */
 	-webkit-user-select: none;
 	/* Others broswer compatability. */
 	user-select: none;
 }
 
-body nav.active-button div.top-navigation-section strong {
+body nav.expanded div.top-navigation-section strong {
 	font-weight: bold;
 	text-wrap: nowrap;
 	opacity: 1;
 }
 
-body nav.active-button div.top-navigation-section #click-button {
+body nav.expanded div.top-navigation-section #click-button {
 	margin-left: 9.5rem;
 	transition: margin-left 0.3s linear;
 }
@@ -100,7 +106,7 @@ body nav div.middle-navigation-first-section p {
 	transition: 0.3s linear;
 }
 
-body nav.active-button div.middle-navigation-first-section p {
+body nav.expanded div.middle-navigation-first-section p {
 	opacity: 1;
 	font-weight: 600;
 	margin-left: 1rem;
@@ -139,12 +145,12 @@ body nav div.middle-navigation-second-section ul li a:hover {
 	border-radius: 4rem;
 }
 
-body nav.active-button ul li a p {
+body nav.expanded ul li a p {
 	opacity: 1;
 	margin-left: 1.5rem;
 }
 
-body nav.active-button ul li a i {
+body nav.expanded ul li a i {
 	position: relative;
 }
 
