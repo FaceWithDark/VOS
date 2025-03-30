@@ -68,6 +68,7 @@ $userData = getUserDetail();
 
     <!-- JS file -->
     <script type="text/javascript" src="/../assets/js/themeSwitchButton.js"></script>
+    <script type="text/javascript" src="/../assets/js/collapsibleNavigationBar.js"></script>
 
     <!-- Browser compatible -->
     <link rel="icon" type="image/png" sizes="96x96" href="/../assets/ico/favicon-96x96.png" />
@@ -136,8 +137,7 @@ $userData = getUserDetail();
 <body>
     <nav>
         <div class="top-navigation-section">
-            <strong><i class="bx bxs-navigation">VOT</i></strong>
-            <i class="bx bx-menu" id="click-button"></i>
+            <i class="bx bx-menu" id="collapsible-icon"></i>
         </div>
 
         <?php if (!$userData): ?>
