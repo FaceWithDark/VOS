@@ -182,6 +182,10 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 		color: var(--light-background-colour);
 	}
 
+	body.system-theme nav.expanded div.top-navigation-section #navigation-title {
+		color: var(--light-background-colour);
+	}
+
 	body.system-theme nav.active-button div.top-navigation-section strong {
 		color: var(--light-background-colour);
 	}
@@ -285,6 +289,10 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 
 	/* Navigation Bar (Top Section) [System - Dark] */
 	body.system-theme nav div.top-navigation-section #collapsible-icon {
+		color: var(--dark-accent-colour);
+	}
+
+	body.system-theme nav.expanded div.top-navigation-section #navigation-title {
 		color: var(--dark-accent-colour);
 	}
 

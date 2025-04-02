@@ -16,28 +16,10 @@ body nav {
 	transition: all 0.3s linear;
 }
 
-/* Navigation Bar (Top Section) [General] */
-body nav div.top-navigation-section {
-	display: flex;
-	justify-content: center;
-	padding: 1rem 0;
-}
-
-body nav div.top-navigation-section #collapsible-icon {
-	font-size: 1.175rem;
-	cursor: pointer;
-}
-
-/*
-body nav div.top-navigation-section strong {
-	transition: all 0.15s linear;
-	opacity: 0;
-}
-*/
-
 body nav.expanded {
+	position: relative;
 	width: 11rem;
-	flex-shrink: 0;
+	min-height: 100vh;
 }
 
 body nav.collapsed {
@@ -46,44 +28,44 @@ body nav.collapsed {
 	min-height: 100vh;
 }
 
-body nav.expanded~body section.tournament-news,
-body div.archived-page,
-body div.staff-page,
-body div.song-page,
-body div.mappool-page,
-body div.vot-page {
-	margin-left: 13rem;
-	width: calc(100% - 13rem);
+body nav.expanded+section.tournament-news,
+body nav.expanded+div.archived-page,
+body nav.expanded+div.staff-page,
+body nav.expanded+div.song-page,
+body nav.expanded+div.mappool-page,
+body nav.expanded+div.vot-page {
+	transition: padding-left 0.325s;
 }
 
-body nav.expanded div.top-navigation-section {
+/* Navigation Bar (Top Section) [General] */
+body nav div.top-navigation-section {
+	display: flex;
+	justify-content: center;
+	padding: 1rem 0;
 	/* Safari compatability. */
 	-webkit-user-select: none;
 	/* Others broswer compatability. */
 	user-select: none;
 }
 
-body nav.expanded div.top-navigation-section strong {
+body nav div.top-navigation-section i#collapsible-icon {
+	font-size: 1.175rem;
+	cursor: pointer;
+}
+
+body nav.expanded div.top-navigation-section i#collapsible-icon {
+	position: absolute;
+	padding-left: 7.775rem;
+	transition: padding-left 0.325s;
+}
+
+body nav.collapsed div.top-navigation-section i#collapsible-icon {
+	position: inherit;
+	transition: padding-left 0.325s;
+}
+
+body nav.expanded div.top-navigation-section i#navigation-title strong {
 	font-weight: bold;
-	text-wrap: nowrap;
-	opacity: 1;
-}
-
-body nav.expanded div.top-navigation-section #click-button {
-	margin-left: 9.5rem;
-	transition: margin-left 0.3s linear;
-}
-
-body section.tournament-news,
-body div.archived-page,
-body div.staff-page,
-body div.song-page,
-body div.mappool-page,
-body div.vot-page {
-	padding-top: 1rem;
-	transition: margin-left 0.25s linear, width 0.25s linear;
-	width: calc(100% - 7rem);
-	margin-left: 7rem;
 }
 
 /* Navigation Bar (First Middle Section) [General] */

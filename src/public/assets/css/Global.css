@@ -93,7 +93,12 @@
 /* GLOBAL STYING FOR SOME ELEMENTS */
 body {
 	display: flex;
-	transition: background-color 0.25s, color 0.25s;
+	flex-direction: row;
+	transition: background-color 0.325s, color 0.325s;
+}
+
+body section {
+	padding-left: 5rem;
 }
 
 body header h1 {
