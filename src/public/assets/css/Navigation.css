@@ -9,31 +9,37 @@
  */
 
 /* Navigation Bar [General] */
-body nav {
-	position: fixed;
-	width: 5rem;
-	min-height: 100vh;
-	transition: all 0.3s linear;
-}
-
 body nav.expanded {
-	position: relative;
+	position: fixed;
 	width: 11rem;
 	min-height: 100vh;
+	transition: all 0.325s linear;
 }
 
 body nav.collapsed {
 	position: fixed;
 	width: 5rem;
 	min-height: 100vh;
+	transition: all 0.325s linear;
 }
 
-body nav.expanded+section.tournament-news,
-body nav.expanded+div.archived-page,
-body nav.expanded+div.staff-page,
-body nav.expanded+div.song-page,
-body nav.expanded+div.mappool-page,
-body nav.expanded+div.vot-page {
+body nav.expanded~section.home-page,
+body nav.expanded~section.landing-page,
+body nav.expanded~section.archive-page,
+body nav.expanded~section.mappool-page,
+body nav.expanded~section.staff-page,
+body nav.expanded~section.song-page {
+	padding-left: 11.75rem;
+	transition: padding-left 0.325s;
+}
+
+body nav.collapsed~section.home-page,
+body nav.collapsed~section.landing-page,
+body nav.collapsed~section.archive-page,
+body nav.collapsed~section.mappool-page,
+body nav.collapsed~section.staff-page,
+body nav.collapsed~section.song-page {
+	padding-left: 5.75rem;
 	transition: padding-left 0.325s;
 }
 
