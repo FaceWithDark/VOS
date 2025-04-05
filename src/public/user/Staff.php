@@ -6,7 +6,11 @@ require_once '../../private/controller/VotController.php';
 require_once '../../private/model/crud/StaffHandling.php';
 ?>
 
-<section>
+<header>
+    <h1>Our Lovely Staff :3</h1>
+</header>
+
+<section class="staff-page">
     <div class="button-container">
         <form action="Staff.php" method="get">
             <!-- Sent the corresponding tournament name fields to the website for fetching stored data -->
@@ -15,22 +19,20 @@ require_once '../../private/model/crud/StaffHandling.php';
         </form>
     </div>
 
-    <div class="staff-page">
-        <!-- Check if there's staff data to show to end-user and any of the tournament names' button is clicked -->
-        <?php if (!empty($staffDatas) && isset($tournamentName)): ?>
-            <!-- Dynamic staff information display -->
-            <?php foreach ($staffDatas as $staffData): ?>
-                <div class="staff-card-container">
-                    <h1>
-                        <img src="<?= htmlspecialchars(isset($staffData['staff_country_flag_url']) ? $staffData['staff_country_flag_url'] : "NULL"); ?>" alt="<?= htmlspecialchars(isset($staffData['staff_country_name']) ? $staffData['staff_country_name'] : "NULL"); ?>">
-                        <?= htmlspecialchars(isset($staffData['staff_username']) ? $staffData['staff_username'] : "NULL"); ?>
-                    </h1>
+    <!-- Check if there's staff data to show to end-user and any of the tournament names' button is clicked -->
+    <?php if (!empty($staffDatas) && isset($tournamentName)): ?>
+        <!-- Dynamic staff information display -->
+        <?php foreach ($staffDatas as $staffData): ?>
+            <div class="staff-card-container">
+                <h1>
+                    <img src="<?= htmlspecialchars(isset($staffData['staff_country_flag_url']) ? $staffData['staff_country_flag_url'] : "NULL"); ?>" alt="<?= htmlspecialchars(isset($staffData['staff_country_name']) ? $staffData['staff_country_name'] : "NULL"); ?>">
+                    <?= htmlspecialchars(isset($staffData['staff_username']) ? $staffData['staff_username'] : "NULL"); ?>
+                </h1>
 
-                    <img src="<?= htmlspecialchars(isset($staffData['staff_avatar_url']) ? $staffData['staff_avatar_url'] : "NULL"); ?>" alt="<?= htmlspecialchars(isset($staffData['staff_username']) ? $staffData['staff_username'] : "NULL"); ?>'s Avatar">
+                <img src="<?= htmlspecialchars(isset($staffData['staff_avatar_url']) ? $staffData['staff_avatar_url'] : "NULL"); ?>" alt="<?= htmlspecialchars(isset($staffData['staff_username']) ? $staffData['staff_username'] : "NULL"); ?>'s Avatar">
 
-                    <h2><?= htmlspecialchars(isset($staffData['staff_roles']) ? $staffData['staff_roles'] : "NULL") ?></h2>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
+                <h2><?= htmlspecialchars(isset($staffData['staff_roles']) ? $staffData['staff_roles'] : "NULL") ?></h2>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </section>

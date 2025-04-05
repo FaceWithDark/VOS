@@ -90,6 +90,9 @@ function getNavigationBarCollapsible() {
         ".top-navigation-section",
     );
 
+    // Set the initial state to collapsed
+    navigationBarToggleState(navigationBarTagLocation, "disable");
+
     collapsibleClickIcon.addEventListener(
         "click",
         function () {

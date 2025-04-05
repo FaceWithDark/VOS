@@ -93,12 +93,40 @@
 /* GLOBAL STYING FOR SOME ELEMENTS */
 body {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	transition: background-color 0.325s, color 0.325s;
 }
 
-body section {
-	padding-left: 5rem;
+/*
+body.light-theme {
+	display: flex;
+	flex-direction: column;
+	transition: background-color 0.325s, color 0.325s;
+}
+
+body.system-theme {
+	display: flex;
+	flex-direction: column;
+	transition: background-color 0.325s, color 0.325s;
+}
+
+body.dark-theme {
+	display: flex;
+	flex-direction: column;
+	transition: background-color 0.325s, color 0.325s;
+}
+*/
+
+body nav {
+	position: fixed;
+	width: 5rem;
+	min-height: 100vh;
+	transition: all 0.325s linear;
+}
+
+body nav~section {
+	padding-left: 5.75rem;
+	transition: padding-left 0.325s;
 }
 
 body header h1 {
