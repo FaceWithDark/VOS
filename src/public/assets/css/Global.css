@@ -97,26 +97,6 @@ body {
 	transition: background-color 0.325s, color 0.325s;
 }
 
-/*
-body.light-theme {
-	display: flex;
-	flex-direction: column;
-	transition: background-color 0.325s, color 0.325s;
-}
-
-body.system-theme {
-	display: flex;
-	flex-direction: column;
-	transition: background-color 0.325s, color 0.325s;
-}
-
-body.dark-theme {
-	display: flex;
-	flex-direction: column;
-	transition: background-color 0.325s, color 0.325s;
-}
-*/
-
 body nav {
 	position: fixed;
 	width: 5rem;
@@ -170,7 +150,7 @@ body section div.button-container button {
 /* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES*/
 body section div.announcement-box,
 body section div.lower-general-information-box {
-	margin: 0 3rem 1.5rem 1.25rem;
+	margin: 1.5rem;
 	border-radius: 1.5rem;
 }
 

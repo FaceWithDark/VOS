@@ -11,13 +11,17 @@ require_once '../../private/model/crud/StaffHandling.php';
 </header>
 
 <section class="staff-page">
-    <div class="button-container">
-        <form action="Staff.php" method="get">
-            <!-- Sent the corresponding tournament name fields to the website for fetching stored data -->
-            <button type="submit" name="name" value="vot3">VOT3</button>
-            <button type="submit" name="name" value="vot4">VOT4</button>
-        </form>
-    </div>
+    <form action="Staff.php" method="get">
+        <div class="flex-container">
+            <div class="direct-link-container">
+                <button type="submit" name="name" value="vot3">VOT3</button>
+            </div>
+
+            <div class="direct-link-container">
+                <button type="submit" name="name" value="vot4">VOT4</button>
+            </div>
+        </div>
+    </form>
 
     <!-- Check if there's staff data to show to end-user and any of the tournament names' button is clicked -->
     <?php if (!empty($staffDatas) && isset($tournamentName)): ?>

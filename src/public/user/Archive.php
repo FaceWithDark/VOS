@@ -13,7 +13,6 @@ require_once '../../private/controller/VotController.php';
 <section class="archive-page">
     <form action="Mappool.php" method="get">
         <div class="flex-container">
-
             <div class="direct-link-container">
                 <!-- <a href="https://docs.google.com/spreadsheets/d/1NTKjjdmax-qjO8L9-V8Iuom8zjcCaz9X-DHFJ4SDSAg/edit#gid=0"> // TODO: Re-create this as the spreadsheet owner somehow delete this. -->
                 <!-- <button type="submit" name="name" value="vot1">Vietnam osu!taiko Tournament 1</button> -->
