@@ -75,6 +75,10 @@ body.light-theme nav div.top-navigation-section #collapsible-icon {
 	color: var(--light-background-colour);
 }
 
+body.light-theme nav.expanded div.top-navigation-section #navigation-title {
+	color: var(--light-background-colour);
+}
+
 body.light-theme nav.active-button div.top-navigation-section strong {
 	color: var(--light-background-colour);
 }
@@ -82,10 +86,10 @@ body.light-theme nav.active-button div.top-navigation-section strong {
 /* Navigation Bar (First Middle Section) [Light] */
 body.light-theme nav div.middle-navigation-first-section img.user-image,
 body.light-theme nav div.middle-navigation-first-section img.authentication-failed-image {
-	border: 1px solid var(--light-background-colour);
+	border: 0.05rem solid var(--light-background-colour);
 }
 
-body.light-theme nav.active-button div.middle-navigation-first-section p {
+body.light-theme nav div.middle-navigation-first-section p {
 	color: var(--light-background-colour);
 }
 
@@ -193,10 +197,10 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 	/* Navigation Bar (First Middle Section) [System - Light] */
 	body.system-theme nav div.middle-navigation-first-section img.user-image,
 	body.system-theme nav div.middle-navigation-first-section img.authentication-failed-image {
-		border: 1px solid var(--light-background-colour);
+		border: 0.05rem solid var(--light-background-colour);
 	}
 
-	body.system-theme nav.active-button div.middle-navigation-first-section p {
+	body.system-theme nav div.middle-navigation-first-section p {
 		color: var(--light-background-colour);
 	}
 
@@ -303,10 +307,10 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 	/* Navigation Bar (First Middle Section) [System - Dark] */
 	body.system-theme nav div.middle-navigation-first-section img.user-image,
 	body.system-theme nav div.middle-navigation-first-section img.authentication-failed-image {
-		border: 1px solid var(--dark-accent-colour);
+		border: 0.05rem solid var(--dark-accent-colour);
 	}
 
-	body.system-theme nav.active-button div.middle-navigation-first-section p {
+	body.system-theme nav div.middle-navigation-first-section p {
 		color: var(--dark-accent-colour);
 	}
 
@@ -403,17 +407,21 @@ body.dark-theme nav div.top-navigation-section #collapsible-icon {
 	color: var(--dark-accent-colour);
 }
 
-body.dark-theme nav.active-button div.top-navigation-section strong {
+body.dark-theme nav div.top-navigation-section #navigation-title {
+	color: var(--dark-accent-colour);
+}
+
+body.dark-theme nav div.top-navigation-section strong {
 	color: var(--dark-accent-colour);
 }
 
 /* Navigation Bar (First Middle Section) [Dark] */
 body.dark-theme nav div.middle-navigation-first-section img.user-image,
 body.dark-theme nav div.middle-navigation-first-section img.authentication-failed-image {
-	border: 1px solid var(--dark-accent-colour);
+	border: 0.05rem solid var(--dark-accent-colour);
 }
 
-body.dark-theme nav.active-button div.middle-navigation-first-section p {
+body.dark-theme nav div.middle-navigation-first-section p {
 	color: var(--dark-accent-colour);
 }
 

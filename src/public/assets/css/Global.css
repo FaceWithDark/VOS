@@ -109,6 +109,28 @@ body nav~section {
 	transition: padding-left 0.325s;
 }
 
+body nav div.middle-navigation-first-section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0.5rem 0;
+}
+
+body nav div.middle-navigation-first-section img.user-image,
+body nav div.middle-navigation-first-section img.authentication-failed-image {
+	width: 3.25rem;
+	height: auto;
+	border-radius: 2rem;
+}
+
+body nav div.middle-navigation-first-section p {
+	font-weight: 600;
+	text-align: center;
+	padding-top: 1rem;
+	opacity: 0;
+	transition: word-wrap 0.325s, opacity 0.325s;
+}
+
 body header h1 {
 	display: flex;
 	justify-content: center;
