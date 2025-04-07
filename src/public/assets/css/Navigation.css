@@ -109,45 +109,43 @@ body nav.expanded div.middle-navigation-first-section p {
 
 
 /* Navigation Bar (Second Middle Section) */
-body nav div.middle-navigation-second-section ul {
-	margin: 2rem 1.5rem;
-	line-height: 3rem;
-}
-
-body nav div.middle-navigation-second-section ul li:not(:last-child) {
-	margin-bottom: 7.25rem;
-}
-
-body nav div.middle-navigation-second-section ul li a {
+body nav.expanded div.middle-navigation-second-section,
+body nav.collapsed div.middle-navigation-second-section {
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
 	align-items: center;
-	transition: all 0.1s linear;
-	padding: 0.15rem 0;
 }
 
-body nav div.middle-navigation-second-section ul li a i {
-	position: absolute;
-	font-size: 1.2rem;
+body nav.expanded div.middle-navigation-second-section ul,
+body nav.collapsed div.middle-navigation-second-section ul {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: stretch;
 }
 
-body nav div.middle-navigation-second-section ul li a p {
-	opacity: 0;
-	text-wrap: nowrap;
-}
-
-body nav div.middle-navigation-second-section ul li a:hover {
+body nav.expanded div.middle-navigation-second-section ul li {
+	margin: 3.25rem 0;
+	padding: 1rem;
+	background: coral;
 	border-radius: 4rem;
+	transition: background 0.325s, padding 0.325s;
 }
 
-body nav.expanded ul li a p {
-	opacity: 1;
-	margin-left: 1.5rem;
+body nav.collapsed div.middle-navigation-second-section ul li {
+	margin: 3.25rem 0;
+	background: coral;
+	border-radius: 4rem;
+	transition: background 0.325s, padding 0.325s;
 }
 
-body nav.expanded ul li a i {
-	position: relative;
+body nav.expanded div.middle-navigation-second-section ul li a,
+body nav.collapsed div.middle-navigation-second-section ul li a {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
 }
+
 
 /* Navigation Bar (Bottom Section) */
 body nav div.bottom-navigation-section {
