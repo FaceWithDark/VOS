@@ -142,7 +142,7 @@ $userData = getUserDetail();
 
         <?php if (!$userData): ?>
             <div class="middle-navigation-first-section">
-                <img src="/../assets/img/Authentication Failed.webp" alt="Sus?" class="authentication-failed-image">
+                <img src="/../assets/img/Authentication Failed.webp" alt="Sus?" class="user-image">
                 <p>Sussy Baka</p>
             </div>
 

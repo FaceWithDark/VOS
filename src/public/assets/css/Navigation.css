@@ -8,7 +8,7 @@
  *  + bottom-nav-section
  */
 
-/* Navigation Bar [General] */
+/* Navigation Bar */
 body nav.expanded {
 	position: fixed;
 	width: 11rem;
@@ -43,8 +43,9 @@ body nav.collapsed~section.song-page {
 	transition: padding-left 0.325s;
 }
 
-/* Navigation Bar (Top Section) [General] */
-body nav div.top-navigation-section {
+/* Navigation Bar (Top Section) */
+body nav.expanded div.top-navigation-section,
+body nav.collapsed div.top-navigation-section {
 	display: flex;
 	justify-content: center;
 	padding: 1rem 0;
@@ -54,34 +55,28 @@ body nav div.top-navigation-section {
 	user-select: none;
 }
 
-body nav div.top-navigation-section i#collapsible-icon {
-	font-size: 1.175rem;
-	cursor: pointer;
-}
-
 body nav.expanded div.top-navigation-section i#collapsible-icon {
 	position: absolute;
+	font-size: 1.175rem;
 	padding-left: 7.775rem;
 	transition: padding-left 0.325s;
+	cursor: pointer;
 }
 
 body nav.collapsed div.top-navigation-section i#collapsible-icon {
 	position: inherit;
+	font-size: 1.175rem;
 	transition: padding-left 0.325s;
+	cursor: pointer;
 }
 
-body nav.expanded div.top-navigation-section i#navigation-title strong {
+body nav.expanded div.top-navigation-section i#navigation-title strong,
+body nav.collapsed div.top-navigation-section i#navigation-title strong {
 	font-weight: bold;
 }
 
 /* Navigation Bar (First Middle Section) [General] */
-body nav.expanded div.middle-navigation-first-section {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin: .5rem 0;
-}
-
+body nav.expanded div.middle-navigation-first-section,
 body nav.collapsed div.middle-navigation-first-section {
 	display: flex;
 	flex-direction: column;
@@ -90,14 +85,7 @@ body nav.collapsed div.middle-navigation-first-section {
 }
 
 body nav.expanded div.middle-navigation-first-section img.user-image,
-body nav.expanded div.middle-navigation-first-section img.authentication-failed-image {
-	width: 3.25rem;
-	height: auto;
-	border-radius: 2rem;
-}
-
-body nav.collapsed div.middle-navigation-first-section img.user-image,
-body nav.collapsed div.middle-navigation-first-section img.authentication-failed-image {
+body nav.collapsed div.middle-navigation-first-section img.user-image {
 	width: 3.25rem;
 	height: auto;
 	border-radius: 2rem;
@@ -120,7 +108,7 @@ body nav.expanded div.middle-navigation-first-section p {
 }
 
 
-/* Navigation Bar (Second Middle Section) [General] */
+/* Navigation Bar (Second Middle Section) */
 body nav div.middle-navigation-second-section ul {
 	margin: 2rem 1.5rem;
 	line-height: 3rem;
@@ -161,7 +149,7 @@ body nav.expanded ul li a i {
 	position: relative;
 }
 
-/* Navigation Bar (Bottom Section) [General] */
+/* Navigation Bar (Bottom Section) */
 body nav div.bottom-navigation-section {
 	margin-top: 8.5rem;
 }

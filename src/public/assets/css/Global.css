@@ -90,13 +90,10 @@
 }
 
 
-/* GLOBAL STYING FOR SOME ELEMENTS */
-body {
-	display: flex;
-	flex-direction: column;
-	transition: background-color 0.325s, color 0.325s;
-}
+/* NAVIGATION BAR GLOBAL STYING */
 
+
+/* Navigation Bar [General] */
 body nav {
 	position: fixed;
 	width: 5rem;
@@ -109,6 +106,27 @@ body nav~section {
 	transition: padding-left 0.325s;
 }
 
+/* Navigation Bar (Top Section) [General] */
+body nav div.top-navigation-section {
+	display: flex;
+	justify-content: center;
+	padding: 1rem 0;
+	/* Safari compatability. */
+	-webkit-user-select: none;
+	/* Others broswer compatability. */
+	user-select: none;
+}
+
+body nav div.top-navigation-section i#collapsible-icon {
+	font-size: 1.175rem;
+	cursor: pointer;
+}
+
+body nav div.top-navigation-section i#navigation-title strong {
+	font-weight: bold;
+}
+
+/* Navigation Bar (First Middle Section) [General] */
 body nav div.middle-navigation-first-section {
 	display: flex;
 	flex-direction: column;
@@ -116,8 +134,7 @@ body nav div.middle-navigation-first-section {
 	margin: 0.5rem 0;
 }
 
-body nav div.middle-navigation-first-section img.user-image,
-body nav div.middle-navigation-first-section img.authentication-failed-image {
+body nav div.middle-navigation-first-section img.user-image {
 	width: 3.25rem;
 	height: auto;
 	border-radius: 2rem;
@@ -131,6 +148,18 @@ body nav div.middle-navigation-first-section p {
 	transition: word-wrap 0.325s, opacity 0.325s;
 }
 
+/* Navigation Bar (Second Middle Section) [General] */
+
+/* Navigation Bar (Bottom Section) [General] */
+
+
+/* GLOBAL STYING FOR SOME ELEMENTS */
+body {
+	display: flex;
+	flex-direction: column;
+	transition: background-color 0.325s, color 0.325s;
+}
+
 body header h1 {
 	display: flex;
 	justify-content: center;
@@ -138,6 +167,8 @@ body header h1 {
 	font-size: 1.75rem;
 	margin: 1.5rem 0;
 }
+
+/* TODO: Start of "May need to delete these and do a more reasonable styling approach". */
 
 /* 'Song' page's styling methods */
 body section div.header-container {
@@ -167,6 +198,8 @@ body section div.button-container button {
 	margin-top: 1rem;
 	margin-right: 1rem;
 }
+
+/* TODO: End of "May need to delete these and do a more reasonable styling approach". */
 
 
 /* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES*/
@@ -243,8 +276,8 @@ body section div.flex-container div.direct-link-container a {
 	user-select: none;
 }
 
-/* NO-HEADER PAGES */
 
+/* NO-HEADER PAGES */
 body section div.mappool-page,
 body section div.staff-page,
 body section div.song-page {
@@ -331,7 +364,6 @@ body div.vot-page section div.lower-general-information-box ul li {
 
 
 /* CARD STYLE WITH HEADER PAGES */
-
 body section div.staff-page div.staff-card-container {
 	display: flex;
 	flex-direction: column;
