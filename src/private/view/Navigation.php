@@ -218,7 +218,7 @@ $userData = getUserDetail();
                     <li>
                         <a href="/../user/Archive.php">
                             <i class="bx bxs-box"></i>
-                            <p>Archive<p>
+                            <p>Archive</p>
                         </a>
                     </li>
 
