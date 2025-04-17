@@ -151,35 +151,30 @@ $userData = getUserDetail();
                     <li>
                         <a href="https://osu.ppy.sh/oauth/authorize?client_id=<?= $clientIdValue; ?>&redirect_uri=<?= $clientRedirectValue; ?>&response_type=code&scope=public+identify&state=randomise">
                             <i class='bx bx-user-plus'></i>
-                            <p>Login</p>
                         </a>
                     </li>
 
                     <li>
                         <a href="/../user/Home.php">
                             <i class="bx bxs-grid-alt"></i>
-                            <p>Home</p>
                         </a>
                     </li>
 
                     <li>
                         <a href="/../user/Archive.php">
                             <i class="bx bxs-box"></i>
-                            <p>Archive</p>
                         </a>
                     </li>
 
                     <li>
                         <a href="/../user/Staff.php">
                             <i class="bx bxs-phone"></i>
-                            <p>Staff</p>
                         </a>
                     </li>
 
                     <li>
                         <a href="/../user/Song.php">
                             <i class="bx bxs-music"></i>
-                            <p>Song</p>
                         </a>
                     </li>
                 </ul>

@@ -1,104 +1,100 @@
 /**
- * Toggle navigation bar expanding/collapsing state.
- * @param {HTMLElement} navigationBarToggleClass - Indicates <nav> tag for toggling mentioned feature.
- * @param {String} navigationBarToggleCondition - Indicates whether the navigation bar should be expanded or collapsed.
- * @returns {Boolean} - Confirms correct keyword to enable/disable the mentioned feature.
+ * Logic to set navigation bar expanding/collapsing state.
+ * @param {HTMLElement} tagLocation - Location of the HTML tag where navigation bar state can be set.
+ * @param {String} toggleState - Receive pre-defined state conditions allowing expandable/collapsible navigation bar.
+ * @returns {Boolean} - Indicates matched keyword to enable corresponding state.
  */
-function navigationBarToggleState(
-    navigationBarToggleClass,
-    navigationBarToggleCondition,
-) {
-    switch (navigationBarToggleCondition) {
-        case "enable":
-            navigationBarToggleClass.classList.remove("collapsed");
-            navigationBarToggleClass.classList.add("expanded");
+function navigationBarToggleState(tagLocation, toggleState) {
+    switch (toggleState) {
+        case "expandable":
+        case "expanded":
+        case "expand":
+            tagLocation.classList.remove("collapsed");
+            tagLocation.classList.add("expanded");
             break;
 
-        case "disable":
-            navigationBarToggleClass.classList.remove("expanded");
-            navigationBarToggleClass.classList.add("collapsed");
+        case "collapsible":
+        case "collapsed":
+        case "collapse":
+            tagLocation.classList.remove("expanded");
+            tagLocation.classList.add("collapsed");
             break;
 
-        // Default case
+        // Non-matching keywords
         default:
-            console.warn(
-                "Unknown toggle condition:",
-                navigationBarToggleCondition,
-            );
+            console.warn("Unknown toggle condition:", toggleState);
             break;
     }
     return true;
 }
 
 /**
- * Create required elements when navigation bar is in expanding state.
- * @param {HTMLElement} navigationBarAppendLocation - Indicates <nav> itself or classes location for appending required elements.
- * @return {HTMLElement} - Created elements.
+ * Create new element(s) when the navigation bar is in expandable state.
+ * @param {HTMLElement} activateLocation - Location of the attribute where new element(s) can be assigned to.
+ * @return {HTMLElement} - Indicates new element(s) is/are created.
  */
-function navigationBarExpendedElement(navigationBarAppendLocation) {
-    const votNavigationElement = document.createElement("i");
-    votNavigationElement.className = "bx bxs-navigation";
-    votNavigationElement.id = "navigation-title";
-    votNavigationElement.innerHTML = "<strong>VOT</strong>";
+function activateExpandableNavigationBar(activateLocation) {
+    const setVotNavigationTitle = document.createElement("i");
+    setVotNavigationTitle.className = "bx bxs-navigation";
+    setVotNavigationTitle.id = "navigation-title";
+    setVotNavigationTitle.innerHTML = "<strong>VOT</strong>";
 
-    navigationBarAppendLocation.appendChild(votNavigationElement);
+    activateLocation.appendChild(setVotNavigationTitle);
 
-    return votNavigationElement;
+    return setVotNavigationTitle;
 }
 
 /**
- * Remove created elements when navigation bar is in collapsing state.
- * @param {HTMLElement} votNavigationElement - Indicates created elements for removal.
- * @return {undefined} - Confirms created elements have been removed successfully.
+ * Remove assigned element(s) when the navigation bar is in collapsible state.
+ * @param {HTMLElement} activateLocation - Location of assigned element(s) for removal.
+ * @return {undefined} - Indicates assigned element(s) is/are removed.
  */
-function navigationBarCollapsedElement(votNavigationElement) {
-    votNavigationElement.remove();
+function activateCollapsibleNavigationBar(activateLocation) {
+    activateLocation.remove();
     return undefined;
 }
 
 /**
- * Main logic for enabling/disabling collapsible navigation bar feature.
- * @param {HTMLElement} navigationBarTagLocation - <nav> tag location for activate toggling/disabling conditions.
- * @param {HTMLElement} navigationBarAppendLocation - Indicates <nav> itself or classes location for appending required elements.
- * @return {Boolean} - Indicates that the navigation bar state has been successfully applied.
+ * Toggle navigation bar expanding/collapsing feature based on set conditions.
+ * @param {HTMLElement} tagLocation - Location of the HTML tag where navigation bar state can access in.
+ * @param {HTMLElement} appendLocation - Location of the attribute where navigation bar state can be applied to.
+ * @return {Boolean} - Indicates correct state applied to the navigation bar.
  */
-function setNavigationBarCollapsible(
-    navigationBarTagLocation,
-    navigationBarAppendLocation,
-) {
-    const votNavigation = document.getElementById("navigation-title");
+function applyCollapsibleNavigationBar(tagLocation, appendLocation) {
+    const getVotNavigationTitle = document.getElementById("navigation-title");
 
-    if (!votNavigation) {
-        navigationBarExpendedElement(navigationBarAppendLocation);
-        navigationBarToggleState(navigationBarTagLocation, "enable");
+    if (!getVotNavigationTitle) {
+        activateExpandableNavigationBar(appendLocation);
+        navigationBarToggleState(tagLocation, "expanded");
+        return true;
     } else {
-        navigationBarCollapsedElement(votNavigation);
-        navigationBarToggleState(navigationBarTagLocation, "disable");
+        activateCollapsibleNavigationBar(getVotNavigationTitle);
+        navigationBarToggleState(tagLocation, "collapsed");
+        return true;
     }
-
-    return true;
 }
 
 /**
- * Retrive enabling/disabling collapsible logic
+ * Activate navigation bar expanding/collapsing feature.
  * @return {Boolean} - Confirms navigation bar enabling/disabling feature is working.
  */
-function getNavigationBarCollapsible() {
-    const collapsibleClickIcon = document.getElementById("collapsible-icon");
+function toggleCollapsibleNavigationBar() {
+    // TODO: Dynamically add <p> tags: Login, Home, Archive, Staff, Song, Log out
+    const navigationBarClickIcon = document.getElementById("collapsible-icon");
     const navigationBarTagLocation = document.querySelector("nav");
-    const navigationBarAppendLocation = document.querySelector(
+    const navigationBarTopAppendLocation = document.querySelector(
         ".top-navigation-section",
     );
 
-    // Set the initial state to collapsed
-    navigationBarToggleState(navigationBarTagLocation, "disable");
+    // Navigation bar will stay in non expanding form by default
+    navigationBarToggleState(navigationBarTagLocation, "collapsed");
 
-    collapsibleClickIcon.addEventListener(
+    navigationBarClickIcon.addEventListener(
         "click",
         function () {
-            setNavigationBarCollapsible(
+            applyCollapsibleNavigationBar(
                 navigationBarTagLocation,
-                navigationBarAppendLocation,
+                navigationBarTopAppendLocation,
             );
         },
     );
@@ -106,4 +102,4 @@ function getNavigationBarCollapsible() {
     return true;
 }
 
-document.addEventListener("DOMContentLoaded", getNavigationBarCollapsible);
+document.addEventListener("DOMContentLoaded", toggleCollapsibleNavigationBar);
