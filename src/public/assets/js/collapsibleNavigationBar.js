@@ -5,6 +5,7 @@
  * @returns {Boolean} - Indicates matched keyword to enable corresponding state.
  */
 function navigationBarToggleState(tagLocation, toggleState) {
+    // I don't get why JS wanted to syntactically handling multi-case this way but it works, somehow
     switch (toggleState) {
         case "expandable":
         case "expanded":
@@ -31,7 +32,7 @@ function navigationBarToggleState(tagLocation, toggleState) {
 /**
  * Create new element(s) when the navigation bar is in expandable state.
  * @param {HTMLElement} activateLocation - Location of the attribute where new element(s) can be assigned to.
- * @return {HTMLElement} - Indicates new element(s) is/are created.
+ * @returns {HTMLElement} - Indicates new element(s) is/are created.
  */
 function activateExpandableNavigationBar(activateLocation) {
     const setVotNavigationTitle = document.createElement("i");
@@ -40,6 +41,17 @@ function activateExpandableNavigationBar(activateLocation) {
     setVotNavigationTitle.innerHTML = "<strong>VOT</strong>";
 
     activateLocation.appendChild(setVotNavigationTitle);
+
+    // Create and append <p> tags within each <a> tag
+    const menuItems = ["Login", "Home", "Archive", "Staff", "Song", "Logout"];
+    const listItems = activateLocation.querySelectorAll("ul li");
+
+    listItems.forEach(function (li, index) {
+        const menuItem = document.createElement("p");
+        menuItem.textContent = menuItems[index];
+        const anchor = li.querySelector("a");
+        anchor.appendChild(menuItem);
+    });
 
     return setVotNavigationTitle;
 }
@@ -51,6 +63,7 @@ function activateExpandableNavigationBar(activateLocation) {
  */
 function activateCollapsibleNavigationBar(activateLocation) {
     activateLocation.remove();
+
     return undefined;
 }
 
@@ -63,27 +76,44 @@ function activateCollapsibleNavigationBar(activateLocation) {
 function applyCollapsibleNavigationBar(tagLocation, appendLocation) {
     const getVotNavigationTitle = document.getElementById("navigation-title");
 
+    // Remove the <p> elements within each <a> tag
+    const listItems = appendLocation.querySelectorAll("ul li");
+
+    listItems.forEach(function (li) {
+        const anchor = li.querySelector("a");
+        const menuItem = anchor.querySelector("p");
+        if (menuItem) {
+            activateCollapsibleNavigationBar(menuItem);
+            navigationBarToggleState(tagLocation, "collapsed");
+
+            return true;
+        }
+    });
+
     if (!getVotNavigationTitle) {
         activateExpandableNavigationBar(appendLocation);
         navigationBarToggleState(tagLocation, "expanded");
+
         return true;
     } else {
         activateCollapsibleNavigationBar(getVotNavigationTitle);
         navigationBarToggleState(tagLocation, "collapsed");
+
         return true;
     }
 }
 
 /**
  * Activate navigation bar expanding/collapsing feature.
- * @return {Boolean} - Confirms navigation bar enabling/disabling feature is working.
+ * @return {Boolean} - Indicates that collapisble navigation bar feature is working.
  */
 function toggleCollapsibleNavigationBar() {
     // TODO: Dynamically add <p> tags: Login, Home, Archive, Staff, Song, Log out
     const navigationBarClickIcon = document.getElementById("collapsible-icon");
     const navigationBarTagLocation = document.querySelector("nav");
     const navigationBarTopAppendLocation = document.querySelector(
-        ".top-navigation-section",
+        //".top-navigation-section",
+        ".middle-navigation-second-section",
     );
 
     // Navigation bar will stay in non expanding form by default

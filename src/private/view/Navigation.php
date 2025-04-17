@@ -206,35 +206,30 @@ $userData = getUserDetail();
                     <li>
                         <a href="/../user/Home.php">
                             <i class="bx bxs-grid-alt"></i>
-                            <p>Home</p>
                         </a>
                     </li>
 
                     <li>
                         <a href="/../user/Archive.php">
                             <i class="bx bxs-box"></i>
-                            <p>Archive</p>
                         </a>
                     </li>
 
                     <li>
                         <a href="/../user/Staff.php">
                             <i class="bx bxs-phone"></i>
-                            <p>Staff</p>
                         </a>
                     </li>
 
                     <li>
                         <a href="/../user/Song.php">
                             <i class="bx bxs-music"></i>
-                            <p>Song</p>
                         </a>
                     </li>
 
                     <li>
                         <a href="/../admin/LogOutInterface.php">
                             <i class='bx bx-user-minus'></i>
-                            <p>Logout</p>
                         </a>
                     </li>
                 </ul>
