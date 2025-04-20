@@ -70,8 +70,8 @@ body nav.collapsed div.top-navigation-section i#collapsible-icon {
 	cursor: pointer;
 }
 
-body nav.expanded div.top-navigation-section i#navigation-title strong,
-body nav.collapsed div.top-navigation-section i#navigation-title strong {
+body nav.expanded div.top-navigation-section i#expandable-title strong,
+body nav.collapsed div.top-navigation-section i#expandable-title strong {
 	font-weight: bold;
 }
 

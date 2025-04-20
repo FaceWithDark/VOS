@@ -75,7 +75,7 @@ body.light-theme nav div.top-navigation-section #collapsible-icon {
 	color: var(--light-background-colour);
 }
 
-body.light-theme nav.expanded div.top-navigation-section #navigation-title {
+body.light-theme nav.expanded div.top-navigation-section #expandable-title {
 	color: var(--light-background-colour);
 }
 
@@ -186,7 +186,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 		color: var(--light-background-colour);
 	}
 
-	body.system-theme nav.expanded div.top-navigation-section #navigation-title {
+	body.system-theme nav.expanded div.top-navigation-section #expandable-title {
 		color: var(--light-background-colour);
 	}
 
@@ -296,7 +296,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 		color: var(--dark-accent-colour);
 	}
 
-	body.system-theme nav.expanded div.top-navigation-section #navigation-title {
+	body.system-theme nav.expanded div.top-navigation-section #expandable-title {
 		color: var(--dark-accent-colour);
 	}
 
@@ -407,7 +407,7 @@ body.dark-theme nav div.top-navigation-section #collapsible-icon {
 	color: var(--dark-accent-colour);
 }
 
-body.dark-theme nav div.top-navigation-section #navigation-title {
+body.dark-theme nav div.top-navigation-section #expandable-title {
 	color: var(--dark-accent-colour);
 }
 
