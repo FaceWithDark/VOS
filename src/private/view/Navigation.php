@@ -67,8 +67,8 @@ $userData = getUserDetail();
     <link rel='stylesheet' type="text/css" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' />
 
     <!-- JS file -->
-    <script type="text/javascript" src="/../assets/js/themeSwitchButton.js"></script>
     <script type="text/javascript" src="/../assets/js/collapsibleNavigationBar.js"></script>
+    <script type="text/javascript" src="/../assets/js/themeSwitchButton.js"></script>
 
     <!-- Browser compatible -->
     <link rel="icon" type="image/png" sizes="96x96" href="/../assets/ico/favicon-96x96.png" />
@@ -135,7 +135,7 @@ $userData = getUserDetail();
 </head>
 
 <body>
-    <nav>
+    <nav class="collapsed">
         <div class="top-navigation-section">
             <i class="bx bx-menu" id="collapsible-icon"></i>
         </div>
@@ -204,6 +204,12 @@ $userData = getUserDetail();
             <div class="middle-navigation-second-section">
                 <ul>
                     <li>
+                        <a href="/../admin/LogOutInterface.php">
+                            <i class='bx bx-user-minus'></i>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="/../user/Home.php">
                             <i class="bx bxs-grid-alt"></i>
                         </a>
@@ -224,12 +230,6 @@ $userData = getUserDetail();
                     <li>
                         <a href="/../user/Song.php">
                             <i class="bx bxs-music"></i>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/../admin/LogOutInterface.php">
-                            <i class='bx bx-user-minus'></i>
                         </a>
                     </li>
                 </ul>
