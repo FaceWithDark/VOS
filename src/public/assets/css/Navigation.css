@@ -84,8 +84,24 @@ body nav.collapsed div.middle-navigation-first-section {
 	margin: .5rem 0;
 }
 
+/* For unauthenticated user image layout */
 body nav.expanded div.middle-navigation-first-section img.user-image,
 body nav.collapsed div.middle-navigation-first-section img.user-image {
+	width: 3.25rem;
+	height: auto;
+	border-radius: 2rem;
+}
+
+/* For authenticated user image layout */
+body nav.expanded div.middle-navigation-first-section a,
+body nav.collapsed div.middle-navigation-first-section a {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+body nav.expanded div.middle-navigation-first-section a img.user-image,
+body nav.collapsed div.middle-navigation-first-section a img.user-image {
 	width: 3.25rem;
 	height: auto;
 	border-radius: 2rem;
