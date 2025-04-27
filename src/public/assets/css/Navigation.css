@@ -124,19 +124,9 @@ body nav.collapsed div.middle-navigation-second-section ul {
 	align-items: stretch;
 }
 
-body nav.expanded div.middle-navigation-second-section ul li {
-	margin: 3.25rem 0;
-	padding: 1rem;
-	background: coral;
-	border-radius: 4rem;
-	transition: background 0.325s, padding 0.325s;
-}
-
+body nav.expanded div.middle-navigation-second-section ul li,
 body nav.collapsed div.middle-navigation-second-section ul li {
 	margin: 3.25rem 0;
-	background: coral;
-	border-radius: 4rem;
-	transition: background 0.325s, padding 0.325s;
 }
 
 body nav.expanded div.middle-navigation-second-section ul li a,
@@ -144,6 +134,9 @@ body nav.collapsed div.middle-navigation-second-section ul li a {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
+	padding: 0.75rem;
+	border-radius: 4rem;
+	transition: background 0.325s, padding 0.325s;
 }
 
 
