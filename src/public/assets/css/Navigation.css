@@ -148,6 +148,6 @@ body nav div.bottom-navigation-section {
 body nav div.bottom-navigation-section div.vot-theme-tray {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	border-radius: 1.25rem;
 }
