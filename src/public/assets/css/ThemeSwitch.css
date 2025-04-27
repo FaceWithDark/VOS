@@ -95,6 +95,7 @@ body.light-theme nav div.middle-navigation-first-section p {
 
 /* Navigation Bar (Second Middle Section) [Light] */
 body.light-theme nav div.middle-navigation-second-section ul li a {
+	background-color: var(--light-secondary-colour);
 	color: var(--light-background-colour);
 }
 
@@ -206,6 +207,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 
 	/* Navigation Bar (Second Middle Section) [System - Light] */
 	body.system-theme nav div.middle-navigation-second-section ul li a {
+		background-color: var(--light-secondary-colour);
 		color: var(--light-background-colour);
 	}
 
@@ -316,12 +318,13 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 
 	/* Navigation Bar (Second Middle Section) [System - Dark] */
 	body.system-theme nav div.middle-navigation-second-section ul li a {
-		color: var(--dark-accent-colour);
+		background-color: var(--dark-secondary-colour);
+		color: var(--dark-background-colour);
 	}
 
 	body.system-theme nav div.middle-navigation-second-section ul li a:hover {
 		background-color: var(--dark-secondary-colour);
-		color: var(--dark-background-colour);
+		color: var(--dark-accent-colour);
 	}
 
 	/* Navigation Bar (Bottom Section) [System - Dark] */
@@ -427,12 +430,13 @@ body.dark-theme nav div.middle-navigation-first-section p {
 
 /* Navigation Bar (Second Middle Section) [Dark] */
 body.dark-theme nav div.middle-navigation-second-section ul li a {
-	color: var(--dark-accent-colour);
+	background-color: var(--dark-secondary-colour);
+	color: var(--dark-background-colour);
 }
 
 body.dark-theme nav div.middle-navigation-second-section ul li a:hover {
 	background-color: var(--dark-secondary-colour);
-	color: var(--dark-background-colour);
+	color: var(--dark-accent-colour);
 }
 
 /* Navigation Bar (Bottom Section) [Dark] */
