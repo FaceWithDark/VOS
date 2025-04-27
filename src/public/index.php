@@ -2,6 +2,8 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
+require __DIR__ . '/../private/config/Configuration.php';
+
 ob_start();
 ?>
 
@@ -34,7 +36,11 @@ ob_start();
     <?php
     // Reference: https://www.php.net/manual/en/function.ob-end-flush.php
     while (ob_get_level() > 0) {
-        exit(header('Location: /user/Home.php', true, 302));
+        exit(header(
+                header: 'Location: /user/Home.php',
+                replace: true,
+                response_code: 302
+        ));
         ob_end_flush();
     }
     ?>
