@@ -1,5 +1,5 @@
 <?php
-require_once '../../private/controller/api/OsuUserAccessToken.php';
+require_once '../../private/controller/utility/FetchOsuUserToken.php';
 ?>
 
 <!--
