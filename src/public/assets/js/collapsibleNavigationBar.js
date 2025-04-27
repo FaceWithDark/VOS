@@ -24,7 +24,7 @@ function collapsibleNavigationBar() {
 
         for (
             let itemValueIndex = 0,
-                itemValueArray = navigationBarItemLocation.length;
+            itemValueArray = navigationBarItemLocation.length;
             itemValueIndex < itemValueArray;
             itemValueIndex++
         ) {
@@ -43,8 +43,6 @@ function collapsibleNavigationBar() {
 
         navigationBarTitleLocation.appendChild(navigationBarTitleLayout);
 
-        // TODO: replace "Login" --> "Logout" only when user authenticated
-        // (check based on user's cookie token)
         const navigationBarItemValue = [
             "Login",
             "Home",
@@ -52,6 +50,23 @@ function collapsibleNavigationBar() {
             "Staff",
             "Song",
         ];
+
+        const navigationBarUserImagePath = document.querySelector(
+            ".user-image",
+        ).getAttribute("src");
+
+        const unauthenticatedUserImagePath =
+            "/../assets/img/Authentication Failed.webp";
+
+        if (
+            navigationBarUserImagePath !== unauthenticatedUserImagePath
+        ) {
+            // Authenticated user should be able to logout as usual
+            navigationBarItemValue[0] = "Logout";
+        } else {
+            // Unauthenticated user should be able to login as usual
+            navigationBarItemValue[0] = "Login";
+        }
 
         for (
             let itemIndex = 0, itemArray = navigationBarItemLocation.length;
