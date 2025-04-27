@@ -5,7 +5,7 @@ declare(strict_types=1);
 require_once '../../private/controller/VotController.php';
 ?>
 
-<section class="tournament-news">
+<section class="home-page">
     <div class="announcement-box" id="latest-news">
         <h2>VIETNAMESE OSU!TAIKO TOURNAMENT</h2>
         <p>Welcome to the website of the biggest vietnamese osu!taiko tournament battlefield ! In here, you can look at everything related to VOT, with pages for all our current and past tournaments!</p>

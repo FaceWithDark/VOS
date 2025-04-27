@@ -1,0 +1,389 @@
+:root {
+	/* GLOBAL FONT & NAVIGATION COLOUR */
+	--global-font: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+	/*
+     *                          LIGHT MODE
+     * ===========================================================
+     * Colour pallete used for VOT website (Light Mode). In order:
+     *  + Red
+     *  + Orange
+     *  + Black
+     *  + Pure white
+     */
+
+	/* Static colour pallete configuration for most cases */
+	--light-primary-colour: hsl(var(--light-primary-colour-hue) var(--light-primary-colour-saturation) var(--light-primary-colour-lightness) / var(--light-primary-colour-alpha));
+	--light-secondary-colour: hsl(var(--light-secondary-colour-hue) var(--light-secondary-colour-saturation) var(--light-secondary-colour-lightness) / var(--light-secondary-colour-alpha));
+	--light-accent-colour: hsl(var(--light-accent-colour-hue) var(--light-accent-colour-saturation) var(--light-accent-colour-lightness) / var(--light-accent-colour-alpha));
+	--light-background-colour: hsl(var(--light-background-colour-hue) var(--light-background-colour-saturation) var(--light-background-colour-lightness) / var(--light-background-colour-alpha));
+	--light-navigation-colour: hsl(var(--light-navigation-colour-hue) var(--light-navigation-colour-saturation) var(--light-navigation-colour-lightness) / var(--light-navigation-colour-alpha));
+
+	/* Dynamic colour pallete modification for special cases */
+	--light-primary-colour-hue: 0;
+	--light-primary-colour-saturation: 100%;
+	--light-primary-colour-lightness: 53.9%;
+	--light-primary-colour-alpha: 1.0;
+
+	--light-secondary-colour-hue: 25;
+	--light-secondary-colour-saturation: 100%;
+	--light-secondary-colour-lightness: 40%;
+	--light-secondary-colour-alpha: 1.0;
+
+	--light-accent-colour-hue: 0;
+	--light-accent-colour-saturation: 0%;
+	--light-accent-colour-lightness: 0%;
+	--light-accent-colour-alpha: 1.0;
+
+	--light-background-colour-hue: 0;
+	--light-background-colour-saturation: 0%;
+	--light-background-colour-lightness: 100%;
+	--light-background-colour-alpha: 1.0;
+
+	--light-navigation-colour-hue: 0;
+	--light-navigation-colour-saturation: 0%;
+	--light-navigation-colour-lightness: 5.5%;
+	--light-navigation-colour-alpha: 1.0;
+
+
+	/*                          DARK MODE
+     * ==========================================================
+     * Colour pallete used for VOT website (Dark Mode). In order:
+     *  + Slightly desaturated red
+     *  + Slightly desaturated orange
+     *  + Slightly desaturated white
+     *  + Slightly desaturated black
+     */
+
+	/* Static colour pallete configuration for most cases */
+	--dark-primary-colour: hsl(var(--dark-primary-colour-hue) var(--dark-primary-colour-saturation) var(--dark-primary-colour-lightness) / var(--dark-primary-colour-alpha));
+	--dark-secondary-colour: hsl(var(--dark-secondary-colour-hue) var(--dark-secondary-colour-saturation) var(--dark-secondary-colour-lightness) / var(--dark-secondary-colour-alpha));
+	--dark-accent-colour: hsl(var(--dark-accent-colour-hue) var(--dark-accent-colour-saturation) var(--dark-accent-colour-lightness) / var(--dark-accent-colour-alpha));
+	--dark-background-colour: hsl(var(--dark-background-colour-hue) var(--dark-background-colour-saturation) var(--dark-background-colour-lightness) / var(--dark-background-colour-alpha));
+	--dark-navigation-colour: hsl(var(--dark-navigation-colour-hue) var(--dark-navigation-colour-saturation) var(--dark-navigation-colour-lightness) / var(--dark-navigation-colour-alpha));
+
+	/* dynamic colour pallete modification for special cases */
+	--dark-primary-colour-hue: 0;
+	--dark-primary-colour-saturation: 100%;
+	--dark-primary-colour-lightness: 53.9%;
+	--dark-primary-colour-alpha: 0.8;
+
+	--dark-secondary-colour-hue: 25;
+	--dark-secondary-colour-saturation: 100%;
+	--dark-secondary-colour-lightness: 40%;
+	--dark-secondary-colour-alpha: 0.8;
+
+	--dark-accent-colour-hue: 0;
+	--dark-accent-colour-saturation: 0%;
+	--dark-accent-colour-lightness: 100%;
+	--dark-accent-colour-alpha: 0.8;
+
+	--dark-background-colour-hue: 0;
+	--dark-background-colour-saturation: 0%;
+	--dark-background-colour-lightness: 0%;
+	--dark-background-colour-alpha: 0.8;
+
+	--dark-navigation-colour-hue: 0;
+	--dark-navigation-colour-saturation: 0%;
+	--dark-navigation-colour-lightness: 3.5%;
+	--dark-navigation-colour-alpha: 0.8;
+}
+
+
+/* NAVIGATION BAR GLOBAL STYING */
+
+
+/* Navigation Bar [General] */
+body nav {
+	position: fixed;
+	width: 5rem;
+	min-height: 100vh;
+	transition: all 0.325s linear;
+}
+
+body nav~section {
+	padding-left: 5.75rem;
+	transition: padding-left 0.325s;
+}
+
+/* Navigation Bar (Top Section) [General] */
+body nav div.top-navigation-section {
+	display: flex;
+	justify-content: center;
+	padding: 1rem 0;
+	/* Safari compatability. */
+	-webkit-user-select: none;
+	/* Others broswer compatability. */
+	user-select: none;
+}
+
+body nav div.top-navigation-section i#collapsible-icon {
+	font-size: 1.175rem;
+	cursor: pointer;
+}
+
+body nav div.top-navigation-section i#expandable-title strong {
+	font-weight: bold;
+}
+
+/* Navigation Bar (First Middle Section) [General] */
+body nav div.middle-navigation-first-section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0.5rem 0;
+}
+
+body nav div.middle-navigation-first-section img.user-image {
+	width: 3.25rem;
+	height: auto;
+	border-radius: 2rem;
+}
+
+body nav div.middle-navigation-first-section p {
+	font-weight: 600;
+	text-align: center;
+	padding-top: 1rem;
+	opacity: 0;
+	transition: word-wrap 0.325s, opacity 0.325s;
+}
+
+/* Navigation Bar (Second Middle Section) [General] */
+
+/* Navigation Bar (Bottom Section) [General] */
+
+
+/* GLOBAL STYING FOR SOME ELEMENTS */
+body {
+	display: flex;
+	flex-direction: column;
+	transition: background-color 0.325s, color 0.325s;
+}
+
+body header h1 {
+	display: flex;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 1.75rem;
+	margin: 1.5rem 0;
+}
+
+/* TODO: Start of "May need to delete these and do a more reasonable styling approach". */
+
+/* 'Song' page's styling methods */
+body section div.header-container {
+	display: flex;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 1.75rem;
+	margin: 1.5rem 0;
+}
+
+/* Content wrapper method accross all the pages (except main). */
+body section div.flex-container {
+	display: flex;
+	text-align: center;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+/* Button container method */
+body section div.button-container {
+	display: flex;
+	justify-content: end;
+}
+
+body section div.button-container button {
+	font-size: 1.5rem;
+	margin-top: 1rem;
+	margin-right: 1rem;
+}
+
+/* TODO: End of "May need to delete these and do a more reasonable styling approach". */
+
+
+/* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES*/
+body section div.announcement-box,
+body section div.lower-general-information-box {
+	margin: 1.5rem;
+	border-radius: 1.5rem;
+}
+
+body section div.announcement-box h2,
+body section div.lower-general-information-box h2 {
+	display: flex;
+	justify-content: center;
+	font-weight: bold;
+	padding: 1rem 0;
+}
+
+body section div.announcement-box p,
+body section div.lower-general-information-box ul li {
+	font-size: 1rem;
+	font-weight: 500;
+	padding-left: .5rem;
+	padding-bottom: 1rem;
+}
+
+body section div.announcement-box img {
+	position: relative;
+	width: 100%;
+	height: auto;
+	padding: .75rem 0;
+}
+
+body section div.announcement-box div.youtube-iframe-container {
+	display: flex;
+	justify-content: center;
+	position: relative;
+	width: 100%;
+	height: auto;
+	padding-bottom: 56.25%;
+	overflow: hidden;
+}
+
+body section div.announcement-box div.youtube-iframe-container iframe {
+	position: absolute;
+	width: 95%;
+	height: 95%;
+	overflow: hidden;
+}
+
+
+/* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES */
+body section div.flex-container div.direct-link-container,
+body section div.mappool-page div.mappool-card-container,
+body section div.staff-page div.staff-card-container,
+body section div.song-page div.song-card-container {
+	padding: 1rem;
+	margin-bottom: 1.5rem;
+	border-radius: 1.5rem;
+}
+
+body section div.flex-container div.direct-link-container:not(:first-child),
+body section div.mappool-page div.mappool-card-container:not(:first-child),
+body section div.staff-page div.staff-card-container:not(:first-child),
+body section div.song-page div.song-card-container:not(:first-child) {
+	margin-left: .75rem;
+}
+
+body section div.flex-container div.direct-link-container a {
+	font-weight: bold;
+	font-size: 0.85rem;
+	/* Safari compatability. */
+	-webkit-user-select: none;
+	/* Others broswer compatability. */
+	user-select: none;
+}
+
+
+/* NO-HEADER PAGES */
+body section div.mappool-page,
+body section div.staff-page,
+body section div.song-page {
+	display: flex;
+	justify-content: space-evenly;
+	flex-wrap: wrap;
+}
+
+body section div.mappool-page div.mappool-card-container,
+body section div.song-page div.song-card-container {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	justify-content: center;
+	width: 30rem;
+	word-wrap: break-word;
+}
+
+body section div.mappool-page div.mappool-card-container h1,
+body section div.mappool-page div.mappool-card-container h2,
+body section div.song-page div.song-card-container h1,
+body section div.song-page div.song-card-container h2 {
+	font-weight: bold;
+}
+
+body section div.mappool-page div.mappool-card-container a,
+body section div.song-page div.song-card-container a {
+	color: var(--light-accent-colour);
+	/* Safari compatability. */
+	-webkit-user-select: none;
+	/* Others broswer compatability. */
+	user-select: none;
+	font-weight: bold;
+	padding: 1rem 0;
+}
+
+body section div.mappool-page div.mappool-card-container a img,
+body section div.song-page div.song-card-container a img {
+	width: 100%;
+	height: auto;
+}
+
+body section div.mappool-page div.mappool-card-container h3,
+body section div.song-page div.song-card-container h3 {
+	padding-top: .75rem;
+}
+
+body section div.mappool-page div.mappool-card-container div.beatmap-attribute-row,
+body section div.song-page div.song-card-container div.beatmap-attribute-row {
+	display: flex;
+	justify-content: space-evenly;
+	padding: .75rem 0;
+}
+
+body section div.mappool-page div.mappool-card-container div.beatmap-attribute-row p,
+body section div.song-page div.song-card-container div.beatmap-attribute-row p {
+	font-weight: 500;
+}
+
+
+/* VOT-SPECIFIC PAGE */
+body div.vot-page section div.upper-general-information-box img {
+	padding-left: 1.5rem;
+	max-width: 95%;
+	height: auto;
+}
+
+body div.vot-page section div.upper-general-information-box p {
+	font-size: 1rem;
+	font-weight: 500;
+	padding: 1rem;
+}
+
+body div.vot-page section div.lower-general-information-box h3 {
+	font-weight: bold;
+	padding-left: .5rem;
+	padding-bottom: 1rem;
+}
+
+body div.vot-page section div.lower-general-information-box ul li {
+	line-height: 1.275rem;
+	list-style: disc inside;
+}
+
+
+/* CARD STYLE WITH HEADER PAGES */
+body section div.staff-page div.staff-card-container {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	justify-content: center;
+	width: 25rem;
+	word-wrap: break-word;
+}
+
+body section div.staff-page div.staff-card-container h1,
+body section div.staff-page div.staff-card-container h2 {
+	font-weight: bold;
+}
+
+body section div.staff-page div.staff-card-container img:nth-child(1) {
+	margin: 0 .25rem;
+}
+
+body section div.staff-page div.staff-card-container img:nth-child(2) {
+	min-width: 300px;
+	min-height: 240px;
+	padding: 1.25rem 0;
+}
