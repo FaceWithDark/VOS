@@ -16,6 +16,7 @@ function collapsibleNavigationBar() {
         ".middle-navigation-second-section ul li a",
     );
 
+    // All new elements added when expand will be deleted when collapse
     if (!navigationBarCurrentState) {
         navigationBarTriggerLocation.classList.remove("expanded");
         navigationBarTriggerLocation.classList.add("collapsed");
@@ -32,10 +33,13 @@ function collapsibleNavigationBar() {
                 navigationBarItemLocation[itemValueIndex].querySelector("p");
             navigationBarItemValueLocation.remove();
         }
+
+        // All needed new elements will be added when expand
     } else {
         navigationBarTriggerLocation.classList.remove("collapsed");
         navigationBarTriggerLocation.classList.add("expanded");
 
+        // Append new elements to top section of the navigation bar layout
         const navigationBarTitleLayout = document.createElement("i");
         navigationBarTitleLayout.className = "bx bxs-navigation";
         navigationBarTitleLayout.id = "expandable-title";
@@ -43,6 +47,7 @@ function collapsibleNavigationBar() {
 
         navigationBarTitleLocation.appendChild(navigationBarTitleLayout);
 
+        // Append new elements to middle 2nd section of the navigation bar layout
         const navigationBarItemValue = [
             "Login",
             "Home",
@@ -89,9 +94,7 @@ function triggerCollapsibleNavigationBar() {
     );
 
     if (!navigationBarTriggerButton) {
-        console.error(
-            "Required ID to trigger navigation bar feature not found!",
-        );
+        console.error("Required ID attribute not found!");
     } else {
         navigationBarTriggerButton.addEventListener(
             "click",
