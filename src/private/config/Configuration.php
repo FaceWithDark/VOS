@@ -3,11 +3,26 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
+include __DIR__ . '/../controller/utility/ReadEnvironmentFile.php';
+
 // Preset database configurations
-$serverHost = $_ENV['DATABASE_HOST'];
-$databaseName = $_ENV['DATABASE_NAME'];
-$databaseUsername = $_ENV['DATABASE_USER'];
-$databasePassword = $_ENV['DATABASE_PASSWORD'];
+$serverHost = getenv(name: 'DATABASE_HOST', local_only: true)
+            ?: getenv(name: 'DATABASE_HOST');
+$databaseName = getenv(name: 'DATABASE_NAME', local_only: true)
+              ?: getenv(name: 'DATABASE_NAME');
+$databaseUser = getenv(name: 'DATABASE_USER', local_only: true)
+              ?: getenv(name: 'DATABASE_USER');
+$databasePassword = getenv(name: 'DATABASE_PASSWORD', local_only: true)
+                  ?: getenv(name: 'DATABASE_PASSWORD');
+
+$databaseCharacterSet = getenv(name: 'DATABASE_CHARACTER_SET', local_only: true)
+                      ?: getenv(name: 'DATABASE_CHARACTER_SET');
+$databaseCollation = getenv(name: 'DATABASE_COLLATION', local_only: true)
+                   ?: getenv(name: 'DATABASE_COLLATION');
+$dataSourceName = "mysql:host=$serverHost; \
+                   dbname=$databaseName; \
+                   charset=$databaseCharacterSet; \
+                   collation=$databaseCollation";
 
 // PDO connection error handling
 $errorHandlingOption = [
@@ -15,31 +30,19 @@ $errorHandlingOption = [
     PDO::ATTR_DEFAULT_FETCH_MODE    => PDO::FETCH_ASSOC,        // Set default fetch mode to associative array
     PDO::ATTR_EMULATE_PREPARES      => false,                   // Use native prepared statements
     PDO::ATTR_PERSISTENT            => true,                    // Keeps database connection alive across scripts
-    PDO::MYSQL_ATTR_INIT_COMMAND    => 'SET NAMES utf8mb4'      // Ensure charset is set to utf8mb4 (same as database)
 ];
 
 // Handling database connection
 try {
-    $phpDataObject = new PDO("mysql:host=$serverHost;dbname=$databaseName;charset=utf8mb4", $databaseUsername, $databasePassword, $errorHandlingOption);
+    $phpDataObject = new PDO(
+        dsn: $dataSourceName,
+        username: $databaseUser,
+        password: $databasePassword,
+        options: $errorHandlingOption
+    );
     // echo "Connection success!!";
 
-    // SQL query test to confirm connection works
-    $query = "SHOW TABLES;";
-
-    // Trick to avoid SQL injections
-    $queryStatement = $phpDataObject->prepare($query);
-
-    // Handling if SQL execution test is correct or not
-    if ($queryStatement->execute()) {
-        error_log("Statement executed!!", 0);
-        return true;
-    } else {
-        error_log("Statement not executed!!", 0);
-        return false;
-    }
-
     // Garbage collecting method (recommended from PHP page)
-    $query = null;
     $phpDataObject = null;
 } catch (PDOException $exception) {
     // Failed to connect the database

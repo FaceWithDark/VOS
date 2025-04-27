@@ -1,46 +1,36 @@
 #!/bin/bash
 
-# Set the environment (dev, stage, prod)
-ENV=$1
+BUILD_STAGE=$1
 
-if [ -z "$ENV" ]; then
-  echo "Please use one of the following accepted build phases: 'dev', 'stage', and 'prod'!"
-  exit 1
-fi
+ENV_FILE="docker.$BUILD_STAGE.env"
+YAML_FILE="docker-compose.$BUILD_STAGE.yaml"
 
-# Define Docker-needed configuration files based on the environment
-ENV_FILE="../docker-compose.$ENV.env"
-YAML_FILE="../docker-compose.$ENV.yaml"
-
-# Make sure the script found .env file based on the environment
-if [ ! -f "$ENV_FILE" ]; then
-  echo "Requested environment file: $ENV_FILE not found! Consider create one on your own using the same file format and try again."
-  exit 1
-fi
-
-# Make sure the script found .yaml file based on the environment
-if [ ! -f "$YAML_FILE" ]; then
-  echo "Requested YAML file: $YAML_FILE not found! Consider create one on your own using the same file format and try again."
-  exit 1
-fi
-
-# Load needed variables from the environment file based on the environment
-export $(grep -v '^#' "$ENV_FILE" | xargs)
-
-# Validate required environment variables
-ENV_VARS=("DATABASE_ROOT_PASSWORD" "DATABASE_NAME" "DATABASE_USER" "DATABASE_PASSWORD")
-for env_var in "${ENV_VARS[@]}"; do
-  if [ -z "${!env_var}" ]; then
-    echo "Required environment variable: '$env_var' is not set!"
+# Make sure all minimum required files are found
+if [ -z "$BUILD_STAGE" ]; then
+    echo "Invalid build stage found! Please use one of the following build stage: <dev>, <stage>, and <prod>"
     exit 1
-  fi
-done
+else
+  echo "Valid build stage found! Process to the next step..."
+fi
 
-# Export the environment variable
-export ENV
+if [ ! -f "$ENV_FILE" ]; then
+  echo "Invalid .env file found! Consider create one on your own based on the repository's file format and try again."
+  exit 1
+else
+  echo "Valid .env file found! Process to the next step..."
+fi
 
-# Run Docker Compose with the specified environment
-echo "Setting up Docker for '$ENV' phase..."
-docker-compose -f "$YAML_FILE" up --build -d
+if [ ! -f "$YAML_FILE" ]; then
+  echo "Invalid .yaml file found! Consider create one on your own based on the repository's file format and try again."
+  exit 1
+else
+  echo "Valid .yaml file found! Process to the next step..."
+fi
 
-echo "Setting up successfully for '$ENV' phase!"
+export BUILD_STAGE
+
+echo "Setting up Docker for <$BUILD_STAGE> phase..."
+
+docker-compose -f "$YAML_FILE" --env-file "$ENV_FILE" up --build -d
+
+echo "Completed setting up Docker for <$BUILD_STAGE> phase."
