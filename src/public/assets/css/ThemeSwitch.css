@@ -109,6 +109,14 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 	background: var(--light-secondary-colour);
 }
 
+body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i {
+	color: var(--light-background-colour);
+}
+
+body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
+	color: var(--light-accent-colour);
+}
+
 
 /* VOT'S SYSTEM MODE LAYOUT */
 @media (prefers-color-scheme: light) {
@@ -219,6 +227,14 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 	/* Navigation Bar (Bottom Section) [System - Light] */
 	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray {
 		background: var(--light-secondary-colour);
+	}
+
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i {
+		color: var(--light-background-colour);
+	}
+
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
+		color: var(--light-accent-colour);
 	}
 }
 
@@ -331,6 +347,14 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
 	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray {
 		background: var(--dark-secondary-colour);
 	}
+
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i {
+		color: var(--dark-background-colour);
+	}
+
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
+		color: var(--dark-accent-colour);
+	}
 }
 
 
@@ -442,4 +466,12 @@ body.dark-theme nav div.middle-navigation-second-section ul li a:hover {
 /* Navigation Bar (Bottom Section) [Dark] */
 body.dark-theme nav div.bottom-navigation-section div.vot-theme-tray {
 	background: var(--dark-secondary-colour);
+}
+
+body.dark-theme nav div.bottom-navigation-section div.vot-theme-tray i {
+	color: var(--dark-background-colour);
+}
+
+body.dark-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
+	color: var(--dark-accent-colour);
 }
