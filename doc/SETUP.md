@@ -23,13 +23,13 @@ git clone git@github.com:FaceWithDark/VOS.git     # SSH way
 # Please execute these scripts from the project's root directory.
 # For all '<>' placeholder, you will have 3 options corresponding to 3 development stages: 'dev', 'stage', and 'prod'
 
-Copy-Item -Path ".\doc\example.env" -Destination ".\docker-compose.<build-stage>.env" -Confirm -Force # Environment file.
-Copy-Item -Path ".\doc\example.yaml" -Destination ".\docker-compose.<build-stage>.yaml" -Confirm -Force # Docker-compose configuration file
+Copy-Item -Path ".\doc\example.env" -Destination ".\docker-compose.<build-stage>.env" -Confirm -Force         # Environment file.
+Copy-Item -Path ".\doc\example.yaml" -Destination ".\docker-compose.<build-stage>.yaml" -Confirm -Force       # Docker-compose configuration file.
 Copy-Item -Path ".\doc\example.conf" -Destination ".\docker\nginx\default.<build-stage>.conf" -Confirm -Force # NGINX configuration file.
 ```
 
 > [!NOTE]
-> For **Dockerfile configuration file**, I have created 3 different Dockerfile profiles for each container, which help debugging process much more easier by letting me fixing the issues within each containers sepearately without having interfere without others. Therefore, you will have to copy the example file 3 times in for 3 different build file and delete one (or two)'s block of code over another, which I have explain clearly within the code file.
+> For **Dockerfile configuration file**, I have created 3 different Dockerfile profiles for each container, which help debugging process much more easier by letting me fixing the issues within each containers sepearately without having interfere without others. Therefore, you will have to copy the example file 3 times in for 3 different build file and delete one (or two) blocks of code over another (I have explain clearly within the code file).
 
 ```powershell
 # Dockerfile configuration file.
@@ -39,16 +39,16 @@ Copy-Item -Path ".\doc\example.Dockerfile" -Destination ".\docker\php\mariadb.<b
 ```
 
 > [!TIP]
-> **Remove** *-Confirm* **parameter if you just want it to run instantly without additional prompting.**
+> Remove _**-Confirm**_ parameter if you just want it to run instantly without additional prompting.
 
 ### Run automate build script
 ```powershell
-# Please execute these scripts from the project's root directory.
+# Ensure that you have Git installed and added to PATH (there will be a checkbox for you to click on when installing Git for the 1st time). Then, please execute these scripts from the project's root directory.
 # For all '<>' placeholder, you will have 3 options corresponding to 3 development stages: 'dev', 'stage', and 'prod'
 
-sh .\deploy.sh <build-stage>   # Set the website's docker configuration settings for the first time (or fully re-build).
-sh .\rebuild.sh <build-stage>  # Reset the website's docker configuration settings without fully killing it and run again.
-sh .\shutdown.sh <build-stage> # Unset the website's docker configuration settings if not intended to work on it anymore
+sh .\bin\deploy.sh <build-stage>   # Set the website's docker configuration settings for the first time (or fully re-build).
+sh .\bin\rebuild.sh <build-stage>  # Reset the website's docker configuration settings without fully killing it and run again.
+sh .\bin\shutdown.sh <build-stage> # Unset the website's docker configuration settings if not intended to work on it anymore.
 ```
 
 > [!CAUTION]
@@ -57,7 +57,7 @@ sh .\shutdown.sh <build-stage> # Unset the website's docker configuration settin
 > [!NOTE]
 > If you want a more GUI-based approaches, please open up Docker Desktop and manually stop/kill the service and related configuration settings **(in this case, the service name will be 'vos')**.
 
-At this point, you should be able to access the website via ** *`http://localhost:<port-number>/`* **. Again, we have 3 options coressponding to 3 development stages (`dev`, `stage`, and `prod`) for the *`<>`* placeholder. However, you will notice that as soon as we get to the next page (`Home` page), we got a **SQL-related error**. Please follow along the next step to be able to resolve it smoothly.
+At this point, you should be able to access the website via _**`http://localhost:<port-number>/`**_. Again, we have 3 options coressponding to 3 development stages (`dev`, `stage`, and `prod`) for the _`<>`_ placeholder. However, you will notice that as soon as we get to the next page (`Home` page), we received a **SQL-related error**. Please follow along the next step to be able to resolve it smoothly.
 
 ### Access the database with root user
 > [!NOTE]
@@ -80,7 +80,7 @@ MariaDB [(none)]>
 
 ### Create new non-root user
 > [!WARNING]
-> It is not recommeded to use **root user account** as the primary database login access (somehow most large-scale companies still doing so), we will have to create a new user account that share almost the same privileges level as **root user account**.
+> It is not recommeded to use **root user account** as the primary database login access _(somehow most large-scale companies still doing so)_.Therfore, we will have to create a new user account that share almost the same privileges level as **root user account**.
 
 ```sql
 MariaDB [(none)]># can be either 'localhost' (local access level), or '%' (global access level);
@@ -123,7 +123,7 @@ mariadb -u $DATABASE_USER -P <port-number> -h localhost $DATABASE_NAME -p
 ```
 
 > [!TIP]
-> **It is generally recommended to leave the ** *-P* **parameter empty so that you don't potentially expose the website's database password for someone else to see it.
+> It is generally recommended to leave the _**-p (look closely, small 'p' letter)**_ parameter empty so that you will not potentially expose the website's database password for someone else to see it.
 
 ### Example of succeed connection (new user)
 ```sql
