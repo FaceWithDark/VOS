@@ -320,7 +320,7 @@ Do not ask me why I have to specifically mention that this is for **Windows 10 &
   # For all bash variables, these can be found under the copied environment file (a.k.a 'docker-compose.${ENV}.env')
   # For all '<>' placeholder, it can be found under the copied docker-compose configuration file (a.k.a 'docker-compose.${ENV}.yaml')
   
-  mariadb -u $DATABASE_USER -P <port-number> -h localhost $DATABASE_NAME -p
+  mariadb -u $DATABASE_USER -P <port-number> --protocol=<IP-or-TCP> -h localhost $DATABASE_NAME -p
   ```
   
   _It is generally recommended to leave the **-p (look closely, small 'p' letter)** parameter empty so that you will not potentially expose the website's database password for someone else to see it._
