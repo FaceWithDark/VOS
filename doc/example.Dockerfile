@@ -1,23 +1,37 @@
-FROM php:8.3-fpm-alpine
+# Dockerfile build for PHP
+FROM php:8.3-fpm-alpine3.21
 
-WORKDIR /var/www
+RUN apk -U upgrade
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-COPY --from=composer:2.8.4 /usr/bin/composer /usr/bin/composer
+COPY './src' '/var/www/html'
 
-# Cool trick utilising Docker's caching feature
-COPY ../../src/private/composer.* .
-
-# This the default folder to test NGINX working or not but we changed it already at the top
-RUN rm -rf html/
-
-COPY ../../src .
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 RUN docker-php-ext-install \
     pdo \
     pdo_mysql
 
-RUN composer install --prefer-dist --no-dev --no-scripts --no-progress --no-interaction
+COPY --from=composer:2.8.4 /usr/bin/composer /usr/bin/composer
+COPY ../../src/private/composer.* .
 
+RUN composer install --prefer-dist --no-dev --no-scripts --no-progress --no-interaction
 RUN composer dump-autoload --optimize
+
+
+# Dockerfile build for MariaDB
+FROM mariadb:lts-noble
+
+RUN apt-get -y update && \
+    apt-get -y full-upgrade && \
+    apt-get -y autoremove && \
+    apt-get -y autoclean
+
+
+# Dockerfile build for NGINX
+FROM nginx:alpine
+
+RUN apk -U upgrade
+
+COPY ./docker/nginx/default.${ENV}.conf /etc/nginx/conf.d/default.conf

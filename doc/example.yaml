@@ -1,73 +1,60 @@
 services:
-  # **Side note before customising this file:                                                        #
-  # ------------------------------------------------------------------------------------------------ #
-  # - In my YAML file, I have set to use a custom name for each containers as I find myself          #
-  #   feeling uneasy with the default name generated when execute the corresponding                  #
-  #   'docker-compose' command.                                                                      #
-  #                                                                                                  #
-  # - If you're good with the default name, feel free to not include 'container_name: <custom-name>' #
-  #   key in every container block.                                                                  #
-
-  # PHP setup
+  # PHP-FPM container
   vot-app:
+    container_name: # Optional. You may leave this empty, which Docker will give a default name for the container automatically
+    networks:
+      - # Optional. You may delete this element if only building for one specific PHP version
     build:
       context: .
-      dockerfile: ./docker/php/${ENV}.Dockerfile
-
-    env_file:
-      - path: docker-compose.${ENV}.env
-        required: true
-        format: raw
-
+      dockerfile: docker/php/php.${ENV}.Dockerfile
     volumes:
-      - ./src/private/vendor:/var/www/private/vendor # Cool trick utilising Docker's caching feature
-      - ./src:/var/www
+      - ./src/private/vendor:/var/www/html/private/vendor # Optional. You may omit this if you don't mind Composer packages load a bit slower on start-up
+      - ./src:/var/www/html # Optional. You may omit this if build for production stage
+    restart: unless-stopped # Optional. You may let this be 'always' in all stages
 
-    restart: unless-stopped
-
-  # NGINX setup
+  # NGINX container
   vot-web:
-    image: nginx:latest
-
+   container_name: # Optional. You may leave this empty, which Docker will give a default name for the container automatically
+    networks:
+      - # Optional. You may delete this element if only building for one specific PHP version
     depends_on:
-      # Extra safe when running the container
-      - vot-app
-
-    ports:
-      # Feel free to change it to other port mapping if you're uneasy with the number.
-      - "8081:80"  # HTTP
-      - "8444:443" # SSL/TLS
-
+      - vot-app   # Required. Need PHP modules first to get the website working
+      - vot-db    # Required. Need MariaDB database second to be able to do CRUD process
+    build:
+      context: .
+      dockerfile: docker/nginx/nginx.${ENV}.Dockerfile
     volumes:
-      - ./docker/nginx/default.${ENV}.conf:/etc/nginx/conf.d/default.conf
-      - ./src:/var/www
+      - ./src:/var/www/html # Optional. You may omit this if build for production stage
+    ports:
+      # Optional. Only use for development stage, omit on production stage as it contains security issues
+      - "<any-ports>:80"  # HTTP
+      - "<any-ports>:443" # HTTPS (or SSL/TLS)
+    restart: unless-stopped # Optional. You may let this be 'always' in all stages
 
-    restart: unless-stopped
-
-  # MariaDB setup
+  # MariaDB container
   vot-db:
-    # Latest LTS version of MariaDB
-    image: mariadb:11.6.2
-
-    depends_on:
-      # Extra safe when running the container
-      - vot-web
-
-    ports:
-      # Feel free to change it to other port mapping if you're uneasy with the number.
-      - "3307:3306"
-
+   container_name: # Optional. You may leave this empty, which Docker will give a default name for the container automatically
+    networks:
+      - # Optional. You may delete this element if only building for one specific PHP version
+    build:
+      context: .
+      dockerfile: docker/sql/mariadb.${ENV}.Dockerfile
     volumes:
-      - mariadb_data:/var/lib/mysql
-
+      - mariadb_data:/var/lib/mysql # Per common practice but we will be loading backed-up data constantly on prduction stage
+    ports:
+      # Optional. Only use for development stage, omit on production stage (or use 'phpmyadmin') as it contains security issues
+      - "3307:3306"
     environment:
-      # The other 3 can be omitted but I don't feel like so, sorry.
-      - MARIADB_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
-      - MARIADB_DATABASE=${DATABASE_NAME}
-      - MARIADB_USER=${DATABASE_USER}
-      - MARIADB_PASSWORD=${DATABASE_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+    restart: unless-stopped # Optional. You may let this be 'always' in all stages
 
-    restart: unless-stopped
-
+# Per common practice but we will be loading backed-up data constantly on prduction stage
 volumes:
-  mariadb_data: {}
+  mariadb_data:
+    name: # Optional. You may leave this empty, which Docker will give a default name for the container automatically
+
+# Optional. As metioned above, only use if working with multiple PHP versions
+#networks:
+#  vot-network:
+#    name: vot-dev-network
+#    driver: bridge
