@@ -2,16 +2,45 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
-$httpRedirectRequest = $_SERVER['REQUEST_URI'];
+require __DIR__ . '/../private/Controllers/NavigationBarController.php';
+
+$httpRedirectRequest = parse_url(url: $_SERVER['REQUEST_URI'], component: PHP_URL_PATH);
 
 switch ($httpRedirectRequest) {
     case '/':
     case '/home':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            require __DIR__ . '/../private/Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+        } else {
+            require __DIR__ . '/../private/Views/NavigationBar/AuthorisedNavigationBarView.php';
+        }
         require __DIR__ . '/../private/Views/HomeView.php';
         break;
 
+    case '/authorise':
+        redirectUserAuthorisationPage();
+        break;
+
+    case '/callback':
+        redirectUserCallbackPage();
+        break;
+
+    /*
+    case '/token':
+        require __DIR__ . '/../private/Views/NavigationBar/UserAccessTokenView.php';
+        break;
+    */
+
     case '/entry':
         require __DIR__ . '/../private/Views/EntryView.php';
+        break;
+
+    # User is not allowed to see the navigation bar by itself as a page
+    case '/nav':
+    case '/navbar':
+    case '/navigation':
+    case '/navigationbar':
+        http_response_code(403);
         break;
 
     default:
