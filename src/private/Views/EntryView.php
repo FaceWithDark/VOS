@@ -1,12 +1,3 @@
-<?php
-# Not so much like static types, but at least it does feel better having this here
-declare(strict_types=1);
-
-# ob_start();
-?>
-
-<!-- TODO: This is a very 'hacky' way of doing this. Proper handling later on -->
-<? #php if (isset($_COOKIE['vot_access_token'])): ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,18 +19,5 @@ declare(strict_types=1);
     <h1 style="display: flex; justify-content: center; align-items: center; color: coral;">Hello there, your website is working!</h1>
     <p style="display: flex; justify-content: end; align-items: end; font-weight: bold;"><a href="/home">Home Page</a></p>
 </body>
-<?php phpinfo(); ?>
 
-<? #php else: ?>
-<?php
-// Reference: https://www.php.net/manual/en/function.ob-end-flush.php
-# while (ob_get_level() > 0) {
-#    exit(header(
-#        header: 'Location: /user/Home.php',
-#        replace: true,
-#        response_code: 302
-#    ));
-#    ob_end_flush();
-#}
-?>
-<? #php endif; ?>
+<?php phpinfo(); ?>

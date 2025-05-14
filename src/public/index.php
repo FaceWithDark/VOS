@@ -25,17 +25,21 @@ switch ($httpRedirectRequest) {
         redirectUserCallbackPage();
         break;
 
-    /*
+    # TODO: add a timer to auto-redirect to 'Home' page
     case '/token':
-        require __DIR__ . '/../private/Views/NavigationBar/UserAccessTokenView.php';
+        if (!isset($_COOKIE['vot_access_token'])) {
+            http_response_code(403);
+        } else {
+            require __DIR__ . '/../private/Views/NavigationBar/UserAccessTokenView.php';
+        }
         break;
-    */
 
     case '/entry':
         require __DIR__ . '/../private/Views/EntryView.php';
         break;
 
     # User is not allowed to see the navigation bar by itself as a page
+    # TODO: block non-admin access to this page properly through privilege levels
     case '/nav':
     case '/navbar':
     case '/navigation':

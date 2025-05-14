@@ -92,8 +92,8 @@ function getUserAccessToken(string $temporary_code): array | bool
         $userRefreshToken   = $curlDecodedResponse['refresh_token'];
         $userExpireToken    = time() + 86400;
 
-        // Set the access token as an HTTP-only cookie
         if (empty($userAccessToken)) {
+            // Ensure that user won't have to re-authorise multiple times if idling for a long time
             setcookie(
                 name: 'vot_access_token',
                 value: $userRefreshToken,
@@ -104,11 +104,12 @@ function getUserAccessToken(string $temporary_code): array | bool
                 httponly: true
             );
             exit(header(
-                header: 'Location: /home',
+                header: 'Location: /token',
                 replace: true,
                 response_code: 302
             ));
         } else {
+            // Just use the freshly created one until expired time
             setcookie(
                 name: 'vot_access_token',
                 value: $userAccessToken,
@@ -119,7 +120,7 @@ function getUserAccessToken(string $temporary_code): array | bool
                 httponly: true
             );
             exit(header(
-                header: 'Location: /home',
+                header: 'Location: /token',
                 replace: true,
                 response_code: 302
             ));
