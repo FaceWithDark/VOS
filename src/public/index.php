@@ -18,28 +18,36 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/authorise':
-        redirectUserAuthorisationPage();
+        getUserAuthoriseCode();
         break;
 
+    # TODO: filter manual `code` parameter injection
     case '/callback':
-        redirectUserCallbackPage();
-        break;
+        $userAuthoriseCode = $_GET['code'];
 
-    # TODO: add a timer to auto-redirect to 'Home' page
+        if (!isset($userAuthoriseCode)) {
+            http_response_code(401);
+            break;
+        } else {
+            getUserAccessToken(temporary_code: $userAuthoriseCode);
+            break;
+        }
+
     case '/token':
         if (!isset($_COOKIE['vot_access_token'])) {
-            http_response_code(403);
+            http_response_code(401);
+            break;
         } else {
-            require __DIR__ . '/../private/Views/NavigationBar/UserAccessTokenView.php';
+            require __DIR__ . '/../private/Views/NavigationBar/TokenView.php';
+            break;
         }
-        break;
 
     case '/entry':
         require __DIR__ . '/../private/Views/EntryView.php';
         break;
 
-    # User is not allowed to see the navigation bar by itself as a page
     # TODO: block non-admin access to this page properly through privilege levels
+    # User is not allowed to see the navigation bar by itself as a page
     case '/nav':
     case '/navbar':
     case '/navigation':
@@ -49,4 +57,5 @@ switch ($httpRedirectRequest) {
 
     default:
         http_response_code(404);
+        break;
 }
