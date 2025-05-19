@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../private/Controllers/NavigationBarController.php';
+require __DIR__ . '/../private/Controllers/TokenController.php';
 
 $httpRedirectRequest = parse_url(url: $_SERVER['REQUEST_URI'], component: PHP_URL_PATH);
 
@@ -34,10 +35,13 @@ switch ($httpRedirectRequest) {
         }
 
     case '/token':
-        if (!isset($_COOKIE['vot_access_token'])) {
+        $userAccessToken = $_COOKIE['vot_access_token'];
+
+        if (!isset($userAccessToken)) {
             http_response_code(401);
             break;
         } else {
+            getUserData(access_token: $userAccessToken);
             require __DIR__ . '/../private/Views/NavigationBar/TokenView.php';
             break;
         }
