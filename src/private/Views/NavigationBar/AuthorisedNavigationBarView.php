@@ -1,4 +1,24 @@
-<?php require __DIR__ . '/../../Models/NavigationBar.php'; ?>
+<?php
+# Not so much like static types, but at least it does feel better having this here
+declare(strict_types=1);
+
+require __DIR__ . '/../../Configurations/Database.php';
+require __DIR__ . '/../../Models/UserData.php';
+
+$osuUserId = getUserData(access_token: $_COOKIE['vot_access_token'])['id'];
+
+if (!empty($osuUserId)) {
+    // Variable scoping in PHP is a bit weird somehow: https://www.php.net/manual/en/language.variables.scope.php
+    $allUserData        = readUserData(id: $osuUserId, database_handle: $GLOBALS['votDatabaseHandle']);
+
+    $osuUserImage       = $allUserData['userImage'];
+    $osuUserName        = $allUserData['userName'];
+    $osuUserRedirect    = $allUserData['userUrl'];
+} else {
+    // TODO: This is not working yet. Fix later (if possible).
+    http_response_code(400);
+}
+?>
 
 <!-- XHTML 1.0 compatible -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -118,15 +138,10 @@
             <i class="bx bx-menu" id="collapsible-icon"></i>
         </div>
 
-        <?php
-        // TODO: CRUD would be a more suitable approach for this. Convert the logic ASAP
-        $userAvatar = $userData->avatar_url;
-        $userName = $userData->username;
-        ?>
         <div class="middle-navigation-first-section">
-            <a href="/user/UserSetting.php">
-                <img src="<?= htmlspecialchars($userAvatar); ?>" alt="<?= htmlspecialchars($userName); ?>" class="user-image">
-                <p><?= htmlspecialchars($userName); ?></p>
+            <a href="<?= htmlspecialchars(string: $osuUserRedirect); ?>">
+                <img src="<?= htmlspecialchars(string: $osuUserImage); ?>" alt="<?= htmlspecialchars(string: $osuUserName); ?>" class="user-image">
+                <p><?= htmlspecialchars(string: $osuUserName); ?></p>
             </a>
         </div>
 
