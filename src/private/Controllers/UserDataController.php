@@ -2,6 +2,7 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
+require __DIR__ . '/../Configurations/Database.php';
 require __DIR__ . '/../Configurations/Environment.php';
 
 function getUserAuthoriseCode(): null
@@ -22,7 +23,7 @@ function getUserAuthoriseCode(): null
     return null;
 }
 
-function getUserAccessToken(string $temporary_code): bool | null
+function getUserAccessToken(string $temporary_code): null | bool
 {
     $userAccessTokenUrl             = "https://osu.ppy.sh/oauth/token";
 
@@ -36,7 +37,6 @@ function getUserAccessToken(string $temporary_code): bool | null
     $httpContentType                = 'application/x-www-form-urlencoded';
 
     if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-        // Prepare payload data for token exchange
         $payloadData = [
             'client_id'     => $applicationId,
             'client_secret' => $applicationSecret,
@@ -62,7 +62,7 @@ function getUserAccessToken(string $temporary_code): bool | null
         );
     }
 
-    $urlencodedPayloadData = http_build_query(
+    $urlEncodedPayloadData = http_build_query(
         data: $payloadData,
         numeric_prefix: '',
         arg_separator: null,
@@ -70,52 +70,35 @@ function getUserAccessToken(string $temporary_code): bool | null
     );
 
     # CURL session will be handled manually through curl_setopt()
-    $curlHandle = curl_init(url: null);
+    $userTokenCurlHandle = curl_init(url: null);
 
-    curl_setopt(handle: $curlHandle, option: CURLOPT_URL, value: $userAccessTokenUrl);
-    curl_setopt(handle: $curlHandle, option: CURLOPT_POST, value: 1);
-    curl_setopt(handle: $curlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
-    curl_setopt(handle: $curlHandle, option: CURLOPT_POSTFIELDS, value: $urlencodedPayloadData);
-    curl_setopt(handle: $curlHandle, option: CURLOPT_HEADER, value: 0);
-    curl_setopt(handle: $curlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
+    curl_setopt(handle: $userTokenCurlHandle, option: CURLOPT_URL, value: $userAccessTokenUrl);
+    curl_setopt(handle: $userTokenCurlHandle, option: CURLOPT_POST, value: 1);
+    curl_setopt(handle: $userTokenCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
+    curl_setopt(handle: $userTokenCurlHandle, option: CURLOPT_POSTFIELDS, value: $urlEncodedPayloadData);
+    curl_setopt(handle: $userTokenCurlHandle, option: CURLOPT_HEADER, value: 0);
+    curl_setopt(handle: $userTokenCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
 
-    $curlResponse = curl_exec(handle: $curlHandle);
+    $userTokenCurlResponse = curl_exec(handle: $userTokenCurlHandle);
 
-    if (curl_errno(handle: $curlHandle)) {
-        error_log(curl_error(handle: $curlHandle));
-        curl_close(handle: $curlHandle);
+    if (curl_errno(handle: $userTokenCurlHandle)) {
+        error_log(curl_error(handle: $userTokenCurlHandle));
+        curl_close(handle: $userTokenCurlHandle);
         return false; // An error occurred during the API call
 
     } else {
-        $curlDecodedResponse = json_decode(
-            json: $curlResponse,
+        $userTokenCurlDecodedResponse = json_decode(
+            json: $userTokenCurlResponse,
             associative: true,
             depth: 512,
             flags: 0
         );
 
-        $userAccessToken    = $curlDecodedResponse['access_token'];
-        $userRefreshToken   = $curlDecodedResponse['refresh_token'];
+        $userAccessToken    = $userTokenCurlDecodedResponse['access_token'];
+        $userRefreshToken   = $userTokenCurlDecodedResponse['refresh_token'];
         $userExpireToken    = time() + 86400;
 
-        if (empty($userAccessToken)) {
-            // Ensure that user won't have to re-authorise multiple times if idling for a long time
-            setcookie(
-                name: 'vot_access_token',
-                value: $userRefreshToken,
-                expires_or_options: $userExpireToken,
-                path: '/',
-                domain: '',
-                secure: false,
-                httponly: true
-            );
-            exit(header(
-                header: 'Location: /token',
-                replace: true,
-                response_code: 302
-            ));
-            return null;
-        } else {
+        if (!empty($userAccessToken)) {
             // Just use the freshly created one until expired time
             setcookie(
                 name: 'vot_access_token',
@@ -127,7 +110,24 @@ function getUserAccessToken(string $temporary_code): bool | null
                 httponly: true
             );
             exit(header(
-                header: 'Location: /token',
+                header: 'Location: /home',
+                replace: true,
+                response_code: 302
+            ));
+            return null;
+        } else {
+            // Ensure that user won't have to re-authorise multiple times if idling for a long time
+            setcookie(
+                name: 'vot_access_token',
+                value: $userRefreshToken,
+                expires_or_options: $userExpireToken,
+                path: '/',
+                domain: '',
+                secure: false,
+                httponly: true
+            );
+            exit(header(
+                header: 'Location: /home',
                 replace: true,
                 response_code: 302
             ));
