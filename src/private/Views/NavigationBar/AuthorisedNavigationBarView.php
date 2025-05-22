@@ -148,31 +148,31 @@ if (!empty($osuUserId)) {
         <div class="middle-navigation-second-section">
             <ul>
                 <li>
-                    <a href="/admin/LogOutInterface.php">
+                    <a href="/logout">
                         <i class='bx bx-user-minus'></i>
                     </a>
                 </li>
 
                 <li>
-                    <a href="/user/Home.php">
+                    <a href="/home">
                         <i class="bx bxs-grid-alt"></i>
                     </a>
                 </li>
 
                 <li>
-                    <a href="/user/Archive.php">
+                    <a href="/archive">
                         <i class="bx bxs-box"></i>
                     </a>
                 </li>
 
                 <li>
-                    <a href="/user/Staff.php">
+                    <a href="/staff">
                         <i class="bx bxs-phone"></i>
                     </a>
                 </li>
 
                 <li>
-                    <a href="/user/Song.php">
+                    <a href="/song">
                         <i class="bx bxs-music"></i>
                     </a>
                 </li>
