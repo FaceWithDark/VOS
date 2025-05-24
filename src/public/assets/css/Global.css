@@ -251,18 +251,20 @@ body section div.announcement-box div.youtube-iframe-container iframe {
 
 
 /* PAGES THAT USE <button> TAG */
-body section.archive-page form div.vot-center-button-container,
-body section.staff-page form div.vot-center-button-container,
-body section.song-page form div.vot-center-button-container {
+body section.archive-page div.vot-center-button-container,
+body section.archive-vot-page form div.vot-center-button-container,
+body section.staff-page div.vot-center-button-container,
+body section.song-page div.vot-center-button-container {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
 	flex-wrap: wrap;
 }
 
-body section.archive-page form div.vot-center-button-container button,
-body section.staff-page form div.vot-center-button-container button,
-body section.song-page form div.vot-center-button-container button {
+body section.archive-page div.vot-center-button-container a,
+body section.archive-vot-page form div.vot-center-button-container button,
+body section.staff-page div.vot-center-button-container a,
+body section.song-page div.vot-center-button-container a {
 	padding: 1rem;
 	font-weight: bold;
 	border-radius: 1.5rem;
@@ -271,83 +273,26 @@ body section.song-page form div.vot-center-button-container button {
 	font-size: 0.85rem;
 }
 
-/*
-body section.staff-page form div.vot-right-button-container {
+body section.vot1-page form div.vot-right-button-container,
+body section.vot2-page form div.vot-right-button-container,
+body section.vot3-page form div.vot-right-button-container,
+body section.vot4-page form div.vot-right-button-container {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
 	flex-wrap: wrap;
 }
 
-body section.staff-page form div.vot-right-button-container button {
+body section.vot1-page form div.vot-right-button-container button,
+body section.vot2-page form div.vot-right-button-container button,
+body section.vot3-page form div.vot-right-button-container button,
+body section.vot4-page form div.vot-right-button-container button {
 	padding: 1rem;
 	font-weight: bold;
 	border-radius: 1.5rem;
 	border-style: none;
-	margin: 0rem 0.5rem 1.5rem 0rem;
+	margin: 0rem 1rem 1.5rem 0rem;
 	font-size: 0.85rem;
-}
-*/
-
-
-/* NO-HEADER PAGES */
-body section div.mappool-page,
-body section div.staff-page,
-body section div.song-page {
-	display: flex;
-	justify-content: space-evenly;
-	flex-wrap: wrap;
-}
-
-body section div.mappool-page div.mappool-card-container,
-body section div.song-page div.song-card-container {
-	display: flex;
-	flex-direction: column;
-	text-align: center;
-	justify-content: center;
-	width: 30rem;
-	word-wrap: break-word;
-}
-
-body section div.mappool-page div.mappool-card-container h1,
-body section div.mappool-page div.mappool-card-container h2,
-body section div.song-page div.song-card-container h1,
-body section div.song-page div.song-card-container h2 {
-	font-weight: bold;
-}
-
-body section div.mappool-page div.mappool-card-container a,
-body section div.song-page div.song-card-container a {
-	color: var(--light-accent-colour);
-	/* Safari compatability. */
-	-webkit-user-select: none;
-	/* Others broswer compatability. */
-	user-select: none;
-	font-weight: bold;
-	padding: 1rem 0;
-}
-
-body section div.mappool-page div.mappool-card-container a img,
-body section div.song-page div.song-card-container a img {
-	width: 100%;
-	height: auto;
-}
-
-body section div.mappool-page div.mappool-card-container h3,
-body section div.song-page div.song-card-container h3 {
-	padding-top: .75rem;
-}
-
-body section div.mappool-page div.mappool-card-container div.beatmap-attribute-row,
-body section div.song-page div.song-card-container div.beatmap-attribute-row {
-	display: flex;
-	justify-content: space-evenly;
-	padding: .75rem 0;
-}
-
-body section div.mappool-page div.mappool-card-container div.beatmap-attribute-row p,
-body section div.song-page div.song-card-container div.beatmap-attribute-row p {
-	font-weight: 500;
 }
 
 
