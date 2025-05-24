@@ -3,6 +3,9 @@
 </header>
 
 <section class="vot4-page">
+    <!-- TODO: Pull staff data and display it from here. However, need some sort of filtering here (GET request, maybe?). -->
+    <?php require __DIR__ . '/Vot4StaffView.php'; ?>
+
     <form action="/vot4" method="get">
         <div class="vot-right-button-container">
             <!-- Sent the corresponding tournament round fields to the website for fetching stored data -->
