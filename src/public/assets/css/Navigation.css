@@ -26,7 +26,11 @@ body nav.collapsed {
 body nav.expanded~section.home-page,
 body nav.expanded~section.landing-page,
 body nav.expanded~section.archive-page,
-body nav.expanded~section.mappool-page,
+body nav.expanded~section.archive-vot-page,
+body nav.expanded~section.vot1-page,
+body nav.expanded~section.vot2-page,
+body nav.expanded~section.vot3-page,
+body nav.expanded~section.vot4-page,
 body nav.expanded~section.staff-page,
 body nav.expanded~section.song-page {
 	padding-left: 11.75rem;
@@ -36,7 +40,11 @@ body nav.expanded~section.song-page {
 body nav.collapsed~section.home-page,
 body nav.collapsed~section.landing-page,
 body nav.collapsed~section.archive-page,
-body nav.collapsed~section.mappool-page,
+body nav.collapsed~section.archive-vot-page,
+body nav.collapsed~section.vot1-page,
+body nav.collapsed~section.vot2-page,
+body nav.collapsed~section.vot3-page,
+body nav.collapsed~section.vot4-page,
 body nav.collapsed~section.staff-page,
 body nav.collapsed~section.song-page {
 	padding-left: 5.75rem;
