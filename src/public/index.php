@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../private/Controllers/UserDataController.php';
+require __DIR__ . '/../private/Controllers/LogOutController.php';
 
 $httpRedirectRequest = parse_url(url: $_SERVER['REQUEST_URI'], component: PHP_URL_PATH);
 
@@ -172,7 +173,7 @@ switch ($httpRedirectRequest) {
                     }
             }
         } else {
-            // TODO: This is just a trick, not real solution. I can't think of one yet but better to put a TODO here.
+            // TODO: this is just a trick, not real solution. I can't think of one yet but better to put a TODO here.
             error_log(message: 'GET data not found! Ignoring for now...', message_type: 0);
         }
 
@@ -215,7 +216,7 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/vtc':
-        // TODO: Deny access for now. I will implement this if other issues fixed.
+        // TODO: deny access for now. I will implement this if other issues fixed.
         http_response_code(403);
         break;
 
@@ -243,15 +244,22 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/logout':
-        // TODO: Leave it like this for now as I will slowly fixing through each pages.
-        exit(header(
-            header: 'Location: /home',
-            replace: true,
-            response_code: 302
-        ));
-        break;
+        $userAccessCookie = $_COOKIE['vot_access_token'];
 
-    # User is not allowed to see the navigation bar by itself as a page
+        if (!isset($userAccessCookie)) {
+            # TODO: proper HTTP handling page
+            exit(header(
+                header: 'Location: /home',
+                replace: true,
+                response_code: 302
+            ));
+        } else {
+            getUserLogOut(cookie: $userAccessCookie);
+            require __DIR__ . '/../private/Views/LogOutView.php';
+            break;
+        }
+
+        # User is not allowed to see the navigation bar by itself as a page
     case '/nav':
     case '/navbar':
     case '/navigation':
