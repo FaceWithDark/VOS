@@ -16,8 +16,6 @@
 </head>
 
 <body>
-    <h1 style="display: flex; justify-content: center; align-items: center; color: coral;">Hello there, your website is working!</h1>
+    <h1 style="display: flex; justify-content: center; align-items: center; color: coral;">Hello there, you have log out your account successfully!</h1>
     <p style="display: flex; justify-content: flex-end; align-items: flex-end; font-weight: bold;"><a href="/home">Home Page</a></p>
 </body>
-
-<?php phpinfo(); ?>
