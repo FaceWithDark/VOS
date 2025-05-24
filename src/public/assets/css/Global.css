@@ -319,29 +319,3 @@ body div.vot-page section div.lower-general-information-box ul li {
 	line-height: 1.275rem;
 	list-style: disc inside;
 }
-
-
-/* CARD STYLE WITH HEADER PAGES */
-body section div.staff-page div.staff-card-container {
-	display: flex;
-	flex-direction: column;
-	text-align: center;
-	justify-content: center;
-	width: 25rem;
-	word-wrap: break-word;
-}
-
-body section div.staff-page div.staff-card-container h1,
-body section div.staff-page div.staff-card-container h2 {
-	font-weight: bold;
-}
-
-body section div.staff-page div.staff-card-container img:nth-child(1) {
-	margin: 0 .25rem;
-}
-
-body section div.staff-page div.staff-card-container img:nth-child(2) {
-	min-width: 300px;
-	min-height: 240px;
-	padding: 1.25rem 0;
-}
