@@ -296,6 +296,68 @@ body section.vot4-page form div.vot-right-button-container button {
 }
 
 
+/* PAGES THAT USE BOX UI STYLE */
+body section.vot4-page form div.box-container {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 2rem;
+	/* background-color: lightblue; */
+	width: 50%;
+	border-radius: 1.5rem;
+}
+
+body section.vot4-page form div.box-container div.song-type,
+body section.vot4-page form div.box-container div.song-image,
+body section.vot4-page form div.box-container div.song-name,
+body section.vot4-page form div.box-container div.song-feature-artist,
+body section.vot4-page form div.box-container div.song-mapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding: 0.5rem 0rem;
+}
+
+body section.vot4-page form div.box-container div.song-attributes {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	padding: 0.5rem 0rem;
+}
+
+body section.vot4-page form div.box-container div.song-image a img {
+	width: 100%;
+	height: auto;
+}
+
+body section.vot4-page form div.box-container div.song-type h1,
+body section.vot4-page form div.box-container div.song-name h2,
+body section.vot4-page form div.box-container div.song-feature-artist h3,
+body section.vot4-page form div.box-container div.song-mapper h4 {
+	font-weight: bold;
+	font-size: 1.025rem;
+}
+
+body section.vot4-page form div.box-container div.song-attributes div.song-star-rating,
+body section.vot4-page form div.box-container div.song-attributes div.song-length,
+body section.vot4-page form div.box-container div.song-attributes div.song-speed,
+body section.vot4-page form div.box-container div.song-attributes div.song-od,
+body section.vot4-page form div.box-container div.song-attributes div.song-hp,
+body section.vot4-page form div.box-container div.song-attributes div.song-pass {
+	display: flex;
+	flex-direction: row;
+}
+
+body section.vot4-page form div.box-container div.song-attributes div.song-star-rating p,
+body section.vot4-page form div.box-container div.song-attributes div.song-length p,
+body section.vot4-page form div.box-container div.song-attributes div.song-speed p,
+body section.vot4-page form div.box-container div.song-attributes div.song-od p,
+body section.vot4-page form div.box-container div.song-attributes div.song-hp p,
+body section.vot4-page form div.box-container div.song-attributes div.song-pass p {
+	padding: 0rem 0.25rem;
+	font-weight: bold;
+	font-size: 1.025rem;
+}
+
 /* VOT-SPECIFIC PAGE */
 body div.vot-page section div.upper-general-information-box img {
 	padding-left: 1.5rem;

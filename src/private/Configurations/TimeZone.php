@@ -7,10 +7,8 @@ require __DIR__ . '/Environment.php';
 
 function getUserTimeZone(): array | bool
 {
-    $osuUserIp              = getUserIp()['ip'];
-    $osuUserTimeZoneApiKey  = getenv(name: 'IPIFY_API_KEY', local_only: true) ?: getenv(name: 'IPIFY_API_KEY');
-    $osuUserTimeZoneUrl     = "https://geo.ipify.org/api/v2/country?apiKey=$osuUserTimeZoneApiKey&ipAddress=$osuUserIp";
-
+    $osuUserTimeZone        = getUserIp()['timezone'];
+    $osuUserTimeZoneUrl     = "https://api.opentimezone.com/timezone/$osuUserTimeZone";
     $httpAcceptType         = 'application/json';
     $httpContentType        = 'application/json';
 
