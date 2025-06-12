@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 function getUserIp(): array | bool
 {
-    $userIpUrl       = 'https://api.ipify.org?format=json';
+    $userIpUrl          = 'http://ip-api.com/json';
 
     $httpAcceptType     = 'application/json';
     $httpContentType    = 'application/json';

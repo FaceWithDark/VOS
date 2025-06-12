@@ -3,12 +3,8 @@
 </header>
 
 <section class="archive-vot-page">
-    <form action="/vot" method="get">
-        <div class="vot-center-button-container">
-            <button type="submit" name="name" value="vot1">VOT1</button>
-            <button type="submit" name="name" value="vot2">VOT2</button>
-            <button type="submit" name="name" value="vot3">VOT3</button>
-            <button type="submit" name="name" value="vot4">VOT4</button>
-        </div>
-    </form>
+    <a href='/vot1'>VOT1</a>
+    <a href='/vot2'>VOT2</a>
+    <a href='/vot3'>VOT3</a>
+    <a href='/vot4'>VOT4</a>
 </section>
