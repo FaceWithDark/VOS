@@ -55,15 +55,27 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/vot4':
-        $vot4TournamentName = trim(
-            string: (
-                parse_url(
-                    url: $_SERVER['REQUEST_URI'],
-                    component: PHP_URL_PATH
-                )
+        if (!isset($_COOKIE['vot_access_token'])) {
+            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Tournament/Vot4TournamentView.php';
+        } else {
+            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Tournament/Vot4TournamentView.php';
+        }
+        break;
+
+    case '/vot4/mappool':
+        $vot4TournamentDetail = explode(
+            separator: '/',
+            string: trim(
+                string: $_SERVER['REQUEST_URI'],
+                characters: '/'
             ),
-            characters: '/'
+            limit: PHP_INT_MAX
         );
+
+        // echo '<pre>' . print_r($vot4TournamentDetail, true) . '</pre>';
+        $vot4TournamentName = $vot4TournamentDetail[0];
 
         if (!isset($_COOKIE['vot_access_token'])) {
             // Start 1st output buffer (HTML outputs in this case). Delete this buffer if no valid GET parameter value found
@@ -74,24 +86,24 @@ switch ($httpRedirectRequest) {
             );
 
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Tournament/Vot4TournamentView.php';
+            require __DIR__ . '/../Views/Tournament/Vot4MappoolView.php';
 
             if (isset($_GET['round'])) {
-                $votTournamentRound = $_GET['round'];
+                $vot4TournamentRound = $_GET['round'];
 
-                switch ($votTournamentRound) {
-                    case 'qlf':
+                switch ($vot4TournamentRound) {
+                    case 'qualifiers':
                         // echo (sprintf("Current round: %s", $tournamentRound));
                         getTournamentRoundMappool(
                             tournament_name: $vot4TournamentName,
-                            tournament_round: $votTournamentRound
+                            tournament_round: $vot4TournamentRound
                         );
                         break;
 
-                    case 'ro16':
+                    case 'round_of_16':
                         getTournamentRoundMappool(
                             tournament_name: $vot4TournamentName,
-                            tournament_round: $votTournamentRound
+                            tournament_round: $vot4TournamentRound
                         );
                         break;
 
@@ -113,24 +125,24 @@ switch ($httpRedirectRequest) {
             );
 
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Tournament/Vot4TournamentView.php';
+            require __DIR__ . '/../Views/Tournament/Vot4MappoolView.php';
 
             if (isset($_GET['round'])) {
-                $votTournamentRound = $_GET['round'];
+                $vot4TournamentRound = $_GET['round'];
 
-                switch ($votTournamentRound) {
-                    case 'qlf':
+                switch ($vot4TournamentRound) {
+                    case 'qualifiers':
                         // echo (sprintf("Current round: %s", $tournamentRound));
                         getTournamentRoundMappool(
                             tournament_name: $vot4TournamentName,
-                            tournament_round: $votTournamentRound
+                            tournament_round: $vot4TournamentRound
                         );
                         break;
 
-                    case 'ro16':
+                    case 'round_of_16':
                         getTournamentRoundMappool(
                             tournament_name: $vot4TournamentName,
-                            tournament_round: $votTournamentRound
+                            tournament_round: $vot4TournamentRound
                         );
                         break;
 

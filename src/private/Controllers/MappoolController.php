@@ -8,12 +8,43 @@ function getTournamentRoundMappool(string $tournament_name, string $tournament_r
     return $successMessage;
     */
 
+    $tournamentRoundAbbreviationNames = [
+        'qualifiers'        => 'QLF',
+        'round_of_16'       => 'RO16',
+        'quarterfinals'     => 'QF',
+        'semifinals'        => 'SF',
+        'finals'            => 'FNL',
+        'grandfinals'       => 'GF',
+        'allstars'          => 'ASTR',
+    ];
+
+    $tournamentRoundAbbreviationNameData    = [];
+    $tournamentRoundBeatmapData             = [];
+
     switch ($tournament_name) {
         case 'vot4':
         case 'vot3':
         case 'vot2':
         case 'vot1':
-            $tournamentRoundMappoolJsonData = file_get_contents(
+            if (array_key_exists(key: $tournament_round, array: $tournamentRoundAbbreviationNames)) {
+                foreach ($tournamentRoundAbbreviationNames as $tournamentRoundAbbreviationName) {
+                    $tournamentRoundAbbreviationNameData[] = $tournamentRoundAbbreviationName;
+                }
+            } else {
+                echo 'Sus';
+            }
+
+            // echo '<pre>' . print_r($tournamentRoundAbbreviationArray, true) . '</pre>';
+
+            $qualifierRoundAbbreviationName     = $tournamentRoundAbbreviationNameData[0];
+            $roundOf16RoundAbbreviationName     = $tournamentRoundAbbreviationNameData[1];
+            $quarterFinalRoundAbbreviationName  = $tournamentRoundAbbreviationNameData[2];
+            $semiFinalRoundAbbreviationName     = $tournamentRoundAbbreviationNameData[3];
+            $finalRoundAbbreviationName         = $tournamentRoundAbbreviationNameData[4];
+            $grandFinalRoundAbbreviationName    = $tournamentRoundAbbreviationNameData[5];
+            $allStarRoundAbbreviationName       = $tournamentRoundAbbreviationNameData[6];
+
+            $tournamentRoundJsonMappoolData = file_get_contents(
                 filename: __DIR__ . '/../Datas/Tournament/VotMappoolData.json',
                 use_include_path: false,
                 context: null,
@@ -21,77 +52,72 @@ function getTournamentRoundMappool(string $tournament_name, string $tournament_r
                 length: null
             );
 
-            $tournamentRoundMappoolReadableData = json_decode(
-                json: $tournamentRoundMappoolJsonData,
+            $tournamentRoundReadableMappoolData = json_decode(
+                json: $tournamentRoundJsonMappoolData,
                 associative: true
             );
 
-            $qualifierRoundMappoolJsonData = $tournamentRoundMappoolReadableData[$tournament_name][$tournament_round];
-            // echo '<pre>' . print_r($qualifierRoundMappoolJsonData, true) . '</pre>';
+            $qualifierRoundJsonMappoolData = $tournamentRoundReadableMappoolData[$tournament_name][$qualifierRoundAbbreviationName];
+            // echo '<pre>' . print_r($qualifierRoundJsonMappoolData, true) . '</pre>';
 
-            $qualifierRoundNoModBeatmapJsonData = $qualifierRoundMappoolJsonData['NM'];
-            // echo '<pre>' . print_r($qualifierRoundNoModBeatmapJsonData, true) . '</pre>';
+            $qualifierRoundJsonMappoolNoModData = $qualifierRoundJsonMappoolData['NM'];
+            // echo '<pre>' . print_r($qualifierRoundJsonMappoolNoModData, true) . '</pre>';
 
-            $tournamentRoundBeatmapData = [];
-
-            foreach ($qualifierRoundNoModBeatmapJsonData as $key => $value) {
+            foreach ($qualifierRoundJsonMappoolNoModData as $qualifierRoundJsonMappoolNoModTypeData => $qualifierRoundJsonMappoolNoModIdData) {
                 // TODO:
                 // Created JSON data should only be used for `View` to read from the
                 // database only. Else, there will be a simple admin-like panel to
                 // create add new data into new JSON file so that it can be added to
                 // the database like the logic below (Can only be done by 'Admin'
                 // role)
-                $qualifierRoundNoModBeatmapData = getTournamentRoundBeatmapData(
-                    beatmap_id: $value,
+                $qualifierRoundBeatmapNoModData = getTournamentRoundBeatmapData(
+                    beatmap_id: $qualifierRoundJsonMappoolNoModIdData,
                     access_token: $_COOKIE['vot_access_token']
                 );
-                // echo '<pre>' . print_r($qualifierRoundNoModBeatmapData, true) . '</pre>';
+                // echo '<pre>' . print_r($tournamentRoundNoModBeatmapData, true) . '</pre>';
 
-                $qualifierRoundBeatmapId                    = $qualifierRoundNoModBeatmapData['id'];
-                $qualifierRoundId                           = strtoupper(string: $_GET['round']);
+                $qualifierRoundBeatmapId                    = $qualifierRoundBeatmapNoModData['id'];
+                $qualifierRoundId                           = $qualifierRoundAbbreviationName;
                 $qualifierTournamentId                      = strtoupper(string: $tournament_name);
-                $qualifierRoundBeatmapType                  = $key;
-                $qualifierRoundBeatmapImage                 = $qualifierRoundNoModBeatmapData['beatmapset']['covers']['cover'];
-                $qualifierRoundBeatmapUrl                   = $qualifierRoundNoModBeatmapData['url'];
-                $qualifierRoundBeatmapName                  = $qualifierRoundNoModBeatmapData['beatmapset']['title'];
-                $qualifierRoundBeatmapDifficultyName        = $qualifierRoundNoModBeatmapData['version'];
-                $qualifierRoundBeatmapFeatureArtist         = $qualifierRoundNoModBeatmapData['beatmapset']['artist'];
-                $qualifierRoundBeatmapMapper                = $qualifierRoundNoModBeatmapData['beatmapset']['creator'];
-                $qualifierRoundBeatmapMapperUrl             = "https://osu.ppy.sh/users/{$qualifierRoundNoModBeatmapData['beatmapset']['user_id']}";
-                $qualifierRoundBeatmapDifficulty            = $qualifierRoundNoModBeatmapData['difficulty_rating'];
-                $qualifierRoundBeatmapLength                = $qualifierRoundNoModBeatmapData['total_length'];
-                $qualifierRoundBeatmapOverallSpeed          = $qualifierRoundNoModBeatmapData['beatmapset']['bpm'];
-                $qualifierRoundBeatmapOverallDifficulty     = $qualifierRoundNoModBeatmapData['accuracy'];
-                $qualifierRoundBeatmapOverallHealth         = $qualifierRoundNoModBeatmapData['drain'];
-                $qualifierRoundBeatmapPassCount             = $qualifierRoundNoModBeatmapData['passcount'];
+                $qualifierRoundBeatmapType                  = $qualifierRoundJsonMappoolNoModTypeData;
+                $qualifierRoundBeatmapImage                 = $qualifierRoundBeatmapNoModData['beatmapset']['covers']['cover'];
+                $qualifierRoundBeatmapUrl                   = $qualifierRoundBeatmapNoModData['url'];
+                $qualifierRoundBeatmapName                  = $qualifierRoundBeatmapNoModData['beatmapset']['title'];
+                $qualifierRoundBeatmapDifficultyName        = $qualifierRoundBeatmapNoModData['version'];
+                $qualifierRoundBeatmapFeatureArtist         = $qualifierRoundBeatmapNoModData['beatmapset']['artist'];
+                $qualifierRoundBeatmapMapper                = $qualifierRoundBeatmapNoModData['beatmapset']['creator'];
+                $qualifierRoundBeatmapMapperUrl             = "https://osu.ppy.sh/users/{$qualifierRoundBeatmapNoModData['beatmapset']['user_id']}";
+                $qualifierRoundBeatmapDifficulty            = $qualifierRoundBeatmapNoModData['difficulty_rating'];
+                $qualifierRoundBeatmapLength                = $qualifierRoundBeatmapNoModData['total_length'];
+                $qualifierRoundBeatmapOverallSpeed          = $qualifierRoundBeatmapNoModData['beatmapset']['bpm'];
+                $qualifierRoundBeatmapOverallDifficulty     = $qualifierRoundBeatmapNoModData['accuracy'];
+                $qualifierRoundBeatmapOverallHealth         = $qualifierRoundBeatmapNoModData['drain'];
+                $qualifierRoundBeatmapPassCount             = $qualifierRoundBeatmapNoModData['passcount'];
 
                 $tournamentRoundBeatmapData[] = [
-                    'beatmap_id'        => $qualifierRoundBeatmapId,
-                    'round_id'          => $qualifierRoundId,
-                    'tournament_id'     => $qualifierTournamentId,
-                    'type'              => $qualifierRoundBeatmapType,
-                    'image'             => $qualifierRoundBeatmapImage,
-                    'url'               => $qualifierRoundBeatmapUrl,
-                    'beatmap_name'      => $qualifierRoundBeatmapName,
-                    'difficulty_name'   => $qualifierRoundBeatmapDifficultyName,
-                    'fa'                => $qualifierRoundBeatmapFeatureArtist,
-                    'mapper'            => $qualifierRoundBeatmapMapper,
-                    'mapper_url'        => $qualifierRoundBeatmapMapperUrl,
-                    'difficulty'        => $qualifierRoundBeatmapDifficulty,
-                    'length'            => $qualifierRoundBeatmapLength,
-                    'bpm'               => $qualifierRoundBeatmapOverallSpeed,
-                    'od'                => $qualifierRoundBeatmapOverallDifficulty,
-                    'hp'                => $qualifierRoundBeatmapOverallHealth,
-                    'pass_count'        => $qualifierRoundBeatmapPassCount
+                    'beatmap_id'                => $qualifierRoundBeatmapId,
+                    'beatmap_round_id'          => $qualifierRoundId,
+                    'beatmap_tournament_id'     => $qualifierTournamentId,
+                    'beatmap_type'              => $qualifierRoundBeatmapType,
+                    'beatmap_image'             => $qualifierRoundBeatmapImage,
+                    'beatmap_url'               => $qualifierRoundBeatmapUrl,
+                    'beatmap_name'              => $qualifierRoundBeatmapName,
+                    'beatmap_difficulty_name'   => $qualifierRoundBeatmapDifficultyName,
+                    'beatmap_fa'                => $qualifierRoundBeatmapFeatureArtist,
+                    'beatmap_mapper'            => $qualifierRoundBeatmapMapper,
+                    'beatmap_mapper_url'        => $qualifierRoundBeatmapMapperUrl,
+                    'beatmap_difficulty'        => $qualifierRoundBeatmapDifficulty,
+                    'beatmap_length'            => $qualifierRoundBeatmapLength,
+                    'beatmap_bpm'               => $qualifierRoundBeatmapOverallSpeed,
+                    'beatmap_od'                => $qualifierRoundBeatmapOverallDifficulty,
+                    'beatmap_hp'                => $qualifierRoundBeatmapOverallHealth,
+                    'beatmap_pass_count'        => $qualifierRoundBeatmapPassCount
                 ];
             }
-
             // echo '<pre>' . print_r($tournamentRoundBeatmapData, true) . '</pre>';
 
             // This will keep the MVC structure as how it is
             getMappoolData(mappool_data: $tournamentRoundBeatmapData);
-
-            return $tournamentRoundMappoolReadableData;
     }
 }
 

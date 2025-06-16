@@ -8,22 +8,22 @@ function getMappoolData(array $mappool_data): null
 {
     foreach ($mappool_data as $beatmap_data) {
         $beatmapId                  = $beatmap_data['beatmap_id'];
-        $roundId                    = $beatmap_data['round_id'];
-        $tournamentId               = $beatmap_data['tournament_id'];
-        $beatmapType                = $beatmap_data['type'];
-        $beatmapImage               = $beatmap_data['image'];
-        $beatmapUrl                 = $beatmap_data['url'];
+        $roundId                    = $beatmap_data['beatmap_round_id'];
+        $tournamentId               = $beatmap_data['beatmap_tournament_id'];
+        $beatmapType                = $beatmap_data['beatmap_type'];
+        $beatmapImage               = $beatmap_data['beatmap_image'];
+        $beatmapUrl                 = $beatmap_data['beatmap_url'];
         $beatmapName                = $beatmap_data['beatmap_name'];
-        $beatmapDifficultyName      = $beatmap_data['difficulty_name'];
-        $beatmapFeatureArtist       = $beatmap_data['fa'];
-        $beatmapMapper              = $beatmap_data['mapper'];
-        $beatmapMapperUrl           = $beatmap_data['mapper_url'];
-        $beatmapDifficulty          = $beatmap_data['difficulty'];
-        $beatmapLength              = $beatmap_data['length'];
-        $beatmapOverallSpeed        = $beatmap_data['bpm'];
-        $beatmapOverallDifficulty   = $beatmap_data['od'];
-        $beatmapOverallHealth       = $beatmap_data['hp'];
-        $beatmapPassCount           = $beatmap_data['pass_count'];
+        $beatmapDifficultyName      = $beatmap_data['beatmap_difficulty_name'];
+        $beatmapFeatureArtist       = $beatmap_data['beatmap_fa'];
+        $beatmapMapper              = $beatmap_data['beatmap_mapper'];
+        $beatmapMapperUrl           = $beatmap_data['beatmap_mapper_url'];
+        $beatmapDifficulty          = $beatmap_data['beatmap_difficulty'];
+        $beatmapLength              = $beatmap_data['beatmap_length'];
+        $beatmapOverallSpeed        = $beatmap_data['beatmap_bpm'];
+        $beatmapOverallDifficulty   = $beatmap_data['beatmap_od'];
+        $beatmapOverallHealth       = $beatmap_data['beatmap_hp'];
+        $beatmapPassCount           = $beatmap_data['beatmap_pass_count'];
         // Variable scoping in PHP is a bit weird somehow: https://www.php.net/manual/en/language.variables.scope.php
         $mappoolDatabase            = $GLOBALS['votDatabaseHandle'];
 
