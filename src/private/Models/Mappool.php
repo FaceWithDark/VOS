@@ -224,7 +224,35 @@ function readMappoolData(
             vr.roundId = :roundId
             AND vt.tournamentId = :tournamentId
         ORDER BY
-            vb.beatmapType ASC;
+            (CASE vb.beatmapType
+                WHEN 'NM1' THEN 1
+                WHEN 'NM2' THEN 2
+                WHEN 'NM3' THEN 3
+                WHEN 'NM4' THEN 4
+                WHEN 'NM5' THEN 5
+                WHEN 'NM6' THEN 6
+
+                WHEN 'HD1' THEN 7
+                WHEN 'HD2' THEN 8
+
+                WHEN 'HR1' THEN 9
+                WHEN 'HR2' THEN 10
+
+                WHEN 'DT1' THEN 11
+                WHEN 'DT2' THEN 12
+
+                WHEN 'FM1' THEN 13
+                WHEN 'FM2' THEN 14
+                WHEN 'FM3' THEN 15
+
+                WHEN 'EZ1' THEN 16
+
+                WHEN 'HDHR1' THEN 17
+
+                WHEN 'TB' THEN 18
+
+                ELSE 19
+            END) ASC;
     ";
 
     $readStatement = $database_handle->prepare($readQuery);
