@@ -90,31 +90,6 @@ switch ($httpRedirectRequest) {
 
             if (isset($_GET['round'])) {
                 $vot4TournamentRound = $_GET['round'];
-
-                switch ($vot4TournamentRound) {
-                    case 'qualifiers':
-                        // echo (sprintf("Current round: %s", $tournamentRound));
-                        getTournamentRoundMappool(
-                            tournament_name: $vot4TournamentName,
-                            tournament_round: $vot4TournamentRound
-                        );
-                        break;
-
-                    case 'round_of_16':
-                        getTournamentRoundMappool(
-                            tournament_name: $vot4TournamentName,
-                            tournament_round: $vot4TournamentRound
-                        );
-                        break;
-
-                    default:
-                        while (ob_get_level() > 1) {
-                            ob_end_clean(); // Delete all output buffers (HTML outputs in this case)
-                        }
-                        http_response_code(404);
-                        ob_end_flush(); // End output buffers delete process
-                        break;
-                }
             }
         } else {
             // Start 1st output buffer (HTML outputs in this case). Delete this buffer if no valid GET parameter value found
@@ -132,7 +107,6 @@ switch ($httpRedirectRequest) {
 
                 switch ($vot4TournamentRound) {
                     case 'qualifiers':
-                        // echo (sprintf("Current round: %s", $tournamentRound));
                         getTournamentRoundMappool(
                             tournament_name: $vot4TournamentName,
                             tournament_round: $vot4TournamentRound
@@ -140,6 +114,41 @@ switch ($httpRedirectRequest) {
                         break;
 
                     case 'round_of_16':
+                        getTournamentRoundMappool(
+                            tournament_name: $vot4TournamentName,
+                            tournament_round: $vot4TournamentRound
+                        );
+                        break;
+
+                    case 'quarterfinals':
+                        getTournamentRoundMappool(
+                            tournament_name: $vot4TournamentName,
+                            tournament_round: $vot4TournamentRound
+                        );
+                        break;
+
+                    case 'semifinals':
+                        getTournamentRoundMappool(
+                            tournament_name: $vot4TournamentName,
+                            tournament_round: $vot4TournamentRound
+                        );
+                        break;
+
+                    case 'finals':
+                        getTournamentRoundMappool(
+                            tournament_name: $vot4TournamentName,
+                            tournament_round: $vot4TournamentRound
+                        );
+                        break;
+
+                    case 'grandfinals':
+                        getTournamentRoundMappool(
+                            tournament_name: $vot4TournamentName,
+                            tournament_round: $vot4TournamentRound
+                        );
+                        break;
+
+                    case 'allstars':
                         getTournamentRoundMappool(
                             tournament_name: $vot4TournamentName,
                             tournament_round: $vot4TournamentRound
