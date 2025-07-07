@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../Configurations/Database.php';
-require __DIR__ . '/../Configurations/TimeZone.php';
 
 function getUserData(string $access_token): array | bool
 {

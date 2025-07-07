@@ -2,9 +2,14 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
+// Helper function wrapped in its own file
+require __DIR__ . '/../Configurations/TimeZone.php';
+
+// Controller function wrapped in its own file
 require __DIR__ . '/../Controllers/UserDataController.php';
 require __DIR__ . '/../Controllers/LogOutController.php';
 require __DIR__ . '/../Controllers/MappoolController.php';
+require __DIR__ . '/../Controllers/StaffController.php';
 
 $httpRedirectRequest = parse_url(url: $_SERVER['REQUEST_URI'], component: PHP_URL_PATH);
 
@@ -87,10 +92,6 @@ switch ($httpRedirectRequest) {
 
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
             require __DIR__ . '/../Views/Tournament/Vot4MappoolView.php';
-
-            if (isset($_GET['round'])) {
-                $vot4TournamentRound = $_GET['round'];
-            }
         } else {
             // Start 1st output buffer (HTML outputs in this case). Delete this buffer if no valid GET parameter value found
             ob_start(
@@ -179,6 +180,70 @@ switch ($httpRedirectRequest) {
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
         }
         require __DIR__ . '/../Views/Staff/StaffTournamentView.php';
+        break;
+
+    case '/staff/vot':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Staff/StaffVotView.php';
+        } else {
+            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Staff/StaffVotView.php';
+        }
+        break;
+
+    case '/vot4/staff':
+        $vot4TournamentDetail = explode(
+            separator: '/',
+            string: trim(
+                string: $_SERVER['REQUEST_URI'],
+                characters: '/'
+            ),
+            limit: PHP_INT_MAX
+        );
+
+        // echo '<pre>' . print_r($vot4TournamentDetail, true) . '</pre>';
+        $vot4TournamentName = $vot4TournamentDetail[0];
+
+        if (!isset($_COOKIE['vot_access_token'])) {
+            // Start 1st output buffer (HTML outputs in this case). Delete this buffer if no valid GET parameter value found
+            ob_start(
+                callback: null,
+                chunk_size: 0,
+                flags: PHP_OUTPUT_HANDLER_STDFLAGS
+            );
+
+            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Tournament/Vot4StaffView.php';
+        } else {
+            // Start 1st output buffer (HTML outputs in this case). Delete this buffer if no valid GET parameter value found
+            ob_start(
+                callback: null,
+                chunk_size: 0,
+                flags: PHP_OUTPUT_HANDLER_STDFLAGS
+            );
+
+            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Tournament/Vot4StaffView.php';
+
+            if (isset($_GET['role'])) {
+                $vot4StaffRole = $_GET['role'];
+
+                switch ($vot4StaffRole) {
+                    case 'default':
+                        getTournamentStaff(tournament_name: $vot4TournamentName);
+                        break;
+
+                    default:
+                        while (ob_get_level() > 1) {
+                            ob_end_clean(); // Delete all output buffers (HTML outputs in this case)
+                        }
+                        http_response_code(404);
+                        ob_end_flush(); // End output buffers delete process
+                        break;
+                }
+            }
+        }
         break;
 
     case '/song':
