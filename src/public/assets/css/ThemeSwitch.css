@@ -38,7 +38,7 @@ body.light-theme section.vot3-page div.vot-center-button-container a,
 body.light-theme section.vot4-page div.vot-center-button-container a,
 body.light-theme section.staff-page div.vot-center-button-container a,
 body.light-theme section.staff-vot-page div.vot-center-button-container a,
-body.light-theme section.song-page div.vot-center-button-container a {
+body.light-theme section.custom-song-page div.vot-center-button-container a {
 	background: hsl(var(--light-background-colour-hue) var(--light-background-colour-saturation) calc(var(--light-background-colour-lightness) - 17%) / var(--light-background-colour-alpha));
 	color: var(--light-accent-colour);
 }
@@ -51,7 +51,7 @@ body.light-theme section.vot3-page div.vot-center-button-container a:hover,
 body.light-theme section.vot4-page div.vot-center-button-container a:hover,
 body.light-theme section.staff-page div.vot-center-button-container a:hover,
 body.light-theme section.staff-vot-page div.vot-center-button-container a:hover,
-body.light-theme section.song-page div.vot-center-button-container a:hover {
+body.light-theme section.custom-song-page div.vot-center-button-container a:hover {
 	background: var(--light-secondary-colour);
 	color: var(--light-background-colour);
 }
@@ -59,13 +59,15 @@ body.light-theme section.song-page div.vot-center-button-container a:hover {
 
 /* PAGES THAT USE <button> TAG [Light] */
 body.light-theme section.vot4-mappool form button,
-body.light-theme section.vot4-staff form button {
+body.light-theme section.vot4-staff form button,
+body.light-theme section.custom-song-vot-page form button {
 	background: hsl(var(--light-background-colour-hue) var(--light-background-colour-saturation) calc(var(--light-background-colour-lightness) - 17%) / var(--light-background-colour-alpha));
 	color: var(--light-accent-colour);
 }
 
 body.light-theme section.vot4-mappool form button:hover,
-body.light-theme section.vot4-staff form button:hover {
+body.light-theme section.vot4-staff form button:hover,
+body.light-theme section.custom-song-vot-page form button:hover {
 	background: var(--light-secondary-colour);
 	color: var(--light-background-colour);
 }
@@ -175,7 +177,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 	body.system-theme section.vot4-page div.vot-center-button-container a,
 	body.system-theme section.staff-page div.vot-center-button-container a,
 	body.system-theme section.staff-vot-page div.vot-center-button-container a,
-	body.system-theme section.song-page div.vot-center-button-container a {
+	body.system-theme section.custom-song-page div.vot-center-button-container a {
 		background: hsl(var(--light-background-colour-hue) var(--light-background-colour-saturation) calc(var(--light-background-colour-lightness) - 17%) / var(--light-background-colour-alpha));
 		color: var(--light-accent-colour);
 	}
@@ -188,7 +190,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 	body.system-theme section.vot4-page div.vot-center-button-container a:hover,
 	body.system-theme section.staff-page div.vot-center-button-container a:hover,
 	body.system-theme section.staff-vot-page div.vot-center-button-container a:hover,
-	body.system-theme section.song-page div.vot-center-button-container a:hover {
+	body.system-theme section.custom-song-page div.vot-center-button-container a:hover {
 		background: var(--light-secondary-colour);
 		color: var(--light-background-colour);
 	}
@@ -196,13 +198,15 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 
 	/* PAGES THAT USE <button> TAG [System - Light] */
 	body.system-theme section.vot4-mappool form button,
-	body.system-theme section.vot4-staff form button {
+	body.system-theme section.vot4-staff form button,
+	body.system-theme section.custom-song-vot-page form button {
 		background: hsl(var(--light-background-colour-hue) var(--light-background-colour-saturation) calc(var(--light-background-colour-lightness) - 17%) / var(--light-background-colour-alpha));
 		color: var(--light-accent-colour);
 	}
 
 	body.system-theme section.vot4-mappool form button:hover,
-	body.system-theme section.vot4-staff form button:hover {
+	body.system-theme section.vot4-staff form button:hover,
+	body.system-theme section.custom-song-vot-page form button:hover {
 		background: var(--light-secondary-colour);
 		color: var(--light-background-colour);
 	}
@@ -311,7 +315,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 	body.system-theme section.vot4-page div.vot-center-button-container a,
 	body.system-theme section.staff-page div.vot-center-button-container a,
 	body.system-theme section.staff-vot-page div.vot-center-button-container a,
-	body.system-theme section.song-page div.vot-center-button-container a {
+	body.system-theme section.custom-song-page div.vot-center-button-container a {
 		background: hsl(var(--dark-background-colour-hue) var(--dark-background-colour-saturation) calc(var(--dark-background-colour-lightness) + 60%) / var(--dark-background-colour-alpha));
 		color: var(--dark-accent-colour);
 	}
@@ -324,7 +328,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 	body.system-theme section.vot4-page div.vot-center-button-container a:hover,
 	body.system-theme section.staff-page div.vot-center-button-container a:hover,
 	body.system-theme section.staff-vot-page div.vot-center-button-container a:hover,
-	body.system-theme section.song-page div.vot-center-button-container a:hover {
+	body.system-theme section.custom-song-page div.vot-center-button-container a:hover {
 		background: hsl(var(--dark-secondary-colour-hue) var(--dark-secondary-colour-saturation) var(--dark-secondary-colour-lightness) / var(--dark-secondary-colour-alpha));
 		color: var(--dark-background-colour);
 	}
@@ -332,13 +336,15 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 
 	/* PAGES THAT USE <button> TAG [System - Dark] */
 	body.system-theme section.vot4-mappool form button,
-	body.system-theme section.vot4-staff form button {
+	body.system-theme section.vot4-staff form button,
+	body.system-theme section.custom-song-vot-page form button {
 		background: hsl(var(--dark-background-colour-hue) var(--dark-background-colour-saturation) calc(var(--dark-background-colour-lightness) + 60%) / var(--dark-background-colour-alpha));
 		color: var(--dark-accent-colour);
 	}
 
 	body.system-theme section.vot4-mappool form button:hover,
-	body.system-theme section.vot4-staff form button:hover {
+	body.system-theme section.vot4-staff form button:hover,
+	body.system-theme section.custom-song-vot-page form button:hover {
 		background: hsl(var(--dark-secondary-colour-hue) var(--dark-secondary-colour-saturation) var(--dark-secondary-colour-lightness) / var(--dark-secondary-colour-alpha));
 		color: var(--dark-background-colour);
 	}
@@ -448,7 +454,7 @@ body.dark-theme section.vot3-page div.vot-center-button-container a,
 body.dark-theme section.vot4-page div.vot-center-button-container a,
 body.dark-theme section.staff-page div.vot-center-button-container a,
 body.dark-theme section.staff-vot-page div.vot-center-button-container a,
-body.dark-theme section.song-page div.vot-center-button-container a {
+body.dark-theme section.custom-song-page div.vot-center-button-container a {
 	background: hsl(var(--dark-background-colour-hue) var(--dark-background-colour-saturation) calc(var(--dark-background-colour-lightness) + 60%) / var(--dark-background-colour-alpha));
 	color: var(--dark-accent-colour);
 }
@@ -461,25 +467,26 @@ body.dark-theme section.vot3-page div.vot-center-button-container a:hover,
 body.dark-theme section.vot4-page div.vot-center-button-container a:hover,
 body.dark-theme section.staff-page div.vot-center-button-container a:hover,
 body.dark-theme section.staff-vot-page div.vot-center-button-container a:hover,
-body.dark-theme section.song-page div.vot-center-button-container a:hover {
-	background: hsl(var(--dark-background-colour-hue) var(--dark-background-colour-saturation) calc(var(--dark-background-colour-lightness) + 60%) / var(--dark-background-colour-alpha));
-	color: var(--dark-accent-colour);
+body.dark-theme section.custom-song-page div.vot-center-button-container a:hover {
+	background: hsl(var(--dark-secondary-colour-hue) var(--dark-secondary-colour-saturation) var(--dark-secondary-colour-lightness) / var(--dark-secondary-colour-alpha));
+	color: var(--dark-background-colour);
 }
 
 
 /* PAGES THAT USE <button> TAG [Dark] */
 body.dark-theme section.vot4-mappool form button,
-body.dark-theme section.vot4-staff form button {
-	background: hsl(var(--light-background-colour-hue) var(--light-background-colour-saturation) calc(var(--light-background-colour-lightness) - 17%) / var(--light-background-colour-alpha));
-	color: var(--light-accent-colour);
+body.dark-theme section.vot4-staff form button,
+body.dark-theme section.custom-song-vot-page form button {
+	background: hsl(var(--dark-background-colour-hue) var(--dark-background-colour-saturation) calc(var(--dark-background-colour-lightness) + 60%) / var(--dark-background-colour-alpha));
+	color: var(--dark-accent-colour);
 }
 
 body.dark-theme section.vot4-mappool form button:hover,
-body.dark-theme section.vot4-staff form button:hover {
+body.dark-theme section.vot4-staff form button:hover,
+body.dark-theme section.custom-song-vot-page form button:hover {
 	background: hsl(var(--dark-secondary-colour-hue) var(--dark-secondary-colour-saturation) var(--dark-secondary-colour-lightness) / var(--dark-secondary-colour-alpha));
 	color: var(--dark-background-colour);
 }
-
 
 /* VOT-SPECIFIC PAGE [Dark] */
 body.dark-theme div.vot-page section div.upper-general-information-box p {

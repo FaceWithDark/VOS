@@ -11,58 +11,57 @@ require __DIR__ . '/../../Configurations/Length.php';
     <h1>Our Banger VOT Song &#128293</h1>
 </header>
 
-<section class="song-vot-page">
-    <section class="vot-song">
-        <form action="/song/vot" method="get">
-            <button type="submit" name="tournament" value="default">Default</button>
-            <button type="submit" name="tournament" value="vot4">VOT4</button>
-            <button type="submit" name="tournament" value="vot3">VOT3</button>
-            <button type="submit" name="tournament" value="vot2">VOT2</button>
-            <button type="submit" name="tournament" value="vot1">VOT1</button>
-        </form>
+<section class="custom-song-vot-page">
+    <form action="/song/vot" method="get">
+        <button type="submit" name="tournament" value="default">Default</button>
+        <button type="submit" name="tournament" value="vot4">VOT4</button>
+        <button type="submit" name="tournament" value="vot3">VOT3</button>
+        <button type="submit" name="tournament" value="vot2">VOT2</button>
+        <button type="submit" name="tournament" value="vot1">VOT1</button>
+    </form>
 
-        <?php
-        require __DIR__ . '/../../Configurations/PrettyArray.php';
-        if (isset($_COOKIE['vot_access_token'])) {
-            if (isset($_GET['tournament'])) {
-                $votCustomSongLocation = $_GET['tournament'];
-                $votCustomSongDatabase = $GLOBALS['votDatabaseHandle'];
+    <?php
+    require __DIR__ . '/../../Configurations/PrettyArray.php';
+    if (isset($_COOKIE['vot_access_token'])) {
+        if (isset($_GET['tournament'])) {
+            $votCustomSongLocation = $_GET['tournament'];
+            $votCustomSongDatabase = $GLOBALS['votDatabaseHandle'];
 
-                switch ($votCustomSongLocation) {
-                    case 'vot4':
-                        $customSongFetchedData = readCustomSongData(
-                            tournament_name: $votCustomSongLocation,
-                            database_handle: $votCustomSongDatabase
-                        );
+            switch ($votCustomSongLocation) {
+                case 'vot4':
+                    $customSongFetchedData = readCustomSongData(
+                        tournament_name: $votCustomSongLocation,
+                        database_handle: $votCustomSongDatabase
+                    );
 
-                        foreach ($customSongFetchedData as $customSongDisplayData) {
-                            // echo array_dump(array: $customSongDisplayData);
-                            $customSongDisplayTournament          = htmlspecialchars($customSongDisplayData['tournamentName']);
-                            $customSongDisplayRound               = htmlspecialchars($customSongDisplayData['roundName']);
-                            $customSongDisplayType                = htmlspecialchars($customSongDisplayData['beatmapType']);
-                            $customSongDisplayImage               = htmlspecialchars($customSongDisplayData['beatmapImage']);
-                            $customSongDisplayUrl                 = htmlspecialchars($customSongDisplayData['beatmapUrl']);
-                            $customSongDisplayName                = htmlspecialchars($customSongDisplayData['beatmapName']);
-                            $customSongDisplayDifficultyName      = htmlspecialchars($customSongDisplayData['beatmapDifficultyName']);
-                            $customSongDisplayFeatureArtist       = htmlspecialchars($customSongDisplayData['beatmapFeatureArtist']);
-                            $customSongDisplayMapper              = htmlspecialchars($customSongDisplayData['beatmapMapper']);
-                            $customSongDisplayMapperUrl           = htmlspecialchars($customSongDisplayData['beatmapMapperUrl']);
-                            $customSongDisplayDifficulty          = htmlspecialchars($customSongDisplayData['beatmapDifficulty']);
-                            $customSongDisplayLength              = timeStampFormat(number: $customSongDisplayData['beatmapLength']);
-                            $customSongDisplayOverallSpeed        = sprintf('%.2f', $customSongDisplayData['beatmapOverallSpeed']);
-                            $customSongDisplayOverallDifficulty   = sprintf('%.2f', $customSongDisplayData['beatmapOverallDifficulty']);
-                            $customSongDisplayOverallHealth       = sprintf('%.2f', $customSongDisplayData['beatmapOverallHealth']);
-                            $customSongDisplayPassCount           = $customSongDisplayData['beatmapPassCount'];
+                    foreach ($customSongFetchedData as $customSongDisplayData) {
+                        // echo array_dump(array: $customSongDisplayData);
+                        $customSongDisplayTournament          = htmlspecialchars($customSongDisplayData['tournamentName']);
+                        $customSongDisplayRound               = htmlspecialchars($customSongDisplayData['roundName']);
+                        $customSongDisplayType                = htmlspecialchars($customSongDisplayData['beatmapType']);
+                        $customSongDisplayImage               = htmlspecialchars($customSongDisplayData['beatmapImage']);
+                        $customSongDisplayUrl                 = htmlspecialchars($customSongDisplayData['beatmapUrl']);
+                        $customSongDisplayName                = htmlspecialchars($customSongDisplayData['beatmapName']);
+                        $customSongDisplayDifficultyName      = htmlspecialchars($customSongDisplayData['beatmapDifficultyName']);
+                        $customSongDisplayFeatureArtist       = htmlspecialchars($customSongDisplayData['beatmapFeatureArtist']);
+                        $customSongDisplayMapper              = htmlspecialchars($customSongDisplayData['beatmapMapper']);
+                        $customSongDisplayMapperUrl           = htmlspecialchars($customSongDisplayData['beatmapMapperUrl']);
+                        $customSongDisplayDifficulty          = htmlspecialchars($customSongDisplayData['beatmapDifficulty']);
+                        $customSongDisplayLength              = timeStampFormat(number: $customSongDisplayData['beatmapLength']);
+                        $customSongDisplayOverallSpeed        = sprintf('%.2f', $customSongDisplayData['beatmapOverallSpeed']);
+                        $customSongDisplayOverallDifficulty   = sprintf('%.2f', $customSongDisplayData['beatmapOverallDifficulty']);
+                        $customSongDisplayOverallHealth       = sprintf('%.2f', $customSongDisplayData['beatmapOverallHealth']);
+                        $customSongDisplayPassCount           = $customSongDisplayData['beatmapPassCount'];
 
-                            $customSongDisplayTemplate =
-                                <<<EOL
+                        $customSongDisplayTemplate =
+                            <<<EOL
                                 <div class="box-container">
                                     <div class="custom-song-header">
                                         <div class="custom-song-tournament">
                                             <h1>- $customSongDisplayTournament -</h1>
                                         </div>
                                         <div class="custom-song-round">
-                                            <h1>$customSongDisplayRound</h1>
+                                            <h1>- $customSongDisplayRound -</h1>
                                         </div>
                                         <div class="custom-song-type">
                                             <h1>- $customSongDisplayType -</h1>
@@ -92,46 +91,40 @@ require __DIR__ . '/../../Configurations/Length.php';
 
                                         <div class="custom-song-attributes">
                                             <div class="custom-song-star-rating">
-                                                <p>SR:</p>
-                                                <p>$customSongDisplayDifficulty</p>
+                                                <p>SR: $customSongDisplayDifficulty</p>
                                             </div>
                                             <div class="custom-song-length">
-                                                <p>Length:</p>
-                                                <p>$customSongDisplayLength</p>
+                                                <p>Length: $customSongDisplayLength</p>
                                             </div>
                                             <div class="custom-song-speed">
-                                                <p>BPM:</p>
-                                                <p>$customSongDisplayOverallSpeed</p>
+                                                <p>BPM: $customSongDisplayOverallSpeed</p>
                                             </div>
                                         </div>
 
                                         <div class="custom-song-attributes">
                                             <div class="custom-song-od">
-                                                <p>OD:</p>
-                                                <p>$customSongDisplayOverallDifficulty</p>
+                                                <p>OD: $customSongDisplayOverallDifficulty</p>
                                             </div>
                                             <div class="custom-song-hp">
-                                                <p>HP:</p>
-                                                <p>$customSongDisplayOverallHealth</p>
+                                                <p>HP: $customSongDisplayOverallHealth</p>
                                             </div>
                                             <div class="custom-song-pass">
-                                                <p>Pass:</p>
-                                                <p>$customSongDisplayPassCount</p>
+                                                <p>Pass: $customSongDisplayPassCount</p>
                                             </div>
                                         </div>
                                     </div>
 
                                 EOL;
 
-                            // It would be much more nasty if I tried to output this using the traditional mixed HTML & PHP codes
-                            echo $customSongDisplayTemplate;
-                        }
-                        break;
-                }
+                        // It would be much more nasty if I tried to output this using the traditional mixed HTML & PHP codes
+                        echo $customSongDisplayTemplate;
+                    }
+                    break;
             }
-        } else {
-            // TODO: This is not working yet. Fix later (if possible).
-            http_response_code(400);
         }
-        ?>
-    </section>
+    } else {
+        // TODO: This is not working yet. Fix later (if possible).
+        http_response_code(400);
+    }
+    ?>
+</section>
