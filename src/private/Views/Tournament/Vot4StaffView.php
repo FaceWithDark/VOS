@@ -83,13 +83,12 @@ require __DIR__ . '/../../Models/Staff.php';
                                                         <img src="$staffDisplayImage" alt="Staff Avatar">
                                                     </a>
                                                 </div>
-
-                                                <div class="staff-role">
-                                                    <h2>$staffDisplayRole</h2>
-                                                </div>
                                             </div>
 
                                             <div class="staff-footer">
+                                                <div class="staff-role">
+                                                    <h2>$staffDisplayRole</h2>
+                                                </div>
                                                 <div class="staff-rank">
                                                     <h3>Rank: $staffDisplayRank</h3>
                                                 </div>

@@ -257,8 +257,9 @@ body section.vot1-page div.vot-center-button-container,
 body section.vot2-page div.vot-center-button-container,
 body section.vot3-page div.vot-center-button-container,
 body section.vot4-page div.vot-center-button-container,
-body section.archive-vtc-page div.vot-center-button-container,
 body section.staff-page div.vot-center-button-container,
+body section.staff-vot-page div.vot-center-button-container,
+body section.archive-vtc-page div.vot-center-button-container,
 body section.song-page div.vot-center-button-container {
 	display: flex;
 	flex-direction: row;
@@ -272,8 +273,9 @@ body section.vot1-page div.vot-center-button-container a,
 body section.vot2-page div.vot-center-button-container a,
 body section.vot3-page div.vot-center-button-container a,
 body section.vot4-page div.vot-center-button-container a,
-body section.archive-vtc-page div.vot-center-button-container a,
 body section.staff-page div.vot-center-button-container a,
+body section.staff-vot-page div.vot-center-button-container a,
+body section.archive-vtc-page div.vot-center-button-container a,
 body section.song-page div.vot-center-button-container a {
 	padding: 1rem;
 	font-weight: bold;
@@ -285,14 +287,16 @@ body section.song-page div.vot-center-button-container a {
 
 
 /* PAGES THAT USE <button> TAG */
-body section.vot4-mappool form {
+body section.vot4-mappool form,
+body section.vot4-staff form {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
 	flex-wrap: wrap;
 }
 
-body section.vot4-mappool form button {
+body section.vot4-mappool form button,
+body section.vot4-staff form button {
 	padding: 1rem;
 	font-weight: bold;
 	border-radius: 1.5rem;
@@ -303,12 +307,13 @@ body section.vot4-mappool form button {
 
 
 /* PAGES THAT USE BOX UI STYLE */
-body section.vot4-mappool div.box-container {
+body section.vot4-mappool div.box-container,
+body section.vot4-staff div.box-container {
 	display: flex;
 	flex-direction: column;
 	margin-bottom: 2rem;
-	/* 	background-color: lightblue; */
-	width: 50%;
+	/* background-color: lightblue; */
+	width: 25%;
 	border-radius: 1.5rem;
 }
 
@@ -363,6 +368,72 @@ body section.vot4-mappool div.box-container div.song-attributes div.song-pass p 
 	font-weight: bold;
 	font-size: 1.025rem;
 }
+
+body section.vot4-staff div.box-container div.staff-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+body section.vot4-staff div.box-container div.staff-header div.staff-name,
+body section.vot4-staff div.box-container div.staff-header div.staff-flag {
+	display: flex;
+	flex-direction: row;
+	padding: 0.5rem 0.25rem 0rem 0.25rem;
+}
+
+body section.vot4-staff div.box-container div.staff-header div.staff-name h1 {
+	font-weight: bold;
+	font-size: 1.025rem;
+}
+
+
+body section.vot4-staff div.box-container div.staff-header div.staff-flag img {
+	/* Although we have set 'center' value to it, it looks not too centered for me at all */
+	padding-bottom: 0.25rem;
+}
+
+body section.vot4-staff div.box-container div.staff-body {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+body section.vot4-staff div.box-container div.staff-body div.staff-image {
+	display: flex;
+	flex-direction: column;
+	/* Use all available spaces of 1st <div> */
+	flex-grow: 1;
+	padding: 0.5rem 0;
+}
+
+body section.vot4-staff div.box-container div.staff-body div.staff-image a img {
+	width: 100%;
+	height: auto;
+}
+
+body section.vot4-staff div.box-container div.staff-footer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+body section.vot4-staff div.box-container div.staff-footer div.staff-role,
+body section.vot4-staff div.box-container div.staff-footer div.staff-rank,
+body section.vot4-staff div.box-container div.staff-footer div.staff-time-zone {
+	display: flex;
+	flex-direction: row;
+	padding: 0rem 0.25rem 0.5rem 0.25rem;
+}
+
+body section.vot4-staff div.box-container div.staff-footer div.staff-role h2,
+body section.vot4-staff div.box-container div.staff-footer div.staff-rank h2,
+body section.vot4-staff div.box-container div.staff-footer div.staff-time-zone h2 {
+	font-weight: bold;
+	font-size: 1.025rem;
+}
+
 
 /* VOT-SPECIFIC PAGE */
 body div.vot-page section div.upper-general-information-box img {
