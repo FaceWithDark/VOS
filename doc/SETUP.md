@@ -77,7 +77,7 @@ Do not ask me why I have to specifically mention that this is for **Windows 10 &
   <details hidden>
   <summary><strong>1.1.5. Test website URL accessible link</strong></summary>
   
-  At this point, you should be able to access the website via _**`http://localhost:<port-number>/`**_. Again, we have 3 options coressponding to 3 development stages (`dev`, `stage`, and `prod`) for the _`<>`_ placeholder. However, you will notice that as soon as we get to the next page (`Home` page), we received a **SQL-related error**. Please follow along the next step to be able to resolve it smoothly.
+  At this point, you should be able to access the website via _**`http://localhost:<port-number>/`**_. You can find the port number by typing `docker ps` to your command line, or see the port within Docker Desktop. However, you will notice that as soon as we get to the next page (`Home` page), we received a **SQL-related error**. Please follow along the next step to be able to resolve it smoothly.
   
   </details>
 
@@ -248,7 +248,7 @@ Do not ask me why I have to specifically mention that this is for **Windows 10 &
   <details hidden>
   <summary><strong>2.1.5. Test website URL accessible link</strong></summary>
   
-  At this point, you should be able to access the website via _**`http://localhost:<port-number>/`**_. Again, we have 3 options coressponding to 3 development stages (`dev`, `stage`, and `prod`) for the _`<>`_ placeholder. However, you will notice that as soon as we get to the next page (`Home` page), we received a **SQL-related error**. Please follow along the next step to be able to resolve it smoothly.
+  At this point, you should be able to access the website via _**`http://localhost:<port-number>/`**_. You can find the port number by typing `docker ps` to your command line, or see the port within Docker Desktop. However, you will notice that as soon as we get to the next page (`Home` page), we received a **SQL-related error**. Please follow along the next step to be able to resolve it smoothly.
   
   </details>
 
@@ -259,7 +259,7 @@ Do not ask me why I have to specifically mention that this is for **Windows 10 &
   
   ```bash
   # Hit <Enter> again when asked for password
-  mariadb -u root -P <port-number> -h localhost -p
+  mariadb -u root -P <port-number> --protocol=<IP-or-TCP> -h localhost -p
   ```
   
   An example of a succeeded MariaDB connection as a root user would look like below:
@@ -320,7 +320,7 @@ Do not ask me why I have to specifically mention that this is for **Windows 10 &
   # For all bash variables, these can be found under the copied environment file (a.k.a 'docker-compose.${ENV}.env')
   # For all '<>' placeholder, it can be found under the copied docker-compose configuration file (a.k.a 'docker-compose.${ENV}.yaml')
   
-  mariadb -u $DATABASE_USER -P <port-number> -h localhost $DATABASE_NAME -p
+  mariadb -u $DATABASE_USER -P <port-number> --protocol=<IP-or-TCP> -h localhost $DATABASE_NAME -p
   ```
   
   _It is generally recommended to leave the **-p (look closely, small 'p' letter)** parameter empty so that you will not potentially expose the website's database password for someone else to see it._
