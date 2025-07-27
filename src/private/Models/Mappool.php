@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 require __DIR__ . '/../Configurations/Database.php';
 
-function getMappoolData(array $mappool_data): null
+
+function getBeatmapData(array $data): null
 {
-    foreach ($mappool_data as $beatmap_data) {
+    foreach ($data as $beatmap_data) {
         $beatmapId                  = $beatmap_data['beatmap_id'];
         $roundId                    = $beatmap_data['beatmap_round_id'];
         $tournamentId               = $beatmap_data['beatmap_tournament_id'];
@@ -15,20 +16,19 @@ function getMappoolData(array $mappool_data): null
         $beatmapUrl                 = $beatmap_data['beatmap_url'];
         $beatmapName                = $beatmap_data['beatmap_name'];
         $beatmapDifficultyName      = $beatmap_data['beatmap_difficulty_name'];
-        $beatmapFeatureArtist       = $beatmap_data['beatmap_fa'];
+        $beatmapFeatureArtist       = $beatmap_data['beatmap_feature_artist'];
         $beatmapMapper              = $beatmap_data['beatmap_mapper'];
         $beatmapMapperUrl           = $beatmap_data['beatmap_mapper_url'];
         $beatmapDifficulty          = $beatmap_data['beatmap_difficulty'];
         $beatmapLength              = $beatmap_data['beatmap_length'];
-        $beatmapOverallSpeed        = $beatmap_data['beatmap_bpm'];
-        $beatmapOverallDifficulty   = $beatmap_data['beatmap_od'];
-        $beatmapOverallHealth       = $beatmap_data['beatmap_hp'];
+        $beatmapOverallSpeed        = $beatmap_data['beatmap_overall_speed'];
+        $beatmapOverallDifficulty   = $beatmap_data['beatmap_overall_difficulty'];
+        $beatmapOverallHealth       = $beatmap_data['beatmap_overall_health'];
         $beatmapPassCount           = $beatmap_data['beatmap_pass_count'];
-        // Variable scoping in PHP is a bit weird somehow: https://www.php.net/manual/en/language.variables.scope.php
-        $mappoolDatabase            = $GLOBALS['votDatabaseHandle'];
+        $beatmapDatabase            = $GLOBALS['votDatabaseHandle'];
 
-        if (!checkMappoolData(beatmap_id: $beatmapId, database_handle: $mappoolDatabase)) {
-            createMappoolData(
+        if (!checkBeatmapData(id: $beatmapId, database_handle: $beatmapDatabase)) {
+            createBeatmapData(
                 beatmap_id: $beatmapId,
                 round_id: $roundId,
                 tournament_id: $tournamentId,
@@ -36,28 +36,31 @@ function getMappoolData(array $mappool_data): null
                 image: $beatmapImage,
                 url: $beatmapUrl,
                 name: $beatmapName,
-                difficulty_name: $beatmapDifficultyName,
-                feature_artist: $beatmapFeatureArtist,
+                diff_name: $beatmapDifficultyName,
+                fa: $beatmapFeatureArtist,
                 mapper: $beatmapMapper,
                 mapper_url: $beatmapMapperUrl,
-                difficulty: $beatmapDifficulty,
+                diff: $beatmapDifficulty,
                 length: $beatmapLength,
-                overall_speed: $beatmapOverallSpeed,
-                overall_difficulty: $beatmapOverallDifficulty,
-                overall_health: $beatmapOverallHealth,
+                bpm: $beatmapOverallSpeed,
+                od: $beatmapOverallDifficulty,
+                hp: $beatmapOverallHealth,
                 pass_count: $beatmapPassCount,
-                database_handle: $mappoolDatabase
+                database_handle: $beatmapDatabase
             );
         } else {
             // TODO: UPDATE query here (change the 'view' table only, not the actual table if all data stay the same).
-            error_log(message: 'Mappool data exist, simply ignoring it...', message_type: 0);
+            error_log(message: 'Beatmap data exist, simply ignoring it...', message_type: 0);
         };
     }
     return null;
 }
 
-function checkMappoolData(int $beatmap_id, object $database_handle): int | bool
-{
+
+function checkBeatmapData(
+    int $id,
+    object $database_handle
+): int | bool {
     $checkQuery = "
         SELECT COUNT(beatmapId)
         FROM VotTournamentBeatmap
@@ -65,14 +68,10 @@ function checkMappoolData(int $beatmap_id, object $database_handle): int | bool
     ";
 
     $checkStatement = $database_handle->prepare($checkQuery);
+    $checkStatement->bindParam(':beatmapId', $id, PDO::PARAM_INT);
 
-    // I can't type hint this due to `var` parameter has an address (&) assigned to it, which syntactically
-    // not valid for a PHP code. Therefore, to let this method works, I have to make this one as an
-    // exceptional for letting my code to be strictly-typed.
-    $checkStatement->bindParam(':beatmapId',   $beatmap_id,    PDO::PARAM_INT);
-
-    $successCheckLogMessage    = sprintf("Check successfully for user ID: %d", $beatmap_id);
-    $unsuccessCheckLogMessage  = sprintf("Check unsuccessfully for user ID: %d", $beatmap_id);
+    $successCheckLogMessage    = sprintf("Check successfully for beatmap ID: %d", $id);
+    $unsuccessCheckLogMessage  = sprintf("Check unsuccessfully for beatmap ID: %d", $id);
 
     if ($checkStatement->execute()) {
         error_log(message: $successCheckLogMessage, message_type: 0);
@@ -86,8 +85,9 @@ function checkMappoolData(int $beatmap_id, object $database_handle): int | bool
     }
 }
 
+
 // Create
-function createMappoolData(
+function createBeatmapData(
     int $beatmap_id,
     string $round_id,
     string $tournament_id,
@@ -95,15 +95,15 @@ function createMappoolData(
     string $image,
     string $url,
     string $name,
-    string $difficulty_name,
-    string $feature_artist,
+    string $diff_name,
+    string $fa,
     string $mapper,
     string $mapper_url,
-    float $difficulty,
+    float $diff,
     int $length,
-    float $overall_speed,
-    float $overall_difficulty,
-    float $overall_health,
+    float $bpm,
+    float $od,
+    float $hp,
     int $pass_count,
     object $database_handle
 ): string | bool {
@@ -149,37 +149,33 @@ function createMappoolData(
     ";
 
     $insertStatement = $database_handle->prepare($insertQuery);
+    // Surprisingly, PDO method doesn't have a proper way to handle float data
+    // type. Reference: https://stackoverflow.com/a/1335191
+    $insertStatement->bindParam(':beatmapId',                   $beatmap_id,        PDO::PARAM_INT);
+    $insertStatement->bindParam(':roundId',                     $round_id,          PDO::PARAM_STR);
+    $insertStatement->bindParam(':tournamentId',                $tournament_id,     PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapType',                 $type,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapImage',                $image,             PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapUrl',                  $url,               PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapName',                 $name,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapDifficultyName',       $diff_name,         PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapFeatureArtist',        $fa,                PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapMapper',               $mapper,            PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapMapperUrl',            $mapper_url,        PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapDifficulty',           $diff,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapLength',               $length,            PDO::PARAM_INT);
+    $insertStatement->bindParam(':beatmapOverallSpeed',         $bpm,               PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapOverallDifficulty',    $od,                PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapOverallHealth',        $hp,                PDO::PARAM_STR);
+    $insertStatement->bindParam(':beatmapPassCount',            $pass_count,        PDO::PARAM_INT);
 
-    // I can't type hint this due to `var` parameter has an address (&) assigned to it, which syntactically
-    // not valid for a PHP code. Therefore, to let this method works, I have to make this one as an
-    // exceptional for letting my code to be strictly-typed.
-    //
-    // Surprisingly, PDO method doesn't have a proper way to handle float data type. Reference: https://stackoverflow.com/a/1335191
-    $insertStatement->bindParam(':beatmapId',                   $beatmap_id,            PDO::PARAM_INT);
-    $insertStatement->bindParam(':roundId',                     $round_id,              PDO::PARAM_STR);
-    $insertStatement->bindParam(':tournamentId',                $tournament_id,         PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapType',                 $type,                  PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapImage',                $image,                 PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapUrl',                  $url,                   PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapName',                 $name,                  PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapDifficultyName',       $difficulty_name,       PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapFeatureArtist',        $feature_artist,        PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapMapper',               $mapper,                PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapMapperUrl',            $mapper_url,            PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapDifficulty',           $difficulty,            PDO::PARAM_STR); // No proper way to handle float data type in PDO somehow
-    $insertStatement->bindParam(':beatmapLength',               $length,                PDO::PARAM_INT);
-    $insertStatement->bindParam(':beatmapOverallSpeed',         $overall_speed,         PDO::PARAM_STR); // No proper way to handle float data type in PDO somehow
-    $insertStatement->bindParam(':beatmapOverallDifficulty',    $overall_difficulty,    PDO::PARAM_STR); // No proper way to handle float data type in PDO somehow
-    $insertStatement->bindParam(':beatmapOverallHealth',        $overall_health,        PDO::PARAM_STR); // No proper way to handle float data type in PDO somehow
-    $insertStatement->bindParam(':beatmapPassCount',            $pass_count,            PDO::PARAM_INT);
-
-    $successInsertLogMessage    = sprintf("Insert successfully for user ID: %d", $beatmap_id);
-    $unsuccessInsertLogMessage  = sprintf("Insert unsuccessfully for user ID: %d", $beatmap_id);
+    $successInsertLogMessage    = sprintf("Insert successfully for beatmap ID: %d", $beatmap_id);
+    $unsuccessInsertLogMessage  = sprintf("Insert unsuccessfully for beatmap ID: %d", $beatmap_id);
 
     if ($insertStatement->execute()) {
         error_log(message: $successInsertLogMessage, message_type: 0);
         $totalInsertLogMessage = sprintf(
-            "Total user data successfully inserted: %d",
+            "Total beatmap data successfully inserted: %d",
             $insertStatement->rowCount()
         );
         return $totalInsertLogMessage;
@@ -189,9 +185,9 @@ function createMappoolData(
     }
 }
 
+
 // Read
-function readMappoolData(
-    // int $beatmap_id,
+function readBeatmapData(
     string $round_name,
     string $tournament_name,
     object $database_handle
@@ -256,22 +252,27 @@ function readMappoolData(
     ";
 
     $readStatement = $database_handle->prepare($readQuery);
-
-    // I can't type hint this due to `var` parameter has an address (&) assigned to it, which syntactically
-    // not valid for a PHP code. Therefore, to let this method works, I have to make this one as an
-    // exceptional for letting my code to be strictly-typed.
-    $readStatement->bindParam(':roundId',       $round_name,        PDO::PARAM_INT);
-    $readStatement->bindParam(':tournamentId',  $tournament_name,   PDO::PARAM_INT);
-
-    // $successReadLogMessage    = sprintf("Read successfully for user ID: %d", $beatmap_id);
-    // $unsuccessReadLogMessage  = sprintf("Read unsuccessfully for user ID: %d", $beatmap_id);
+    if ($round_name !== 'ASTR') {
+        // Edge case not needed, perform the reading logic as usual
+        $readStatement->bindParam(':roundId',       $round_name,        PDO::PARAM_STR);
+        $readStatement->bindParam(':tournamentId',  $tournament_name,   PDO::PARAM_STR);
+    } else {
+        $allStarEdgeCaseBypass = 'GF'; // bindParam() 2nd parameter is a 'lvalue' type so I can't pass the string straight away
+        /*
+        Because All Star mappool is basically the same as Grand
+        Final mappool, so I'll just being a bit hacky here by
+        reading Grand Final mappool data straight away. Take a
+        look at the 'MappoolController.php' file at line 2207
+        to see why doing so is beneficial
+        */
+        $readStatement->bindParam(':roundId',       $allStarEdgeCaseBypass,     PDO::PARAM_STR);
+        $readStatement->bindParam(':tournamentId',  $tournament_name,           PDO::PARAM_STR);
+    }
 
     if ($readStatement->execute()) {
-        // error_log(message: $successReadLogMessage, message_type: 0);
         $readAllMappoolData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
         return $readAllMappoolData;
     } else {
-        // error_log(message: $unsuccessReadLogMessage, message_type: 0);
         return false;
     }
 }

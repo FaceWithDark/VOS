@@ -71,100 +71,35 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/vot4/mappool':
-        $vot4TournamentDetail = explode(
-            separator: '/',
-            string: trim(
-                string: $_SERVER['REQUEST_URI'],
-                characters: '/'
-            ),
-            limit: PHP_INT_MAX
-        );
-
-        // echo '<pre>' . print_r($vot4TournamentDetail, true) . '</pre>';
-        $vot4TournamentName = $vot4TournamentDetail[0];
-
         if (!isset($_COOKIE['vot_access_token'])) {
-            // Start 1st output buffer (HTML outputs in this case). Delete this buffer if no valid GET parameter value found
-            ob_start(
-                callback: null,
-                chunk_size: 0,
-                flags: PHP_OUTPUT_HANDLER_STDFLAGS
-            );
-
+            // No need to fetch new beatmap data (if any), read beatmap data
+            // straight away within the include 'View' file
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
             require __DIR__ . '/../Views/Tournament/Vot4MappoolView.php';
         } else {
-            // Start 1st output buffer (HTML outputs in this case). Delete this buffer if no valid GET parameter value found
-            ob_start(
-                callback: null,
-                chunk_size: 0,
-                flags: PHP_OUTPUT_HANDLER_STDFLAGS
-            );
-
+            // In need of fetching new beatmap data (if any) using the below
+            // data fetching method
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Tournament/Vot4MappoolView.php';
 
-            if (isset($_GET['round'])) {
+            if (!isset($_GET['round'])) {
+                // Do nothing, show the page only
+                require __DIR__ . '/../Views/Tournament/Vot4MappoolView.php';
+            } else {
+                // Perform the MVC, after button get clicked
+                require __DIR__ . '/../Views/Tournament/Vot4MappoolView.php';
+                $vot4TournamentName = explode(
+                    separator: '/',
+                    string: trim(
+                        string: $_SERVER['REQUEST_URI'],
+                        characters: '/'
+                    ),
+                    limit: PHP_INT_MAX
+                )[0];
                 $vot4TournamentRound = $_GET['round'];
-
-                switch ($vot4TournamentRound) {
-                    case 'qualifiers':
-                        getTournamentRoundMappool(
-                            tournament_name: $vot4TournamentName,
-                            tournament_round: $vot4TournamentRound
-                        );
-                        break;
-
-                    case 'round_of_16':
-                        getTournamentRoundMappool(
-                            tournament_name: $vot4TournamentName,
-                            tournament_round: $vot4TournamentRound
-                        );
-                        break;
-
-                    case 'quarterfinals':
-                        getTournamentRoundMappool(
-                            tournament_name: $vot4TournamentName,
-                            tournament_round: $vot4TournamentRound
-                        );
-                        break;
-
-                    case 'semifinals':
-                        getTournamentRoundMappool(
-                            tournament_name: $vot4TournamentName,
-                            tournament_round: $vot4TournamentRound
-                        );
-                        break;
-
-                    case 'finals':
-                        getTournamentRoundMappool(
-                            tournament_name: $vot4TournamentName,
-                            tournament_round: $vot4TournamentRound
-                        );
-                        break;
-
-                    case 'grandfinals':
-                        getTournamentRoundMappool(
-                            tournament_name: $vot4TournamentName,
-                            tournament_round: $vot4TournamentRound
-                        );
-                        break;
-
-                    case 'allstars':
-                        getTournamentRoundMappool(
-                            tournament_name: $vot4TournamentName,
-                            tournament_round: $vot4TournamentRound
-                        );
-                        break;
-
-                    default:
-                        while (ob_get_level() > 1) {
-                            ob_end_clean(); // Delete all output buffers (HTML outputs in this case)
-                        }
-                        http_response_code(404);
-                        ob_end_flush(); // End output buffers delete process
-                        break;
-                }
+                getTournamentMappool(
+                    name: $vot4TournamentName,
+                    round: $vot4TournamentRound
+                );
             }
         }
         break;
