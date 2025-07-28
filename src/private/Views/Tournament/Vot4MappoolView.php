@@ -61,60 +61,60 @@ require __DIR__ . '/../../Configurations/Length.php';
 
             $beatmapDisplayTemplate =
                 <<<EOL
-            <div class="box-container">
-                <div class="song-type">
-                    <h1>$vot4TournamentBeatmapType</h1>
-                </div>
-
-                <div class="song-image">
-                    <a href="$vot4TournamentBeatmapUrl">
-                        <img src="$vot4TournamentBeatmapImage" alt="VOT4 Beatmap Image">
-                    </a>
-                </div>
-
-                <div class="song-name">
-                    <h2>$vot4TournamentBeatmapName [$vot4TournamentBeatmapDifficultyName]</h2>
-                </div>
-
-                <div class="song-feature-artist">
-                    <h3>Song by $vot4TournamentBeatmapFeatureArtist</h3>
-                </div>
-
-                <div class="song-mapper">
-                    <h4>Created by <a href="$vot4TournamentBeatmapMapperUrl">$vot4TournamentBeatmapMapper</a></h4>
-                </div>
-
-                <div class="song-attributes">
-                    <div class="song-star-rating">
-                        <p>SR:</p>
-                        <p>$vot4TournamentBeatmapDifficulty</p>
+                <div class="box-container">
+                    <div class="song-type">
+                        <h1>$vot4TournamentBeatmapType</h1>
                     </div>
-                    <div class="song-length">
-                        <p>Length:</p>
-                        <p>$vot4TournamentBeatmapLength</p>
-                    </div>
-                    <div class="song-speed">
-                        <p>BPM:</p>
-                        <p>$vot4TournamentBeatmapOverallSpeed</p>
-                    </div>
-                </div>
 
-                <div class="song-attributes">
-                    <div class="song-od">
-                        <p>OD:</p>
-                        <p>$vot4TournamentBeatmapOverallDifficulty</p>
+                    <div class="song-image">
+                        <a href="$vot4TournamentBeatmapUrl">
+                            <img src="$vot4TournamentBeatmapImage" alt="VOT4 Beatmap Image">
+                        </a>
                     </div>
-                    <div class="song-hp">
-                        <p>HP:</p>
-                        <p>$vot4TournamentBeatmapOverallHealth</p>
+
+                    <div class="song-name">
+                        <h2>$vot4TournamentBeatmapName [$vot4TournamentBeatmapDifficultyName]</h2>
                     </div>
-                    <div class="song-pass">
-                        <p>Pass:</p>
-                        <p>$vot4TournamentBeatmapPassCount</p>
+
+                    <div class="song-feature-artist">
+                        <h3>Song by $vot4TournamentBeatmapFeatureArtist</h3>
+                    </div>
+
+                    <div class="song-mapper">
+                        <h4>Created by <a href="$vot4TournamentBeatmapMapperUrl">$vot4TournamentBeatmapMapper</a></h4>
+                    </div>
+
+                    <div class="song-attributes">
+                        <div class="song-star-rating">
+                            <p>SR:</p>
+                            <p>$vot4TournamentBeatmapDifficulty</p>
+                        </div>
+                        <div class="song-length">
+                            <p>Length:</p>
+                            <p>$vot4TournamentBeatmapLength</p>
+                        </div>
+                        <div class="song-speed">
+                            <p>BPM:</p>
+                            <p>$vot4TournamentBeatmapOverallSpeed</p>
+                        </div>
+                    </div>
+
+                    <div class="song-attributes">
+                        <div class="song-od">
+                            <p>OD:</p>
+                            <p>$vot4TournamentBeatmapOverallDifficulty</p>
+                        </div>
+                        <div class="song-hp">
+                            <p>HP:</p>
+                            <p>$vot4TournamentBeatmapOverallHealth</p>
+                        </div>
+                        <div class="song-pass">
+                            <p>Pass:</p>
+                            <p>$vot4TournamentBeatmapPassCount</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            EOL;
+                EOL;
 
             // It would be much more nasty if I tried to output this using the traditional mixed HTML & PHP codes
             echo $beatmapDisplayTemplate;

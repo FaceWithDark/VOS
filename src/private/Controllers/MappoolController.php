@@ -2600,6 +2600,10 @@ function getTournamentMappool(
                 }
             }
             break;
+
+        default:
+            # code...
+            break;
     }
 
     getBeatmapData(data: $allMappoolNoModData);
@@ -2623,14 +2627,15 @@ function getTournamentMappool(
     ];
 }
 
+
 function getTournamentMappoolData(
     int $id,
     string $token
 ): array | bool {
-    $httpAuthorisationType      = $token;
-    $httpAcceptType             = 'application/json';
-    $httpContentType            = 'application/json';
-    $tournamentRoundBeatmapUrl  = "https://osu.ppy.sh/api/v2/beatmaps/{$id}";
+    $httpAuthorisationType  = $token;
+    $httpAcceptType         = 'application/json';
+    $httpContentType        = 'application/json';
+    $beatmapUrl             = "https://osu.ppy.sh/api/v2/beatmaps/{$id}";
 
     if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
         $httpHeaderRequest = [
@@ -2640,30 +2645,30 @@ function getTournamentMappoolData(
         ];
 
         # CURL session will be handled manually through curl_setopt()
-        $tournamentRoundBeatmapCurlHandle = curl_init(url: null);
+        $mappoolCurlHandle = curl_init(url: null);
 
-        curl_setopt(handle: $tournamentRoundBeatmapCurlHandle, option: CURLOPT_URL, value: $tournamentRoundBeatmapUrl);
-        curl_setopt(handle: $tournamentRoundBeatmapCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
-        curl_setopt(handle: $tournamentRoundBeatmapCurlHandle, option: CURLOPT_HEADER, value: 0);
-        curl_setopt(handle: $tournamentRoundBeatmapCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_URL, value: $beatmapUrl);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HEADER, value: 0);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
 
-        $tournamentRoundBeatmapCurlResponse = curl_exec(handle: $tournamentRoundBeatmapCurlHandle);
+        $mappoolCurlResponse = curl_exec(handle: $mappoolCurlHandle);
 
-        if (curl_errno(handle: $tournamentRoundBeatmapCurlHandle)) {
-            error_log(curl_error(handle: $tournamentRoundBeatmapCurlHandle));
-            curl_close(handle: $tournamentRoundBeatmapCurlHandle);
+        if (curl_errno(handle: $mappoolCurlHandle)) {
+            error_log(curl_error(handle: $mappoolCurlHandle));
+            curl_close(handle: $mappoolCurlHandle);
             return false; // An error occurred during the API call
 
         } else {
-            $tournamentRoundBeatmapReadableData = json_decode(
-                json: $tournamentRoundBeatmapCurlResponse,
+            $mappoolReadableData = json_decode(
+                json: $mappoolCurlResponse,
                 associative: true,
                 depth: 512,
                 flags: 0
             );
 
-            curl_close(handle: $tournamentRoundBeatmapCurlHandle);
-            return $tournamentRoundBeatmapReadableData;
+            curl_close(handle: $mappoolCurlHandle);
+            return $mappoolReadableData;
         }
     } else {
         $httpHeaderRequest = array(
@@ -2673,30 +2678,30 @@ function getTournamentMappoolData(
         );
 
         # CURL session will be handled manually through curl_setopt()
-        $tournamentRoundBeatmapCurlHandle = curl_init(url: null);
+        $mappoolCurlHandle = curl_init(url: null);
 
-        curl_setopt(handle: $tournamentRoundBeatmapCurlHandle, option: CURLOPT_URL, value: $tournamentRoundBeatmapUrl);
-        curl_setopt(handle: $tournamentRoundBeatmapCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
-        curl_setopt(handle: $tournamentRoundBeatmapCurlHandle, option: CURLOPT_HEADER, value: 0);
-        curl_setopt(handle: $tournamentRoundBeatmapCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_URL, value: $beatmapUrl);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HEADER, value: 0);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
 
-        $tournamentRoundBeatmapCurlResponse = curl_exec(handle: $tournamentRoundBeatmapCurlHandle);
+        $mappoolCurlResponse = curl_exec(handle: $mappoolCurlHandle);
 
-        if (curl_errno(handle: $tournamentRoundBeatmapCurlHandle)) {
-            error_log(curl_error(handle: $tournamentRoundBeatmapCurlHandle));
-            curl_close(handle: $tournamentRoundBeatmapCurlHandle);
+        if (curl_errno(handle: $mappoolCurlHandle)) {
+            error_log(curl_error(handle: $mappoolCurlHandle));
+            curl_close(handle: $mappoolCurlHandle);
             return false; // An error occurred during the API call
 
         } else {
-            $tournamentRoundBeatmapReadableData = json_decode(
-                json: $tournamentRoundBeatmapCurlResponse,
+            $mappoolReadableData = json_decode(
+                json: $mappoolCurlResponse,
                 associative: true,
                 depth: 512,
                 flags: 0
             );
 
-            curl_close(handle: $tournamentRoundBeatmapCurlHandle);
-            return $tournamentRoundBeatmapReadableData;
+            curl_close(handle: $mappoolCurlHandle);
+            return $mappoolReadableData;
         }
     }
 }

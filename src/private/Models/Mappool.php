@@ -62,9 +62,12 @@ function checkBeatmapData(
     object $database_handle
 ): int | bool {
     $checkQuery = "
-        SELECT COUNT(beatmapId)
-        FROM VotTournamentBeatmap
-        WHERE beatmapId = :beatmapId;
+        SELECT
+            COUNT(beatmapId)
+        FROM
+            VotTournamentBeatmap
+        WHERE
+            beatmapId = :beatmapId;
     ";
 
     $checkStatement = $database_handle->prepare($checkQuery);
@@ -108,44 +111,46 @@ function createBeatmapData(
     object $database_handle
 ): string | bool {
     $insertQuery = "
-        INSERT INTO VotTournamentBeatmap (
-            beatmapId,
-            roundId,
-            tournamentId,
-            beatmapType,
-            beatmapImage,
-            beatmapUrl,
-            beatmapName,
-            beatmapDifficultyName,
-            beatmapFeatureArtist,
-            beatmapMapper,
-            beatmapMapperUrl,
-            beatmapDifficulty,
-            beatmapLength,
-            beatmapOverallSpeed,
-            beatmapOverallDifficulty,
-            beatmapOverallHealth,
-            beatmapPassCount
-        )
-        VALUES (
-            :beatmapId,
-            :roundId,
-            :tournamentId,
-            :beatmapType,
-            :beatmapImage,
-            :beatmapUrl,
-            :beatmapName,
-            :beatmapDifficultyName,
-            :beatmapFeatureArtist,
-            :beatmapMapper,
-            :beatmapMapperUrl,
-            :beatmapDifficulty,
-            :beatmapLength,
-            :beatmapOverallSpeed,
-            :beatmapOverallDifficulty,
-            :beatmapOverallHealth,
-            :beatmapPassCount
-        );
+        INSERT INTO
+            VotTournamentBeatmap (
+                beatmapId,
+                roundId,
+                tournamentId,
+                beatmapType,
+                beatmapImage,
+                beatmapUrl,
+                beatmapName,
+                beatmapDifficultyName,
+                beatmapFeatureArtist,
+                beatmapMapper,
+                beatmapMapperUrl,
+                beatmapDifficulty,
+                beatmapLength,
+                beatmapOverallSpeed,
+                beatmapOverallDifficulty,
+                beatmapOverallHealth,
+                beatmapPassCount
+            )
+        VALUES
+            (
+                :beatmapId,
+                :roundId,
+                :tournamentId,
+                :beatmapType,
+                :beatmapImage,
+                :beatmapUrl,
+                :beatmapName,
+                :beatmapDifficultyName,
+                :beatmapFeatureArtist,
+                :beatmapMapper,
+                :beatmapMapperUrl,
+                :beatmapDifficulty,
+                :beatmapLength,
+                :beatmapOverallSpeed,
+                :beatmapOverallDifficulty,
+                :beatmapOverallHealth,
+                :beatmapPassCount
+            );
     ";
 
     $insertStatement = $database_handle->prepare($insertQuery);

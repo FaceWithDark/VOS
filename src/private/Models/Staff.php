@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/../Configurations/Database.php';
 
+
 function getStaffData(array $data): null
 {
     foreach ($data as $staff_data) {
@@ -17,7 +18,7 @@ function getStaffData(array $data): null
         $staffTimeZone   = $staff_data['staff_time_zone'];
         $staffDatabase   = $GLOBALS['votDatabaseHandle'];
 
-        if (!checkStaffData(staff_id: $staffId, database_handle: $staffDatabase)) {
+        if (!checkStaffData(id: $staffId, database_handle: $staffDatabase)) {
             createStaffData(
                 id: $staffId,
                 name: $staffName,
@@ -29,7 +30,6 @@ function getStaffData(array $data): null
                 time_zone: $staffTimeZone,
                 database_handle: $staffDatabase
             );
-            // TODO: Need to create user role as well (Maybe within this function or somewhere else).
         } else {
             // TODO: UPDATE query here (change the 'view' table only, not the actual table if all data stay the same).
             error_log(message: 'Staff data exist, simply ignoring it...', message_type: 0);
@@ -38,8 +38,11 @@ function getStaffData(array $data): null
     return null;
 }
 
-function checkStaffData(int $staff_id, object $database_handle): int | bool
-{
+
+function checkStaffData(
+    int $id,
+    object $database_handle
+): int | bool {
     $checkQuery = "
         SELECT COUNT(userId)
         FROM VotUser
@@ -47,14 +50,10 @@ function checkStaffData(int $staff_id, object $database_handle): int | bool
     ";
 
     $checkStatement = $database_handle->prepare($checkQuery);
+    $checkStatement->bindParam(':userId', $id, PDO::PARAM_INT);
 
-    // I can't type hint this due to `var` parameter has an address (&) assigned to it, which syntactically
-    // not valid for a PHP code. Therefore, to let this method works, I have to make this one as an
-    // exceptional for letting my code to be strictly-typed.
-    $checkStatement->bindParam(':userId',   $staff_id,    PDO::PARAM_INT);
-
-    $successCheckLogMessage    = sprintf("Check successfully for staff ID: %d", $staff_id);
-    $unsuccessCheckLogMessage  = sprintf("Check unsuccessfully for staff ID: %d", $staff_id);
+    $successCheckLogMessage    = sprintf("Check successfully for staff ID: %d", $id);
+    $unsuccessCheckLogMessage  = sprintf("Check unsuccessfully for staff ID: %d", $id);
 
     if ($checkStatement->execute()) {
         error_log(message: $successCheckLogMessage, message_type: 0);
@@ -67,6 +66,7 @@ function checkStaffData(int $staff_id, object $database_handle): int | bool
         return false;
     }
 }
+
 
 // Create
 function createStaffData(
@@ -81,15 +81,31 @@ function createStaffData(
     object $database_handle
 ): string | bool {
     $insertQuery = "
-        INSERT INTO VotUser (userId, userName, userRole, userFlag, userImage, userUrl, userRank, userTimeZone)
-        VALUES (:userId, :userName, :userRole, :userFlag, :userImage, :userUrl, :userRank, :userTimeZone);
+        INSERT INTO
+            VotUser (
+                userId,
+                userName,
+                userRole,
+                userFlag,
+                userImage,
+                userUrl,
+                userRank,
+                userTimeZone
+            )
+        VALUES
+            (
+                :userId,
+                :userName,
+                :userRole,
+                :userFlag,
+                :userImage,
+                :userUrl,
+                :userRank,
+                :userTimeZone
+            );
     ";
 
     $insertStatement = $database_handle->prepare($insertQuery);
-
-    // I can't type hint this due to `var` parameter has an address (&) assigned to it, which syntactically
-    // not valid for a PHP code. Therefore, to let this method works, I have to make this one as an
-    // exceptional for letting my code to be strictly-typed.
     $insertStatement->bindParam(':userId',          $id,            PDO::PARAM_INT);
     $insertStatement->bindParam(':userName',        $name,          PDO::PARAM_STR);
     $insertStatement->bindParam(':userRole',        $role,          PDO::PARAM_STR);
@@ -115,32 +131,73 @@ function createStaffData(
     }
 }
 
+
 // Read
-function readStaffData(int $staff_id, object $database_handle): array | bool
-{
+function readStaffData(
+    string $role,
+    string $name,
+    object $database_handle
+): array | bool {
     $readQuery = "
-        SELECT userName, userRole, userFlag, userImage, userUrl, userRank, userTimeZone
-        FROM VotUser
-        WHERE userId = :userId
-        ORDER BY userRole ASC;
+        SELECT
+            vt.tournamentName,
+            vu.userName,
+            vu.userRole,
+            vu.userFlag,
+            vu.userImage,
+            vu.userUrl,
+            vu.userRank,
+            vu.userTimeZone
+        FROM
+            VotUser vu
+        JOIN
+            VotTournamentType vt ON vu.tournamentId = vt.tournamentId
+        WHERE
+            vu.userRole = :userRole
+            AND vt.tournamentId = :tournamentId
+        ORDER BY
+            vu.userRole ASC;
     ";
 
     $readStatement = $database_handle->prepare($readQuery);
-
-    // I can't type hint this due to `var` parameter has an address (&) assigned to it, which syntactically
-    // not valid for a PHP code. Therefore, to let this method works, I have to make this one as an
-    // exceptional for letting my code to be strictly-typed.
-    $readStatement->bindParam(':userId',    $staff_id,    PDO::PARAM_INT);
-
-    $successReadLogMessage    = sprintf("Read successfully for staff ID: %d", $staff_id);
-    $unsuccessReadLogMessage  = sprintf("Read unsuccessfully for staff ID: %d", $staff_id);
+    if ($role !== 'DEFAULT') {
+        // Edge case not needed, perform the reading logic as usual
+        $readStatement->bindParam(':tournamentId',  $name,  PDO::PARAM_STR);
+        $readStatement->bindParam(':userRole',      $role,  PDO::PARAM_STR);
+    } else {
+        // bindParam() 2nd parameter is a 'lvalue' type so I can't pass the string straight away
+        $staffRoleEdgeCaseFirstByPass       = 'HOST';
+        $staffRoleEdgeCaseSecondByPass      = 'MAPPOOLER';
+        $staffRoleEdgeCaseThirdByPass       = 'GFX/VFX';
+        $staffRoleEdgeCaseForthByPass       = 'MAPPER';
+        $staffRoleEdgeCaseFifthByPass       = 'PLAYTESTER';
+        $staffRoleEdgeCaseSixthByPass       = 'REFEREE';
+        $staffRoleEdgeCaseSeventhByPass     = 'STREAMER';
+        $staffRoleEdgeCaseEighthByPass      = 'COMMENTATOR';
+        $staffRoleEdgeCaseNinethByPass      = 'STATISTICIAN';
+        /*
+        Because filter staff role by default is basically fetching all staff
+        roles within the database of a specific tournament, so I'll just being a
+        bit hacky here by reading each individual staff role data straight away.
+        Take a look at the 'StaffController.php' file at line 51 to see why doing
+        so is beneficial
+        */
+        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseFirstByPass,      PDO::PARAM_STR);
+        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseSecondByPass,     PDO::PARAM_STR);
+        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseThirdByPass,      PDO::PARAM_STR);
+        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseForthByPass,      PDO::PARAM_STR);
+        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseFifthByPass,      PDO::PARAM_STR);
+        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseSixthByPass,      PDO::PARAM_STR);
+        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseSeventhByPass,    PDO::PARAM_STR);
+        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseEighthByPass,     PDO::PARAM_STR);
+        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseNinethByPass,     PDO::PARAM_STR);
+        $readStatement->bindParam(':userRole',  $role,                              PDO::PARAM_STR);
+    }
 
     if ($readStatement->execute()) {
-        error_log(message: $successReadLogMessage, message_type: 0);
         $readAllStaffData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
         return $readAllStaffData;
     } else {
-        error_log(message: $unsuccessReadLogMessage, message_type: 0);
         return false;
     }
 }
