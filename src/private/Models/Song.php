@@ -273,10 +273,10 @@ function readCustomSongData(
         );
 
         $newReadStatement = $database_handle->prepare($newReadQuery);
-        $newReadStatement->bindParam(':tournamentFirstId',  $customSongEdgeCaseFirstByPass,     PDO::PARAM_STR);
-        $newReadStatement->bindParam(':tournamentSecondId',  $customSongEdgeCaseSecondByPass,    PDO::PARAM_STR);
-        $newReadStatement->bindParam(':tournamentThirdId',  $customSongEdgeCaseThirdByPass,     PDO::PARAM_STR);
-        $newReadStatement->bindParam(':tournamentForthId',  $customSongEdgeCaseForthByPass,     PDO::PARAM_STR);
+        $newReadStatement->bindParam(':tournamentFirstId',      $customSongEdgeCaseFirstByPass,     PDO::PARAM_STR);
+        $newReadStatement->bindParam(':tournamentSecondId',     $customSongEdgeCaseSecondByPass,    PDO::PARAM_STR);
+        $newReadStatement->bindParam(':tournamentThirdId',      $customSongEdgeCaseThirdByPass,     PDO::PARAM_STR);
+        $newReadStatement->bindParam(':tournamentForthId',      $customSongEdgeCaseForthByPass,     PDO::PARAM_STR);
 
         /*
         $successReadLogMessage    = sprintf("Read successfully for all custom song data from: %s", $name);
