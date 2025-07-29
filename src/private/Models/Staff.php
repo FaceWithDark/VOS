@@ -140,7 +140,6 @@ function readStaffData(
 ): array | bool {
     $readQuery = "
         SELECT
-            vt.tournamentName,
             vu.userName,
             vu.userRole,
             vu.userFlag,
@@ -159,11 +158,18 @@ function readStaffData(
             vu.userRole ASC;
     ";
 
-    $readStatement = $database_handle->prepare($readQuery);
     if ($role !== 'DEFAULT') {
         // Edge case not needed, perform the reading logic as usual
-        $readStatement->bindParam(':tournamentId',  $name,  PDO::PARAM_STR);
+        $readStatement = $database_handle->prepare($readQuery);
         $readStatement->bindParam(':userRole',      $role,  PDO::PARAM_STR);
+        $readStatement->bindParam(':tournamentId',  $name,  PDO::PARAM_STR);
+
+        if ($readStatement->execute()) {
+            $readAllStaffData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
+            return $readAllStaffData;
+        } else {
+            return false;
+        }
     } else {
         // bindParam() 2nd parameter is a 'lvalue' type so I can't pass the string straight away
         $staffRoleEdgeCaseFirstByPass       = 'HOST';
@@ -175,6 +181,7 @@ function readStaffData(
         $staffRoleEdgeCaseSeventhByPass     = 'STREAMER';
         $staffRoleEdgeCaseEighthByPass      = 'COMMENTATOR';
         $staffRoleEdgeCaseNinethByPass      = 'STATISTICIAN';
+
         /*
         Because filter staff role by default is basically fetching all staff
         roles within the database of a specific tournament, so I'll just being a
@@ -182,23 +189,31 @@ function readStaffData(
         Take a look at the 'StaffController.php' file at line 51 to see why doing
         so is beneficial
         */
-        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseFirstByPass,      PDO::PARAM_STR);
-        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseSecondByPass,     PDO::PARAM_STR);
-        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseThirdByPass,      PDO::PARAM_STR);
-        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseForthByPass,      PDO::PARAM_STR);
-        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseFifthByPass,      PDO::PARAM_STR);
-        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseSixthByPass,      PDO::PARAM_STR);
-        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseSeventhByPass,    PDO::PARAM_STR);
-        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseEighthByPass,     PDO::PARAM_STR);
-        $readStatement->bindParam(':roundId',   $staffRoleEdgeCaseNinethByPass,     PDO::PARAM_STR);
-        $readStatement->bindParam(':userRole',  $role,                              PDO::PARAM_STR);
-    }
 
-    if ($readStatement->execute()) {
-        $readAllStaffData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
-        return $readAllStaffData;
-    } else {
-        return false;
+        $newReadQuery = str_replace(
+            " = :userRole",
+            " IN (:userRoleFirstId, :userRoleSecondId, :userRoleThirdId, :userRoleForthId, :userRoleFifthId, :userRoleSixthId, :userRoleSeventhId, :userRoleEightId, :userRoleNinethId)",
+            $readQuery
+        );
+
+        $newReadStatement = $database_handle->prepare($newReadQuery);
+        $newReadStatement->bindParam(':userRoleFirstId',    $staffRoleEdgeCaseFirstByPass,      PDO::PARAM_STR);
+        $newReadStatement->bindParam(':userRoleSecondId',   $staffRoleEdgeCaseSecondByPass,     PDO::PARAM_STR);
+        $newReadStatement->bindParam(':userRoleThirdId',    $staffRoleEdgeCaseThirdByPass,      PDO::PARAM_STR);
+        $newReadStatement->bindParam(':userRoleForthId',    $staffRoleEdgeCaseForthByPass,      PDO::PARAM_STR);
+        $newReadStatement->bindParam(':userRoleFifthId',    $staffRoleEdgeCaseFifthByPass,      PDO::PARAM_STR);
+        $newReadStatement->bindParam(':userRoleSixthId',    $staffRoleEdgeCaseSixthByPass,      PDO::PARAM_STR);
+        $newReadStatement->bindParam(':userRoleSeventhId',  $staffRoleEdgeCaseSeventhByPass,    PDO::PARAM_STR);
+        $newReadStatement->bindParam(':userRoleEightId',    $staffRoleEdgeCaseEighthByPass,     PDO::PARAM_STR);
+        $newReadStatement->bindParam(':userRoleNinethId',   $staffRoleEdgeCaseNinethByPass,     PDO::PARAM_STR);
+        $newReadStatement->bindParam(':tournamentId',       $name,                              PDO::PARAM_STR);
+
+        if ($newReadStatement->execute()) {
+            $readAllStaffData = $newReadStatement->fetchAll(mode: PDO::FETCH_ASSOC);
+            return $readAllStaffData;
+        } else {
+            return false;
+        }
     }
 }
 
