@@ -262,7 +262,8 @@ function readBeatmapData(
         $readStatement->bindParam(':roundId',       $round_name,        PDO::PARAM_STR);
         $readStatement->bindParam(':tournamentId',  $tournament_name,   PDO::PARAM_STR);
     } else {
-        $allStarEdgeCaseBypass = 'GF'; // bindParam() 2nd parameter is a 'lvalue' type so I can't pass the string straight away
+        // bindParam() 2nd parameter is a 'lvalue' type so I can't pass the string straight away
+        $allStarEdgeCaseBypass = 'GF';
         /*
         Because All Star mappool is basically the same as Grand
         Final mappool, so I'll just being a bit hacky here by
@@ -274,10 +275,23 @@ function readBeatmapData(
         $readStatement->bindParam(':tournamentId',  $tournament_name,           PDO::PARAM_STR);
     }
 
+    $successReadLogMessage = sprintf(
+        "Read successfully for all mappool data from %s round within %s",
+        $round_name,
+        strtoupper(string: $tournament_name)
+    );
+    $unsuccessReadLogMessage = sprintf(
+        "Read unsuccessfully for all mappool data from %s round within %s",
+        $round_name,
+        strtoupper(string: $tournament_name)
+    );
+
     if ($readStatement->execute()) {
+        error_log(message: $successReadLogMessage, message_type: 0);
         $readAllMappoolData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
         return $readAllMappoolData;
     } else {
+        error_log(message: $unsuccessReadLogMessage, message_type: 0);
         return false;
     }
 }
