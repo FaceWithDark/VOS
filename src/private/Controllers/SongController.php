@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 
 function getTournamentCustomSong(
-    string $tournament_name,
+    string $name
 ): array {
     $customSongJsonData     = __DIR__ . '/../Datas/Song/CustomSongData.json';
 
-    $allCustomSongRoundData = ['GF', 'SF'];
     $allCustomSongData      = [];
 
-    $osuUserAccessToken     = $_COOKIE['vot_access_token'];
+    $customSongAccessToken  = $_COOKIE['vot_access_token'];
 
     $customSongViewableJsonData = file_get_contents(
         filename: $customSongJsonData,
@@ -26,80 +25,103 @@ function getTournamentCustomSong(
         associative: true
     );
 
-    switch ($tournament_name) {
-        case 'vot4':
-            foreach ($customSongReadableJsonData[$tournament_name] as $customSongJsonData) {
-                $customSongJsonId = $customSongJsonData['custom_song_id'];
-                $customSongJsonType = $customSongJsonData['custom_song_type'];
+    switch ($name) {
+        case 'DEFAULT':
+            /*** VOT4 CUSTOM SONG DATA ***/
+            foreach ($customSongReadableJsonData['vot4'] as $vot4CustomSongJsonData) {
+                /*
+                Because filter custom song data by default is basically fetching
+                all custom song information within the database of a specific
+                tournament, so I'll just being a bit hacky here by reading the
+                data for each individual tournament straight away. This will
+                prevent me having to create a dedicated 'default' tournament
+                type in the database table that just basically the sum of all
+                other type, which unesscesary increase the database size.
+                */
+                $vot4CustomSongRoundData    = $vot4CustomSongJsonData['custom_song_round'];
+                $vot4CustomSongIdJsonData   = $vot4CustomSongJsonData['custom_song_id'];
+                $vot4CustomSongModData      = $vot4CustomSongJsonData['custom_song_mod'];
 
-                $customSongData = getTournamentCustomSongData(
-                    id: $customSongJsonId,
-                    access_token: $osuUserAccessToken
+                $vot4CustomSongData = getTournamentCustomSongData(
+                    id: $vot4CustomSongIdJsonData,
+                    token: $customSongAccessToken
                 );
 
-                $customSongId                  = $customSongData['id'];
-                $customSongRoundId             = $allCustomSongRoundData[0];
-                $customSongTournamentId        = strtoupper(string: $tournament_name);
-                $customSongType                = $customSongJsonType;
-                $customSongImage               = $customSongData['beatmapset']['covers']['cover'];
-                $customSongUrl                 = $customSongData['url'];
-                $customSongName                = $customSongData['beatmapset']['title'];
-                $customSongDifficultyName      = $customSongData['version'];
-                $customSongFeatureArtist       = $customSongData['beatmapset']['artist'];
-                $customSongMapper              = $customSongData['beatmapset']['creator'];
-                $customSongMapperUrl           = "https://osu.ppy.sh/users/{$customSongData['beatmapset']['user_id']}";
-                $customSongDifficulty          = $customSongData['difficulty_rating'];
-                $customSongLength              = $customSongData['total_length'];
-                $customSongOverallSpeed        = $customSongData['beatmapset']['bpm'];
-                $customSongOverallDifficulty   = $customSongData['accuracy'];
-                $customSongOverallHealth       = $customSongData['drain'];
-                $customSongPassCount           = $customSongData['passcount'];
-                $customSongCustomIndicator     = true;
+                $vot4CustomSongId                   = $vot4CustomSongData['id'];
+                $vot4CustomSongRoundId              = $vot4CustomSongRoundData;
+                $vot4CustomSongTournamentId         = 'VOT4';
+                $vot4CustomSongType                 = $vot4CustomSongModData;
+                $vot4CustomSongImage                = $vot4CustomSongData['beatmapset']['covers']['cover'];
+                $vot4CustomSongUrl                  = $vot4CustomSongData['url'];
+                $vot4CustomSongName                 = $vot4CustomSongData['beatmapset']['title'];
+                $vot4CustomSongDifficultyName       = $vot4CustomSongData['version'];
+                $vot4CustomSongFeatureArtist        = $vot4CustomSongData['beatmapset']['artist'];
+                $vot4CustomSongMapper               = $vot4CustomSongData['beatmapset']['creator'];
+                $vot4CustomSongMapperUrl            = "https://osu.ppy.sh/users/{$vot4CustomSongData['beatmapset']['user_id']}";
+                $vot4CustomSongDifficulty           = $vot4CustomSongData['difficulty_rating'];
+                $vot4CustomSongLength               = $vot4CustomSongData['total_length'];
+                $vot4CustomSongOverallSpeed         = $vot4CustomSongData['beatmapset']['bpm'];
+                $vot4CustomSongOverallDifficulty    = $vot4CustomSongData['accuracy'];
+                $vot4CustomSongOverallHealth        = $vot4CustomSongData['drain'];
+                $vot4CustomSongPassCount            = $vot4CustomSongData['passcount'];
+                $vot4CustomSongIndicator            = true;
 
                 $allCustomSongData[] = [
-                    'custom_song_id'                => $customSongId,
-                    'custom_song_round_id'          => $customSongRoundId,
-                    'custom_song_tournament_id'     => $customSongTournamentId,
-                    'custom_song_type'              => $customSongType,
-                    'custom_song_image'             => $customSongImage,
-                    'custom_song_url'               => $customSongUrl,
-                    'custom_song_name'              => $customSongName,
-                    'custom_song_difficulty_name'   => $customSongDifficultyName,
-                    'custom_song_fa'                => $customSongFeatureArtist,
-                    'custom_song_mapper'            => $customSongMapper,
-                    'custom_song_mapper_url'        => $customSongMapperUrl,
-                    'custom_song_difficulty'        => $customSongDifficulty,
-                    'custom_song_length'            => $customSongLength,
-                    'custom_song_bpm'               => $customSongOverallSpeed,
-                    'custom_song_od'                => $customSongOverallDifficulty,
-                    'custom_song_hp'                => $customSongOverallHealth,
-                    'custom_song_pass_count'        => $customSongPassCount,
-                    'custom_song_custom_indicator'  => $customSongCustomIndicator
+                    'custom_song_id'                    => $vot4CustomSongId,
+                    'custom_song_round_id'              => $vot4CustomSongRoundId,
+                    'custom_song_tournament_id'         => $vot4CustomSongTournamentId,
+                    'custom_song_type'                  => $vot4CustomSongType,
+                    'custom_song_image'                 => $vot4CustomSongImage,
+                    'custom_song_url'                   => $vot4CustomSongUrl,
+                    'custom_song_name'                  => $vot4CustomSongName,
+                    'custom_song_difficulty_name'       => $vot4CustomSongDifficultyName,
+                    'custom_song_feature_artist'        => $vot4CustomSongFeatureArtist,
+                    'custom_song_mapper'                => $vot4CustomSongMapper,
+                    'custom_song_mapper_url'            => $vot4CustomSongMapperUrl,
+                    'custom_song_difficulty'            => $vot4CustomSongDifficulty,
+                    'custom_song_length'                => $vot4CustomSongLength,
+                    'custom_song_overall_speed'         => $vot4CustomSongOverallSpeed,
+                    'custom_song_overall_difficulty'    => $vot4CustomSongOverallDifficulty,
+                    'custom_song_overall_health'        => $vot4CustomSongOverallHealth,
+                    'custom_song_pass_count'            => $vot4CustomSongPassCount,
+                    'custom_song_indicator'             => $vot4CustomSongIndicator
                 ];
             }
-
-            getCustomSongData(data: $allCustomSongData);
             break;
 
-        // TODO: Add corresponding logics later
-        case 'default':
-        case 'vot3':
-        case 'vot2':
-        case 'vot1':
+        case 'VOT4':
             break;
-    };
 
+        case 'VOT3':
+            break;
 
-    return $allCustomSongData;
+        case 'VOT2':
+            break;
+
+        case 'VOT1':
+            break;
+
+        default:
+            # code...
+            break;
+    }
+
+    getCustomSongData(data: $allCustomSongData);
+
+    return [
+        $allCustomSongData
+    ];
 }
+
 
 function getTournamentCustomSongData(
     int $id,
-    string $access_token
+    string $token
 ): array | bool {
-    $httpAuthorisationType  = $access_token;
+    $httpAuthorisationType  = $token;
     $httpAcceptType         = 'application/json';
     $httpContentType        = 'application/json';
+    $customSongUrl          = "https://osu.ppy.sh/api/v2/beatmaps/{$id}";
 
     if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
         $httpHeaderRequest = [
@@ -107,8 +129,6 @@ function getTournamentCustomSongData(
             "Accept: {$httpAcceptType}",
             "Content-Type: {$httpContentType}",
         ];
-
-        $customSongUrl = "https://osu.ppy.sh/api/v2/beatmaps/{$id}";
 
         # CURL session will be handled manually through curl_setopt()
         $customSongCurlHandle = curl_init(url: null);
@@ -142,8 +162,6 @@ function getTournamentCustomSongData(
             "Accept: {$httpAcceptType}",
             "Content-Type: {$httpContentType}",
         );
-
-        $customSongUrl = "https://osu.ppy.sh/api/v2/beatmaps/{$id}";
 
         # CURL session will be handled manually through curl_setopt()
         $customSongCurlHandle = curl_init(url: null);

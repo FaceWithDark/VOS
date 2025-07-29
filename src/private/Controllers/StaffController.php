@@ -40,9 +40,7 @@ function getTournamentStaff(
                 associative: true
             );
 
-            // echo array_dump(array: $staffReadableJsonData);
             foreach ($staffReadableJsonData as $staffRoleJsonData) {
-                // echo array_dump(array: $staffRoleJsonData);
                 switch ($role) {
                     case 'DEFAULT':
                         /*** STAFF DATA FOR HOST ROLE ***/

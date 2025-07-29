@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/../Configurations/Database.php';
 
+
 function getCustomSongData(array $data): null
 {
     foreach ($data as $custom_song_data) {
@@ -15,16 +16,16 @@ function getCustomSongData(array $data): null
         $customSongUrl                  = $custom_song_data['custom_song_url'];
         $customSongName                 = $custom_song_data['custom_song_name'];
         $customSongDifficultyName       = $custom_song_data['custom_song_difficulty_name'];
-        $customSongFeatureArtist        = $custom_song_data['custom_song_fa'];
+        $customSongFeatureArtist        = $custom_song_data['custom_song_feature_artist'];
         $customSongMapper               = $custom_song_data['custom_song_mapper'];
         $customSongMapperUrl            = $custom_song_data['custom_song_mapper_url'];
         $customSongDifficulty           = $custom_song_data['custom_song_difficulty'];
         $customSongLength               = $custom_song_data['custom_song_length'];
-        $customSongOverallSpeed         = $custom_song_data['custom_song_bpm'];
-        $customSongOverallDifficulty    = $custom_song_data['custom_song_od'];
-        $customSongOverallHealth        = $custom_song_data['custom_song_hp'];
+        $customSongOverallSpeed         = $custom_song_data['custom_song_overall_speed'];
+        $customSongOverallDifficulty    = $custom_song_data['custom_song_overall_difficulty'];
+        $customSongOverallHealth        = $custom_song_data['custom_song_overall_health'];
         $customSongPassCount            = $custom_song_data['custom_song_pass_count'];
-        $customSongCustomIndicator      = $custom_song_data['custom_song_custom_indicator'];
+        $customSongCustomIndicator      = $custom_song_data['custom_song_indicator'];
         $customSongDatabase             = $GLOBALS['votDatabaseHandle'];
 
         if (!checkCustomSongData(id: $customSongId, database_handle: $customSongDatabase)) {
@@ -36,15 +37,15 @@ function getCustomSongData(array $data): null
                 image: $customSongImage,
                 url: $customSongUrl,
                 name: $customSongName,
-                difficulty_name: $customSongDifficultyName,
-                feature_artist: $customSongFeatureArtist,
+                diff_name: $customSongDifficultyName,
+                fa: $customSongFeatureArtist,
                 mapper: $customSongMapper,
                 mapper_url: $customSongMapperUrl,
-                difficulty: $customSongDifficulty,
+                diff: $customSongDifficulty,
                 length: $customSongLength,
-                overall_speed: $customSongOverallSpeed,
-                overall_difficulty: $customSongOverallDifficulty,
-                overall_health: $customSongOverallHealth,
+                bpm: $customSongOverallSpeed,
+                od: $customSongOverallDifficulty,
+                hp: $customSongOverallHealth,
                 pass_count: $customSongPassCount,
                 custom_indicator: $customSongCustomIndicator,
                 database_handle: $customSongDatabase
@@ -57,22 +58,22 @@ function getCustomSongData(array $data): null
     return null;
 }
 
+
 function checkCustomSongData(
     int $id,
     object $database_handle
 ): int | bool {
     $checkQuery = "
-        SELECT COUNT(beatmapId)
-        FROM VotTournamentBeatmap
-        WHERE beatmapId = :beatmapId
+    SELECT
+        COUNT(beatmapId)
+    FROM
+        VotBeatmap
+    WHERE
+        beatmapId = :beatmapId
         AND beatmapCustom = 1;
     ";
 
     $checkStatement = $database_handle->prepare($checkQuery);
-
-    // I can't type hint this due to `var` parameter has an address (&) assigned to it, which syntactically
-    // not valid for a PHP code. Therefore, to let this method works, I have to make this one as an
-    // exceptional for letting my code to be strictly-typed.
     $checkStatement->bindParam(':beatmapId', $id, PDO::PARAM_INT);
 
     $successCheckLogMessage    = sprintf("Check successfully for custom song ID: %d", $id);
@@ -90,6 +91,7 @@ function checkCustomSongData(
     }
 }
 
+
 // Create
 function createCustomSongData(
     int $id,
@@ -99,21 +101,22 @@ function createCustomSongData(
     string $image,
     string $url,
     string $name,
-    string $difficulty_name,
-    string $feature_artist,
+    string $diff_name,
+    string $fa,
     string $mapper,
     string $mapper_url,
-    float $difficulty,
+    float $diff,
     int $length,
-    float $overall_speed,
-    float $overall_difficulty,
-    float $overall_health,
+    float $bpm,
+    float $od,
+    float $hp,
     int $pass_count,
     bool $custom_indicator,
     object $database_handle
 ): string | bool {
     $insertQuery = "
-        INSERT INTO VotTournamentBeatmap (
+    INSERT INTO
+        VotBeatmap (
             beatmapId,
             roundId,
             tournamentId,
@@ -133,53 +136,50 @@ function createCustomSongData(
             beatmapPassCount,
             beatmapCustom
         )
-        VALUES (
-            :beatmapId,
+    VALUES
+        (
+            :customSongId,
             :roundId,
             :tournamentId,
-            :beatmapType,
-            :beatmapImage,
-            :beatmapUrl,
-            :beatmapName,
-            :beatmapDifficultyName,
-            :beatmapFeatureArtist,
-            :beatmapMapper,
-            :beatmapMapperUrl,
-            :beatmapDifficulty,
-            :beatmapLength,
-            :beatmapOverallSpeed,
-            :beatmapOverallDifficulty,
-            :beatmapOverallHealth,
-            :beatmapPassCount,
-            :beatmapCustom
+            :customSongType,
+            :customSongImage,
+            :customSongUrl,
+            :customSongName,
+            :customSongDifficultyName,
+            :customSongFeatureArtist,
+            :customSongMapper,
+            :customSongMapperUrl,
+            :customSongDifficulty,
+            :customSongLength,
+            :customSongOverallSpeed,
+            :customSongOverallDifficulty,
+            :customSongOverallHealth,
+            :customSongPassCount,
+            :customSongIndicator
         );
     ";
 
     $insertStatement = $database_handle->prepare($insertQuery);
-
-    // I can't type hint this due to `var` parameter has an address (&) assigned to it, which syntactically
-    // not valid for a PHP code. Therefore, to let this method works, I have to make this one as an
-    // exceptional for letting my code to be strictly-typed.
-    //
-    // Surprisingly, PDO method doesn't have a proper way to handle float data type. Reference: https://stackoverflow.com/a/1335191
-    $insertStatement->bindParam(':beatmapId',                   $id,                    PDO::PARAM_INT);
-    $insertStatement->bindParam(':roundId',                     $round_id,              PDO::PARAM_STR);
-    $insertStatement->bindParam(':tournamentId',                $tournament_id,         PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapType',                 $type,                  PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapImage',                $image,                 PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapUrl',                  $url,                   PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapName',                 $name,                  PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapDifficultyName',       $difficulty_name,       PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapFeatureArtist',        $feature_artist,        PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapMapper',               $mapper,                PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapMapperUrl',            $mapper_url,            PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapDifficulty',           $difficulty,            PDO::PARAM_STR); // No proper way to handle float data type in PDO somehow
-    $insertStatement->bindParam(':beatmapLength',               $length,                PDO::PARAM_INT);
-    $insertStatement->bindParam(':beatmapOverallSpeed',         $overall_speed,         PDO::PARAM_STR); // No proper way to handle float data type in PDO somehow
-    $insertStatement->bindParam(':beatmapOverallDifficulty',    $overall_difficulty,    PDO::PARAM_STR); // No proper way to handle float data type in PDO somehow
-    $insertStatement->bindParam(':beatmapOverallHealth',        $overall_health,        PDO::PARAM_STR); // No proper way to handle float data type in PDO somehow
-    $insertStatement->bindParam(':beatmapPassCount',            $pass_count,            PDO::PARAM_INT);
-    $insertStatement->bindParam(':beatmapCustom',               $custom_indicator,      PDO::PARAM_INT); // boolean data type just basically means '1' & '0' in MySQL
+    // Surprisingly, PDO method doesn't have a proper way to handle float data
+    // type. Reference: https://stackoverflow.com/a/1335191
+    $insertStatement->bindParam(':customSongId',                    $id,                PDO::PARAM_INT);
+    $insertStatement->bindParam(':roundId',                         $round_id,          PDO::PARAM_STR);
+    $insertStatement->bindParam(':tournamentId',                    $tournament_id,     PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongType',                  $type,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongImage',                 $image,             PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongUrl',                   $url,               PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongName',                  $name,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongDifficultyName',        $diff_name,         PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongFeatureArtist',         $fa,                PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongMapper',                $mapper,            PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongMapperUrl',             $mapper_url,        PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongDifficulty',            $diff,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongLength',                $length,            PDO::PARAM_INT);
+    $insertStatement->bindParam(':customSongOverallSpeed',          $bpm,               PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongOverallDifficulty',     $od,                PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongOverallHealth',         $hp,                PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongPassCount',             $pass_count,        PDO::PARAM_INT);
+    $insertStatement->bindParam(':customSongIndicator',             $custom_indicator,  PDO::PARAM_INT); // Boolean data type just basically means '1' & '0' in MariaDB
 
     $successInsertLogMessage    = sprintf("Insert successfully for custom song ID: %d", $id);
     $unsuccessInsertLogMessage  = sprintf("Insert unsuccessfully for custom song ID: %d", $id);
@@ -197,9 +197,10 @@ function createCustomSongData(
     }
 }
 
+
 // Read
 function readCustomSongData(
-    string $tournament_name,
+    string $name,
     object $database_handle
 ): array | bool {
     $readQuery = "
@@ -221,35 +222,74 @@ function readCustomSongData(
             vb.beatmapOverallHealth,
             vb.beatmapPassCount
         FROM
-            VotTournamentBeatmap vb
+            VotBeatmap vb
         JOIN
-            VotTournamentRound vr ON vb.roundId = vr.roundId
+            VotRound vr ON vb.roundId = vr.roundId
         JOIN
-            VotTournamentType vt ON vr.tournamentId = vt.tournamentId
+            VotTournament vt ON vr.tournamentId = vt.tournamentId
         WHERE
-            vb.beatmapCustom = 1
-            AND vt.tournamentId = :tournamentId
+            vt.tournamentId = :tournamentId
+            AND vb.beatmapCustom = 1
         ORDER BY
-            vt.tournamentId;
+            vt.tournamentId ASC;
     ";
 
-    $readStatement = $database_handle->prepare($readQuery);
+    if ($name !== 'DEFAULT') {
+        // Edge case not needed, perform the reading logic as usual
+        $readStatement = $database_handle->prepare($readQuery);
+        $readStatement->bindParam(':tournamentId', $name, PDO::PARAM_STR);
 
-    // I can't type hint this due to `var` parameter has an address (&) assigned to it, which syntactically
-    // not valid for a PHP code. Therefore, to let this method works, I have to make this one as an
-    // exceptional for letting my code to be strictly-typed.
-    $readStatement->bindParam(':tournamentId',  $tournament_name,   PDO::PARAM_INT);
-
-    $successReadLogMessage    = sprintf("Read successfully for all custom song data from: %s", $tournament_name);
-    $unsuccessReadLogMessage  = sprintf("Read unsuccessfully for all custom song data from: %s", $tournament_name);
-
-    if ($readStatement->execute()) {
-        error_log(message: $successReadLogMessage, message_type: 0);
-        $readAllCustomSongData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
-        return $readAllCustomSongData;
+        /*
+        $successReadLogMessage    = sprintf("Read successfully for all custom song data from: %s", $name);
+        $unsuccessReadLogMessage  = sprintf("Read unsuccessfully for all custom song data from: %s", $name);
+        */
+        if ($readStatement->execute()) {
+            // error_log(message: $successReadLogMessage, message_type: 0);
+            $readAllCustomSongData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
+            return $readAllCustomSongData;
+        } else {
+            // error_log(message: $unsuccessReadLogMessage, message_type: 0);
+            return false;
+        }
     } else {
-        error_log(message: $unsuccessReadLogMessage, message_type: 0);
-        return false;
+        // bindParam() 2nd parameter is a 'lvalue' type so I can't pass the string straight away
+        $customSongEdgeCaseFirstByPass      = 'VOT4';
+        $customSongEdgeCaseSecondByPass     = 'VOT3';
+        $customSongEdgeCaseThirdByPass      = 'VOT2';
+        $customSongEdgeCaseForthByPass      = 'VOT1';
+
+        /*
+        Because filter custom song data by default is basically fetching all
+        custom song information within the database of a specific tournament, so
+        I'll just being a bit hacky here by reading the data for each individual
+        tournament straight away. Take a look at the 'SongController.php' file
+        at line 35 to see why doing so is beneficial
+        */
+
+        $newReadQuery = str_replace(
+            " = :tournamentId",
+            " IN (:tournamentFirstId, :tournamentSecondId, :tournamentThirdId, :tournamentForthId)",
+            $readQuery
+        );
+
+        $newReadStatement = $database_handle->prepare($newReadQuery);
+        $newReadStatement->bindParam(':tournamentFirstId',  $customSongEdgeCaseFirstByPass,     PDO::PARAM_STR);
+        $newReadStatement->bindParam(':tournamentSecondId',  $customSongEdgeCaseSecondByPass,    PDO::PARAM_STR);
+        $newReadStatement->bindParam(':tournamentThirdId',  $customSongEdgeCaseThirdByPass,     PDO::PARAM_STR);
+        $newReadStatement->bindParam(':tournamentForthId',  $customSongEdgeCaseForthByPass,     PDO::PARAM_STR);
+
+        /*
+        $successReadLogMessage    = sprintf("Read successfully for all custom song data from: %s", $name);
+        $unsuccessReadLogMessage  = sprintf("Read unsuccessfully for all custom song data from: %s", $name);
+        */
+        if ($newReadStatement->execute()) {
+            // error_log(message: $successReadLogMessage, message_type: 0);
+            $readAllCustomSongData = $newReadStatement->fetchAll(mode: PDO::FETCH_ASSOC);
+            return $readAllCustomSongData;
+        } else {
+            // error_log(message: $unsuccessReadLogMessage, message_type: 0);
+            return false;
+        }
     }
 }
 

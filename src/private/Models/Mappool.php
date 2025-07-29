@@ -65,7 +65,7 @@ function checkBeatmapData(
         SELECT
             COUNT(beatmapId)
         FROM
-            VotTournamentBeatmap
+            VotBeatmap
         WHERE
             beatmapId = :beatmapId;
     ";
@@ -112,7 +112,7 @@ function createBeatmapData(
 ): string | bool {
     $insertQuery = "
         INSERT INTO
-            VotTournamentBeatmap (
+            VotBeatmap (
                 beatmapId,
                 roundId,
                 tournamentId,
@@ -216,11 +216,11 @@ function readBeatmapData(
             vb.beatmapOverallHealth,
             vb.beatmapPassCount
         FROM
-            VotTournamentBeatmap vb
+            VotBeatmap vb
         JOIN
-            VotTournamentRound vr ON vb.roundId = vr.roundId
+            VotRound vr ON vb.roundId = vr.roundId
         JOIN
-            VotTournamentType vt ON vr.tournamentId = vt.tournamentId
+            VotTournament vt ON vr.tournamentId = vt.tournamentId
         WHERE
             vr.roundId = :roundId
             AND vt.tournamentId = :tournamentId

@@ -1,18 +1,21 @@
 {
     "vot4": {
         "GF": {
+            "custom_song_round": "GF",
             "custom_song_id": 4724485,
-            "custom_song_type": "TB"
+            "custom_song_mod": "TB"
         }
     },
     "vot3": {
         "SF": {
+            "custom_song_round": "SF",
             "custom_song_id": 4235709,
-            "custom_song_type": "HD1"
+            "custom_song_mod": "HD1"
         },
         "GF": {
+            "custom_song_round": "GF",
             "custom_song_id": 4255915,
-            "custom_song_type": "TB"
+            "custom_song_mod": "TB"
         }
     }
 }

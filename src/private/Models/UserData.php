@@ -117,16 +117,18 @@ function checkUserData(int $id, object $database_handle): int | bool
 function createUserData(int $id, string $name, string $role, string $flag, string $image, string $url, int $rank, string $time_zone, object $database_handle): string | bool
 {
     $insertQuery = "
-        INSERT INTO VotUser (userId, userName, userRole, userFlag, userImage, userUrl, userRank, userTimeZone)
-        VALUES (:userId, :userName, :userRole, :userFlag, :userImage, :userUrl, :userRank, :userTimeZone);
+        INSERT INTO VotUser (userId, tournamentId, userName, userRole, userFlag, userImage, userUrl, userRank, userTimeZone)
+        VALUES (:userId, :tournamentId, :userName, :userRole, :userFlag, :userImage, :userUrl, :userRank, :userTimeZone);
     ";
 
     $insertStatement = $database_handle->prepare($insertQuery);
+    $tournamentId = 'VOT4'; // TODO: Temporary fix for now as I want to re-write this file in a seperate commit
 
     // I can't type hint this due to `var` parameter has an address (&) assigned to it, which syntactically
     // not valid for a PHP code. Therefore, to let this method works, I have to make this one as an
     // exceptional for letting my code to be strictly-typed.
-    $insertStatement->bindParam(':userId',          $id,            PDO::PARAM_INT);
+    $insertStatement->bindParam(':userId',          $id,            PDO::PARAM_STR);
+    $insertStatement->bindParam(':tournamentId',    $tournamentId,  PDO::PARAM_STR);
     $insertStatement->bindParam(':userName',        $name,          PDO::PARAM_STR);
     $insertStatement->bindParam(':userRole',        $role,          PDO::PARAM_STR);
     $insertStatement->bindParam(':userFlag',        $flag,          PDO::PARAM_STR);
