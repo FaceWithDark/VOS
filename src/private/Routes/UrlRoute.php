@@ -90,42 +90,25 @@ switch ($httpRedirectRequest) {
 
     case '/song/vot':
         if (!isset($_COOKIE['vot_access_token'])) {
-            // Start 1st output buffer (HTML outputs in this case). Delete this buffer if no valid GET parameter value found
-            ob_start(
-                callback: null,
-                chunk_size: 0,
-                flags: PHP_OUTPUT_HANDLER_STDFLAGS
-            );
-
+            // No need to fetch new custom song data (if any), read custom song
+            // data straight away within the include 'View' file
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
             require __DIR__ . '/../Views/Song/SongVotView.php';
         } else {
-            // Start 1st output buffer (HTML outputs in this case). Delete this buffer if no valid GET parameter value found
-            ob_start(
-                callback: null,
-                chunk_size: 0,
-                flags: PHP_OUTPUT_HANDLER_STDFLAGS
-            );
-
+            // In need of fetching new custom song data (if any) using the below
+            // data fetching method
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Song/SongVotView.php';
 
-            if (isset($_GET['tournament'])) {
-                $votCustomSongLocation = $_GET['tournament'];
-
-                switch ($votCustomSongLocation) {
-                    case 'vot4':
-                        getTournamentCustomSong(tournament_name: $votCustomSongLocation);
-                        break;
-
-                    default:
-                        while (ob_get_level() > 1) {
-                            ob_end_clean(); // Delete all output buffers (HTML outputs in this case)
-                        }
-                        http_response_code(404);
-                        ob_end_flush(); // End output buffers delete process
-                        break;
-                }
+            if (!isset($_GET['tournament'])) {
+                // Do nothing, show the page only
+                require __DIR__ . '/../Views/Song/SongVotView.php';
+            } else {
+                // Perform the MVC, after button get clicked
+                require __DIR__ . '/../Views/Song/SongVotView.php';
+                $votTournamentName = $_GET['tournament'];
+                getTournamentCustomSong(
+                    name: $votTournamentName
+                );
             }
         }
         break;
