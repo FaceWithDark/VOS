@@ -164,10 +164,23 @@ function readStaffData(
         $readStatement->bindParam(':userRole',      $role,  PDO::PARAM_STR);
         $readStatement->bindParam(':tournamentId',  $name,  PDO::PARAM_STR);
 
+        $successReadLogMessage = sprintf(
+            "Read successfully for all staff data with %s role from %s",
+            $role,
+            strtoupper(string: $name)
+        );
+        $unsuccessReadLogMessage = sprintf(
+            "Read unsuccessfully for all staff data with %s role from %s",
+            $role,
+            strtoupper(string: $name)
+        );
+
         if ($readStatement->execute()) {
+            error_log(message: $successReadLogMessage, message_type: 0);
             $readAllStaffData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
             return $readAllStaffData;
         } else {
+            error_log(message: $unsuccessReadLogMessage, message_type: 0);
             return false;
         }
     } else {
@@ -208,10 +221,21 @@ function readStaffData(
         $newReadStatement->bindParam(':userRoleNinethId',   $staffRoleEdgeCaseNinethByPass,     PDO::PARAM_STR);
         $newReadStatement->bindParam(':tournamentId',       $name,                              PDO::PARAM_STR);
 
+        $newSuccessReadLogMessage = sprintf(
+            "Read successfully for all staff data from all role within VOT4",
+            strtoupper(string: $name)
+        );
+        $newUnsuccessReadLogMessage = sprintf(
+            "Read unsuccessfully for all staff data from all role within VOT4",
+            strtoupper(string: $name)
+        );
+
         if ($newReadStatement->execute()) {
+            error_log(message: $newSuccessReadLogMessage, message_type: 0);
             $readAllStaffData = $newReadStatement->fetchAll(mode: PDO::FETCH_ASSOC);
             return $readAllStaffData;
         } else {
+            error_log(message: $newUnsuccessReadLogMessage, message_type: 0);
             return false;
         }
     }

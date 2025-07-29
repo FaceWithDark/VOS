@@ -239,16 +239,21 @@ function readCustomSongData(
         $readStatement = $database_handle->prepare($readQuery);
         $readStatement->bindParam(':tournamentId', $name, PDO::PARAM_STR);
 
-        /*
-        $successReadLogMessage    = sprintf("Read successfully for all custom song data from: %s", $name);
-        $unsuccessReadLogMessage  = sprintf("Read unsuccessfully for all custom song data from: %s", $name);
-        */
+        $successReadLogMessage = sprintf(
+            "Read successfully for all custom song data from %s",
+            $name
+        );
+        $unsuccessReadLogMessage = sprintf(
+            "Read unsuccessfully for all custom song data from %s",
+            $name
+        );
+
         if ($readStatement->execute()) {
-            // error_log(message: $successReadLogMessage, message_type: 0);
+            error_log(message: $successReadLogMessage, message_type: 0);
             $readAllCustomSongData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
             return $readAllCustomSongData;
         } else {
-            // error_log(message: $unsuccessReadLogMessage, message_type: 0);
+            error_log(message: $unsuccessReadLogMessage, message_type: 0);
             return false;
         }
     } else {
@@ -278,16 +283,15 @@ function readCustomSongData(
         $newReadStatement->bindParam(':tournamentThirdId',      $customSongEdgeCaseThirdByPass,     PDO::PARAM_STR);
         $newReadStatement->bindParam(':tournamentForthId',      $customSongEdgeCaseForthByPass,     PDO::PARAM_STR);
 
-        /*
-        $successReadLogMessage    = sprintf("Read successfully for all custom song data from: %s", $name);
-        $unsuccessReadLogMessage  = sprintf("Read unsuccessfully for all custom song data from: %s", $name);
-        */
+        $newSuccessReadLogMessage    = 'Read successfully for all custom song data from all VOT tournaments';
+        $newUnsuccessReadLogMessage  = 'Read unsuccessfully for all custom song data from all VOT tournaments';
+
         if ($newReadStatement->execute()) {
-            // error_log(message: $successReadLogMessage, message_type: 0);
+            error_log(message: $newSuccessReadLogMessage, message_type: 0);
             $readAllCustomSongData = $newReadStatement->fetchAll(mode: PDO::FETCH_ASSOC);
             return $readAllCustomSongData;
         } else {
-            // error_log(message: $unsuccessReadLogMessage, message_type: 0);
+            error_log(message: $newUnsuccessReadLogMessage, message_type: 0);
             return false;
         }
     }
