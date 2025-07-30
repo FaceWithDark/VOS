@@ -201,7 +201,7 @@ switch ($httpRedirectRequest) {
         }
         break;
 
-    /*     case '/entry':
+    case '/entry':
         if (!isset($_COOKIE['vot_access_token'])) {
             // Deny everyone access to entry file ('logout' scenario) even the website owner
             // TODO: Find a way to retrieve the IP address of the person that trying to access the file
@@ -229,7 +229,7 @@ switch ($httpRedirectRequest) {
                 require __DIR__ . '/../Views/EntryView.php';
             }
         }
-        break; */
+        break;
 
     case '/logout':
         if (!isset($_COOKIE['vot_access_token'])) {
@@ -246,11 +246,11 @@ switch ($httpRedirectRequest) {
         }
 
     default:
-        /* // Any URL paths that I haven't configured will be sent back to 'Home' page
+        // Any URL paths that I haven't configured will be sent back to 'Home' page
         exit(header(
             header: 'Location: /home',
             replace: true,
             response_code: 302
-        )); */
+        ));
         break;
 }
