@@ -44,9 +44,12 @@ function checkStaffData(
     object $database_handle
 ): int | bool {
     $checkQuery = "
-        SELECT COUNT(userId)
-        FROM VotUser
-        WHERE userId = :userId;
+        SELECT
+            COUNT(userId)
+        FROM
+            VotUser
+        WHERE
+            userId = :userId;
     ";
 
     $checkStatement = $database_handle->prepare($checkQuery);
@@ -78,12 +81,16 @@ function createStaffData(
     string $url,
     int $rank,
     string $time_zone,
-    object $database_handle
+    object $database_handle,
+    // Default params need to be be declared after all optional params.
+    // Reference: https://www.php.net/manual/en/functions.arguments.php#functions.arguments.default
+    string $tournament_id = 'NONE' // Everyone belong to none tournament by default
 ): string | bool {
     $insertQuery = "
         INSERT INTO
             VotUser (
                 userId,
+                tournamentId,
                 userName,
                 userRole,
                 userFlag,
@@ -95,6 +102,7 @@ function createStaffData(
         VALUES
             (
                 :userId,
+                :tournamentId,
                 :userName,
                 :userRole,
                 :userFlag,
@@ -106,14 +114,15 @@ function createStaffData(
     ";
 
     $insertStatement = $database_handle->prepare($insertQuery);
-    $insertStatement->bindParam(':userId',          $id,            PDO::PARAM_INT);
-    $insertStatement->bindParam(':userName',        $name,          PDO::PARAM_STR);
-    $insertStatement->bindParam(':userRole',        $role,          PDO::PARAM_STR);
-    $insertStatement->bindParam(':userFlag',        $flag,          PDO::PARAM_STR);
-    $insertStatement->bindParam(':userImage',       $image,         PDO::PARAM_STR);
-    $insertStatement->bindParam(':userUrl',         $url,           PDO::PARAM_STR);
-    $insertStatement->bindParam(':userRank',        $rank,          PDO::PARAM_INT);
-    $insertStatement->bindParam(':userTimeZone',    $time_zone,     PDO::PARAM_STR);
+    $insertStatement->bindParam(':userId',          $id,                PDO::PARAM_INT);
+    $insertStatement->bindParam(':tournamentId',    $tournament_id,     PDO::PARAM_STR);
+    $insertStatement->bindParam(':userName',        $name,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':userRole',        $role,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':userFlag',        $flag,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':userImage',       $image,             PDO::PARAM_STR);
+    $insertStatement->bindParam(':userUrl',         $url,               PDO::PARAM_STR);
+    $insertStatement->bindParam(':userRank',        $rank,              PDO::PARAM_INT);
+    $insertStatement->bindParam(':userTimeZone',    $time_zone,         PDO::PARAM_STR);
 
     $successInsertLogMessage    = sprintf("Insert successfully for staff ID: %d", $id);
     $unsuccessInsertLogMessage  = sprintf("Insert unsuccessfully for staff ID: %d", $id);
@@ -150,7 +159,7 @@ function readStaffData(
         FROM
             VotUser vu
         JOIN
-            VotTournamentType vt ON vu.tournamentId = vt.tournamentId
+            VotTournament vt ON vu.tournamentId = vt.tournamentId
         WHERE
             vu.userRole = :userRole
             AND vt.tournamentId = :tournamentId

@@ -2,22 +2,7 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
-require __DIR__ . '/../../Configurations/Database.php';
 require __DIR__ . '/../../Models/UserData.php';
-
-$osuUserId = getUserData(access_token: $_COOKIE['vot_access_token'])['id'];
-
-if (!empty($osuUserId)) {
-    // Variable scoping in PHP is a bit weird somehow: https://www.php.net/manual/en/language.variables.scope.php
-    $allUserData        = readUserData(id: $osuUserId, database_handle: $GLOBALS['votDatabaseHandle']);
-
-    $osuUserImage       = $allUserData['userImage'];
-    $osuUserName        = $allUserData['userName'];
-    $osuUserRedirect    = $allUserData['userUrl'];
-} else {
-    // TODO: This is not working yet. Fix later (if possible).
-    http_response_code(400);
-}
 ?>
 
 <!-- XHTML 1.0 compatible -->
@@ -138,12 +123,30 @@ if (!empty($osuUserId)) {
             <i class="bx bx-menu" id="collapsible-icon"></i>
         </div>
 
-        <div class="middle-navigation-first-section">
-            <a href="<?= htmlspecialchars(string: $osuUserRedirect); ?>">
-                <img src="<?= htmlspecialchars(string: $osuUserImage); ?>" alt="<?= htmlspecialchars(string: $osuUserName); ?>" class="user-image">
-                <p><?= htmlspecialchars(string: $osuUserName); ?></p>
-            </a>
-        </div>
+        <?php
+        $votUserDatabase = $GLOBALS['votDatabaseHandle'];
+
+        $votUserData = readUserData(
+            database_handle: $votUserDatabase
+        );
+
+        $votUserName    = htmlspecialchars($votUserData['userName']);
+        $votUserImage   = htmlspecialchars($votUserData['userImage']);
+        $votUserUrl     = htmlspecialchars($votUserData['userUrl']);
+
+        $userDisplayTemplate =
+            <<<EOL
+            <div class="middle-navigation-first-section">
+                <a href="$votUserUrl">
+                    <img src="$votUserImage" alt="User Avatar" class="user-image">
+                    <p>$votUserName</p>
+                </a>
+            </div>
+            EOL;
+
+        // It would be much more nasty if I tried to output this using the traditional mixed HTML & PHP codes
+        echo $userDisplayTemplate;
+        ?>
 
         <div class="middle-navigation-second-section">
             <ul>
