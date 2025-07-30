@@ -18,36 +18,44 @@ switch ($httpRedirectRequest) {
     case '/':
     case '/home':
         if (!isset($_COOKIE['vot_access_token'])) {
+            // No need to fetch new osu user data (if any), read osu user data
+            // straight away within the include 'View' file
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/HomeView.php';
         } else {
+            // In need of fetching new osu user data (if any) using the below
+            // data fetching method
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/HomeView.php';
+
+            // Perform the MVC, after button get clicked
+            $homeAccessToken = $_COOKIE['vot_access_token'];
+            getOsuUser(token: $homeAccessToken);
         }
-        require __DIR__ . '/../Views/HomeView.php';
         break;
 
     case '/authorise':
-        getUserAuthoriseCode();
+        getOsuUserAuthoriseCode();
         break;
 
     case '/callback':
-        # TODO: filter manual `code` parameter injection
-        $userAuthoriseCode = $_GET['code'];
-
-        if (!isset($userAuthoriseCode)) {
+        if (!isset($_GET['code'])) {
             http_response_code(401);
             break;
         } else {
-            getUserAccessToken(temporary_code: $userAuthoriseCode);
+            $osuUserAuthoriseCode = $_GET['code'];
+            getOsuUserAccessToken(code: $osuUserAuthoriseCode);
             break;
         }
 
     case '/archive':
         if (!isset($_COOKIE['vot_access_token'])) {
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Archive/ArchiveTournamentView.php';
         } else {
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Archive/ArchiveTournamentView.php';
         }
-        require __DIR__ . '/../Views/Archive/ArchiveTournamentView.php';
         break;
 
     case '/archive/vot':
@@ -63,10 +71,11 @@ switch ($httpRedirectRequest) {
     case '/staff':
         if (!isset($_COOKIE['vot_access_token'])) {
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Staff/StaffTournamentView.php';
         } else {
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Staff/StaffTournamentView.php';
         }
-        require __DIR__ . '/../Views/Staff/StaffTournamentView.php';
         break;
 
     case '/staff/vot':
@@ -82,10 +91,11 @@ switch ($httpRedirectRequest) {
     case '/song':
         if (!isset($_COOKIE['vot_access_token'])) {
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Song/SongTournamentView.php';
         } else {
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Song/SongTournamentView.php';
         }
-        require __DIR__ . '/../Views/Song/SongTournamentView.php';
         break;
 
     case '/song/vot':
@@ -191,28 +201,56 @@ switch ($httpRedirectRequest) {
         }
         break;
 
-    case '/entry':
-        # TODO: block non-admin access to this page properly through privilege levels
-        require __DIR__ . '/../Views/EntryView.php';
-        break;
-
-    case '/logout':
-        $userAccessCookie = $_COOKIE['vot_access_token'];
-
-        if (!isset($userAccessCookie)) {
-            # TODO: proper HTTP handling page
+    /*     case '/entry':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            // Deny everyone access to entry file ('logout' scenario) even the website owner
+            // TODO: Find a way to retrieve the IP address of the person that trying to access the file
+            error_log(message: "Someone tried to access entry file without permission from website owner!!!", message_type: 0);
             exit(header(
                 header: 'Location: /home',
                 replace: true,
                 response_code: 302
             ));
         } else {
-            getUserLogOut(cookie: $userAccessCookie);
+            $osuUserAccessToken = $_COOKIE['vot_access_token'];
+            $osuUserData = getOsuUserData(token: $osuUserAccessToken);
+
+            if ($osuUserData['username'] !== 'DeepInDark') {
+                // Deny everyone access to entry file ('login' scenario) expect the website owner
+                // TODO: Find a way to retrieve the IP address of the person that trying to access the file
+                error_log(message: "Someone tried to access entry file without permission from website owner!!!", message_type: 0);
+                exit(header(
+                    header: 'Location: /home',
+                    replace: true,
+                    response_code: 302
+                ));
+            } else {
+                // Only me (the website owner) can access entry file
+                require __DIR__ . '/../Views/EntryView.php';
+            }
+        }
+        break; */
+
+    case '/logout':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            exit(header(
+                header: 'Location: /home',
+                replace: true,
+                response_code: 302
+            ));
+        } else {
+            $userAccesstoken = $_COOKIE['vot_access_token'];
+            getUserLogOut(cookie: $userAccesstoken);
             require __DIR__ . '/../Views/LogOutView.php';
             break;
         }
 
     default:
-        http_response_code(404);
+        /* // Any URL paths that I haven't configured will be sent back to 'Home' page
+        exit(header(
+            header: 'Location: /home',
+            replace: true,
+            response_code: 302
+        )); */
         break;
 }
