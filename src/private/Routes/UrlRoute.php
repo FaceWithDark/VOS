@@ -201,6 +201,50 @@ switch ($httpRedirectRequest) {
         }
         break;
 
+    case '/vot5':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Tournament/Vot5TournamentView.php';
+        } else {
+            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Tournament/Vot5TournamentView.php';
+        }
+        break;
+
+    case '/vot5/mappool':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            // No need to fetch new beatmap data (if any), read beatmap data
+            // straight away within the include 'View' file
+            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Tournament/Vot5MappoolView.php';
+        } else {
+            // In need of fetching new beatmap data (if any) using the below
+            // data fetching method
+            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+
+            if (!isset($_GET['round'])) {
+                // Do nothing, show the page only
+                require __DIR__ . '/../Views/Tournament/Vot5MappoolView.php';
+            } else {
+                // Perform the MVC, after button get clicked
+                require __DIR__ . '/../Views/Tournament/Vot5MappoolView.php';
+                $vot5TournamentName = explode(
+                    separator: '/',
+                    string: trim(
+                        string: $_SERVER['REQUEST_URI'],
+                        characters: '/'
+                    ),
+                    limit: PHP_INT_MAX
+                )[0];
+                $vot5TournamentRound = $_GET['round'];
+                getTournamentMappool(
+                    name: $vot5TournamentName,
+                    round: $vot5TournamentRound
+                );
+            }
+        }
+        break;
+
     case '/entry':
         if (!isset($_COOKIE['vot_access_token'])) {
             // Deny everyone access to entry file ('logout' scenario) even the website owner

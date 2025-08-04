@@ -21,10 +21,11 @@ function getTournamentMappool(
     $mappoolAccessToken = $_COOKIE['vot_access_token'];
 
     switch ($name) {
-        case 'vot4':
-        case 'vot3':
-        case 'vot2':
         case 'vot1':
+        case 'vot2':
+        case 'vot3':
+        case 'vot4':
+        case 'vot5':
             $mappoolViewableJsonData = file_get_contents(
                 filename: $mappoolJsonData,
                 use_include_path: false,
