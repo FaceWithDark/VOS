@@ -274,7 +274,6 @@ body section.vot3-page div.vot-center-button-container a,
 body section.vot4-page div.vot-center-button-container a,
 body section.staff-page div.vot-center-button-container a,
 body section.staff-vot-page div.vot-center-button-container a,
-body section.archive-vtc-page div.vot-center-button-container a,
 body section.custom-song-page div.vot-center-button-container a {
 	padding: 1rem;
 	font-weight: bold;
@@ -322,7 +321,7 @@ body section.vot4-staff div.box-container {
 	display: flex;
 	flex-direction: column;
 	margin-bottom: 2rem;
-	/* background-color: lightblue; */
+	background-color: lightblue;
 	width: 25%;
 	border-radius: 1.5rem;
 }
