@@ -110,6 +110,7 @@ require __DIR__ . '/../../Configurations/Length.php';
                             </div>
                         </div>
                     </div>
+                </div>
                 EOL;
 
             // It would be much more nasty if I tried to output this using the traditional mixed HTML & PHP codes

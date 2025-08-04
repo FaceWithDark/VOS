@@ -8,15 +8,16 @@ require __DIR__ . '/../Configurations/Database.php';
 function getStaffData(array $data): null
 {
     foreach ($data as $staff_data) {
-        $staffId         = $staff_data['staff_id'];
-        $staffName       = $staff_data['staff_name'];
-        $staffRole       = $staff_data['staff_role'];
-        $staffFlag       = $staff_data['staff_flag'];
-        $staffImage      = $staff_data['staff_image'];
-        $staffUrl        = $staff_data['staff_url'];
-        $staffRank       = $staff_data['staff_rank'];
-        $staffTimeZone   = $staff_data['staff_time_zone'];
-        $staffDatabase   = $GLOBALS['votDatabaseHandle'];
+        $staffId            = $staff_data['staff_id'];
+        $staffTournamentId  = $staff_data['staff_tournament_id'];
+        $staffName          = $staff_data['staff_name'];
+        $staffRole          = $staff_data['staff_role'];
+        $staffFlag          = $staff_data['staff_flag'];
+        $staffImage         = $staff_data['staff_image'];
+        $staffUrl           = $staff_data['staff_url'];
+        $staffRank          = $staff_data['staff_rank'];
+        $staffTimeZone      = $staff_data['staff_time_zone'];
+        $staffDatabase      = $GLOBALS['votDatabaseHandle'];
 
         if (!checkStaffData(id: $staffId, database_handle: $staffDatabase)) {
             createStaffData(
@@ -28,7 +29,8 @@ function getStaffData(array $data): null
                 url: $staffUrl,
                 rank: $staffRank,
                 time_zone: $staffTimeZone,
-                database_handle: $staffDatabase
+                database_handle: $staffDatabase,
+                tournament_id: $staffTournamentId
             );
         } else {
             // TODO: UPDATE query here (change the 'view' table only, not the actual table if all data stay the same).
