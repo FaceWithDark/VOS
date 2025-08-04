@@ -1,5 +1,15 @@
 {
     "vot4": {
+        "QF": {
+            "custom_song_round": "QF",
+            "custom_song_id": 4692888,
+            "custom_song_mod": "HDHR1"
+        },
+        "FNL": {
+            "custom_song_round": "FNL",
+            "custom_song_id": 4713744,
+            "custom_song_mod": "TB"
+        },
         "GF": {
             "custom_song_round": "GF",
             "custom_song_id": 4724485,

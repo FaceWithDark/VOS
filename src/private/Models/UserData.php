@@ -3,20 +3,22 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../Configurations/Database.php';
+require_once __DIR__ . '/../Configurations/PrettyArray.php';
 
 
 function getUserData(array $data): null
 {
     foreach ($data as $user_data) {
-        $userId         = $user_data['osu_user_id'];
-        $userName       = $user_data['osu_user_name'];
-        $userRole       = $user_data['osu_user_role'];
-        $userFlag       = $user_data['osu_user_flag'];
-        $userImage      = $user_data['osu_user_image'];
-        $userUrl        = $user_data['osu_user_url'];
-        $userRank       = $user_data['osu_user_rank'];
-        $userTimeZone   = $user_data['osu_user_time_zone'];
-        $userDatabase   = $GLOBALS['votDatabaseHandle'];
+        $userId             = $user_data['osu_user_id'];
+        $userTournamentId   = $user_data['osu_user_tournament_id'];
+        $userName           = $user_data['osu_user_name'];
+        $userRole           = $user_data['osu_user_role'];
+        $userFlag           = $user_data['osu_user_flag'];
+        $userImage          = $user_data['osu_user_image'];
+        $userUrl            = $user_data['osu_user_url'];
+        $userRank           = $user_data['osu_user_rank'];
+        $userTimeZone       = $user_data['osu_user_time_zone'];
+        $userDatabase       = $GLOBALS['votDatabaseHandle'];
 
         if (!checkUserData(id: $userId, database_handle: $userDatabase)) {
             createUserData(
@@ -28,7 +30,8 @@ function getUserData(array $data): null
                 url: $userUrl,
                 rank: $userRank,
                 time_zone: $userTimeZone,
-                database_handle: $userDatabase
+                database_handle: $userDatabase,
+                tournament_id: $userTournamentId
             );
         } else {
             // TODO: UPDATE query here (change the 'view' table only, not the actual table if all data stay the same).
@@ -148,12 +151,8 @@ function readUserData(
     $readQuery = "
         SELECT
             vu.userName,
-            vu.userRole,
-            vu.userFlag,
             vu.userImage,
-            vu.userUrl,
-            vu.userRank,
-            vu.userTimeZone
+            vu.userUrl
         FROM
             VotUser vu
         JOIN

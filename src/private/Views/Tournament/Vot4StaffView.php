@@ -51,7 +51,10 @@ require __DIR__ . '/../../Models/Staff.php';
             $vot4TournamentStaffFlag        = htmlspecialchars("https://flagsapi.com/{$vot4TournamentStaffDisplayData['userFlag']}/shiny/24.png");
             $vot4TournamentStaffImage       = htmlspecialchars($vot4TournamentStaffDisplayData['userImage']);
             $vot4TournamentStaffUrl         = htmlspecialchars($vot4TournamentStaffDisplayData['userUrl']);
-            $vot4TournamentStaffRank        = htmlspecialchars($vot4TournamentStaffDisplayData['userRank']);
+            $vot4TournamentStaffRank
+                = ($vot4TournamentStaffDisplayData['userRank'] !== 0)
+                ? $vot4TournamentStaffDisplayData['userRank']
+                : htmlspecialchars('NO DATA'); // That one staff not even playin' a single taiko map...
             $vot4TournamentStaffTimeZone    = htmlspecialchars($vot4TournamentStaffDisplayData['userTimeZone']);
 
             $staffDisplayTemplate =
@@ -59,30 +62,30 @@ require __DIR__ . '/../../Models/Staff.php';
                 <div class="box-container">
                     <div class="staff-header">
                         <div class="staff-name">
-                            <h1>$vot4TournamentStaffDisplayName</h1>
+                            <h1>$vot4TournamentStaffName</h1>
                         </div>
                         <div class="staff-flag">
-                            <img src="$vot4TournamentStaffDisplayFlag" alt="Staff Country Flag">
+                            <img src="$vot4TournamentStaffFlag" alt="Staff Country Flag">
                         </div>
                     </div>
 
                     <div class="staff-body">
                         <div class="staff-image">
-                            <a href="$vot4TournamentStaffDisplayUrl">
-                                <img src="$vot4TournamentStaffDisplayImage" alt="Staff Avatar">
+                            <a href="$vot4TournamentStaffUrl">
+                                <img src="$vot4TournamentStaffImage" alt="Staff Avatar">
                             </a>
                         </div>
                     </div>
 
                     <div class="staff-footer">
                         <div class="staff-role">
-                            <h2>$vot4TournamentStaffDisplayRole</h2>
+                            <h2>$vot4TournamentStaffRole</h2>
                         </div>
                         <div class="staff-rank">
-                            <h3>Rank: $vot4TournamentStaffDisplayRank</h3>
+                            <h3>Rank: $vot4TournamentStaffRank</h3>
                         </div>
                         <div class="staff-time-zone">
-                            <h3>Time Zone: $vot4TournamentStaffDisplayTimeZone</h3>
+                            <h3>Time Zone: $vot4TournamentStaffTimeZone</h3>
                         </div>
                     </div>
                 </div>

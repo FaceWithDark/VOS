@@ -219,27 +219,29 @@ function getOsuUserAccessToken(
 function getOsuUser(
     $token
 ): array {
-    $allOsuUserData     = [];
-    $osuUserData        = getOsuUserData(token: $token);
+    $allOsuUserData         = [];
+    $osuUserData            = getOsuUserData(token: $token);
 
-    $osuUserId          = $osuUserData['id'];
-    $osuUserName        = $osuUserData['username'];
-    $osuUserRole        = 'User'; // Everyone have user-level access by default
-    $osuUserFlag        = $osuUserData['country_code'];
-    $osuUserImage       = $osuUserData['avatar_url'];
-    $osuUserUrl         = "https://osu.ppy.sh/users/{$osuUserData['id']}";
-    $osuUserRank        = $osuUserData['statistics']['global_rank'];
-    $osuUserTimeZone    = getUserTimeZone()['baseOffset'];
+    $osuUserId              = $osuUserData['id'];
+    $osuUserTournamentId    = 'NONE'; // Everyone belong to none tournament by default
+    $osuUserName            = $osuUserData['username'];
+    $osuUserRole            = 'User'; // Everyone have user-level access by default
+    $osuUserFlag            = $osuUserData['country_code'];
+    $osuUserImage           = $osuUserData['avatar_url'];
+    $osuUserUrl             = "https://osu.ppy.sh/users/{$osuUserData['id']}";
+    $osuUserRank            = $osuUserData['statistics']['global_rank'];
+    $osuUserTimeZone        = getUserTimeZone()['baseOffset'];
 
-    $allOsuUserData[]   = [
-        "osu_user_id"           => $osuUserId,
-        "osu_user_name"         => $osuUserName,
-        "osu_user_role"         => $osuUserRole,
-        "osu_user_flag"         => $osuUserFlag,
-        "osu_user_image"        => $osuUserImage,
-        "osu_user_url"          => $osuUserUrl,
-        "osu_user_rank"         => $osuUserRank,
-        "osu_user_time_zone"    => $osuUserTimeZone
+    $allOsuUserData[]       = [
+        'osu_user_id'               => $osuUserId,
+        'osu_user_tournament_id'    => $osuUserTournamentId,
+        'osu_user_name'             => $osuUserName,
+        'osu_user_role'             => $osuUserRole,
+        'osu_user_flag'             => $osuUserFlag,
+        'osu_user_image'            => $osuUserImage,
+        'osu_user_url'              => $osuUserUrl,
+        'osu_user_rank'             => $osuUserRank,
+        'osu_user_time_zone'        => $osuUserTimeZone
     ];
 
     getUserData(data: $allOsuUserData);
