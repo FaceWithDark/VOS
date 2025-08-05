@@ -2,10 +2,8 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
-require __DIR__ . '/../../Configurations/Database.php';
 require __DIR__ . '/../../Models/Staff.php';
 ?>
-
 
 <header>
     <h1>VOT4 Staff</h1>
@@ -13,103 +11,89 @@ require __DIR__ . '/../../Models/Staff.php';
 
 <section class="vot4-staff">
     <form action="/vot4/staff" method="get">
-        <button type="submit" name="role" value="default">Default</button>
-        <button type="submit" name="role" value="host">Host</button>
-        <button type="submit" name="role" value="mappooler">Mappooler</button>
-        <button type="submit" name="role" value="gfx_vfx">GFX/VFX</button>
-        <button type="submit" name="role" value="mapper">Mapper</button>
-        <button type="submit" name="role" value="play_tester">Play Tester</button>
-        <button type="submit" name="role" value="referee">Referee</button>
-        <button type="submit" name="role" value="streamer">Streamer</button>
-        <button type="submit" name="role" value="commentator">Commentator</button>
-        <button type="submit" name="role" value="statistician">Statistician</button>
+        <button type="submit" name="role" value="DEFAULT">Default</button>
+        <button type="submit" name="role" value="HOST">Host</button>
+        <button type="submit" name="role" value="MAPPOOLER">Mappooler</button>
+        <button type="submit" name="role" value="GFX_VFX">GFX/VFX</button>
+        <button type="submit" name="role" value="MAPPER">Mapper</button>
+        <button type="submit" name="role" value="PLAY_TESTER">Play Tester</button>
+        <button type="submit" name="role" value="REFEREE">Referee</button>
+        <button type="submit" name="role" value="STREAMER">Streamer</button>
+        <button type="submit" name="role" value="COMMENTATOR">Commentator</button>
+        <button type="submit" name="role" value="STATISTICIAN">Statistician</button>
     </form>
 
     <?php
-    if (isset($_COOKIE['vot_access_token'])) {
-        if (isset($_GET['role'])) {
-            $staffRoleName = $_GET['role'];
+    $vot4TournamentName = explode(
+        separator: '/',
+        string: trim(
+            string: $_SERVER['REQUEST_URI'],
+            characters: '/'
+        ),
+        limit: PHP_INT_MAX
+    )[0];
+    $vot4TournamentDatabase = $GLOBALS['votDatabaseHandle'];
 
-            switch ($staffRoleName) {
-                case 'default':
-                    $staffJsonData = __DIR__ . '/../../Datas/Staff/VotStaffData.json';
-                    $staffDatabase = $GLOBALS['votDatabaseHandle'];
-                    $staffViewableJsonData = file_get_contents(
-                        filename: $staffJsonData,
-                        use_include_path: false,
-                        context: null,
-                        offset: 0,
-                        length: null
-                    );
-
-                    $staffReadableJsonData = json_decode(
-                        json: $staffViewableJsonData,
-                        associative: true
-                    );
-
-                    foreach ($staffReadableJsonData as $staffRoleJsonData) {
-                        foreach ($staffRoleJsonData['host_role'] as $staffRoleSpecificIdJsonData) {
-                            $staffFetchedData = readStaffData(
-                                staff_id: $staffRoleSpecificIdJsonData,
-                                database_handle: $staffDatabase
-                            );
-
-                            foreach ($staffFetchedData as $staffDisplayData) {
-                                // echo '<pre>' . print_r($staffDisplayData, true) . '</pre>';
-                                $staffDisplayName       = htmlspecialchars($staffDisplayData['userName']);
-                                $staffDisplayRole       = htmlspecialchars($staffDisplayData['userRole']);
-                                $staffDisplayFlag       = htmlspecialchars("https://flagsapi.com/{$staffDisplayData['userFlag']}/shiny/24.png");
-                                $staffDisplayImage      = htmlspecialchars($staffDisplayData['userImage']);
-                                $staffDisplayUrl        = htmlspecialchars($staffDisplayData['userUrl']);
-                                $staffDisplayRank       = htmlspecialchars($staffDisplayData['userRank']);
-                                $staffDisplayTimeZone   = htmlspecialchars($staffDisplayData['userTimeZone']);
-
-
-                                $staffDisplayTemplate   =
-                                    <<<EOL
-                                        <div class="box-container">
-                                            <div class="staff-header">
-                                                <div class="staff-name">
-                                                    <h1>$staffDisplayName</h1>
-                                                </div>
-                                                <div class="staff-flag">
-                                                    <img src="$staffDisplayFlag" alt="Staff Country Flag">
-                                                </div>
-                                            </div>
-
-                                            <div class="staff-body">
-                                                <div class="staff-image">
-                                                    <a href="$staffDisplayUrl">
-                                                        <img src="$staffDisplayImage" alt="Staff Avatar">
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="staff-footer">
-                                                <div class="staff-role">
-                                                    <h2>$staffDisplayRole</h2>
-                                                </div>
-                                                <div class="staff-rank">
-                                                    <h3>Rank: $staffDisplayRank</h3>
-                                                </div>
-                                                <div class="staff-time-zone">
-                                                    <h3>Time Zone: $staffDisplayTimeZone</h3>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    EOL;
-
-                                // It would be much more nasty if I tried to output this using the traditional mixed HTML & PHP codes
-                                echo $staffDisplayTemplate;
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
+    if (!isset($_GET['role'])) {
+        echo 'Among Us';
     } else {
-        // TODO: This is not working yet. Fix later (if possible).
-        http_response_code(400);
+        $vot4StaffRole = $_GET['role'];
+
+        $vot4TournamentStaffData = readStaffData(
+            role: $vot4StaffRole,
+            name: $vot4TournamentName,
+            database_handle: $vot4TournamentDatabase
+        );
+
+        foreach ($vot4TournamentStaffData as $vot4TournamentStaffDisplayData) {
+            $vot4TournamentStaffName        = htmlspecialchars($vot4TournamentStaffDisplayData['userName']);
+            $vot4TournamentStaffRole        = htmlspecialchars($vot4TournamentStaffDisplayData['userRole']);
+            $vot4TournamentStaffFlag        = htmlspecialchars("https://flagsapi.com/{$vot4TournamentStaffDisplayData['userFlag']}/shiny/24.png");
+            $vot4TournamentStaffImage       = htmlspecialchars($vot4TournamentStaffDisplayData['userImage']);
+            $vot4TournamentStaffUrl         = htmlspecialchars($vot4TournamentStaffDisplayData['userUrl']);
+            $vot4TournamentStaffRank
+                = ($vot4TournamentStaffDisplayData['userRank'] !== 0)
+                ? $vot4TournamentStaffDisplayData['userRank']
+                : htmlspecialchars('NO DATA'); // That one staff not even playin' a single taiko map...
+            $vot4TournamentStaffTimeZone    = htmlspecialchars($vot4TournamentStaffDisplayData['userTimeZone']);
+
+            $staffDisplayTemplate =
+                <<<EOL
+                <div class="box-container">
+                    <div class="staff-header">
+                        <div class="staff-name">
+                            <h1>$vot4TournamentStaffName</h1>
+                        </div>
+                        <div class="staff-flag">
+                            <img src="$vot4TournamentStaffFlag" alt="Staff Country Flag">
+                        </div>
+                    </div>
+
+                    <div class="staff-body">
+                        <div class="staff-image">
+                            <a href="$vot4TournamentStaffUrl">
+                                <img src="$vot4TournamentStaffImage" alt="Staff Avatar">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="staff-footer">
+                        <div class="staff-role">
+                            <h2>$vot4TournamentStaffRole</h2>
+                        </div>
+                        <div class="staff-rank">
+                            <h3>Rank: $vot4TournamentStaffRank</h3>
+                        </div>
+                        <div class="staff-time-zone">
+                            <h3>Time Zone: $vot4TournamentStaffTimeZone</h3>
+                        </div>
+                    </div>
+                </div>
+                EOL;
+
+            // It would be much more nasty if I tried to output this using the traditional mixed HTML & PHP codes
+            echo $staffDisplayTemplate;
+        }
     }
     ?>
 </section>
