@@ -1,10 +1,3 @@
-<?php
-# Not so much like static types, but at least it does feel better having this here
-declare(strict_types=1);
-
-require __DIR__ . '/../../Models/UserData.php';
-?>
-
 <!-- XHTML 1.0 compatible -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -39,19 +32,6 @@ require __DIR__ . '/../../Models/UserData.php';
     <meta name="HandheldFriendly" content="true" />
 
     <title>VOT</title>
-
-    <!-- CSS files -->
-    <link rel="stylesheet" type="text/css" href="/assets/css/TagReset.css" />
-    <link rel="stylesheet" type="text/css" href="/assets/css/Global.css" />
-    <link rel="stylesheet" type="text/css" href="/assets/css/Navigation.css" />
-    <link rel="stylesheet" type="text/css" href="/assets/css/ThemeSwitch.css" />
-
-    <!-- Icon file -->
-    <link rel='stylesheet' type="text/css" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' />
-
-    <!-- JS file -->
-    <script type="text/javascript" src="/assets/js/collapsibleNavigationBar.js"></script>
-    <script type="text/javascript" src="/assets/js/themeSwitchButton.js"></script>
 
     <!-- Browser compatible -->
     <link rel="icon" type="image/png" sizes="96x96" href="/assets/ico/favicon-96x96.png" />
@@ -118,78 +98,6 @@ require __DIR__ . '/../../Models/UserData.php';
 </head>
 
 <body>
-    <nav class="collapsed">
-        <div class="top-navigation-section">
-            <i class="bx bx-menu" id="collapsible-icon"></i>
-        </div>
-
-        <?php
-        $votUserDatabase = $GLOBALS['votDatabaseHandle'];
-
-        $votUserData = readUserData(
-            database_handle: $votUserDatabase
-        );
-
-        $votUserName    = htmlspecialchars($votUserData['userName']);
-        $votUserImage   = htmlspecialchars($votUserData['userImage']);
-        $votUserUrl     = htmlspecialchars($votUserData['userUrl']);
-
-        $userDisplayTemplate =
-            <<<EOL
-            <div class="middle-navigation-first-section">
-                <a href="$votUserUrl">
-                    <img src="$votUserImage" alt="User Avatar" class="user-image">
-                    <p>$votUserName</p>
-                </a>
-            </div>
-            EOL;
-
-        // It would be much more nasty if I tried to output this using the traditional mixed HTML & PHP codes
-        echo $userDisplayTemplate;
-        ?>
-
-        <div class="middle-navigation-second-section">
-            <ul>
-                <li>
-                    <a href="/logout">
-                        <i class='bx bx-user-minus'></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/home">
-                        <i class="bx bxs-grid-alt"></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/archive">
-                        <i class="bx bxs-box"></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/staff">
-                        <i class="bx bxs-phone"></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/song">
-                        <i class="bx bxs-music"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="bottom-navigation-section">
-            <div class="vot-theme-tray">
-                <i class='bx bxs-sun' id="light-theme"></i>
-                <i class='bx bx-desktop' id="system-theme"></i>
-                <i class='bx bxs-moon' id="dark-theme"></i>
-            </div>
-        </div>
-    </nav>
+    <h1 style="display: flex; justify-content: center; align-items: center;">Hello there, you have <strong style="margin: 0rem 1.25rem; color: coral;">LOG OUT</strong> from your account successfully!</h1>
+    <p style="display: flex; justify-content: flex-end; align-items: flex-end; font-weight: bold;"><a href="/home">Home Page</a></p>
 </body>
-
-</html>
