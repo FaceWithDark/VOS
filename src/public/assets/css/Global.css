@@ -202,7 +202,7 @@ body section div.button-container button {
 /* TODO: End of "May need to delete these and do a more reasonable styling approach". */
 
 
-/* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES*/
+/* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES */
 body section div.announcement-box,
 body section div.lower-general-information-box {
 	margin: 1.5rem;
@@ -250,140 +250,268 @@ body section div.announcement-box div.youtube-iframe-container iframe {
 }
 
 
-/* BOXES OF DIRECT LINKS FORMAT FOR SPECIFIC PAGES */
-body section div.flex-container div.direct-link-container,
-body section div.mappool-page div.mappool-card-container,
-body section div.staff-page div.staff-card-container,
-body section div.song-page div.song-card-container {
-	padding: 1rem;
-	margin-bottom: 1.5rem;
-	border-radius: 1.5rem;
-}
-
-body section div.flex-container div.direct-link-container:not(:first-child),
-body section div.mappool-page div.mappool-card-container:not(:first-child),
-body section div.staff-page div.staff-card-container:not(:first-child),
-body section div.song-page div.song-card-container:not(:first-child) {
-	margin-left: .75rem;
-}
-
-body section div.flex-container div.direct-link-container a {
-	font-weight: bold;
-	font-size: 0.85rem;
-	/* Safari compatability. */
-	-webkit-user-select: none;
-	/* Others broswer compatability. */
-	user-select: none;
-}
-
-
-/* NO-HEADER PAGES */
-body section div.mappool-page,
-body section div.staff-page,
-body section div.song-page {
+/* PAGES THAT USE <a> TAG */
+body section.archive-page div.vot-center-button-container,
+body section.archive-vot-page div.vot-center-button-container,
+body section.vot1-page div.vot-center-button-container,
+body section.vot2-page div.vot-center-button-container,
+body section.vot3-page div.vot-center-button-container,
+body section.vot4-page div.vot-center-button-container,
+body section.vot5-page div.vot-center-button-container,
+body section.staff-page div.vot-center-button-container,
+body section.staff-vot-page div.vot-center-button-container,
+body section.custom-song-page div.vot-center-button-container {
 	display: flex;
+	flex-direction: row;
 	justify-content: space-evenly;
 	flex-wrap: wrap;
 }
 
-body section div.mappool-page div.mappool-card-container,
-body section div.song-page div.song-card-container {
+body section.archive-page div.vot-center-button-container a,
+body section.archive-vot-page div.vot-center-button-container a,
+body section.vot1-page div.vot-center-button-container a,
+body section.vot2-page div.vot-center-button-container a,
+body section.vot3-page div.vot-center-button-container a,
+body section.vot4-page div.vot-center-button-container a,
+body section.vot5-page div.vot-center-button-container a,
+body section.staff-page div.vot-center-button-container a,
+body section.staff-vot-page div.vot-center-button-container a,
+body section.custom-song-page div.vot-center-button-container a {
+	padding: 1rem;
+	font-weight: bold;
+	border-radius: 1.5rem;
+	border-style: none;
+	margin: 0rem 0.5rem 1.5rem 0rem;
+	font-size: 0.85rem;
+}
+
+
+/* PAGES THAT USE <button> TAG */
+body section.vot4-mappool form,
+body section.vot5-mappool form,
+body section.vot4-staff form,
+body section.custom-song-vot-page form {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+}
+
+body section.vot4-mappool form button,
+body section.vot5-mappool form button,
+body section.vot4-staff form button,
+body section.custom-song-vot-page form button {
+	padding: 1rem;
+	font-weight: bold;
+	border-radius: 1.5rem;
+	border-style: none;
+	margin: 0rem 1rem 1.5rem 0rem;
+	font-size: 0.85rem;
+}
+
+
+/* PAGES THAT USE BOX UI STYLE */
+body section.vot4-mappool div.box-container,
+body section.vot5-mappool div.box-container,
+body section.custom-song-vot-page div.box-container {
 	display: flex;
 	flex-direction: column;
-	text-align: center;
+	margin-bottom: 2rem;
+	background-color: lightblue;
+	width: 50%;
+	border-radius: 1.5rem;
+}
+
+body section.vot4-staff div.box-container {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 2rem;
+	background-color: lightblue;
+	width: 25%;
+	border-radius: 1.5rem;
+}
+
+body section.vot4-mappool div.box-container div.song-type,
+body section.vot4-mappool div.box-container div.song-image,
+body section.vot4-mappool div.box-container div.song-name,
+body section.vot4-mappool div.box-container div.song-feature-artist,
+body section.vot4-mappool div.box-container div.song-mapper,
+body section.vot5-mappool div.box-container div.song-type,
+body section.vot5-mappool div.box-container div.song-image,
+body section.vot5-mappool div.box-container div.song-name,
+body section.vot5-mappool div.box-container div.song-feature-artist,
+body section.vot5-mappool div.box-container div.song-mapper {
+
+	display: flex;
+	flex-direction: row;
 	justify-content: center;
-	width: 30rem;
-	word-wrap: break-word;
+	padding: 0.5rem 0rem;
 }
 
-body section div.mappool-page div.mappool-card-container h1,
-body section div.mappool-page div.mappool-card-container h2,
-body section div.song-page div.song-card-container h1,
-body section div.song-page div.song-card-container h2 {
-	font-weight: bold;
+body section.vot4-mappool div.box-container div.song-attributes,
+body section.vot5-mappool div.box-container div.song-attributes {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	padding: 0.5rem 0rem;
 }
 
-body section div.mappool-page div.mappool-card-container a,
-body section div.song-page div.song-card-container a {
-	color: var(--light-accent-colour);
-	/* Safari compatability. */
-	-webkit-user-select: none;
-	/* Others broswer compatability. */
-	user-select: none;
-	font-weight: bold;
-	padding: 1rem 0;
-}
-
-body section div.mappool-page div.mappool-card-container a img,
-body section div.song-page div.song-card-container a img {
+body section.vot4-mappool div.box-container div.song-image a img,
+body section.vot5-mappool div.box-container div.song-image a img {
 	width: 100%;
 	height: auto;
 }
 
-body section div.mappool-page div.mappool-card-container h3,
-body section div.song-page div.song-card-container h3 {
-	padding-top: .75rem;
+body section.vot4-mappool div.box-container div.song-type h1,
+body section.vot4-mappool div.box-container div.song-name h2,
+body section.vot4-mappool div.box-container div.song-feature-artist h3,
+body section.vot4-mappool div.box-container div.song-mapper h4,
+body section.vot5-mappool div.box-container div.song-type h1,
+body section.vot5-mappool div.box-container div.song-name h2,
+body section.vot5-mappool div.box-container div.song-feature-artist h3,
+body section.vot5-mappool div.box-container div.song-mapper h4 {
+
+	font-weight: bold;
+	font-size: 1.025rem;
 }
 
-body section div.mappool-page div.mappool-card-container div.beatmap-attribute-row,
-body section div.song-page div.song-card-container div.beatmap-attribute-row {
+body section.vot4-mappool div.box-container div.song-attributes div.song-star-rating,
+body section.vot4-mappool div.box-container div.song-attributes div.song-length,
+body section.vot4-mappool div.box-container div.song-attributes div.song-speed,
+body section.vot4-mappool div.box-container div.song-attributes div.song-od,
+body section.vot4-mappool div.box-container div.song-attributes div.song-hp,
+body section.vot4-mappool div.box-container div.song-attributes div.song-pass,
+body section.vot5-mappool div.box-container div.song-attributes div.song-star-rating,
+body section.vot5-mappool div.box-container div.song-attributes div.song-length,
+body section.vot5-mappool div.box-container div.song-attributes div.song-speed,
+body section.vot5-mappool div.box-container div.song-attributes div.song-od,
+body section.vot5-mappool div.box-container div.song-attributes div.song-hp,
+body section.vot5-mappool div.box-container div.song-attributes div.song-pass {
+
 	display: flex;
-	justify-content: space-evenly;
-	padding: .75rem 0;
+	flex-direction: row;
 }
 
-body section div.mappool-page div.mappool-card-container div.beatmap-attribute-row p,
-body section div.song-page div.song-card-container div.beatmap-attribute-row p {
-	font-weight: 500;
+body section.vot4-mappool div.box-container div.song-attributes div.song-star-rating p,
+body section.vot4-mappool div.box-container div.song-attributes div.song-length p,
+body section.vot4-mappool div.box-container div.song-attributes div.song-speed p,
+body section.vot4-mappool div.box-container div.song-attributes div.song-od p,
+body section.vot4-mappool div.box-container div.song-attributes div.song-hp p,
+body section.vot4-mappool div.box-container div.song-attributes div.song-pass p,
+body section.vot5-mappool div.box-container div.song-attributes div.song-star-rating p,
+body section.vot5-mappool div.box-container div.song-attributes div.song-length p,
+body section.vot5-mappool div.box-container div.song-attributes div.song-speed p,
+body section.vot5-mappool div.box-container div.song-attributes div.song-od p,
+body section.vot5-mappool div.box-container div.song-attributes div.song-hp p,
+body section.vot5-mappool div.box-container div.song-attributes div.song-pass p {
+
+	padding: 0rem 0.25rem;
+	font-weight: bold;
+	font-size: 1.025rem;
+}
+
+body section.vot4-staff div.box-container div.staff-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+body section.custom-song-vot-page div.box-container div.custom-song-header {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+body section.vot4-staff div.box-container div.staff-header div.staff-name,
+body section.vot4-staff div.box-container div.staff-header div.staff-flag,
+body section.custom-song-vot-page div.box-container div.custom-song-header div.custom-song-tournament,
+body section.custom-song-vot-page div.box-container div.custom-song-header div.custom-song-round,
+body section.custom-song-vot-page div.box-container div.custom-song-header div.custom-song-type {
+	display: flex;
+	flex-direction: row;
+	padding: 0.5rem 0.25rem 0rem 0.25rem;
+}
+
+body section.vot4-staff div.box-container div.staff-header div.staff-name h1,
+body section.custom-song-vot-page div.box-container div.custom-song-header div.custom-song-tournament h1,
+body section.custom-song-vot-page div.box-container div.custom-song-header div.custom-song-round h1,
+body section.custom-song-vot-page div.box-container div.custom-song-header div.custom-song-type h1 {
+	font-weight: bold;
+	font-size: 1.025rem;
 }
 
 
-/* VOT-SPECIFIC PAGE */
-body div.vot-page section div.upper-general-information-box img {
-	padding-left: 1.5rem;
-	max-width: 95%;
+body section.vot4-staff div.box-container div.staff-header div.staff-flag img {
+	/* Although we have set 'center' value to it, it looks not too centered for me at all */
+	padding-bottom: 0.25rem;
+}
+
+body section.vot4-staff div.box-container div.staff-body,
+body section.custom-song-vot-page div.box-container div.custom-song-body {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+body section.vot4-staff div.box-container div.staff-body div.staff-image,
+body section.custom-song-vot-page div.box-container div.custom-song-body div.custom-song-image {
+	display: flex;
+	flex-direction: column;
+	/* Use all available spaces of 1st <div> */
+	flex-grow: 1;
+	padding: 0.5rem 0;
+}
+
+body section.vot4-staff div.box-container div.staff-body div.staff-image a img,
+body section.custom-song-vot-page div.box-container div.custom-song-body div.custom-song-image a img {
+	width: 100%;
 	height: auto;
 }
 
-body div.vot-page section div.upper-general-information-box p {
-	font-size: 1rem;
-	font-weight: 500;
-	padding: 1rem;
-}
-
-body div.vot-page section div.lower-general-information-box h3 {
-	font-weight: bold;
-	padding-left: .5rem;
-	padding-bottom: 1rem;
-}
-
-body div.vot-page section div.lower-general-information-box ul li {
-	line-height: 1.275rem;
-	list-style: disc inside;
-}
-
-
-/* CARD STYLE WITH HEADER PAGES */
-body section div.staff-page div.staff-card-container {
+body section.vot4-staff div.box-container div.staff-footer,
+body section.custom-song-vot-page div.box-container div.custom-song-footer {
 	display: flex;
 	flex-direction: column;
-	text-align: center;
-	justify-content: center;
-	width: 25rem;
-	word-wrap: break-word;
+	align-items: center;
 }
 
-body section div.staff-page div.staff-card-container h1,
-body section div.staff-page div.staff-card-container h2 {
+body section.vot4-staff div.box-container div.staff-footer div.staff-role,
+body section.vot4-staff div.box-container div.staff-footer div.staff-rank,
+body section.vot4-staff div.box-container div.staff-footer div.staff-time-zone,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-name,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-feature-artist,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-mapper,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes {
+	display: flex;
+	flex-direction: row;
+	padding: 0rem 0.25rem 0.5rem 0.25rem;
+}
+
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-star-rating,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-length,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-speed,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-od,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-hp,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-pass {
+	display: flex;
+	flex-direction: row;
+	padding: 0rem 1.5rem;
+}
+
+body section.vot4-staff div.box-container div.staff-footer div.staff-role h2,
+body section.vot4-staff div.box-container div.staff-footer div.staff-rank h2,
+body section.vot4-staff div.box-container div.staff-footer div.staff-time-zone h2,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-name h2,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-feature-artist h3,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-mapper h4,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-star-rating p,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-length p,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-speed p,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-od p,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-hp p,
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-pass p {
 	font-weight: bold;
-}
-
-body section div.staff-page div.staff-card-container img:nth-child(1) {
-	margin: 0 .25rem;
-}
-
-body section div.staff-page div.staff-card-container img:nth-child(2) {
-	min-width: 300px;
-	min-height: 240px;
-	padding: 1.25rem 0;
+	font-size: 1.025rem;
 }
