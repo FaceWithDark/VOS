@@ -24,21 +24,35 @@ body nav.collapsed {
 }
 
 body nav.expanded~section.home-page,
-body nav.expanded~section.landing-page,
 body nav.expanded~section.archive-page,
-body nav.expanded~section.mappool-page,
+body nav.expanded~section.archive-vot-page,
 body nav.expanded~section.staff-page,
-body nav.expanded~section.song-page {
+body nav.expanded~section.staff-vot-page,
+body nav.expanded~section.custom-song-page,
+body nav.expanded~section.custom-song-vot-page,
+body nav.expanded~section.vot1-page,
+body nav.expanded~section.vot2-page,
+body nav.expanded~section.vot3-page,
+body nav.expanded~section.vot4-page,
+body nav.expanded~section.vot4-mappool,
+body nav.expanded~section.vot4-staff {
 	padding-left: 11.75rem;
 	transition: padding-left 0.325s;
 }
 
 body nav.collapsed~section.home-page,
-body nav.collapsed~section.landing-page,
 body nav.collapsed~section.archive-page,
-body nav.collapsed~section.mappool-page,
+body nav.collapsed~section.archive-vot-page,
 body nav.collapsed~section.staff-page,
-body nav.collapsed~section.song-page {
+body nav.collapsed~section.staff-vot-page,
+body nav.collapsed~section.custom-song-page,
+body nav.collapsed~section.custom-song-vot-page,
+body nav.collapsed~section.vot1-page,
+body nav.collapsed~section.vot2-page,
+body nav.collapsed~section.vot3-page,
+body nav.collapsed~section.vot4-page,
+body nav.collapsed~section.vot4-mappool,
+body nav.collapsed~section.vot4-staff {
 	padding-left: 5.75rem;
 	transition: padding-left 0.325s;
 }
@@ -142,7 +156,8 @@ body nav.collapsed div.middle-navigation-second-section ul {
 
 body nav.expanded div.middle-navigation-second-section ul li,
 body nav.collapsed div.middle-navigation-second-section ul li {
-	margin: 3.25rem 0;
+	/* TODO: 3.25rem spacing on 16:10 resolution */
+	margin: 1.25rem 0;
 }
 
 body nav.expanded div.middle-navigation-second-section ul li a,
