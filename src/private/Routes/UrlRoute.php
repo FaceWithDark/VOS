@@ -21,16 +21,12 @@ switch ($httpRedirectRequest) {
             // No need to fetch new osu user data (if any), read osu user data
             // straight away within the include 'View' file
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/HomeView.php';
+            require __DIR__ . '/../Views/Home/HomeView.php';
         } else {
             // In need of fetching new osu user data (if any) using the below
             // data fetching method
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/HomeView.php';
-
-            // Perform the MVC, after button get clicked
-            $homeAccessToken = $_COOKIE['vot_access_token'];
-            getOsuUser(token: $homeAccessToken);
+            require __DIR__ . '/../Views/Home/HomeView.php';
         }
         break;
 
@@ -275,6 +271,22 @@ switch ($httpRedirectRequest) {
         }
         break;
 
+    case '/login':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            exit(header(
+                header: 'Location: /home',
+                replace: true,
+                response_code: 302
+            ));
+            break;
+        } else {
+            require __DIR__ . '/../Views/Home/LogInView.php';
+
+            $userAccessToken = $_COOKIE['vot_access_token'];
+            getOsuUser(token: $userAccessToken);
+            break;
+        }
+
     case '/logout':
         if (!isset($_COOKIE['vot_access_token'])) {
             exit(header(
@@ -282,10 +294,12 @@ switch ($httpRedirectRequest) {
                 replace: true,
                 response_code: 302
             ));
+            break;
         } else {
             $userAccesstoken = $_COOKIE['vot_access_token'];
             getUserLogOut(cookie: $userAccesstoken);
-            require __DIR__ . '/../Views/LogOutView.php';
+
+            require __DIR__ . '/../Views/Home/LogOutView.php';
             break;
         }
 

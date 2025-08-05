@@ -101,7 +101,7 @@ function getOsuUserAccessToken(
                     httponly: true
                 );
                 exit(header(
-                    header: 'Location: /home',
+                    header: 'Location: /login',
                     replace: true,
                     response_code: 302
                 ));
@@ -118,7 +118,7 @@ function getOsuUserAccessToken(
                     httponly: true
                 );
                 exit(header(
-                    header: 'Location: /home',
+                    header: 'Location: /login',
                     replace: true,
                     response_code: 302
                 ));
