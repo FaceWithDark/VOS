@@ -220,7 +220,7 @@ function readBeatmapData(
         JOIN
             VotRound vr ON vb.roundId = vr.roundId
         JOIN
-            VotTournament vt ON vr.tournamentId = vt.tournamentId
+            VotTournament vt ON vb.tournamentId = vt.tournamentId
         WHERE
             vr.roundId = :roundId
             AND vt.tournamentId = :tournamentId

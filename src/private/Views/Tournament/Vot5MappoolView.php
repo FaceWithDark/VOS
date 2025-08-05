@@ -39,7 +39,7 @@ require __DIR__ . '/../../Configurations/Length.php';
 
         $vot5TournamentMappoolData = readBeatmapData(
             round_name: $vot5TournamentRound,
-            tournament_name: strtoupper(string: $vot5TournamentName),
+            tournament_name: $vot5TournamentName,
             database_handle: $vot5TournamentDatabase
         );
 
