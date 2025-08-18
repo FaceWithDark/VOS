@@ -246,9 +246,7 @@ function getOsuUser(
 
     getUserData(data: $allOsuUserData);
 
-    return [
-        $allOsuUserData
-    ];
+    return $allOsuUserData;
 }
 
 
