@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../Configurations/Database.php';
-require_once __DIR__ . '/../Configurations/PrettyArray.php';
 
 
 function getUserData(array $data): null
@@ -146,10 +145,12 @@ function createUserData(
 
 // Read
 function readUserData(
+    int $id,
     object $database_handle
 ): array | bool {
     $readQuery = "
         SELECT
+            vu.userId,
             vu.userName,
             vu.userImage,
             vu.userUrl
@@ -158,17 +159,16 @@ function readUserData(
         JOIN
             VotTournament vt ON vu.tournamentId = vt.tournamentId
         WHERE
-            vu.userRole = :userRole
+            vu.userId = :userId
         ORDER BY
             vu.userRole ASC;
     ";
 
     $readStatement = $database_handle->prepare($readQuery);
-    $userRoleFilter = 'User'; // There's no other way I can do to filter query result so yeah
-    $readStatement->bindParam(':userRole', $userRoleFilter, PDO::PARAM_STR);
+    $readStatement->bindParam(':userId', $id, PDO::PARAM_INT);
 
-    $successReadLogMessage = sprintf("Read successfully for all authorised user data");
-    $unsuccessReadLogMessage = sprintf("Read unsuccessfully for all authorised user data");
+    $successReadLogMessage = sprintf("Read successfully for user ID: %d", $id);
+    $unsuccessReadLogMessage = sprintf("Read unsuccessfully for user ID: %d", $id);
 
     if ($readStatement->execute()) {
         error_log(message: $successReadLogMessage, message_type: 0);

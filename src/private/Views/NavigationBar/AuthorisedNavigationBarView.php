@@ -3,6 +3,14 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../../Models/UserData.php';
+
+session_start(
+    options: [
+        'name' => 'vot_access_id',
+        'cookie_lifetime' => 86400,
+        'cookie_httponly' => 1
+    ]
+);
 ?>
 
 <!-- XHTML 1.0 compatible -->
@@ -124,9 +132,11 @@ require __DIR__ . '/../../Models/UserData.php';
         </div>
 
         <?php
-        $votUserDatabase = $GLOBALS['votDatabaseHandle'];
+        $votUserId          = $_SESSION['id'];
+        $votUserDatabase    = $GLOBALS['votDatabaseHandle'];
 
-        $votUserData = readUserData(
+        $votUserData        = readUserData(
+            id: $votUserId,
             database_handle: $votUserDatabase
         );
 

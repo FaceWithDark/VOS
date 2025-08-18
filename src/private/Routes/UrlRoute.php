@@ -8,6 +8,7 @@ require __DIR__ . '/../Configurations/TimeZone.php';
 // Controller function wrapped in its own file
 require __DIR__ . '/../Controllers/UserDataController.php';
 require __DIR__ . '/../Controllers/LogOutController.php';
+require __DIR__ . '/../Controllers/LogInController.php';
 require __DIR__ . '/../Controllers/MappoolController.php';
 require __DIR__ . '/../Controllers/StaffController.php';
 require __DIR__ . '/../Controllers/SongController.php';
@@ -280,10 +281,14 @@ switch ($httpRedirectRequest) {
             ));
             break;
         } else {
+            getUserLogIn();
+
             require __DIR__ . '/../Views/Home/LogInView.php';
 
-            $userAccessToken = $_COOKIE['vot_access_token'];
-            getOsuUser(token: $userAccessToken);
+            $userAccessToken    = $_COOKIE['vot_access_token'];
+            $osuUserData        = getOsuUser(token: $userAccessToken);
+            $_SESSION['id']     = $osuUserData[0]['osu_user_id']; // Only one user data per unique token used so it is safe to do so
+
             break;
         }
 
@@ -296,8 +301,22 @@ switch ($httpRedirectRequest) {
             ));
             break;
         } else {
-            $userAccesstoken = $_COOKIE['vot_access_token'];
-            getUserLogOut(cookie: $userAccesstoken);
+            session_start(
+                options: [
+                    'name' => 'vot_access_id',
+                    'cookie_lifetime' => 86400,
+                    'cookie_httponly' => 1,
+                    'read_and_close' => true
+                ]
+            );
+
+            $userAccessId       = $_SESSION['id'];
+            $userAccesstoken    = $_COOKIE['vot_access_token'];
+
+            getUserLogOut(
+                id: $userAccessId,
+                cookie: $userAccesstoken
+            );
 
             require __DIR__ . '/../Views/Home/LogOutView.php';
             break;
