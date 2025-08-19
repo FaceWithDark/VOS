@@ -8,7 +8,8 @@
  *  + bottom-nav-section
  */
 
-/* Navigation Bar */
+
+/* Navigation Bar (Other section) */
 body nav.expanded {
 	position: fixed;
 	width: 11rem;
@@ -57,7 +58,8 @@ body nav.collapsed~section.vot4-staff {
 	transition: padding-left 0.325s;
 }
 
-/* Navigation Bar (Top Section) */
+
+/* Navigation Bar (Top section) */
 body nav.expanded div.top-navigation-section,
 body nav.collapsed div.top-navigation-section {
 	display: flex;
@@ -89,13 +91,13 @@ body nav.collapsed div.top-navigation-section i#expandable-title strong {
 	font-weight: bold;
 }
 
-/* Navigation Bar (First Middle Section) [General] */
+
+/* Navigation Bar (First middle section) */
 body nav.expanded div.middle-navigation-first-section,
 body nav.collapsed div.middle-navigation-first-section {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin: .5rem 0;
 }
 
 /* For unauthenticated user image layout */
@@ -144,6 +146,7 @@ body nav.collapsed div.middle-navigation-second-section {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin: 1.5rem 0rem;
 }
 
 body nav.expanded div.middle-navigation-second-section ul,
@@ -171,12 +174,14 @@ body nav.collapsed div.middle-navigation-second-section ul li a {
 }
 
 
-/* Navigation Bar (Bottom Section) */
-body nav div.bottom-navigation-section {
-	margin-top: 8.5rem;
+/* Navigation Bar (Bottom section) */
+body nav.expanded div.bottom-navigation-section,
+body nav.collapsed div.bottom-navigation-section {
+	margin-top: 4.5rem;
 }
 
-body nav div.bottom-navigation-section div.vot-theme-tray {
+body nav.expanded div.bottom-navigation-section div.vot-theme-tray,
+body nav.collapsed div.bottom-navigation-section div.vot-theme-tray {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;

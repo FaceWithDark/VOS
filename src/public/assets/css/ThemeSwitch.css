@@ -1,11 +1,76 @@
-/* VOT'S LIGHT MODE LAYOUT */
+/*
+ *====================*
+ * LIGHT MODE LAYOUT  *
+ *====================*
+ */
+
+
+
 body.light-theme {
 	background-color: var(--light-background-colour);
 	transition: background-color 0.25s, color 0.25s;
 }
 
-/* 'Landing' page's styling methods [Light] */
+
+/* PAGES THAT USE <header> TAG [Light] */
 body.light-theme header h1 {
+	color: var(--light-accent-colour);
+}
+
+
+/* Navigation Bar [Light] */
+body.light-theme nav {
+	background-color: var(--light-navigation-colour);
+}
+
+
+/* Navigation Bar (Top Section) [Light] */
+body.light-theme nav div.top-navigation-section #collapsible-icon {
+	color: var(--light-background-colour);
+}
+
+body.light-theme nav.expanded div.top-navigation-section #expandable-title {
+	color: var(--light-background-colour);
+}
+
+body.light-theme nav.active-button div.top-navigation-section strong {
+	color: var(--light-background-colour);
+}
+
+
+/* Navigation Bar (First Middle Section) [Light] */
+body.light-theme nav div.middle-navigation-first-section img.user-image,
+body.light-theme nav div.middle-navigation-first-section img.authentication-failed-image {
+	border: 0.05rem solid var(--light-background-colour);
+}
+
+body.light-theme nav div.middle-navigation-first-section p {
+	color: var(--light-background-colour);
+}
+
+
+/* Navigation Bar (Second Middle Section) [Light] */
+body.light-theme nav div.middle-navigation-second-section ul li a {
+	background-color: var(--light-secondary-colour);
+	color: var(--light-background-colour);
+}
+
+body.light-theme nav div.middle-navigation-second-section ul li a:hover {
+	background-color: var(--light-secondary-colour);
+	color: var(--light-accent-colour);
+}
+
+
+/* Navigation Bar (Bottom Section) [Light] */
+body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
+	background: var(--light-secondary-colour);
+}
+
+body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i {
+	color: var(--light-background-colour);
+}
+
+body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 	color: var(--light-accent-colour);
 }
 
@@ -77,83 +142,86 @@ body.light-theme section.custom-song-vot-page form button:hover {
 }
 
 
-/* VOT-SPECIFIC PAGE [Light] */
-body.light-theme div.vot-page section div.upper-general-information-box p {
-	color: var(--light-accent-colour);
-}
 
-body.light-theme div.vot-page section div.lower-general-information-box h3 {
-	color: var(--light-secondary-colour);
-}
+/*
+ *===========================*
+ * SYSTEM MODE LIGHT LAYOUT  *
+ *===========================*
+ */
 
 
-/* Navigation Bar [Light] */
-body.light-theme nav {
-	background-color: var(--light-navigation-colour);
-}
 
-/* Navigation Bar (Top Section) [Light] */
-body.light-theme nav div.top-navigation-section #collapsible-icon {
-	color: var(--light-background-colour);
-}
-
-body.light-theme nav.expanded div.top-navigation-section #expandable-title {
-	color: var(--light-background-colour);
-}
-
-body.light-theme nav.active-button div.top-navigation-section strong {
-	color: var(--light-background-colour);
-}
-
-/* Navigation Bar (First Middle Section) [Light] */
-body.light-theme nav div.middle-navigation-first-section img.user-image,
-body.light-theme nav div.middle-navigation-first-section img.authentication-failed-image {
-	border: 0.05rem solid var(--light-background-colour);
-}
-
-body.light-theme nav div.middle-navigation-first-section p {
-	color: var(--light-background-colour);
-}
-
-/* Navigation Bar (Second Middle Section) [Light] */
-body.light-theme nav div.middle-navigation-second-section ul li a {
-	background-color: var(--light-secondary-colour);
-	color: var(--light-background-colour);
-}
-
-body.light-theme nav div.middle-navigation-second-section ul li a:hover {
-	background-color: var(--light-secondary-colour);
-	color: var(--light-accent-colour);
-}
-
-/* Navigation Bar (Bottom Section) [Light] */
-body.light-theme nav div.bottom-navigation-section div.vot-theme-tray {
-	background: var(--light-secondary-colour);
-}
-
-body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i {
-	color: var(--light-background-colour);
-}
-
-body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
-	color: var(--light-accent-colour);
-}
-
-
-/* VOT'S SYSTEM MODE LAYOUT */
 @media (prefers-color-scheme: light) {
 	body.system-theme {
 		background-color: var(--light-background-colour);
 		transition: background-color 0.25s, color 0.25s;
 	}
 
-	/* 'Landing' page's styling methods [System - Light] */
+
+	/* PAGES THAT USE <header> TAG [Light] */
 	body.system-theme header h1 {
 		color: var(--light-accent-colour);
 	}
 
 
-	/* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES [System - Light] */
+	/* Navigation Bar [Light] */
+	body.system-theme nav {
+		background-color: var(--light-navigation-colour);
+	}
+
+
+	/* Navigation Bar (Top Section) [Light] */
+	body.system-theme nav div.top-navigation-section #collapsible-icon {
+		color: var(--light-background-colour);
+	}
+
+	body.system-theme nav.expanded div.top-navigation-section #expandable-title {
+		color: var(--light-background-colour);
+	}
+
+	body.system-theme nav.active-button div.top-navigation-section strong {
+		color: var(--light-background-colour);
+	}
+
+
+	/* Navigation Bar (First Middle Section) [Light] */
+	body.system-theme nav div.middle-navigation-first-section img.user-image,
+	body.system-theme nav div.middle-navigation-first-section img.authentication-failed-image {
+		border: 0.05rem solid var(--light-background-colour);
+	}
+
+	body.system-theme nav div.middle-navigation-first-section p {
+		color: var(--light-background-colour);
+	}
+
+
+	/* Navigation Bar (Second Middle Section) [Light] */
+	body.system-theme nav div.middle-navigation-second-section ul li a {
+		background-color: var(--light-secondary-colour);
+		color: var(--light-background-colour);
+	}
+
+	body.system-theme nav div.middle-navigation-second-section ul li a:hover {
+		background-color: var(--light-secondary-colour);
+		color: var(--light-accent-colour);
+	}
+
+
+	/* Navigation Bar (Bottom Section) [Light] */
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray {
+		background: var(--light-secondary-colour);
+	}
+
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i {
+		color: var(--light-background-colour);
+	}
+
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
+		color: var(--light-accent-colour);
+	}
+
+
+	/* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES [Light] */
 	body.system-theme section div.announcement-box,
 	body.system-theme section div.lower-general-information-box {
 		background-color: hsl(var(--light-accent-colour-hue) var(--light-accent-colour-saturation) calc(var(--light-accent-colour-lightness) + 86.3%) / var(--light-accent-colour-alpha));
@@ -172,7 +240,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 	}
 
 
-	/* PAGES THAT USE <a> TAG [System - Light] */
+	/* PAGES THAT USE <a> TAG [Light] */
 	body.system-theme section.archive-page div.vot-center-button-container a,
 	body.system-theme section.archive-vot-page div.vot-center-button-container a,
 	body.system-theme section.vot1-page div.vot-center-button-container a,
@@ -202,7 +270,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 	}
 
 
-	/* PAGES THAT USE <button> TAG [System - Light] */
+	/* PAGES THAT USE <button> TAG [Light] */
 	body.system-theme section.vot4-mappool form button,
 	body.system-theme section.vot5-mappool form button,
 	body.system-theme section.vot4-staff form button,
@@ -218,70 +286,17 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 		background: var(--light-secondary-colour);
 		color: var(--light-background-colour);
 	}
-
-
-	/* VOT-SPECIFIC PAGE [System - Light] */
-	body.system-theme div.vot-page section div.upper-general-information-box p {
-		color: var(--light-accent-colour);
-	}
-
-	body.system-theme div.vot-page section div.lower-general-information-box h3 {
-		color: var(--light-secondary-colour);
-	}
-
-
-	/* Navigation Bar [System - Light] */
-	body.system-theme nav {
-		background-color: var(--light-navigation-colour);
-	}
-
-	/* Navigation Bar (Top Section) [System - Light] */
-	body.system-theme nav div.top-navigation-section #collapsible-icon {
-		color: var(--light-background-colour);
-	}
-
-	body.system-theme nav.expanded div.top-navigation-section #expandable-title {
-		color: var(--light-background-colour);
-	}
-
-	body.system-theme nav.active-button div.top-navigation-section strong {
-		color: var(--light-background-colour);
-	}
-
-	/* Navigation Bar (First Middle Section) [System - Light] */
-	body.system-theme nav div.middle-navigation-first-section img.user-image,
-	body.system-theme nav div.middle-navigation-first-section img.authentication-failed-image {
-		border: 0.05rem solid var(--light-background-colour);
-	}
-
-	body.system-theme nav div.middle-navigation-first-section p {
-		color: var(--light-background-colour);
-	}
-
-	/* Navigation Bar (Second Middle Section) [System - Light] */
-	body.system-theme nav div.middle-navigation-second-section ul li a {
-		background-color: var(--light-secondary-colour);
-		color: var(--light-background-colour);
-	}
-
-	body.system-theme nav div.middle-navigation-second-section ul li a:hover {
-		background-color: var(--light-secondary-colour);
-		color: var(--light-accent-colour);
-	}
-
-	/* Navigation Bar (Bottom Section) [System - Light] */
-	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray {
-		background: var(--light-secondary-colour);
-	}
-
-	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i {
-		color: var(--light-background-colour);
-	}
-
-	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
-		color: var(--light-accent-colour);
-	}
 }
+
+
+
+/*
+ *==========================*
+ * SYSTEM MODE DARK LAYOUT  *
+ *==========================*
+ */
+
+
 
 @media (prefers-color-scheme: dark) {
 	body.system-theme {
@@ -289,13 +304,71 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 		transition: background-color 0.25s, color 0.25s;
 	}
 
-	/* 'Landing' page's styling methods [System - Dark] */
+
+	/* PAGES THAT USE <header> TAG [Light] */
 	body.system-theme header h1 {
 		color: var(--dark-accent-colour);
 	}
 
 
-	/* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES [System - Dark] */
+	/* Navigation Bar [Dark] */
+	body.system-theme nav {
+		background-color: var(--dark-navigation-colour);
+	}
+
+
+	/* Navigation Bar (Top Section) [Dark] */
+	body.system-theme nav div.top-navigation-section #collapsible-icon {
+		color: var(--dark-accent-colour);
+	}
+
+	body.system-theme nav div.top-navigation-section #expandable-title {
+		color: var(--dark-accent-colour);
+	}
+
+	body.system-theme nav div.top-navigation-section strong {
+		color: var(--dark-accent-colour);
+	}
+
+
+	/* Navigation Bar (First Middle Section) [Dark] */
+	body.system-theme nav div.middle-navigation-first-section img.user-image,
+	body.system-theme nav div.middle-navigation-first-section img.authentication-failed-image {
+		border: 0.05rem solid var(--dark-accent-colour);
+	}
+
+	body.system-theme nav div.middle-navigation-first-section p {
+		color: var(--dark-accent-colour);
+	}
+
+
+	/* Navigation Bar (Second Middle Section) [Dark] */
+	body.system-theme nav div.middle-navigation-second-section ul li a {
+		background-color: var(--dark-secondary-colour);
+		color: var(--dark-background-colour);
+	}
+
+	body.system-theme nav div.middle-navigation-second-section ul li a:hover {
+		background-color: var(--dark-secondary-colour);
+		color: var(--dark-accent-colour);
+	}
+
+
+	/* Navigation Bar (Bottom Section) [Dark] */
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray {
+		background: var(--dark-secondary-colour);
+	}
+
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i {
+		color: var(--dark-background-colour);
+	}
+
+	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
+		color: var(--dark-accent-colour);
+	}
+
+
+	/* BOX OF CONTENTS FORMAT FOR SPECIFIC PAGES [Dark] */
 	body.system-theme section div.announcement-box,
 	body.system-theme section div.lower-general-information-box {
 		background-color: hsl(var(--dark-accent-colour-hue) var(--dark-accent-colour-saturation) var(--dark-accent-colour-lightness) / calc(var(--dark-accent-colour-alpha) - 0.3));
@@ -314,7 +387,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 	}
 
 
-	/* PAGES THAT USE <a> TAG [System - Dark] */
+	/* PAGES THAT USE <a> TAG [Dark] */
 	body.system-theme section.archive-page div.vot-center-button-container a,
 	body.system-theme section.archive-vot-page div.vot-center-button-container a,
 	body.system-theme section.vot1-page div.vot-center-button-container a,
@@ -344,7 +417,7 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 	}
 
 
-	/* PAGES THAT USE <button> TAG [System - Dark] */
+	/* PAGES THAT USE <button> TAG [Dark] */
 	body.system-theme section.vot4-mappool form button,
 	body.system-theme section.vot5-mappool form button,
 	body.system-theme section.vot4-staff form button,
@@ -360,80 +433,83 @@ body.light-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 		background: hsl(var(--dark-secondary-colour-hue) var(--dark-secondary-colour-saturation) var(--dark-secondary-colour-lightness) / var(--dark-secondary-colour-alpha));
 		color: var(--dark-background-colour);
 	}
-
-
-	/* VOT-SPECIFIC PAGE [System - Dark] */
-	body.system-theme div.vot-page section div.upper-general-information-box p {
-		color: var(--dark-accent-colour);
-	}
-
-	body.system-theme div.vot-page section div.lower-general-information-box h3 {
-		color: var(--dark-secondary-colour);
-	}
-
-
-	/* Navigation Bar [System - Dark] */
-	body.system-theme nav {
-		background-color: var(--dark-navigation-colour);
-	}
-
-	/* Navigation Bar (Top Section) [System - Dark] */
-	body.system-theme nav div.top-navigation-section #collapsible-icon {
-		color: var(--dark-accent-colour);
-	}
-
-	body.system-theme nav.expanded div.top-navigation-section #expandable-title {
-		color: var(--dark-accent-colour);
-	}
-
-	body.system-theme nav.active-button div.top-navigation-section strong {
-		color: var(--dark-accent-colour);
-	}
-
-	/* Navigation Bar (First Middle Section) [System - Dark] */
-	body.system-theme nav div.middle-navigation-first-section img.user-image,
-	body.system-theme nav div.middle-navigation-first-section img.authentication-failed-image {
-		border: 0.05rem solid var(--dark-accent-colour);
-	}
-
-	body.system-theme nav div.middle-navigation-first-section p {
-		color: var(--dark-accent-colour);
-	}
-
-	/* Navigation Bar (Second Middle Section) [System - Dark] */
-	body.system-theme nav div.middle-navigation-second-section ul li a {
-		background-color: var(--dark-secondary-colour);
-		color: var(--dark-background-colour);
-	}
-
-	body.system-theme nav div.middle-navigation-second-section ul li a:hover {
-		background-color: var(--dark-secondary-colour);
-		color: var(--dark-accent-colour);
-	}
-
-	/* Navigation Bar (Bottom Section) [System - Dark] */
-	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray {
-		background: var(--dark-secondary-colour);
-	}
-
-	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i {
-		color: var(--dark-background-colour);
-	}
-
-	body.system-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
-		color: var(--dark-accent-colour);
-	}
 }
 
 
-/* VOT'S DARK MODE LAYOUT */
+
+/*
+ *===================*
+ * DARK MODE LAYOUT  *
+ *===================*
+ */
+
+
+
 body.dark-theme {
 	background-color: var(--dark-background-colour);
 	transition: background-color 0.25s, color 0.25s;
 }
 
-/* 'Landing' page's styling methods [Dark] */
+
+/* PAGES THAT USE <header> TAG [Light] */
 body.dark-theme header h1 {
+	color: var(--dark-accent-colour);
+}
+
+
+/* Navigation Bar [Dark] */
+body.dark-theme nav {
+	background-color: var(--dark-navigation-colour);
+}
+
+
+/* Navigation Bar (Top Section) [Dark] */
+body.dark-theme nav div.top-navigation-section #collapsible-icon {
+	color: var(--dark-accent-colour);
+}
+
+body.dark-theme nav div.top-navigation-section #expandable-title {
+	color: var(--dark-accent-colour);
+}
+
+body.dark-theme nav div.top-navigation-section strong {
+	color: var(--dark-accent-colour);
+}
+
+
+/* Navigation Bar (First Middle Section) [Dark] */
+body.dark-theme nav div.middle-navigation-first-section img.user-image,
+body.dark-theme nav div.middle-navigation-first-section img.authentication-failed-image {
+	border: 0.05rem solid var(--dark-accent-colour);
+}
+
+body.dark-theme nav div.middle-navigation-first-section p {
+	color: var(--dark-accent-colour);
+}
+
+
+/* Navigation Bar (Second Middle Section) [Dark] */
+body.dark-theme nav div.middle-navigation-second-section ul li a {
+	background-color: var(--dark-secondary-colour);
+	color: var(--dark-background-colour);
+}
+
+body.dark-theme nav div.middle-navigation-second-section ul li a:hover {
+	background-color: var(--dark-secondary-colour);
+	color: var(--dark-accent-colour);
+}
+
+
+/* Navigation Bar (Bottom Section) [Dark] */
+body.dark-theme nav div.bottom-navigation-section div.vot-theme-tray {
+	background: var(--dark-secondary-colour);
+}
+
+body.dark-theme nav div.bottom-navigation-section div.vot-theme-tray i {
+	color: var(--dark-background-colour);
+}
+
+body.dark-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
 	color: var(--dark-accent-colour);
 }
 
@@ -502,66 +578,4 @@ body.dark-theme section.vot4-staff form button:hover,
 body.dark-theme section.custom-song-vot-page form button:hover {
 	background: hsl(var(--dark-secondary-colour-hue) var(--dark-secondary-colour-saturation) var(--dark-secondary-colour-lightness) / var(--dark-secondary-colour-alpha));
 	color: var(--dark-background-colour);
-}
-
-/* VOT-SPECIFIC PAGE [Dark] */
-body.dark-theme div.vot-page section div.upper-general-information-box p {
-	color: var(--dark-accent-colour);
-}
-
-body.dark-theme div.vot-page section div.lower-general-information-box h3 {
-	color: var(--dark-secondary-colour);
-}
-
-
-/* Navigation Bar [Dark] */
-body.dark-theme nav {
-	background-color: var(--dark-navigation-colour);
-}
-
-/* Navigation Bar (Top Section) [Dark] */
-body.dark-theme nav div.top-navigation-section #collapsible-icon {
-	color: var(--dark-accent-colour);
-}
-
-body.dark-theme nav div.top-navigation-section #expandable-title {
-	color: var(--dark-accent-colour);
-}
-
-body.dark-theme nav div.top-navigation-section strong {
-	color: var(--dark-accent-colour);
-}
-
-/* Navigation Bar (First Middle Section) [Dark] */
-body.dark-theme nav div.middle-navigation-first-section img.user-image,
-body.dark-theme nav div.middle-navigation-first-section img.authentication-failed-image {
-	border: 0.05rem solid var(--dark-accent-colour);
-}
-
-body.dark-theme nav div.middle-navigation-first-section p {
-	color: var(--dark-accent-colour);
-}
-
-/* Navigation Bar (Second Middle Section) [Dark] */
-body.dark-theme nav div.middle-navigation-second-section ul li a {
-	background-color: var(--dark-secondary-colour);
-	color: var(--dark-background-colour);
-}
-
-body.dark-theme nav div.middle-navigation-second-section ul li a:hover {
-	background-color: var(--dark-secondary-colour);
-	color: var(--dark-accent-colour);
-}
-
-/* Navigation Bar (Bottom Section) [Dark] */
-body.dark-theme nav div.bottom-navigation-section div.vot-theme-tray {
-	background: var(--dark-secondary-colour);
-}
-
-body.dark-theme nav div.bottom-navigation-section div.vot-theme-tray i {
-	color: var(--dark-background-colour);
-}
-
-body.dark-theme nav div.bottom-navigation-section div.vot-theme-tray i:hover {
-	color: var(--dark-accent-colour);
 }
