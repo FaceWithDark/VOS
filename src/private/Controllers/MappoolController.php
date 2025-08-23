@@ -522,6 +522,54 @@ function getTournamentMappool(
                             'beatmap_pass_count'            => $groupStageWeekOneFreeModPassCount
                         ];
                     }
+
+
+                    /*** GROUP STAGE (WEEK 1) TB BEATMAP DATA ***/
+                    $groupStageWeekOneTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
+                    foreach ($groupStageWeekOneTieBreakerJsonData as $groupStageWeekOneTieBreakerJsonType => $groupStageWeekOneTieBreakerJsonId) {
+                        $groupStageWeekOneTieBreakerData = getTournamentMappoolData(
+                            id: $groupStageWeekOneTieBreakerJsonId,
+                            token: $mappoolAccessToken
+                        );
+
+                        $groupStageWeekOneTieBreakerId                 = $groupStageWeekOneTieBreakerData['id'];
+                        $groupStageWeekOneTieBreakerRoundId            = $round;
+                        $groupStageWeekOneTieBreakerTournamentId       = strtoupper(string: $name);
+                        $groupStageWeekOneTieBreakerType               = $groupStageWeekOneTieBreakerJsonType;
+                        $groupStageWeekOneTieBreakerImage              = $groupStageWeekOneTieBreakerData['beatmapset']['covers']['cover'];
+                        $groupStageWeekOneTieBreakerUrl                = $groupStageWeekOneTieBreakerData['url'];
+                        $groupStageWeekOneTieBreakerName               = $groupStageWeekOneTieBreakerData['beatmapset']['title'];
+                        $groupStageWeekOneTieBreakerDifficultyName     = $groupStageWeekOneTieBreakerData['version'];
+                        $groupStageWeekOneTieBreakerFeatureArtist      = $groupStageWeekOneTieBreakerData['beatmapset']['artist'];
+                        $groupStageWeekOneTieBreakerMapper             = $groupStageWeekOneTieBreakerData['beatmapset']['creator'];
+                        $groupStageWeekOneTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$groupStageWeekOneTieBreakerData['beatmapset']['user_id']}";
+                        $groupStageWeekOneTieBreakerDifficulty         = $groupStageWeekOneTieBreakerData['difficulty_rating'];
+                        $groupStageWeekOneTieBreakerLength             = $groupStageWeekOneTieBreakerData['total_length'];
+                        $groupStageWeekOneTieBreakerOverallSpeed       = $groupStageWeekOneTieBreakerData['beatmapset']['bpm'];
+                        $groupStageWeekOneTieBreakerOverallDifficulty  = $groupStageWeekOneTieBreakerData['accuracy'];
+                        $groupStageWeekOneTieBreakerOverallHealth      = $groupStageWeekOneTieBreakerData['drain'];
+                        $groupStageWeekOneTieBreakerPassCount          = $groupStageWeekOneTieBreakerData['passcount'];
+
+                        $allMappoolTieBreakerData[] = [
+                            'beatmap_id'                    => $groupStageWeekOneTieBreakerId,
+                            'beatmap_round_id'              => $groupStageWeekOneTieBreakerRoundId,
+                            'beatmap_tournament_id'         => $groupStageWeekOneTieBreakerTournamentId,
+                            'beatmap_type'                  => $groupStageWeekOneTieBreakerType,
+                            'beatmap_image'                 => $groupStageWeekOneTieBreakerImage,
+                            'beatmap_url'                   => $groupStageWeekOneTieBreakerUrl,
+                            'beatmap_name'                  => $groupStageWeekOneTieBreakerName,
+                            'beatmap_difficulty_name'       => $groupStageWeekOneTieBreakerDifficultyName,
+                            'beatmap_feature_artist'        => $groupStageWeekOneTieBreakerFeatureArtist,
+                            'beatmap_mapper'                => $groupStageWeekOneTieBreakerMapper,
+                            'beatmap_mapper_url'            => $groupStageWeekOneTieBreakerMapperUrl,
+                            'beatmap_difficulty'            => $groupStageWeekOneTieBreakerDifficulty,
+                            'beatmap_length'                => $groupStageWeekOneTieBreakerLength,
+                            'beatmap_overall_speed'         => $groupStageWeekOneTieBreakerOverallSpeed,
+                            'beatmap_overall_difficulty'    => $groupStageWeekOneTieBreakerOverallDifficulty,
+                            'beatmap_overall_health'        => $groupStageWeekOneTieBreakerOverallHealth,
+                            'beatmap_pass_count'            => $groupStageWeekOneTieBreakerPassCount
+                        ];
+                    }
                     break;
 
                 // VOT5 using a different matching format
@@ -762,6 +810,54 @@ function getTournamentMappool(
                             'beatmap_overall_difficulty'    => $GroupStageWeekTwoFreeModOverallDifficulty,
                             'beatmap_overall_health'        => $GroupStageWeekTwoFreeModOverallHealth,
                             'beatmap_pass_count'            => $GroupStageWeekTwoFreeModPassCount
+                        ];
+                    }
+
+
+                    /*** GROUP STAGE (WEEK 2) TB BEATMAP DATA ***/
+                    $groupStageWeekTwoTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
+                    foreach ($groupStageWeekTwoTieBreakerJsonData as $groupStageWeekTwoTieBreakerJsonType => $groupStageWeekTwoTieBreakerJsonId) {
+                        $groupStageWeekTwoTieBreakerData = getTournamentMappoolData(
+                            id: $groupStageWeekTwoTieBreakerJsonId,
+                            token: $mappoolAccessToken
+                        );
+
+                        $groupStageWeekTwoTieBreakerId                 = $groupStageWeekTwoTieBreakerData['id'];
+                        $groupStageWeekTwoTieBreakerRoundId            = $round;
+                        $groupStageWeekTwoTieBreakerTournamentId       = strtoupper(string: $name);
+                        $groupStageWeekTwoTieBreakerType               = $groupStageWeekTwoTieBreakerJsonType;
+                        $groupStageWeekTwoTieBreakerImage              = $groupStageWeekTwoTieBreakerData['beatmapset']['covers']['cover'];
+                        $groupStageWeekTwoTieBreakerUrl                = $groupStageWeekTwoTieBreakerData['url'];
+                        $groupStageWeekTwoTieBreakerName               = $groupStageWeekTwoTieBreakerData['beatmapset']['title'];
+                        $groupStageWeekTwoTieBreakerDifficultyName     = $groupStageWeekTwoTieBreakerData['version'];
+                        $groupStageWeekTwoTieBreakerFeatureArtist      = $groupStageWeekTwoTieBreakerData['beatmapset']['artist'];
+                        $groupStageWeekTwoTieBreakerMapper             = $groupStageWeekTwoTieBreakerData['beatmapset']['creator'];
+                        $groupStageWeekTwoTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$groupStageWeekTwoTieBreakerData['beatmapset']['user_id']}";
+                        $groupStageWeekTwoTieBreakerDifficulty         = $groupStageWeekTwoTieBreakerData['difficulty_rating'];
+                        $groupStageWeekTwoTieBreakerLength             = $groupStageWeekTwoTieBreakerData['total_length'];
+                        $groupStageWeekTwoTieBreakerOverallSpeed       = $groupStageWeekTwoTieBreakerData['beatmapset']['bpm'];
+                        $groupStageWeekTwoTieBreakerOverallDifficulty  = $groupStageWeekTwoTieBreakerData['accuracy'];
+                        $groupStageWeekTwoTieBreakerOverallHealth      = $groupStageWeekTwoTieBreakerData['drain'];
+                        $groupStageWeekTwoTieBreakerPassCount          = $groupStageWeekTwoTieBreakerData['passcount'];
+
+                        $allMappoolTieBreakerData[] = [
+                            'beatmap_id'                    => $groupStageWeekTwoTieBreakerId,
+                            'beatmap_round_id'              => $groupStageWeekTwoTieBreakerRoundId,
+                            'beatmap_tournament_id'         => $groupStageWeekTwoTieBreakerTournamentId,
+                            'beatmap_type'                  => $groupStageWeekTwoTieBreakerType,
+                            'beatmap_image'                 => $groupStageWeekTwoTieBreakerImage,
+                            'beatmap_url'                   => $groupStageWeekTwoTieBreakerUrl,
+                            'beatmap_name'                  => $groupStageWeekTwoTieBreakerName,
+                            'beatmap_difficulty_name'       => $groupStageWeekTwoTieBreakerDifficultyName,
+                            'beatmap_feature_artist'        => $groupStageWeekTwoTieBreakerFeatureArtist,
+                            'beatmap_mapper'                => $groupStageWeekTwoTieBreakerMapper,
+                            'beatmap_mapper_url'            => $groupStageWeekTwoTieBreakerMapperUrl,
+                            'beatmap_difficulty'            => $groupStageWeekTwoTieBreakerDifficulty,
+                            'beatmap_length'                => $groupStageWeekTwoTieBreakerLength,
+                            'beatmap_overall_speed'         => $groupStageWeekTwoTieBreakerOverallSpeed,
+                            'beatmap_overall_difficulty'    => $groupStageWeekTwoTieBreakerOverallDifficulty,
+                            'beatmap_overall_health'        => $groupStageWeekTwoTieBreakerOverallHealth,
+                            'beatmap_pass_count'            => $groupStageWeekTwoTieBreakerPassCount
                         ];
                     }
                     break;
