@@ -240,7 +240,9 @@ function readBeatmapData(
                 WHEN 'HR2' THEN 10
 
                 WHEN 'DT1' THEN 11
+                WHEN 'NC1' THEN 11
                 WHEN 'DT2' THEN 12
+                WHEN 'NC2' THEN 12
 
                 WHEN 'FM1' THEN 13
                 WHEN 'FM2' THEN 14

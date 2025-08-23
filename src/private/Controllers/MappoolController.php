@@ -3094,6 +3094,7 @@ function getTournamentMappool(
     getBeatmapData(data: $allMappoolHiddenData);
     getBeatmapData(data: $allMappoolHardRockData);
     getBeatmapData(data: $allMappoolDoubleTimeData);
+    getBeatmapData(data: $allMappoolNightCoreData); // VOT5 using a different pooling format
     getBeatmapData(data: $allMappoolFreeModData);
     getBeatmapData(data: $allMappoolEasyData);
     getBeatmapData(data: $allMappoolHiddenHardRockData);
