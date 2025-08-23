@@ -36,7 +36,9 @@ body nav.expanded~section.vot2-page,
 body nav.expanded~section.vot3-page,
 body nav.expanded~section.vot4-page,
 body nav.expanded~section.vot4-mappool,
-body nav.expanded~section.vot4-staff {
+body nav.expanded~section.vot4-staff,
+body nav.expanded~section.vot5-page,
+body nav.expanded~section.vot5-mappool {
 	padding-left: 11.75rem;
 	transition: padding-left 0.325s;
 }
@@ -53,7 +55,10 @@ body nav.collapsed~section.vot2-page,
 body nav.collapsed~section.vot3-page,
 body nav.collapsed~section.vot4-page,
 body nav.collapsed~section.vot4-mappool,
-body nav.collapsed~section.vot4-staff {
+body nav.collapsed~section.vot4-staff,
+body nav.collapsed~section.vot5-page,
+body nav.collapsed~section.vot5-mappool {
+
 	padding-left: 5.75rem;
 	transition: padding-left 0.325s;
 }
