@@ -61,7 +61,7 @@ function collapsibleNavigationBar() {
         ).getAttribute("src");
 
         const unauthenticatedUserImagePath =
-            "/../assets/img/Authentication Failed.webp";
+            "/assets/img/Authentication Failed.webp";
 
         if (
             navigationBarUserImagePath !== unauthenticatedUserImagePath
