@@ -13,6 +13,8 @@ require __DIR__ . '/../../Configurations/Length.php';
 <section class="vot5-mappool">
     <form action="/vot5/mappool" method="get">
         <button type="submit" name="round" value="QLF">Qualifiers</button>
+        <button type="submit" name="round" value="GSW1">Group Stage (Week 1)</button>
+        <button type="submit" name="round" value="GSW2">Group Stage (Week 2)</button>
         <button type="submit" name="round" value="RO16">Round Of 16</button>
         <button type="submit" name="round" value="QF">Quarter Finals</button>
         <button type="submit" name="round" value="SF">Semi Finals</button>
