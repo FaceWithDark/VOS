@@ -248,11 +248,13 @@ function readBeatmapData(
                 WHEN 'FM2' THEN 14
                 WHEN 'FM3' THEN 15
 
-                WHEN 'EZ1' THEN 16
+                WHEN 'EZ' THEN 16
 
-                WHEN 'HDHR1' THEN 17
+                WHEN 'HDHR' THEN 17
 
-                WHEN 'TB' THEN 18
+                WHEN 'FL' THEN 18
+
+                WHEN 'TB' THEN 19
 
                 ELSE 19
             END) ASC;
