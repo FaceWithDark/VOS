@@ -316,7 +316,11 @@ body section.vot4-page div.vot-center-button-container,
 body section.vot5-page div.vot-center-button-container,
 body section.staff-page div.vot-center-button-container,
 body section.staff-vot-page div.vot-center-button-container,
-body section.custom-song-page div.vot-center-button-container {
+body section.custom-song-page div.vot-center-button-container,
+body section.setting-page div.vot-center-button-container,
+body section.admin-setting-page div.vot-center-button-container,
+body section.staff-setting-page div.vot-center-button-container,
+body section.user-setting-page div.vot-center-button-container {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
@@ -332,7 +336,11 @@ body section.vot4-page div.vot-center-button-container a,
 body section.vot5-page div.vot-center-button-container a,
 body section.staff-page div.vot-center-button-container a,
 body section.staff-vot-page div.vot-center-button-container a,
-body section.custom-song-page div.vot-center-button-container a {
+body section.custom-song-page div.vot-center-button-container a,
+body section.setting-page div.vot-center-button-container a,
+body section.admin-setting-page div.vot-center-button-container a,
+body section.staff-setting-page div.vot-center-button-container a,
+body section.user-setting-page div.vot-center-button-container a {
 	padding: 1rem;
 	font-weight: bold;
 	border-radius: 1.5rem;
