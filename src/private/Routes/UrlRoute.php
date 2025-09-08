@@ -120,6 +120,48 @@ switch ($httpRedirectRequest) {
         }
         break;
 
+    case '/setting':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Setting/GeneralSettingView.php';
+        } else {
+            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Setting/GeneralSettingView.php';
+        }
+        break;
+
+    // TODO: === filter access to each of this path [START]. ===
+    case '/setting/admin':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Setting/AdminSettingView.php';
+        } else {
+            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Setting/AdminSettingView.php';
+        }
+        break;
+
+    case '/setting/staff':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Setting/StaffSettingView.php';
+        } else {
+            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Setting/StaffSettingView.php';
+        }
+        break;
+
+    case '/setting/user':
+        if (!isset($_COOKIE['vot_access_token'])) {
+            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
+            require __DIR__ . '/../Views/Setting/UserSettingView.php';
+        } else {
+            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+            require __DIR__ . '/../Views/Setting/UserSettingView.php';
+        }
+        break;
+    // TODO: === filter access to each of this path [END]. ===
+
     case '/vot4':
         if (!isset($_COOKIE['vot_access_token'])) {
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
