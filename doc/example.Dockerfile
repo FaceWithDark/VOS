@@ -38,4 +38,5 @@ RUN apk -U upgrade
 COPY ./src /var/www/html
 RUN rm -rf /var/www/html/private
 
-COPY ./docker/nginx/nginx.${BUILD_STAGE}.conf /etc/nginx/nginx.conf
+# 3 available options for build stage are: [dev], [stage], [prod]
+COPY ./docker/nginx/nginx.<build-stage>.conf /etc/nginx/nginx.conf
