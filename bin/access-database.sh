@@ -1,3 +1,5 @@
+#!/bin/bash
+
 read -p "Enter your database name here (e.g: root): " DATABASE_NAME
 read -p "Enter your database port here (e.g: 3306): " DATABASE_PORT
 read -p "Enter your database connection type here (e.g: TCP/IP): " DATABASE_PROTOCOL
