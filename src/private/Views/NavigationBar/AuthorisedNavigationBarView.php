@@ -189,6 +189,12 @@ session_start(
                         <i class="bx bxs-music"></i>
                     </a>
                 </li>
+
+                <li>
+                    <a href="/setting">
+                        <i class='bx bxs-cog'></i>
+                    </a>
+                </li>
             </ul>
         </div>
 
