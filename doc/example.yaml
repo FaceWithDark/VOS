@@ -1,60 +1,65 @@
 services:
+
+#                             NOTE
+# =================================================================
+# The use of custom Docker container networking would be overkill
+# for the current usage. However, because I'll make project to work
+# with legacy version of PHP (PHP <= 5.x) so it's safe to do this
+# as soon as possible.
+
   # PHP-FPM container
   vot-app:
-    container_name: # Optional. You may leave this empty, which Docker will give a default name for the container automatically
+    container_name: vot-${BUILD_STAGE}-php # Optional, remove if needed
     networks:
-      - # Optional. You may delete this element if only building for one specific PHP version
+      - vot-network
     build:
       context: .
-      dockerfile: docker/php/php.${ENV}.Dockerfile
+      dockerfile: docker/php/php.${BUILD_STAGE}.Dockerfile
     volumes:
-      - ./src/private/vendor:/var/www/html/private/vendor # Optional. You may omit this if you don't mind Composer packages load a bit slower on start-up
-      - ./src:/var/www/html # Optional. You may omit this if build for production stage
-    restart: unless-stopped # Optional. You may let this be 'always' in all stages
+      - ./src:/var/www/html # Optional, remove if needed
+    restart: unless-stopped
 
   # NGINX container
   vot-web:
-   container_name: # Optional. You may leave this empty, which Docker will give a default name for the container automatically
+    container_name: vot-${BUILD_STAGE}-nginx # Optional, remove if needed
     networks:
-      - # Optional. You may delete this element if only building for one specific PHP version
+      - vot-network
     depends_on:
-      - vot-app   # Required. Need PHP modules first to get the website working
-      - vot-db    # Required. Need MariaDB database second to be able to do CRUD process
+      - vot-app
+      - vot-database
     build:
       context: .
-      dockerfile: docker/nginx/nginx.${ENV}.Dockerfile
+      dockerfile: docker/nginx/nginx.${BUILD_STAGE}.Dockerfile
     volumes:
-      - ./src:/var/www/html # Optional. You may omit this if build for production stage
+      - ./src:/var/www/html   # Optional, remove if needed
     ports:
-      # Optional. Only use for development stage, omit on production stage as it contains security issues
-      - "<any-ports>:80"  # HTTP
-      - "<any-ports>:443" # HTTPS (or SSL/TLS)
-    restart: unless-stopped # Optional. You may let this be 'always' in all stages
+      - "<host-port>:80"      # HTTP
+      - "<host-port>:443"     # HTTPS
+    restart: unless-stopped   # Optional, remove if needed
 
   # MariaDB container
-  vot-db:
-   container_name: # Optional. You may leave this empty, which Docker will give a default name for the container automatically
+  vot-database:
+    container_name: vot-${BUILD_STAGE}-mariadb # Optional, remove if needed
     networks:
-      - # Optional. You may delete this element if only building for one specific PHP version
+      - vot-network
     build:
       context: .
-      dockerfile: docker/sql/mariadb.${ENV}.Dockerfile
+      dockerfile: docker/sql/mariadb.${BUILD_STAGE}.Dockerfile
     volumes:
-      - mariadb_data:/var/lib/mysql # Per common practice but we will be loading backed-up data constantly on prduction stage
+      - vot_data:/var/lib/mysql
     ports:
-      # Optional. Only use for development stage, omit on production stage (or use 'phpmyadmin') as it contains security issues
-      - "3307:3306"
+      - "<host-port>:3306"  # Direct database access without getting inside the
+                            # container directly
     environment:
       MARIADB_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
-    restart: unless-stopped # Optional. You may let this be 'always' in all stages
+    restart: unless-stopped # Optional, remove if needed
 
-# Per common practice but we will be loading backed-up data constantly on prduction stage
 volumes:
-  mariadb_data:
-    name: # Optional. You may leave this empty, which Docker will give a default name for the container automatically
+  vot_data:
+    name: vot-${BUILD_STAGE}-database-data # Optional, remove if needed
 
-# Optional. As metioned above, only use if working with multiple PHP versions
-#networks:
-#  vot-network:
-#    name: vot-dev-network
-#    driver: bridge
+networks:
+  # PHP 8.x network
+  vot-network:
+    name: vot-${BUILD_STAGE}-latest-network # Optional, remove if needed
+    driver: bridge
