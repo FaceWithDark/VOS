@@ -54,6 +54,7 @@ function collapsibleNavigationBar() {
             "Archive",
             "Staff",
             "Song",
+            "Setting"
         ];
 
         const navigationBarUserImagePath = document.querySelector(
