@@ -122,15 +122,20 @@ switch ($httpRedirectRequest) {
 
     case '/setting':
         if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Setting/GeneralSettingView.php';
+            // Setting can only be change when the user logged in
+            exit(header(
+                header: 'Location: /home',
+                replace: true,
+                response_code: 302
+            ));
+            break;
         } else {
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
             require __DIR__ . '/../Views/Setting/GeneralSettingView.php';
+            break;
         }
-        break;
 
-    // TODO: === filter access to each of this path [START]. ===
+        // TODO: === filter access to each of this path [START]. ===
     case '/setting/admin':
         if (!isset($_COOKIE['vot_access_token'])) {
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
@@ -141,13 +146,13 @@ switch ($httpRedirectRequest) {
         }
         break;
 
-    case '/setting/staff':
+    case '/setting/tournament':
         if (!isset($_COOKIE['vot_access_token'])) {
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Setting/StaffSettingView.php';
+            require __DIR__ . '/../Views/Setting/TournamentSettingView.php';
         } else {
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Setting/StaffSettingView.php';
+            require __DIR__ . '/../Views/Setting/TournamentSettingView.php';
         }
         break;
 
