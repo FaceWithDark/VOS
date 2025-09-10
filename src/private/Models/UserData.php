@@ -9,9 +9,7 @@ function getUserData(array $data): null
 {
     foreach ($data as $user_data) {
         $userId             = $user_data['osu_user_id'];
-        $userTournamentId   = $user_data['osu_user_tournament_id'];
         $userName           = $user_data['osu_user_name'];
-        $userRole           = $user_data['osu_user_role'];
         $userFlag           = $user_data['osu_user_flag'];
         $userImage          = $user_data['osu_user_image'];
         $userUrl            = $user_data['osu_user_url'];
@@ -23,14 +21,12 @@ function getUserData(array $data): null
             createUserData(
                 id: $userId,
                 name: $userName,
-                role: $userRole,
                 flag: $userFlag,
                 image: $userImage,
                 url: $userUrl,
                 rank: $userRank,
                 time_zone: $userTimeZone,
                 database_handle: $userDatabase,
-                tournament_id: $userTournamentId
             );
         } else {
             // TODO: UPDATE query here (change the 'view' table only, not the actual table if all data stay the same).
@@ -77,24 +73,19 @@ function checkUserData(
 function createUserData(
     int $id,
     string $name,
-    string $role,
     string $flag,
     string $image,
     string $url,
     int $rank,
     string $time_zone,
-    object $database_handle,
-    // Default params need to be be declared after all optional params.
-    // Reference: https://www.php.net/manual/en/functions.arguments.php#functions.arguments.default
-    string $tournament_id = 'NONE' // Everyone belong to none tournament by default
+    object $database_handle
+    // There is a default data for 'tournamentId' column, DO NOT DELETE IT!!
 ): string | bool {
     $insertQuery = "
         INSERT INTO
             VotUser (
                 userId,
-                tournamentId,
                 userName,
-                userRole,
                 userFlag,
                 userImage,
                 userUrl,
@@ -104,9 +95,7 @@ function createUserData(
         VALUES
             (
                 :userId,
-                :tournamentId,
                 :userName,
-                :userRole,
                 :userFlag,
                 :userImage,
                 :userUrl,
@@ -117,9 +106,7 @@ function createUserData(
 
     $insertStatement = $database_handle->prepare($insertQuery);
     $insertStatement->bindParam(':userId',          $id,                PDO::PARAM_INT);
-    $insertStatement->bindParam(':tournamentId',    $tournament_id,     PDO::PARAM_STR);
     $insertStatement->bindParam(':userName',        $name,              PDO::PARAM_STR);
-    $insertStatement->bindParam(':userRole',        $role,              PDO::PARAM_STR);
     $insertStatement->bindParam(':userFlag',        $flag,              PDO::PARAM_STR);
     $insertStatement->bindParam(':userImage',       $image,             PDO::PARAM_STR);
     $insertStatement->bindParam(':userUrl',         $url,               PDO::PARAM_STR);
@@ -148,39 +135,137 @@ function readUserData(
     int $id,
     object $database_handle
 ): array | bool {
-    $readQuery = "
-        SELECT
-            vu.userId,
-            vu.userName,
-            vu.userImage,
-            vu.userUrl
-        FROM
-            VotUser vu
-        JOIN
-            VotTournament vt ON vu.tournamentId = vt.tournamentId
-        WHERE
-            vu.userId = :userId
-        ORDER BY
-            vu.userRole ASC;
-    ";
+    switch ($id) {
+        /* Website owner is also an osu! player */
+        case 19817503:
+            // Only read user data that have admin role
+            $adminReadQuery = "
+                SELECT
+                    vu.userName,
+                    vr.roleName,
+                    vu.userFlag,
+                    vu.userImage,
+                    vu.userUrl,
+                    vu.userRank,
+                    vu.userTimeZone
+                FROM
+                    VotGeneralRole vgr
+                JOIN
+                    VotUser vu ON vgr.userId = vu.userId
+                JOIN
+                    VotRole vr ON vgr.roleId = vr.roleId
+                WHERE
+                    vgr.userId = :userId AND vr.roleName = 'Admin'
+                ORDER BY
+                    vgr.roleId ASC;
+            ";
 
-    $readStatement = $database_handle->prepare($readQuery);
-    $readStatement->bindParam(':userId', $id, PDO::PARAM_INT);
+            $adminReadStatement = $database_handle->prepare($adminReadQuery);
+            $adminReadStatement->bindParam(':userId', $id, PDO::PARAM_INT);
 
-    $successReadLogMessage = sprintf("Read successfully for user ID: %d", $id);
-    $unsuccessReadLogMessage = sprintf("Read unsuccessfully for user ID: %d", $id);
+            $adminSuccessReadLogMessage     = sprintf("Read successfully for admin role with user ID: %d", $id);
+            $adminUnsuccessReadLogMessage   = sprintf("Read unsuccessfully for admin role with user ID: %d", $id);
 
-    if ($readStatement->execute()) {
-        error_log(message: $successReadLogMessage, message_type: 0);
-        $readAllUserData = $readStatement->fetch(
-            mode: PDO::FETCH_ASSOC,
-            cursorOrientation: PDO::FETCH_ORI_NEXT,
-            cursorOffset: 0
-        );
-        return $readAllUserData;
-    } else {
-        error_log(message: $unsuccessReadLogMessage, message_type: 0);
-        return false;
+            if ($adminReadStatement->execute()) {
+                error_log(message: $adminSuccessReadLogMessage, message_type: 0);
+                $adminViewData = $adminReadStatement->fetch(
+                    mode: PDO::FETCH_ASSOC,
+                    cursorOrientation: PDO::FETCH_ORI_NEXT,
+                    cursorOffset: 0
+                );
+                return $adminViewData;
+            } else {
+                error_log(message: $adminUnsuccessReadLogMessage, message_type: 0);
+                return false;
+            }
+            break;
+
+        /* Host for each tournament is also an osu! player */
+        case 9623142 || 16039831:
+            // Only read user data that have host role
+            $hostReadQuery = "
+                SELECT
+                    vu.userName,
+                    vr.roleName,
+                    vu.userFlag,
+                    vu.userImage,
+                    vu.userUrl,
+                    vu.userRank,
+                    vu.userTimeZone
+                FROM
+                    VotTournamentRole vgr
+                JOIN
+                    VotUser vu ON vgr.userId = vu.userId
+                JOIN
+                    VotRole vr ON vgr.roleId = vr.roleId
+                WHERE
+                    vgr.userId = :userId AND vr.roleName = 'Host'
+                ORDER BY
+                    vgr.roleId ASC;
+            ";
+
+            $hostReadStatement = $database_handle->prepare($hostReadQuery);
+            $hostReadStatement->bindParam(':userId', $id, PDO::PARAM_INT);
+
+            $hostSuccessReadLogMessage     = sprintf("Read successfully for host role with user ID: %d", $id);
+            $hostUnsuccessReadLogMessage   = sprintf("Read unsuccessfully for host role with user ID: %d", $id);
+
+            if ($hostReadStatement->execute()) {
+                error_log(message: $hostSuccessReadLogMessage, message_type: 0);
+                $hostViewData = $hostReadStatement->fetch(
+                    mode: PDO::FETCH_ASSOC,
+                    cursorOrientation: PDO::FETCH_ORI_NEXT,
+                    cursorOffset: 0
+                );
+                return $hostViewData;
+            } else {
+                error_log(message: $hostUnsuccessReadLogMessage, message_type: 0);
+                return false;
+            }
+            break;
+
+        default:
+            // Only read user data that have user role
+            $userReadQuery = "
+                SELECT
+                    vu.userName,
+                    vr.roleName,
+                    vu.userFlag,
+                    vu.userImage,
+                    vu.userUrl,
+                    vu.userRank,
+                    vu.userTimeZone
+                FROM
+                    VotGeneralRole vgr
+                JOIN
+                    VotUser vu ON vgr.userId = vu.userId
+                JOIN
+                    VotRole vr ON vgr.roleId = vr.roleId
+                WHERE
+                    vgr.userId = :userId AND vr.roleName = 'User'
+                ORDER BY
+                    vgr.roleId ASC;
+            ";
+
+            $userReadStatement = $database_handle->prepare($userReadQuery);
+            $userReadStatement->bindParam(':userId', $id, PDO::PARAM_INT);
+
+            $userSuccessReadLogMessage     = sprintf("Read successfully for user role with user ID: %d", $id);
+            $userUnsuccessReadLogMessage   = sprintf("Read unsuccessfully for user role with user ID: %d", $id);
+
+            if ($userReadStatement->execute()) {
+                error_log(message: $userSuccessReadLogMessage, message_type: 0);
+                $userViewData = $userReadStatement->fetch(
+                    mode: PDO::FETCH_ASSOC,
+                    cursorOrientation: PDO::FETCH_ORI_NEXT,
+                    cursorOffset: 0
+                );
+                return $userViewData;
+            } else {
+                error_log(message: $userUnsuccessReadLogMessage, message_type: 0);
+                return false;
+            }
+            break;
     }
 }
 
