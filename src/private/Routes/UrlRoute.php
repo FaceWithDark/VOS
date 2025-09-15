@@ -15,6 +15,17 @@ require __DIR__ . '/../Controllers/SongController.php';
 
 $httpRedirectRequest = parse_url(url: $_SERVER['REQUEST_URI'], component: PHP_URL_PATH);
 
+// Osu! sent a pretty damn long GET request when user refuses to give permission
+// for using their data for website authentication. Within that request, there
+// is a redirect path and the state of it, which explains why these particular
+// variable is here.
+$httpDenyRedirectUrl
+    = getenv(name: 'APPLICATION_REDIRECT_URL', local_only: true)
+    ?: getenv(name: 'APPLICATION_REDIRECT_URL');
+$httpDenyRedirectState
+    = getenv(name: 'APPLICATION_STATE', local_only: true)
+    ?: getenv(name: 'APPLICATION_RESPONSE_TYPE');
+
 switch ($httpRedirectRequest) {
     case '/':
     case '/home':
@@ -36,12 +47,24 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/callback':
-        if (!isset($_GET['code'])) {
-            http_response_code(401);
+        if ((isset($_GET['error'])) && ($_GET['error'] === 'access_denied')) {
+            // 'Cancel' button clicked
+            exit(header(
+                header: 'Location: /home',
+                replace: true,
+                response_code: 302
+            ));
             break;
-        } else {
+        } elseif ((isset($_GET['code'])) && (is_string(value: $_GET['code']))) {
+            // 'Authorise' button clicked
+            // TODO: regex filter. Only alphanumeric value passed to prevent
+            // path injection
             $osuUserAuthoriseCode = $_GET['code'];
             getOsuUserAccessToken(code: $osuUserAuthoriseCode);
+            break;
+        } else {
+            // Path injection detected
+            http_response_code(401);
             break;
         }
 
