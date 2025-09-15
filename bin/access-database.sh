@@ -22,7 +22,7 @@ case $DATABASE_USAGE_CONFIRMATION in
                 ;;
             *)
                 echo 'Invalid option provided, please try again!!'
-                return 1
+                exit 1
                 ;;
         esac
         ;;
@@ -31,7 +31,7 @@ case $DATABASE_USAGE_CONFIRMATION in
         ;;
     *)
         echo 'Invalid option provided, please try again!!'
-        return 1
+        exit 1
         ;;
 esac
 
