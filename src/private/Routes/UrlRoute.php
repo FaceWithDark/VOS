@@ -15,17 +15,6 @@ require __DIR__ . '/../Controllers/SongController.php';
 
 $httpRedirectRequest = parse_url(url: $_SERVER['REQUEST_URI'], component: PHP_URL_PATH);
 
-// Osu! sent a pretty damn long GET request when user refuses to give permission
-// for using their data for website authentication. Within that request, there
-// is a redirect path and the state of it, which explains why these particular
-// variable is here.
-$httpDenyRedirectUrl
-    = getenv(name: 'APPLICATION_REDIRECT_URL', local_only: true)
-    ?: getenv(name: 'APPLICATION_REDIRECT_URL');
-$httpDenyRedirectState
-    = getenv(name: 'APPLICATION_STATE', local_only: true)
-    ?: getenv(name: 'APPLICATION_RESPONSE_TYPE');
-
 switch ($httpRedirectRequest) {
     case '/':
     case '/home':
