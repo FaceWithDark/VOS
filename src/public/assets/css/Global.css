@@ -579,3 +579,13 @@ body section.custom-song-vot-page div.box-container div.custom-song-footer div.c
 	font-weight: bold;
 	font-size: 1.025rem;
 }
+
+
+/* PAGES THAT USE CONTROL PANEL STYLE [Global] */
+body section.admin-setting-page div.admin-add-role-panel,
+body section.admin-setting-page div.admin-view-data-panel {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	margin-top: 1rem;
+}
