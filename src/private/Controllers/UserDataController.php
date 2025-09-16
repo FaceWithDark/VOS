@@ -229,15 +229,20 @@ function getOsuUser(
     $osuUserUrl             = "https://osu.ppy.sh/users/{$osuUserData['id']}";
     $osuUserRank            = $osuUserData['statistics']['global_rank'];
     $osuUserTimeZone        = getUserTimeZone()['baseOffset'];
+    $osuUserRoleId          = 'USR';    // All user have user-level access by default
+    $osuUserTournamemtId    = 'NONE';   // All user belong to none tournament by default
+
 
     $allOsuUserData[]       = [
-        'osu_user_id'           => $osuUserId,
-        'osu_user_name'         => $osuUserName,
-        'osu_user_flag'         => $osuUserFlag,
-        'osu_user_image'        => $osuUserImage,
-        'osu_user_url'          => $osuUserUrl,
-        'osu_user_rank'         => $osuUserRank,
-        'osu_user_time_zone'    => $osuUserTimeZone
+        'osu_user_id'               => $osuUserId,
+        'osu_user_name'             => $osuUserName,
+        'osu_user_flag'             => $osuUserFlag,
+        'osu_user_image'            => $osuUserImage,
+        'osu_user_url'              => $osuUserUrl,
+        'osu_user_rank'             => $osuUserRank,
+        'osu_user_time_zone'        => $osuUserTimeZone,
+        'osu_user_role_id'          => $osuUserRoleId,
+        'osu_user_tournament_id'    => $osuUserTournamemtId
     ];
 
     getUserData(data: $allOsuUserData);
