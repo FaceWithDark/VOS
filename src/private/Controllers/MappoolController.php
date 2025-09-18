@@ -63,7 +63,6 @@ function getTournamentMappool(
                         $groupStageWeekOneNoModOverallSpeed       = $groupStageWeekOneNoModData['beatmapset']['bpm'];
                         $groupStageWeekOneNoModOverallDifficulty  = $groupStageWeekOneNoModData['accuracy'];
                         $groupStageWeekOneNoModOverallHealth      = $groupStageWeekOneNoModData['drain'];
-                        $groupStageWeekOneNoModPassCount          = $groupStageWeekOneNoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $groupStageWeekOneNoModId,
@@ -81,8 +80,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $groupStageWeekOneNoModLength,
                             'beatmap_overall_speed'         => $groupStageWeekOneNoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $groupStageWeekOneNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneNoModOverallHealth,
-                            'beatmap_pass_count'            => $groupStageWeekOneNoModPassCount
+                            'beatmap_overall_health'        => $groupStageWeekOneNoModOverallHealth
                         ];
                     }
 
@@ -111,7 +109,6 @@ function getTournamentMappool(
                         $groupStageWeekOneHiddenOverallSpeed       = $groupStageWeekOneHiddenData['beatmapset']['bpm'];
                         $groupStageWeekOneHiddenOverallDifficulty  = $groupStageWeekOneHiddenData['accuracy'];
                         $groupStageWeekOneHiddenOverallHealth      = $groupStageWeekOneHiddenData['drain'];
-                        $groupStageWeekOneHiddenPassCount          = $groupStageWeekOneHiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $groupStageWeekOneHiddenId,
@@ -129,8 +126,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $groupStageWeekOneHiddenLength,
                             'beatmap_overall_speed'         => $groupStageWeekOneHiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $groupStageWeekOneHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneHiddenOverallHealth,
-                            'beatmap_pass_count'            => $groupStageWeekOneHiddenPassCount
+                            'beatmap_overall_health'        => $groupStageWeekOneHiddenOverallHealth
                         ];
                     }
 
@@ -159,7 +155,6 @@ function getTournamentMappool(
                         $groupStageWeekOneHardRockOverallSpeed       = $groupStageWeekOneHardRockData['beatmapset']['bpm'];
                         $groupStageWeekOneHardRockOverallDifficulty  = $groupStageWeekOneHardRockData['accuracy'];
                         $groupStageWeekOneHardRockOverallHealth      = $groupStageWeekOneHardRockData['drain'];
-                        $groupStageWeekOneHardRockPassCount          = $groupStageWeekOneHardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $groupStageWeekOneHardRockId,
@@ -177,8 +172,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $groupStageWeekOneHardRockLength,
                             'beatmap_overall_speed'         => $groupStageWeekOneHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $groupStageWeekOneHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneHardRockOverallHealth,
-                            'beatmap_pass_count'            => $groupStageWeekOneHardRockPassCount
+                            'beatmap_overall_health'        => $groupStageWeekOneHardRockOverallHealth
                         ];
                     }
 
@@ -207,7 +201,6 @@ function getTournamentMappool(
                         $groupStageWeekOneNightCoreOverallSpeed       = $groupStageWeekOneNightCoreData['beatmapset']['bpm'];
                         $groupStageWeekOneNightCoreOverallDifficulty  = $groupStageWeekOneNightCoreData['accuracy'];
                         $groupStageWeekOneNightCoreOverallHealth      = $groupStageWeekOneNightCoreData['drain'];
-                        $groupStageWeekOneNightCorePassCount          = $groupStageWeekOneNightCoreData['passcount'];
 
                         $allMappoolNightCoreData[] = [
                             'beatmap_id'                    => $groupStageWeekOneNightCoreId,
@@ -225,8 +218,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $groupStageWeekOneNightCoreLength,
                             'beatmap_overall_speed'         => $groupStageWeekOneNightCoreOverallSpeed,
                             'beatmap_overall_difficulty'    => $groupStageWeekOneNightCoreOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneNightCoreOverallHealth,
-                            'beatmap_pass_count'            => $groupStageWeekOneNightCorePassCount
+                            'beatmap_overall_health'        => $groupStageWeekOneNightCoreOverallHealth
                         ];
                     }
 
@@ -255,7 +247,6 @@ function getTournamentMappool(
                         $groupStageWeekOneFreeModOverallSpeed       = $groupStageWeekOneFreeModData['beatmapset']['bpm'];
                         $groupStageWeekOneFreeModOverallDifficulty  = $groupStageWeekOneFreeModData['accuracy'];
                         $groupStageWeekOneFreeModOverallHealth      = $groupStageWeekOneFreeModData['drain'];
-                        $groupStageWeekOneFreeModPassCount          = $groupStageWeekOneFreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $groupStageWeekOneFreeModId,
@@ -273,8 +264,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $groupStageWeekOneFreeModLength,
                             'beatmap_overall_speed'         => $groupStageWeekOneFreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $groupStageWeekOneFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneFreeModOverallHealth,
-                            'beatmap_pass_count'            => $groupStageWeekOneFreeModPassCount
+                            'beatmap_overall_health'        => $groupStageWeekOneFreeModOverallHealth
                         ];
                     }
 
@@ -303,7 +293,6 @@ function getTournamentMappool(
                         $groupStageWeekOneTieBreakerOverallSpeed       = $groupStageWeekOneTieBreakerData['beatmapset']['bpm'];
                         $groupStageWeekOneTieBreakerOverallDifficulty  = $groupStageWeekOneTieBreakerData['accuracy'];
                         $groupStageWeekOneTieBreakerOverallHealth      = $groupStageWeekOneTieBreakerData['drain'];
-                        $groupStageWeekOneTieBreakerPassCount          = $groupStageWeekOneTieBreakerData['passcount'];
 
                         $allMappoolTieBreakerData[] = [
                             'beatmap_id'                    => $groupStageWeekOneTieBreakerId,
@@ -321,8 +310,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $groupStageWeekOneTieBreakerLength,
                             'beatmap_overall_speed'         => $groupStageWeekOneTieBreakerOverallSpeed,
                             'beatmap_overall_difficulty'    => $groupStageWeekOneTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneTieBreakerOverallHealth,
-                            'beatmap_pass_count'            => $groupStageWeekOneTieBreakerPassCount
+                            'beatmap_overall_health'        => $groupStageWeekOneTieBreakerOverallHealth
                         ];
                     }
                     break;
@@ -353,7 +341,6 @@ function getTournamentMappool(
                         $GroupStageWeekTwoNoModOverallSpeed       = $GroupStageWeekTwoNoModData['beatmapset']['bpm'];
                         $GroupStageWeekTwoNoModOverallDifficulty  = $GroupStageWeekTwoNoModData['accuracy'];
                         $GroupStageWeekTwoNoModOverallHealth      = $GroupStageWeekTwoNoModData['drain'];
-                        $GroupStageWeekTwoNoModPassCount          = $GroupStageWeekTwoNoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $GroupStageWeekTwoNoModId,
@@ -371,8 +358,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $GroupStageWeekTwoNoModLength,
                             'beatmap_overall_speed'         => $GroupStageWeekTwoNoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $GroupStageWeekTwoNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $GroupStageWeekTwoNoModOverallHealth,
-                            'beatmap_pass_count'            => $GroupStageWeekTwoNoModPassCount
+                            'beatmap_overall_health'        => $GroupStageWeekTwoNoModOverallHealth
                         ];
                     }
 
@@ -401,7 +387,6 @@ function getTournamentMappool(
                         $GroupStageWeekTwoHiddenOverallSpeed       = $GroupStageWeekTwoHiddenData['beatmapset']['bpm'];
                         $GroupStageWeekTwoHiddenOverallDifficulty  = $GroupStageWeekTwoHiddenData['accuracy'];
                         $GroupStageWeekTwoHiddenOverallHealth      = $GroupStageWeekTwoHiddenData['drain'];
-                        $GroupStageWeekTwoHiddenPassCount          = $GroupStageWeekTwoHiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $GroupStageWeekTwoHiddenId,
@@ -419,8 +404,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $GroupStageWeekTwoHiddenLength,
                             'beatmap_overall_speed'         => $GroupStageWeekTwoHiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $GroupStageWeekTwoHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $GroupStageWeekTwoHiddenOverallHealth,
-                            'beatmap_pass_count'            => $GroupStageWeekTwoHiddenPassCount
+                            'beatmap_overall_health'        => $GroupStageWeekTwoHiddenOverallHealth
                         ];
                     }
 
@@ -449,7 +433,6 @@ function getTournamentMappool(
                         $GroupStageWeekTwoHardRockOverallSpeed       = $GroupStageWeekTwoHardRockData['beatmapset']['bpm'];
                         $GroupStageWeekTwoHardRockOverallDifficulty  = $GroupStageWeekTwoHardRockData['accuracy'];
                         $GroupStageWeekTwoHardRockOverallHealth      = $GroupStageWeekTwoHardRockData['drain'];
-                        $GroupStageWeekTwoHardRockPassCount          = $GroupStageWeekTwoHardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $GroupStageWeekTwoHardRockId,
@@ -467,8 +450,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $GroupStageWeekTwoHardRockLength,
                             'beatmap_overall_speed'         => $GroupStageWeekTwoHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $GroupStageWeekTwoHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $GroupStageWeekTwoHardRockOverallHealth,
-                            'beatmap_pass_count'            => $GroupStageWeekTwoHardRockPassCount
+                            'beatmap_overall_health'        => $GroupStageWeekTwoHardRockOverallHealth
                         ];
                     }
 
@@ -497,7 +479,6 @@ function getTournamentMappool(
                         $GroupStageWeekTwoNightCoreOverallSpeed       = $GroupStageWeekTwoNightCoreData['beatmapset']['bpm'];
                         $GroupStageWeekTwoNightCoreOverallDifficulty  = $GroupStageWeekTwoNightCoreData['accuracy'];
                         $GroupStageWeekTwoNightCoreOverallHealth      = $GroupStageWeekTwoNightCoreData['drain'];
-                        $GroupStageWeekTwoNightCorePassCount          = $GroupStageWeekTwoNightCoreData['passcount'];
 
                         $allMappoolNightCoreData[] = [
                             'beatmap_id'                    => $GroupStageWeekTwoNightCoreId,
@@ -515,8 +496,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $GroupStageWeekTwoNightCoreLength,
                             'beatmap_overall_speed'         => $GroupStageWeekTwoNightCoreOverallSpeed,
                             'beatmap_overall_difficulty'    => $GroupStageWeekTwoNightCoreOverallDifficulty,
-                            'beatmap_overall_health'        => $GroupStageWeekTwoNightCoreOverallHealth,
-                            'beatmap_pass_count'            => $GroupStageWeekTwoNightCorePassCount
+                            'beatmap_overall_health'        => $GroupStageWeekTwoNightCoreOverallHealth
                         ];
                     }
 
@@ -545,7 +525,6 @@ function getTournamentMappool(
                         $GroupStageWeekTwoFreeModOverallSpeed       = $GroupStageWeekTwoFreeModData['beatmapset']['bpm'];
                         $GroupStageWeekTwoFreeModOverallDifficulty  = $GroupStageWeekTwoFreeModData['accuracy'];
                         $GroupStageWeekTwoFreeModOverallHealth      = $GroupStageWeekTwoFreeModData['drain'];
-                        $GroupStageWeekTwoFreeModPassCount          = $GroupStageWeekTwoFreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $GroupStageWeekTwoFreeModId,
@@ -563,8 +542,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $GroupStageWeekTwoFreeModLength,
                             'beatmap_overall_speed'         => $GroupStageWeekTwoFreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $GroupStageWeekTwoFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $GroupStageWeekTwoFreeModOverallHealth,
-                            'beatmap_pass_count'            => $GroupStageWeekTwoFreeModPassCount
+                            'beatmap_overall_health'        => $GroupStageWeekTwoFreeModOverallHealth
                         ];
                     }
 
@@ -593,7 +571,6 @@ function getTournamentMappool(
                         $groupStageWeekTwoTieBreakerOverallSpeed       = $groupStageWeekTwoTieBreakerData['beatmapset']['bpm'];
                         $groupStageWeekTwoTieBreakerOverallDifficulty  = $groupStageWeekTwoTieBreakerData['accuracy'];
                         $groupStageWeekTwoTieBreakerOverallHealth      = $groupStageWeekTwoTieBreakerData['drain'];
-                        $groupStageWeekTwoTieBreakerPassCount          = $groupStageWeekTwoTieBreakerData['passcount'];
 
                         $allMappoolTieBreakerData[] = [
                             'beatmap_id'                    => $groupStageWeekTwoTieBreakerId,
@@ -611,8 +588,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $groupStageWeekTwoTieBreakerLength,
                             'beatmap_overall_speed'         => $groupStageWeekTwoTieBreakerOverallSpeed,
                             'beatmap_overall_difficulty'    => $groupStageWeekTwoTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekTwoTieBreakerOverallHealth,
-                            'beatmap_pass_count'            => $groupStageWeekTwoTieBreakerPassCount
+                            'beatmap_overall_health'        => $groupStageWeekTwoTieBreakerOverallHealth
                         ];
                     }
                     break;
@@ -642,7 +618,6 @@ function getTournamentMappool(
                         $semiFinalNoModOverallSpeed       = $semiFinalNoModData['beatmapset']['bpm'];
                         $semiFinalNoModOverallDifficulty  = $semiFinalNoModData['accuracy'];
                         $semiFinalNoModOverallHealth      = $semiFinalNoModData['drain'];
-                        $semiFinalNoModPassCount          = $semiFinalNoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $semiFinalNoModId,
@@ -660,8 +635,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalNoModLength,
                             'beatmap_overall_speed'         => $semiFinalNoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalNoModOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalNoModPassCount
+                            'beatmap_overall_health'        => $semiFinalNoModOverallHealth
                         ];
                     }
 
@@ -690,7 +664,6 @@ function getTournamentMappool(
                         $semiFinalHiddenOverallSpeed       = $semiFinalHiddenData['beatmapset']['bpm'];
                         $semiFinalHiddenOverallDifficulty  = $semiFinalHiddenData['accuracy'];
                         $semiFinalHiddenOverallHealth      = $semiFinalHiddenData['drain'];
-                        $semiFinalHiddenPassCount          = $semiFinalHiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $semiFinalHiddenId,
@@ -708,8 +681,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalHiddenLength,
                             'beatmap_overall_speed'         => $semiFinalHiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalHiddenOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalHiddenPassCount
+                            'beatmap_overall_health'        => $semiFinalHiddenOverallHealth
                         ];
                     }
 
@@ -738,7 +710,6 @@ function getTournamentMappool(
                         $semiFinalHardRockOverallSpeed       = $semiFinalHardRockData['beatmapset']['bpm'];
                         $semiFinalHardRockOverallDifficulty  = $semiFinalHardRockData['accuracy'];
                         $semiFinalHardRockOverallHealth      = $semiFinalHardRockData['drain'];
-                        $semiFinalHardRockPassCount          = $semiFinalHardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $semiFinalHardRockId,
@@ -756,8 +727,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalHardRockLength,
                             'beatmap_overall_speed'         => $semiFinalHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalHardRockOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalHardRockPassCount
+                            'beatmap_overall_health'        => $semiFinalHardRockOverallHealth
                         ];
                     }
 
@@ -786,7 +756,6 @@ function getTournamentMappool(
                         $semiFinalNightCoreOverallSpeed       = $semiFinalNightCoreData['beatmapset']['bpm'];
                         $semiFinalNightCoreOverallDifficulty  = $semiFinalNightCoreData['accuracy'];
                         $semiFinalNightCoreOverallHealth      = $semiFinalNightCoreData['drain'];
-                        $semiFinalNightCorePassCount          = $semiFinalNightCoreData['passcount'];
 
                         $allMappoolNightCoreData[] = [
                             'beatmap_id'                    => $semiFinalNightCoreId,
@@ -804,8 +773,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalNightCoreLength,
                             'beatmap_overall_speed'         => $semiFinalNightCoreOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalNightCoreOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalNightCoreOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalNightCorePassCount
+                            'beatmap_overall_health'        => $semiFinalNightCoreOverallHealth
                         ];
                     }
 
@@ -834,7 +802,6 @@ function getTournamentMappool(
                         $semiFinalFreeModOverallSpeed       = $semiFinalFreeModData['beatmapset']['bpm'];
                         $semiFinalFreeModOverallDifficulty  = $semiFinalFreeModData['accuracy'];
                         $semiFinalFreeModOverallHealth      = $semiFinalFreeModData['drain'];
-                        $semiFinalFreeModPassCount          = $semiFinalFreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $semiFinalFreeModId,
@@ -852,8 +819,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalFreeModLength,
                             'beatmap_overall_speed'         => $semiFinalFreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalFreeModOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalFreeModPassCount
+                            'beatmap_overall_health'        => $semiFinalFreeModOverallHealth
                         ];
                     }
 
@@ -882,7 +848,6 @@ function getTournamentMappool(
                         $semiFinalFlashLightOverallSpeed       = $semiFinalFlashLightData['beatmapset']['bpm'];
                         $semiFinalFlashLightOverallDifficulty  = $semiFinalFlashLightData['accuracy'];
                         $semiFinalFlashLightOverallHealth      = $semiFinalFlashLightData['drain'];
-                        $semiFinalFlashLightPassCount          = $semiFinalFlashLightData['passcount'];
 
                         $allMappoolFlashLightData[] = [
                             'beatmap_id'                    => $semiFinalFlashLightId,
@@ -900,8 +865,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalFlashLightLength,
                             'beatmap_overall_speed'         => $semiFinalFlashLightOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalFlashLightOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalFlashLightOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalFlashLightPassCount
+                            'beatmap_overall_health'        => $semiFinalFlashLightOverallHealth
                         ];
                     }
 
@@ -930,7 +894,6 @@ function getTournamentMappool(
                         $semiFinalTieBreakerOverallSpeed       = $semiFinalTieBreakerData['beatmapset']['bpm'];
                         $semiFinalTieBreakerOverallDifficulty  = $semiFinalTieBreakerData['accuracy'];
                         $semiFinalTieBreakerOverallHealth      = $semiFinalTieBreakerData['drain'];
-                        $semiFinalTieBreakerPassCount          = $semiFinalTieBreakerData['passcount'];
 
                         $allMappoolTieBreakerData[] = [
                             'beatmap_id'                    => $semiFinalTieBreakerId,
@@ -948,8 +911,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalTieBreakerLength,
                             'beatmap_overall_speed'         => $semiFinalTieBreakerOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalTieBreakerOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalTieBreakerPassCount
+                            'beatmap_overall_health'        => $semiFinalTieBreakerOverallHealth
                         ];
                     }
                     break;
@@ -979,7 +941,6 @@ function getTournamentMappool(
                         $finalNoModOverallSpeed       = $finalNoModData['beatmapset']['bpm'];
                         $finalNoModOverallDifficulty  = $finalNoModData['accuracy'];
                         $finalNoModOverallHealth      = $finalNoModData['drain'];
-                        $finalNoModPassCount          = $finalNoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $finalNoModId,
@@ -997,8 +958,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalNoModLength,
                             'beatmap_overall_speed'         => $finalNoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $finalNoModOverallHealth,
-                            'beatmap_pass_count'            => $finalNoModPassCount
+                            'beatmap_overall_health'        => $finalNoModOverallHealth
                         ];
                     }
 
@@ -1027,7 +987,6 @@ function getTournamentMappool(
                         $finalHiddenOverallSpeed       = $finalHiddenData['beatmapset']['bpm'];
                         $finalHiddenOverallDifficulty  = $finalHiddenData['accuracy'];
                         $finalHiddenOverallHealth      = $finalHiddenData['drain'];
-                        $finalHiddenPassCount          = $finalHiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $finalHiddenId,
@@ -1045,8 +1004,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalHiddenLength,
                             'beatmap_overall_speed'         => $finalHiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $finalHiddenOverallHealth,
-                            'beatmap_pass_count'            => $finalHiddenPassCount
+                            'beatmap_overall_health'        => $finalHiddenOverallHealth
                         ];
                     }
 
@@ -1075,7 +1033,6 @@ function getTournamentMappool(
                         $finalHardRockOverallSpeed       = $finalHardRockData['beatmapset']['bpm'];
                         $finalHardRockOverallDifficulty  = $finalHardRockData['accuracy'];
                         $finalHardRockOverallHealth      = $finalHardRockData['drain'];
-                        $finalHardRockPassCount          = $finalHardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $finalHardRockId,
@@ -1093,8 +1050,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalHardRockLength,
                             'beatmap_overall_speed'         => $finalHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $finalHardRockOverallHealth,
-                            'beatmap_pass_count'            => $finalHardRockPassCount
+                            'beatmap_overall_health'        => $finalHardRockOverallHealth
                         ];
                     }
 
@@ -1123,7 +1079,6 @@ function getTournamentMappool(
                         $finalNightCoreOverallSpeed       = $finalNightCoreData['beatmapset']['bpm'];
                         $finalNightCoreOverallDifficulty  = $finalNightCoreData['accuracy'];
                         $finalNightCoreOverallHealth      = $finalNightCoreData['drain'];
-                        $finalNightCorePassCount          = $finalNightCoreData['passcount'];
 
                         $allMappoolNightCoreData[] = [
                             'beatmap_id'                    => $finalNightCoreId,
@@ -1141,8 +1096,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalNightCoreLength,
                             'beatmap_overall_speed'         => $finalNightCoreOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalNightCoreOverallDifficulty,
-                            'beatmap_overall_health'        => $finalNightCoreOverallHealth,
-                            'beatmap_pass_count'            => $finalNightCorePassCount
+                            'beatmap_overall_health'        => $finalNightCoreOverallHealth
                         ];
                     }
 
@@ -1171,7 +1125,6 @@ function getTournamentMappool(
                         $finalFreeModOverallSpeed       = $finalFreeModData['beatmapset']['bpm'];
                         $finalFreeModOverallDifficulty  = $finalFreeModData['accuracy'];
                         $finalFreeModOverallHealth      = $finalFreeModData['drain'];
-                        $finalFreeModPassCount          = $finalFreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $finalFreeModId,
@@ -1189,8 +1142,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalFreeModLength,
                             'beatmap_overall_speed'         => $finalFreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $finalFreeModOverallHealth,
-                            'beatmap_pass_count'            => $finalFreeModPassCount
+                            'beatmap_overall_health'        => $finalFreeModOverallHealth
                         ];
                     }
 
@@ -1219,7 +1171,6 @@ function getTournamentMappool(
                         $finalTieBreakerOverallSpeed       = $finalTieBreakerData['beatmapset']['bpm'];
                         $finalTieBreakerOverallDifficulty  = $finalTieBreakerData['accuracy'];
                         $finalTieBreakerOverallHealth      = $finalTieBreakerData['drain'];
-                        $finalTieBreakerPassCount          = $finalTieBreakerData['passcount'];
 
                         $allMappoolTieBreakerData[] = [
                             'beatmap_id'                    => $finalTieBreakerId,
@@ -1237,8 +1188,284 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalTieBreakerLength,
                             'beatmap_overall_speed'         => $finalTieBreakerOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $finalTieBreakerOverallHealth,
-                            'beatmap_pass_count'            => $finalTieBreakerPassCount
+                            'beatmap_overall_health'        => $finalTieBreakerOverallHealth
+                        ];
+                    }
+                    break;
+
+                case 'GF':
+                    /*** GRAND FINAL NM BEATMAP DATA ***/
+                    $grandFinalNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
+                    foreach ($grandFinalNoModJsonData as $grandFinalNoModJsonType => $grandFinalNoModJsonId) {
+                        $grandFinalNoModData = getTournamentMappoolData(
+                            id: $grandFinalNoModJsonId,
+                            token: $mappoolAccessToken
+                        );
+
+                        $grandFinalNoModId                 = $grandFinalNoModData['id'];
+                        $grandFinalNoModRoundId            = $round;
+                        $grandFinalNoModTournamentId       = strtoupper(string: $name);
+                        $grandFinalNoModType               = $grandFinalNoModJsonType;
+                        $grandFinalNoModImage              = $grandFinalNoModData['beatmapset']['covers']['cover'];
+                        $grandFinalNoModUrl                = $grandFinalNoModData['url'];
+                        $grandFinalNoModName               = $grandFinalNoModData['beatmapset']['title'];
+                        $grandFinalNoModDifficultyName     = $grandFinalNoModData['version'];
+                        $grandFinalNoModFeatureArtist      = $grandFinalNoModData['beatmapset']['artist'];
+                        $grandFinalNoModMapper             = $grandFinalNoModData['beatmapset']['creator'];
+                        $grandFinalNoModMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalNoModData['beatmapset']['user_id']}";
+                        $grandFinalNoModDifficulty         = $grandFinalNoModData['difficulty_rating'];
+                        $grandFinalNoModLength             = $grandFinalNoModData['total_length'];
+                        $grandFinalNoModOverallSpeed       = $grandFinalNoModData['beatmapset']['bpm'];
+                        $grandFinalNoModOverallDifficulty  = $grandFinalNoModData['accuracy'];
+                        $grandFinalNoModOverallHealth      = $grandFinalNoModData['drain'];
+
+                        $allMappoolNoModData[] = [
+                            'beatmap_id'                    => $grandFinalNoModId,
+                            'beatmap_round_id'              => $grandFinalNoModRoundId,
+                            'beatmap_tournament_id'         => $grandFinalNoModTournamentId,
+                            'beatmap_type'                  => $grandFinalNoModType,
+                            'beatmap_image'                 => $grandFinalNoModImage,
+                            'beatmap_url'                   => $grandFinalNoModUrl,
+                            'beatmap_name'                  => $grandFinalNoModName,
+                            'beatmap_difficulty_name'       => $grandFinalNoModDifficultyName,
+                            'beatmap_feature_artist'        => $grandFinalNoModFeatureArtist,
+                            'beatmap_mapper'                => $grandFinalNoModMapper,
+                            'beatmap_mapper_url'            => $grandFinalNoModMapperUrl,
+                            'beatmap_difficulty'            => $grandFinalNoModDifficulty,
+                            'beatmap_length'                => $grandFinalNoModLength,
+                            'beatmap_overall_speed'         => $grandFinalNoModOverallSpeed,
+                            'beatmap_overall_difficulty'    => $grandFinalNoModOverallDifficulty,
+                            'beatmap_overall_health'        => $grandFinalNoModOverallHealth
+                        ];
+                    }
+
+
+                    /*** GRAND FINAL HD BEATMAP DATA ***/
+                    $grandFinalHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
+                    foreach ($grandFinalHiddenJsonData as $grandFinalHiddenJsonType => $grandFinalHiddenJsonId) {
+                        $grandFinalHiddenData = getTournamentMappoolData(
+                            id: $grandFinalHiddenJsonId,
+                            token: $mappoolAccessToken
+                        );
+
+                        $grandFinalHiddenId                 = $grandFinalHiddenData['id'];
+                        $grandFinalHiddenRoundId            = $round;
+                        $grandFinalHiddenTournamentId       = strtoupper(string: $name);
+                        $grandFinalHiddenType               = $grandFinalHiddenJsonType;
+                        $grandFinalHiddenImage              = $grandFinalHiddenData['beatmapset']['covers']['cover'];
+                        $grandFinalHiddenUrl                = $grandFinalHiddenData['url'];
+                        $grandFinalHiddenName               = $grandFinalHiddenData['beatmapset']['title'];
+                        $grandFinalHiddenDifficultyName     = $grandFinalHiddenData['version'];
+                        $grandFinalHiddenFeatureArtist      = $grandFinalHiddenData['beatmapset']['artist'];
+                        $grandFinalHiddenMapper             = $grandFinalHiddenData['beatmapset']['creator'];
+                        $grandFinalHiddenMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalHiddenData['beatmapset']['user_id']}";
+                        $grandFinalHiddenDifficulty         = $grandFinalHiddenData['difficulty_rating'];
+                        $grandFinalHiddenLength             = $grandFinalHiddenData['total_length'];
+                        $grandFinalHiddenOverallSpeed       = $grandFinalHiddenData['beatmapset']['bpm'];
+                        $grandFinalHiddenOverallDifficulty  = $grandFinalHiddenData['accuracy'];
+                        $grandFinalHiddenOverallHealth      = $grandFinalHiddenData['drain'];
+
+                        $allMappoolHiddenData[] = [
+                            'beatmap_id'                    => $grandFinalHiddenId,
+                            'beatmap_round_id'              => $grandFinalHiddenRoundId,
+                            'beatmap_tournament_id'         => $grandFinalHiddenTournamentId,
+                            'beatmap_type'                  => $grandFinalHiddenType,
+                            'beatmap_image'                 => $grandFinalHiddenImage,
+                            'beatmap_url'                   => $grandFinalHiddenUrl,
+                            'beatmap_name'                  => $grandFinalHiddenName,
+                            'beatmap_difficulty_name'       => $grandFinalHiddenDifficultyName,
+                            'beatmap_feature_artist'        => $grandFinalHiddenFeatureArtist,
+                            'beatmap_mapper'                => $grandFinalHiddenMapper,
+                            'beatmap_mapper_url'            => $grandFinalHiddenMapperUrl,
+                            'beatmap_difficulty'            => $grandFinalHiddenDifficulty,
+                            'beatmap_length'                => $grandFinalHiddenLength,
+                            'beatmap_overall_speed'         => $grandFinalHiddenOverallSpeed,
+                            'beatmap_overall_difficulty'    => $grandFinalHiddenOverallDifficulty,
+                            'beatmap_overall_health'        => $grandFinalHiddenOverallHealth
+                        ];
+                    }
+
+
+                    /*** GRAND FINAL HR BEATMAP DATA ***/
+                    $grandFinalHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
+                    foreach ($grandFinalHardRockJsonData as $grandFinalHardRockJsonType => $grandFinalHardRockJsonId) {
+                        $grandFinalHardRockData = getTournamentMappoolData(
+                            id: $grandFinalHardRockJsonId,
+                            token: $mappoolAccessToken
+                        );
+
+                        $grandFinalHardRockId                 = $grandFinalHardRockData['id'];
+                        $grandFinalHardRockRoundId            = $round;
+                        $grandFinalHardRockTournamentId       = strtoupper(string: $name);
+                        $grandFinalHardRockType               = $grandFinalHardRockJsonType;
+                        $grandFinalHardRockImage              = $grandFinalHardRockData['beatmapset']['covers']['cover'];
+                        $grandFinalHardRockUrl                = $grandFinalHardRockData['url'];
+                        $grandFinalHardRockName               = $grandFinalHardRockData['beatmapset']['title'];
+                        $grandFinalHardRockDifficultyName     = $grandFinalHardRockData['version'];
+                        $grandFinalHardRockFeatureArtist      = $grandFinalHardRockData['beatmapset']['artist'];
+                        $grandFinalHardRockMapper             = $grandFinalHardRockData['beatmapset']['creator'];
+                        $grandFinalHardRockMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalHardRockData['beatmapset']['user_id']}";
+                        $grandFinalHardRockDifficulty         = $grandFinalHardRockData['difficulty_rating'];
+                        $grandFinalHardRockLength             = $grandFinalHardRockData['total_length'];
+                        $grandFinalHardRockOverallSpeed       = $grandFinalHardRockData['beatmapset']['bpm'];
+                        $grandFinalHardRockOverallDifficulty  = $grandFinalHardRockData['accuracy'];
+                        $grandFinalHardRockOverallHealth      = $grandFinalHardRockData['drain'];
+
+                        $allMappoolHardRockData[] = [
+                            'beatmap_id'                    => $grandFinalHardRockId,
+                            'beatmap_round_id'              => $grandFinalHardRockRoundId,
+                            'beatmap_tournament_id'         => $grandFinalHardRockTournamentId,
+                            'beatmap_type'                  => $grandFinalHardRockType,
+                            'beatmap_image'                 => $grandFinalHardRockImage,
+                            'beatmap_url'                   => $grandFinalHardRockUrl,
+                            'beatmap_name'                  => $grandFinalHardRockName,
+                            'beatmap_difficulty_name'       => $grandFinalHardRockDifficultyName,
+                            'beatmap_feature_artist'        => $grandFinalHardRockFeatureArtist,
+                            'beatmap_mapper'                => $grandFinalHardRockMapper,
+                            'beatmap_mapper_url'            => $grandFinalHardRockMapperUrl,
+                            'beatmap_difficulty'            => $grandFinalHardRockDifficulty,
+                            'beatmap_length'                => $grandFinalHardRockLength,
+                            'beatmap_overall_speed'         => $grandFinalHardRockOverallSpeed,
+                            'beatmap_overall_difficulty'    => $grandFinalHardRockOverallDifficulty,
+                            'beatmap_overall_health'        => $grandFinalHardRockOverallHealth
+                        ];
+                    }
+
+
+                    /*** GRAND FINAL NC BEATMAP DATA ***/
+                    $grandFinalNightCoreJsonData = $mappoolReadableJsonData[$name][$round]['NC'];
+                    foreach ($grandFinalNightCoreJsonData as $grandFinalNightCoreJsonType => $grandFinalNightCoreJsonId) {
+                        $grandFinalNightCoreData = getTournamentMappoolData(
+                            id: $grandFinalNightCoreJsonId,
+                            token: $mappoolAccessToken
+                        );
+
+                        $grandFinalNightCoreId                 = $grandFinalNightCoreData['id'];
+                        $grandFinalNightCoreRoundId            = $round;
+                        $grandFinalNightCoreTournamentId       = strtoupper(string: $name);
+                        $grandFinalNightCoreType               = $grandFinalNightCoreJsonType;
+                        $grandFinalNightCoreImage              = $grandFinalNightCoreData['beatmapset']['covers']['cover'];
+                        $grandFinalNightCoreUrl                = $grandFinalNightCoreData['url'];
+                        $grandFinalNightCoreName               = $grandFinalNightCoreData['beatmapset']['title'];
+                        $grandFinalNightCoreDifficultyName     = $grandFinalNightCoreData['version'];
+                        $grandFinalNightCoreFeatureArtist      = $grandFinalNightCoreData['beatmapset']['artist'];
+                        $grandFinalNightCoreMapper             = $grandFinalNightCoreData['beatmapset']['creator'];
+                        $grandFinalNightCoreMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalNightCoreData['beatmapset']['user_id']}";
+                        $grandFinalNightCoreDifficulty         = $grandFinalNightCoreData['difficulty_rating'];
+                        $grandFinalNightCoreLength             = $grandFinalNightCoreData['total_length'];
+                        $grandFinalNightCoreOverallSpeed       = $grandFinalNightCoreData['beatmapset']['bpm'];
+                        $grandFinalNightCoreOverallDifficulty  = $grandFinalNightCoreData['accuracy'];
+                        $grandFinalNightCoreOverallHealth      = $grandFinalNightCoreData['drain'];
+
+                        $allMappoolNightCoreData[] = [
+                            'beatmap_id'                    => $grandFinalNightCoreId,
+                            'beatmap_round_id'              => $grandFinalNightCoreRoundId,
+                            'beatmap_tournament_id'         => $grandFinalNightCoreTournamentId,
+                            'beatmap_type'                  => $grandFinalNightCoreType,
+                            'beatmap_image'                 => $grandFinalNightCoreImage,
+                            'beatmap_url'                   => $grandFinalNightCoreUrl,
+                            'beatmap_name'                  => $grandFinalNightCoreName,
+                            'beatmap_difficulty_name'       => $grandFinalNightCoreDifficultyName,
+                            'beatmap_feature_artist'        => $grandFinalNightCoreFeatureArtist,
+                            'beatmap_mapper'                => $grandFinalNightCoreMapper,
+                            'beatmap_mapper_url'            => $grandFinalNightCoreMapperUrl,
+                            'beatmap_difficulty'            => $grandFinalNightCoreDifficulty,
+                            'beatmap_length'                => $grandFinalNightCoreLength,
+                            'beatmap_overall_speed'         => $grandFinalNightCoreOverallSpeed,
+                            'beatmap_overall_difficulty'    => $grandFinalNightCoreOverallDifficulty,
+                            'beatmap_overall_health'        => $grandFinalNightCoreOverallHealth
+                        ];
+                    }
+
+
+                    /*** GRAND FINAL FM BEATMAP DATA ***/
+                    $grandFinalFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
+                    foreach ($grandFinalFreeModJsonData as $grandFinalFreeModJsonType => $grandFinalFreeModJsonId) {
+                        $grandFinalFreeModData = getTournamentMappoolData(
+                            id: $grandFinalFreeModJsonId,
+                            token: $mappoolAccessToken
+                        );
+
+                        $grandFinalFreeModId                 = $grandFinalFreeModData['id'];
+                        $grandFinalFreeModRoundId            = $round;
+                        $grandFinalFreeModTournamentId       = strtoupper(string: $name);
+                        $grandFinalFreeModType               = $grandFinalFreeModJsonType;
+                        $grandFinalFreeModImage              = $grandFinalFreeModData['beatmapset']['covers']['cover'];
+                        $grandFinalFreeModUrl                = $grandFinalFreeModData['url'];
+                        $grandFinalFreeModName               = $grandFinalFreeModData['beatmapset']['title'];
+                        $grandFinalFreeModDifficultyName     = $grandFinalFreeModData['version'];
+                        $grandFinalFreeModFeatureArtist      = $grandFinalFreeModData['beatmapset']['artist'];
+                        $grandFinalFreeModMapper             = $grandFinalFreeModData['beatmapset']['creator'];
+                        $grandFinalFreeModMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalFreeModData['beatmapset']['user_id']}";
+                        $grandFinalFreeModDifficulty         = $grandFinalFreeModData['difficulty_rating'];
+                        $grandFinalFreeModLength             = $grandFinalFreeModData['total_length'];
+                        $grandFinalFreeModOverallSpeed       = $grandFinalFreeModData['beatmapset']['bpm'];
+                        $grandFinalFreeModOverallDifficulty  = $grandFinalFreeModData['accuracy'];
+                        $grandFinalFreeModOverallHealth      = $grandFinalFreeModData['drain'];
+
+                        $allMappoolFreeModData[] = [
+                            'beatmap_id'                    => $grandFinalFreeModId,
+                            'beatmap_round_id'              => $grandFinalFreeModRoundId,
+                            'beatmap_tournament_id'         => $grandFinalFreeModTournamentId,
+                            'beatmap_type'                  => $grandFinalFreeModType,
+                            'beatmap_image'                 => $grandFinalFreeModImage,
+                            'beatmap_url'                   => $grandFinalFreeModUrl,
+                            'beatmap_name'                  => $grandFinalFreeModName,
+                            'beatmap_difficulty_name'       => $grandFinalFreeModDifficultyName,
+                            'beatmap_feature_artist'        => $grandFinalFreeModFeatureArtist,
+                            'beatmap_mapper'                => $grandFinalFreeModMapper,
+                            'beatmap_mapper_url'            => $grandFinalFreeModMapperUrl,
+                            'beatmap_difficulty'            => $grandFinalFreeModDifficulty,
+                            'beatmap_length'                => $grandFinalFreeModLength,
+                            'beatmap_overall_speed'         => $grandFinalFreeModOverallSpeed,
+                            'beatmap_overall_difficulty'    => $grandFinalFreeModOverallDifficulty,
+                            'beatmap_overall_health'        => $grandFinalFreeModOverallHealth
+                        ];
+                    }
+
+
+                    /*** GRAND FINAL TB BEATMAP DATA ***/
+                    $grandFinalTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
+                    foreach ($grandFinalTieBreakerJsonData as $grandFinalTieBreakerJsonType => $grandFinalTieBreakerJsonId) {
+                        $grandFinalTieBreakerData = getTournamentMappoolData(
+                            id: $grandFinalTieBreakerJsonId,
+                            token: $mappoolAccessToken
+                        );
+
+                        $grandFinalTieBreakerId                 = $grandFinalTieBreakerData['id'];
+                        $grandFinalTieBreakerRoundId            = $round;
+                        $grandFinalTieBreakerTournamentId       = strtoupper(string: $name);
+                        $grandFinalTieBreakerType               = $grandFinalTieBreakerJsonType;
+                        $grandFinalTieBreakerImage              = $grandFinalTieBreakerData['beatmapset']['covers']['cover'];
+                        $grandFinalTieBreakerUrl                = $grandFinalTieBreakerData['url'];
+                        $grandFinalTieBreakerName               = $grandFinalTieBreakerData['beatmapset']['title'];
+                        $grandFinalTieBreakerDifficultyName     = $grandFinalTieBreakerData['version'];
+                        $grandFinalTieBreakerFeatureArtist      = $grandFinalTieBreakerData['beatmapset']['artist'];
+                        $grandFinalTieBreakerMapper             = $grandFinalTieBreakerData['beatmapset']['creator'];
+                        $grandFinalTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalTieBreakerData['beatmapset']['user_id']}";
+                        $grandFinalTieBreakerDifficulty         = $grandFinalTieBreakerData['difficulty_rating'];
+                        $grandFinalTieBreakerLength             = $grandFinalTieBreakerData['total_length'];
+                        $grandFinalTieBreakerOverallSpeed       = $grandFinalTieBreakerData['beatmapset']['bpm'];
+                        $grandFinalTieBreakerOverallDifficulty  = $grandFinalTieBreakerData['accuracy'];
+                        $grandFinalTieBreakerOverallHealth      = $grandFinalTieBreakerData['drain'];
+
+                        $allMappoolTieBreakerData[] = [
+                            'beatmap_id'                    => $grandFinalTieBreakerId,
+                            'beatmap_round_id'              => $grandFinalTieBreakerRoundId,
+                            'beatmap_tournament_id'         => $grandFinalTieBreakerTournamentId,
+                            'beatmap_type'                  => $grandFinalTieBreakerType,
+                            'beatmap_image'                 => $grandFinalTieBreakerImage,
+                            'beatmap_url'                   => $grandFinalTieBreakerUrl,
+                            'beatmap_name'                  => $grandFinalTieBreakerName,
+                            'beatmap_difficulty_name'       => $grandFinalTieBreakerDifficultyName,
+                            'beatmap_feature_artist'        => $grandFinalTieBreakerFeatureArtist,
+                            'beatmap_mapper'                => $grandFinalTieBreakerMapper,
+                            'beatmap_mapper_url'            => $grandFinalTieBreakerMapperUrl,
+                            'beatmap_difficulty'            => $grandFinalTieBreakerDifficulty,
+                            'beatmap_length'                => $grandFinalTieBreakerLength,
+                            'beatmap_overall_speed'         => $grandFinalTieBreakerOverallSpeed,
+                            'beatmap_overall_difficulty'    => $grandFinalTieBreakerOverallDifficulty,
+                            'beatmap_overall_health'        => $grandFinalTieBreakerOverallHealth
                         ];
                     }
                     break;
@@ -1276,7 +1503,6 @@ function getTournamentMappool(
                         $qualifierNoModOverallSpeed       = $qualifierNoModData['beatmapset']['bpm'];
                         $qualifierNoModOverallDifficulty  = $qualifierNoModData['accuracy'];
                         $qualifierNoModOverallHealth      = $qualifierNoModData['drain'];
-                        $qualifierNoModPassCount          = $qualifierNoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $qualifierNoModId,
@@ -1294,8 +1520,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $qualifierNoModLength,
                             'beatmap_overall_speed'         => $qualifierNoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $qualifierNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $qualifierNoModOverallHealth,
-                            'beatmap_pass_count'            => $qualifierNoModPassCount
+                            'beatmap_overall_health'        => $qualifierNoModOverallHealth
                         ];
                     }
 
@@ -1324,7 +1549,6 @@ function getTournamentMappool(
                         $qualifierHiddenOverallSpeed       = $qualifierHiddenData['beatmapset']['bpm'];
                         $qualifierHiddenOverallDifficulty  = $qualifierHiddenData['accuracy'];
                         $qualifierHiddenOverallHealth      = $qualifierHiddenData['drain'];
-                        $qualifierHiddenPassCount          = $qualifierHiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $qualifierHiddenId,
@@ -1342,8 +1566,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $qualifierHiddenLength,
                             'beatmap_overall_speed'         => $qualifierHiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $qualifierHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $qualifierHiddenOverallHealth,
-                            'beatmap_pass_count'            => $qualifierHiddenPassCount
+                            'beatmap_overall_health'        => $qualifierHiddenOverallHealth
                         ];
                     }
 
@@ -1372,7 +1595,6 @@ function getTournamentMappool(
                         $qualifierHardRockOverallSpeed       = $qualifierHardRockData['beatmapset']['bpm'];
                         $qualifierHardRockOverallDifficulty  = $qualifierHardRockData['accuracy'];
                         $qualifierHardRockOverallHealth      = $qualifierHardRockData['drain'];
-                        $qualifierHardRockPassCount          = $qualifierHardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $qualifierHardRockId,
@@ -1390,8 +1612,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $qualifierHardRockLength,
                             'beatmap_overall_speed'         => $qualifierHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $qualifierHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $qualifierHardRockOverallHealth,
-                            'beatmap_pass_count'            => $qualifierHardRockPassCount
+                            'beatmap_overall_health'        => $qualifierHardRockOverallHealth
                         ];
                     }
 
@@ -1420,7 +1641,6 @@ function getTournamentMappool(
                         $qualifierDoubleTimeOverallSpeed       = $qualifierDoubleTimeData['beatmapset']['bpm'];
                         $qualifierDoubleTimeOverallDifficulty  = $qualifierDoubleTimeData['accuracy'];
                         $qualifierDoubleTimeOverallHealth      = $qualifierDoubleTimeData['drain'];
-                        $qualifierDoubleTimePassCount          = $qualifierDoubleTimeData['passcount'];
 
                         $allMappoolDoubleTimeData[] = [
                             'beatmap_id'                    => $qualifierDoubleTimeId,
@@ -1438,8 +1658,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $qualifierDoubleTimeLength,
                             'beatmap_overall_speed'         => $qualifierDoubleTimeOverallSpeed,
                             'beatmap_overall_difficulty'    => $qualifierDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $qualifierDoubleTimeOverallHealth,
-                            'beatmap_pass_count'            => $qualifierDoubleTimePassCount
+                            'beatmap_overall_health'        => $qualifierDoubleTimeOverallHealth
                         ];
                     }
 
@@ -1468,7 +1687,6 @@ function getTournamentMappool(
                         $qualifierFreeModOverallSpeed       = $qualifierFreeModData['beatmapset']['bpm'];
                         $qualifierFreeModOverallDifficulty  = $qualifierFreeModData['accuracy'];
                         $qualifierFreeModOverallHealth      = $qualifierFreeModData['drain'];
-                        $qualifierFreeModPassCount          = $qualifierFreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $qualifierFreeModId,
@@ -1486,8 +1704,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $qualifierFreeModLength,
                             'beatmap_overall_speed'         => $qualifierFreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $qualifierFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $qualifierFreeModOverallHealth,
-                            'beatmap_pass_count'            => $qualifierFreeModPassCount
+                            'beatmap_overall_health'        => $qualifierFreeModOverallHealth
                         ];
                     }
                     break;
@@ -1517,7 +1734,6 @@ function getTournamentMappool(
                         $roundOf16NoModOverallSpeed       = $roundOf16NoModData['beatmapset']['bpm'];
                         $roundOf16NoModOverallDifficulty  = $roundOf16NoModData['accuracy'];
                         $roundOf16NoModOverallHealth      = $roundOf16NoModData['drain'];
-                        $roundOf16NoModPassCount          = $roundOf16NoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $roundOf16NoModId,
@@ -1535,8 +1751,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $roundOf16NoModLength,
                             'beatmap_overall_speed'         => $roundOf16NoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $roundOf16NoModOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16NoModOverallHealth,
-                            'beatmap_pass_count'            => $roundOf16NoModPassCount
+                            'beatmap_overall_health'        => $roundOf16NoModOverallHealth
                         ];
                     }
 
@@ -1565,7 +1780,6 @@ function getTournamentMappool(
                         $roundOf16HiddenOverallSpeed       = $roundOf16HiddenData['beatmapset']['bpm'];
                         $roundOf16HiddenOverallDifficulty  = $roundOf16HiddenData['accuracy'];
                         $roundOf16HiddenOverallHealth      = $roundOf16HiddenData['drain'];
-                        $roundOf16HiddenPassCount          = $roundOf16HiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $roundOf16HiddenId,
@@ -1583,8 +1797,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $roundOf16HiddenLength,
                             'beatmap_overall_speed'         => $roundOf16HiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $roundOf16HiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16HiddenOverallHealth,
-                            'beatmap_pass_count'            => $roundOf16HiddenPassCount
+                            'beatmap_overall_health'        => $roundOf16HiddenOverallHealth
                         ];
                     }
 
@@ -1613,7 +1826,6 @@ function getTournamentMappool(
                         $roundOf16HardRockOverallSpeed       = $roundOf16HardRockData['beatmapset']['bpm'];
                         $roundOf16HardRockOverallDifficulty  = $roundOf16HardRockData['accuracy'];
                         $roundOf16HardRockOverallHealth      = $roundOf16HardRockData['drain'];
-                        $roundOf16HardRockPassCount          = $roundOf16HardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $roundOf16HardRockId,
@@ -1631,8 +1843,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $roundOf16HardRockLength,
                             'beatmap_overall_speed'         => $roundOf16HardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $roundOf16HardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16HardRockOverallHealth,
-                            'beatmap_pass_count'            => $roundOf16HardRockPassCount
+                            'beatmap_overall_health'        => $roundOf16HardRockOverallHealth
                         ];
                     }
 
@@ -1661,7 +1872,6 @@ function getTournamentMappool(
                         $roundOf16DoubleTimeOverallSpeed       = $roundOf16DoubleTimeData['beatmapset']['bpm'];
                         $roundOf16DoubleTimeOverallDifficulty  = $roundOf16DoubleTimeData['accuracy'];
                         $roundOf16DoubleTimeOverallHealth      = $roundOf16DoubleTimeData['drain'];
-                        $roundOf16DoubleTimePassCount          = $roundOf16DoubleTimeData['passcount'];
 
                         $allMappoolDoubleTimeData[] = [
                             'beatmap_id'                    => $roundOf16DoubleTimeId,
@@ -1679,8 +1889,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $roundOf16DoubleTimeLength,
                             'beatmap_overall_speed'         => $roundOf16DoubleTimeOverallSpeed,
                             'beatmap_overall_difficulty'    => $roundOf16DoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16DoubleTimeOverallHealth,
-                            'beatmap_pass_count'            => $roundOf16DoubleTimePassCount
+                            'beatmap_overall_health'        => $roundOf16DoubleTimeOverallHealth
                         ];
                     }
 
@@ -1709,7 +1918,6 @@ function getTournamentMappool(
                         $roundOf16FreeModOverallSpeed       = $roundOf16FreeModData['beatmapset']['bpm'];
                         $roundOf16FreeModOverallDifficulty  = $roundOf16FreeModData['accuracy'];
                         $roundOf16FreeModOverallHealth      = $roundOf16FreeModData['drain'];
-                        $roundOf16FreeModPassCount          = $roundOf16FreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $roundOf16FreeModId,
@@ -1727,8 +1935,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $roundOf16FreeModLength,
                             'beatmap_overall_speed'         => $roundOf16FreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $roundOf16FreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16FreeModOverallHealth,
-                            'beatmap_pass_count'            => $roundOf16FreeModPassCount
+                            'beatmap_overall_health'        => $roundOf16FreeModOverallHealth
                         ];
                     }
 
@@ -1757,7 +1964,6 @@ function getTournamentMappool(
                         $roundOf16EasyOverallSpeed       = $roundOf16EasyData['beatmapset']['bpm'];
                         $roundOf16EasyOverallDifficulty  = $roundOf16EasyData['accuracy'];
                         $roundOf16EasyOverallHealth      = $roundOf16EasyData['drain'];
-                        $roundOf16EasyPassCount          = $roundOf16EasyData['passcount'];
 
                         $allMappoolEasyData[] = [
                             'beatmap_id'                    => $roundOf16EasyId,
@@ -1775,8 +1981,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $roundOf16EasyLength,
                             'beatmap_overall_speed'         => $roundOf16EasyOverallSpeed,
                             'beatmap_overall_difficulty'    => $roundOf16EasyOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16EasyOverallHealth,
-                            'beatmap_pass_count'            => $roundOf16EasyPassCount
+                            'beatmap_overall_health'        => $roundOf16EasyOverallHealth
                         ];
                     }
 
@@ -1804,7 +2009,6 @@ function getTournamentMappool(
                         $roundOf16HiddenHardRockOverallSpeed       = $roundOf16HiddenHardRockData['beatmapset']['bpm'];
                         $roundOf16HiddenHardRockOverallDifficulty  = $roundOf16HiddenHardRockData['accuracy'];
                         $roundOf16HiddenHardRockOverallHealth      = $roundOf16HiddenHardRockData['drain'];
-                        $roundOf16HiddenHardRockPassCount          = $roundOf16HiddenHardRockData['passcount'];
 
                         $allMappoolHiddenHardRockData[] = [
                             'beatmap_id'                    => $roundOf16HiddenHardRockId,
@@ -1822,8 +2026,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $roundOf16HiddenHardRockLength,
                             'beatmap_overall_speed'         => $roundOf16HiddenHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $roundOf16HiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16HiddenHardRockOverallHealth,
-                            'beatmap_pass_count'            => $roundOf16HiddenHardRockPassCount
+                            'beatmap_overall_health'        => $roundOf16HiddenHardRockOverallHealth
                         ];
                     }
 
@@ -1852,7 +2055,6 @@ function getTournamentMappool(
                         $roundOf16TieBreakerOverallSpeed       = $roundOf16TieBreakerData['beatmapset']['bpm'];
                         $roundOf16TieBreakerOverallDifficulty  = $roundOf16TieBreakerData['accuracy'];
                         $roundOf16TieBreakerOverallHealth      = $roundOf16TieBreakerData['drain'];
-                        $roundOf16TieBreakerPassCount          = $roundOf16TieBreakerData['passcount'];
 
                         $allMappoolTieBreakerData[] = [
                             'beatmap_id'                    => $roundOf16TieBreakerId,
@@ -1870,8 +2072,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $roundOf16TieBreakerLength,
                             'beatmap_overall_speed'         => $roundOf16TieBreakerOverallSpeed,
                             'beatmap_overall_difficulty'    => $roundOf16TieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16TieBreakerOverallHealth,
-                            'beatmap_pass_count'            => $roundOf16TieBreakerPassCount
+                            'beatmap_overall_health'        => $roundOf16TieBreakerOverallHealth
                         ];
                     }
                     break;
@@ -1901,7 +2102,6 @@ function getTournamentMappool(
                         $quarterFinalNoModOverallSpeed       = $quarterFinalNoModData['beatmapset']['bpm'];
                         $quarterFinalNoModOverallDifficulty  = $quarterFinalNoModData['accuracy'];
                         $quarterFinalNoModOverallHealth      = $quarterFinalNoModData['drain'];
-                        $quarterFinalNoModPassCount          = $quarterFinalNoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $quarterFinalNoModId,
@@ -1919,8 +2119,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $quarterFinalNoModLength,
                             'beatmap_overall_speed'         => $quarterFinalNoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $quarterFinalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalNoModOverallHealth,
-                            'beatmap_pass_count'            => $quarterFinalNoModPassCount
+                            'beatmap_overall_health'        => $quarterFinalNoModOverallHealth
                         ];
                     }
 
@@ -1949,7 +2148,6 @@ function getTournamentMappool(
                         $quarterFinalHiddenOverallSpeed       = $quarterFinalHiddenData['beatmapset']['bpm'];
                         $quarterFinalHiddenOverallDifficulty  = $quarterFinalHiddenData['accuracy'];
                         $quarterFinalHiddenOverallHealth      = $quarterFinalHiddenData['drain'];
-                        $quarterFinalHiddenPassCount          = $quarterFinalHiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $quarterFinalHiddenId,
@@ -1967,8 +2165,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $quarterFinalHiddenLength,
                             'beatmap_overall_speed'         => $quarterFinalHiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $quarterFinalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalHiddenOverallHealth,
-                            'beatmap_pass_count'            => $quarterFinalHiddenPassCount
+                            'beatmap_overall_health'        => $quarterFinalHiddenOverallHealth
                         ];
                     }
 
@@ -1997,7 +2194,6 @@ function getTournamentMappool(
                         $quarterFinalHardRockOverallSpeed       = $quarterFinalHardRockData['beatmapset']['bpm'];
                         $quarterFinalHardRockOverallDifficulty  = $quarterFinalHardRockData['accuracy'];
                         $quarterFinalHardRockOverallHealth      = $quarterFinalHardRockData['drain'];
-                        $quarterFinalHardRockPassCount          = $quarterFinalHardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $quarterFinalHardRockId,
@@ -2015,8 +2211,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $quarterFinalHardRockLength,
                             'beatmap_overall_speed'         => $quarterFinalHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $quarterFinalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalHardRockOverallHealth,
-                            'beatmap_pass_count'            => $quarterFinalHardRockPassCount
+                            'beatmap_overall_health'        => $quarterFinalHardRockOverallHealth
                         ];
                     }
 
@@ -2045,7 +2240,6 @@ function getTournamentMappool(
                         $quarterFinalDoubleTimeOverallSpeed       = $quarterFinalDoubleTimeData['beatmapset']['bpm'];
                         $quarterFinalDoubleTimeOverallDifficulty  = $quarterFinalDoubleTimeData['accuracy'];
                         $quarterFinalDoubleTimeOverallHealth      = $quarterFinalDoubleTimeData['drain'];
-                        $quarterFinalDoubleTimePassCount          = $quarterFinalDoubleTimeData['passcount'];
 
                         $allMappoolDoubleTimeData[] = [
                             'beatmap_id'                    => $quarterFinalDoubleTimeId,
@@ -2063,8 +2257,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $quarterFinalDoubleTimeLength,
                             'beatmap_overall_speed'         => $quarterFinalDoubleTimeOverallSpeed,
                             'beatmap_overall_difficulty'    => $quarterFinalDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalDoubleTimeOverallHealth,
-                            'beatmap_pass_count'            => $quarterFinalDoubleTimePassCount
+                            'beatmap_overall_health'        => $quarterFinalDoubleTimeOverallHealth
                         ];
                     }
 
@@ -2093,7 +2286,6 @@ function getTournamentMappool(
                         $quarterFinalFreeModOverallSpeed       = $quarterFinalFreeModData['beatmapset']['bpm'];
                         $quarterFinalFreeModOverallDifficulty  = $quarterFinalFreeModData['accuracy'];
                         $quarterFinalFreeModOverallHealth      = $quarterFinalFreeModData['drain'];
-                        $quarterFinalFreeModPassCount          = $quarterFinalFreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $quarterFinalFreeModId,
@@ -2111,8 +2303,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $quarterFinalFreeModLength,
                             'beatmap_overall_speed'         => $quarterFinalFreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $quarterFinalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalFreeModOverallHealth,
-                            'beatmap_pass_count'            => $quarterFinalFreeModPassCount
+                            'beatmap_overall_health'        => $quarterFinalFreeModOverallHealth
                         ];
                     }
 
@@ -2141,7 +2332,6 @@ function getTournamentMappool(
                         $quarterFinalEasyOverallSpeed       = $quarterFinalEasyData['beatmapset']['bpm'];
                         $quarterFinalEasyOverallDifficulty  = $quarterFinalEasyData['accuracy'];
                         $quarterFinalEasyOverallHealth      = $quarterFinalEasyData['drain'];
-                        $quarterFinalEasyPassCount          = $quarterFinalEasyData['passcount'];
 
                         $allMappoolEasyData[] = [
                             'beatmap_id'                    => $quarterFinalEasyId,
@@ -2159,8 +2349,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $quarterFinalEasyLength,
                             'beatmap_overall_speed'         => $quarterFinalEasyOverallSpeed,
                             'beatmap_overall_difficulty'    => $quarterFinalEasyOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalEasyOverallHealth,
-                            'beatmap_pass_count'            => $quarterFinalEasyPassCount
+                            'beatmap_overall_health'        => $quarterFinalEasyOverallHealth
                         ];
                     }
 
@@ -2188,7 +2377,6 @@ function getTournamentMappool(
                         $quarterFinalHiddenHardRockOverallSpeed       = $quarterFinalHiddenHardRockData['beatmapset']['bpm'];
                         $quarterFinalHiddenHardRockOverallDifficulty  = $quarterFinalHiddenHardRockData['accuracy'];
                         $quarterFinalHiddenHardRockOverallHealth      = $quarterFinalHiddenHardRockData['drain'];
-                        $quarterFinalHiddenHardRockPassCount          = $quarterFinalHiddenHardRockData['passcount'];
 
                         $allMappoolHiddenHardRockData[] = [
                             'beatmap_id'                    => $quarterFinalHiddenHardRockId,
@@ -2206,8 +2394,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $quarterFinalHiddenHardRockLength,
                             'beatmap_overall_speed'         => $quarterFinalHiddenHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $quarterFinalHiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalHiddenHardRockOverallHealth,
-                            'beatmap_pass_count'            => $quarterFinalHiddenHardRockPassCount
+                            'beatmap_overall_health'        => $quarterFinalHiddenHardRockOverallHealth
                         ];
                     }
 
@@ -2236,7 +2423,6 @@ function getTournamentMappool(
                         $quarterFinalTieBreakerOverallSpeed       = $quarterFinalTieBreakerData['beatmapset']['bpm'];
                         $quarterFinalTieBreakerOverallDifficulty  = $quarterFinalTieBreakerData['accuracy'];
                         $quarterFinalTieBreakerOverallHealth      = $quarterFinalTieBreakerData['drain'];
-                        $quarterFinalTieBreakerPassCount          = $quarterFinalTieBreakerData['passcount'];
 
                         $allMappoolTieBreakerData[] = [
                             'beatmap_id'                    => $quarterFinalTieBreakerId,
@@ -2254,8 +2440,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $quarterFinalTieBreakerLength,
                             'beatmap_overall_speed'         => $quarterFinalTieBreakerOverallSpeed,
                             'beatmap_overall_difficulty'    => $quarterFinalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalTieBreakerOverallHealth,
-                            'beatmap_pass_count'            => $quarterFinalTieBreakerPassCount
+                            'beatmap_overall_health'        => $quarterFinalTieBreakerOverallHealth
                         ];
                     }
                     break;
@@ -2285,7 +2470,6 @@ function getTournamentMappool(
                         $semiFinalNoModOverallSpeed       = $semiFinalNoModData['beatmapset']['bpm'];
                         $semiFinalNoModOverallDifficulty  = $semiFinalNoModData['accuracy'];
                         $semiFinalNoModOverallHealth      = $semiFinalNoModData['drain'];
-                        $semiFinalNoModPassCount          = $semiFinalNoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $semiFinalNoModId,
@@ -2303,8 +2487,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalNoModLength,
                             'beatmap_overall_speed'         => $semiFinalNoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalNoModOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalNoModPassCount
+                            'beatmap_overall_health'        => $semiFinalNoModOverallHealth
                         ];
                     }
 
@@ -2333,7 +2516,6 @@ function getTournamentMappool(
                         $semiFinalHiddenOverallSpeed       = $semiFinalHiddenData['beatmapset']['bpm'];
                         $semiFinalHiddenOverallDifficulty  = $semiFinalHiddenData['accuracy'];
                         $semiFinalHiddenOverallHealth      = $semiFinalHiddenData['drain'];
-                        $semiFinalHiddenPassCount          = $semiFinalHiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $semiFinalHiddenId,
@@ -2351,8 +2533,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalHiddenLength,
                             'beatmap_overall_speed'         => $semiFinalHiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalHiddenOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalHiddenPassCount
+                            'beatmap_overall_health'        => $semiFinalHiddenOverallHealth
                         ];
                     }
 
@@ -2381,7 +2562,6 @@ function getTournamentMappool(
                         $semiFinalHardRockOverallSpeed       = $semiFinalHardRockData['beatmapset']['bpm'];
                         $semiFinalHardRockOverallDifficulty  = $semiFinalHardRockData['accuracy'];
                         $semiFinalHardRockOverallHealth      = $semiFinalHardRockData['drain'];
-                        $semiFinalHardRockPassCount          = $semiFinalHardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $semiFinalHardRockId,
@@ -2399,8 +2579,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalHardRockLength,
                             'beatmap_overall_speed'         => $semiFinalHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalHardRockOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalHardRockPassCount
+                            'beatmap_overall_health'        => $semiFinalHardRockOverallHealth
                         ];
                     }
 
@@ -2429,7 +2608,6 @@ function getTournamentMappool(
                         $semiFinalDoubleTimeOverallSpeed       = $semiFinalDoubleTimeData['beatmapset']['bpm'];
                         $semiFinalDoubleTimeOverallDifficulty  = $semiFinalDoubleTimeData['accuracy'];
                         $semiFinalDoubleTimeOverallHealth      = $semiFinalDoubleTimeData['drain'];
-                        $semiFinalDoubleTimePassCount          = $semiFinalDoubleTimeData['passcount'];
 
                         $allMappoolDoubleTimeData[] = [
                             'beatmap_id'                    => $semiFinalDoubleTimeId,
@@ -2447,8 +2625,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalDoubleTimeLength,
                             'beatmap_overall_speed'         => $semiFinalDoubleTimeOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalDoubleTimeOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalDoubleTimePassCount
+                            'beatmap_overall_health'        => $semiFinalDoubleTimeOverallHealth
                         ];
                     }
 
@@ -2477,7 +2654,6 @@ function getTournamentMappool(
                         $semiFinalFreeModOverallSpeed       = $semiFinalFreeModData['beatmapset']['bpm'];
                         $semiFinalFreeModOverallDifficulty  = $semiFinalFreeModData['accuracy'];
                         $semiFinalFreeModOverallHealth      = $semiFinalFreeModData['drain'];
-                        $semiFinalFreeModPassCount          = $semiFinalFreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $semiFinalFreeModId,
@@ -2495,8 +2671,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalFreeModLength,
                             'beatmap_overall_speed'         => $semiFinalFreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalFreeModOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalFreeModPassCount
+                            'beatmap_overall_health'        => $semiFinalFreeModOverallHealth
                         ];
                     }
 
@@ -2525,7 +2700,6 @@ function getTournamentMappool(
                         $semiFinalEasyOverallSpeed       = $semiFinalEasyData['beatmapset']['bpm'];
                         $semiFinalEasyOverallDifficulty  = $semiFinalEasyData['accuracy'];
                         $semiFinalEasyOverallHealth      = $semiFinalEasyData['drain'];
-                        $semiFinalEasyPassCount          = $semiFinalEasyData['passcount'];
 
                         $allMappoolEasyData[] = [
                             'beatmap_id'                    => $semiFinalEasyId,
@@ -2543,8 +2717,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalEasyLength,
                             'beatmap_overall_speed'         => $semiFinalEasyOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalEasyOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalEasyOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalEasyPassCount
+                            'beatmap_overall_health'        => $semiFinalEasyOverallHealth
                         ];
                     }
 
@@ -2573,7 +2746,6 @@ function getTournamentMappool(
                         $semiFinalHiddenHardRockOverallSpeed       = $semiFinalHiddenHardRockData['beatmapset']['bpm'];
                         $semiFinalHiddenHardRockOverallDifficulty  = $semiFinalHiddenHardRockData['accuracy'];
                         $semiFinalHiddenHardRockOverallHealth      = $semiFinalHiddenHardRockData['drain'];
-                        $semiFinalHiddenHardRockPassCount          = $semiFinalHiddenHardRockData['passcount'];
 
                         $allMappoolHiddenHardRockData[] = [
                             'beatmap_id'                    => $semiFinalHiddenHardRockId,
@@ -2591,8 +2763,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalHiddenHardRockLength,
                             'beatmap_overall_speed'         => $semiFinalHiddenHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalHiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalHiddenHardRockOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalHiddenHardRockPassCount
+                            'beatmap_overall_health'        => $semiFinalHiddenHardRockOverallHealth
                         ];
                     }
 
@@ -2621,7 +2792,6 @@ function getTournamentMappool(
                         $semiFinalTieBreakerOverallSpeed       = $semiFinalTieBreakerData['beatmapset']['bpm'];
                         $semiFinalTieBreakerOverallDifficulty  = $semiFinalTieBreakerData['accuracy'];
                         $semiFinalTieBreakerOverallHealth      = $semiFinalTieBreakerData['drain'];
-                        $semiFinalTieBreakerPassCount          = $semiFinalTieBreakerData['passcount'];
 
                         $allMappoolTieBreakerData[] = [
                             'beatmap_id'                    => $semiFinalTieBreakerId,
@@ -2639,8 +2809,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $semiFinalTieBreakerLength,
                             'beatmap_overall_speed'         => $semiFinalTieBreakerOverallSpeed,
                             'beatmap_overall_difficulty'    => $semiFinalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalTieBreakerOverallHealth,
-                            'beatmap_pass_count'            => $semiFinalTieBreakerPassCount
+                            'beatmap_overall_health'        => $semiFinalTieBreakerOverallHealth
                         ];
                     }
                     break;
@@ -2670,7 +2839,6 @@ function getTournamentMappool(
                         $finalNoModOverallSpeed       = $finalNoModData['beatmapset']['bpm'];
                         $finalNoModOverallDifficulty  = $finalNoModData['accuracy'];
                         $finalNoModOverallHealth      = $finalNoModData['drain'];
-                        $finalNoModPassCount          = $finalNoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $finalNoModId,
@@ -2688,8 +2856,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalNoModLength,
                             'beatmap_overall_speed'         => $finalNoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $finalNoModOverallHealth,
-                            'beatmap_pass_count'            => $finalNoModPassCount
+                            'beatmap_overall_health'        => $finalNoModOverallHealth
                         ];
                     }
 
@@ -2718,7 +2885,6 @@ function getTournamentMappool(
                         $finalHiddenOverallSpeed       = $finalHiddenData['beatmapset']['bpm'];
                         $finalHiddenOverallDifficulty  = $finalHiddenData['accuracy'];
                         $finalHiddenOverallHealth      = $finalHiddenData['drain'];
-                        $finalHiddenPassCount          = $finalHiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $finalHiddenId,
@@ -2736,8 +2902,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalHiddenLength,
                             'beatmap_overall_speed'         => $finalHiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $finalHiddenOverallHealth,
-                            'beatmap_pass_count'            => $finalHiddenPassCount
+                            'beatmap_overall_health'        => $finalHiddenOverallHealth
                         ];
                     }
 
@@ -2766,7 +2931,6 @@ function getTournamentMappool(
                         $finalHardRockOverallSpeed       = $finalHardRockData['beatmapset']['bpm'];
                         $finalHardRockOverallDifficulty  = $finalHardRockData['accuracy'];
                         $finalHardRockOverallHealth      = $finalHardRockData['drain'];
-                        $finalHardRockPassCount          = $finalHardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $finalHardRockId,
@@ -2784,8 +2948,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalHardRockLength,
                             'beatmap_overall_speed'         => $finalHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $finalHardRockOverallHealth,
-                            'beatmap_pass_count'            => $finalHardRockPassCount
+                            'beatmap_overall_health'        => $finalHardRockOverallHealth
                         ];
                     }
 
@@ -2814,7 +2977,6 @@ function getTournamentMappool(
                         $finalDoubleTimeOverallSpeed       = $finalDoubleTimeData['beatmapset']['bpm'];
                         $finalDoubleTimeOverallDifficulty  = $finalDoubleTimeData['accuracy'];
                         $finalDoubleTimeOverallHealth      = $finalDoubleTimeData['drain'];
-                        $finalDoubleTimePassCount          = $finalDoubleTimeData['passcount'];
 
                         $allMappoolDoubleTimeData[] = [
                             'beatmap_id'                    => $finalDoubleTimeId,
@@ -2832,8 +2994,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalDoubleTimeLength,
                             'beatmap_overall_speed'         => $finalDoubleTimeOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $finalDoubleTimeOverallHealth,
-                            'beatmap_pass_count'            => $finalDoubleTimePassCount
+                            'beatmap_overall_health'        => $finalDoubleTimeOverallHealth
                         ];
                     }
 
@@ -2862,7 +3023,6 @@ function getTournamentMappool(
                         $finalFreeModOverallSpeed       = $finalFreeModData['beatmapset']['bpm'];
                         $finalFreeModOverallDifficulty  = $finalFreeModData['accuracy'];
                         $finalFreeModOverallHealth      = $finalFreeModData['drain'];
-                        $finalFreeModPassCount          = $finalFreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $finalFreeModId,
@@ -2880,8 +3040,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalFreeModLength,
                             'beatmap_overall_speed'         => $finalFreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $finalFreeModOverallHealth,
-                            'beatmap_pass_count'            => $finalFreeModPassCount
+                            'beatmap_overall_health'        => $finalFreeModOverallHealth
                         ];
                     }
 
@@ -2910,7 +3069,6 @@ function getTournamentMappool(
                         $finalEasyOverallSpeed       = $finalEasyData['beatmapset']['bpm'];
                         $finalEasyOverallDifficulty  = $finalEasyData['accuracy'];
                         $finalEasyOverallHealth      = $finalEasyData['drain'];
-                        $finalEasyPassCount          = $finalEasyData['passcount'];
 
                         $allMappoolEasyData[] = [
                             'beatmap_id'                    => $finalEasyId,
@@ -2928,8 +3086,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalEasyLength,
                             'beatmap_overall_speed'         => $finalEasyOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalEasyOverallDifficulty,
-                            'beatmap_overall_health'        => $finalEasyOverallHealth,
-                            'beatmap_pass_count'            => $finalEasyPassCount
+                            'beatmap_overall_health'        => $finalEasyOverallHealth
                         ];
                     }
 
@@ -2957,7 +3114,6 @@ function getTournamentMappool(
                         $finalHiddenHardRockOverallSpeed       = $finalHiddenHardRockData['beatmapset']['bpm'];
                         $finalHiddenHardRockOverallDifficulty  = $finalHiddenHardRockData['accuracy'];
                         $finalHiddenHardRockOverallHealth      = $finalHiddenHardRockData['drain'];
-                        $finalHiddenHardRockPassCount          = $finalHiddenHardRockData['passcount'];
 
                         $allMappoolHiddenHardRockData[] = [
                             'beatmap_id'                    => $finalHiddenHardRockId,
@@ -2975,8 +3131,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalHiddenHardRockLength,
                             'beatmap_overall_speed'         => $finalHiddenHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalHiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $finalHiddenHardRockOverallHealth,
-                            'beatmap_pass_count'            => $finalHiddenHardRockPassCount
+                            'beatmap_overall_health'        => $finalHiddenHardRockOverallHealth
                         ];
                     }
 
@@ -3005,7 +3160,6 @@ function getTournamentMappool(
                         $finalTieBreakerOverallSpeed       = $finalTieBreakerData['beatmapset']['bpm'];
                         $finalTieBreakerOverallDifficulty  = $finalTieBreakerData['accuracy'];
                         $finalTieBreakerOverallHealth      = $finalTieBreakerData['drain'];
-                        $finalTieBreakerPassCount          = $finalTieBreakerData['passcount'];
 
                         $allMappoolTieBreakerData[] = [
                             'beatmap_id'                    => $finalTieBreakerId,
@@ -3023,8 +3177,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $finalTieBreakerLength,
                             'beatmap_overall_speed'         => $finalTieBreakerOverallSpeed,
                             'beatmap_overall_difficulty'    => $finalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $finalTieBreakerOverallHealth,
-                            'beatmap_pass_count'            => $finalTieBreakerPassCount
+                            'beatmap_overall_health'        => $finalTieBreakerOverallHealth
                         ];
                     }
                     break;
@@ -3054,7 +3207,6 @@ function getTournamentMappool(
                         $grandFinalNoModOverallSpeed       = $grandFinalNoModData['beatmapset']['bpm'];
                         $grandFinalNoModOverallDifficulty  = $grandFinalNoModData['accuracy'];
                         $grandFinalNoModOverallHealth      = $grandFinalNoModData['drain'];
-                        $grandFinalNoModPassCount          = $grandFinalNoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $grandFinalNoModId,
@@ -3072,8 +3224,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $grandFinalNoModLength,
                             'beatmap_overall_speed'         => $grandFinalNoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $grandFinalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalNoModOverallHealth,
-                            'beatmap_pass_count'            => $grandFinalNoModPassCount
+                            'beatmap_overall_health'        => $grandFinalNoModOverallHealth
                         ];
                     }
 
@@ -3102,7 +3253,6 @@ function getTournamentMappool(
                         $grandFinalHiddenOverallSpeed       = $grandFinalHiddenData['beatmapset']['bpm'];
                         $grandFinalHiddenOverallDifficulty  = $grandFinalHiddenData['accuracy'];
                         $grandFinalHiddenOverallHealth      = $grandFinalHiddenData['drain'];
-                        $grandFinalHiddenPassCount          = $grandFinalHiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $grandFinalHiddenId,
@@ -3120,8 +3270,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $grandFinalHiddenLength,
                             'beatmap_overall_speed'         => $grandFinalHiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $grandFinalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalHiddenOverallHealth,
-                            'beatmap_pass_count'            => $grandFinalHiddenPassCount
+                            'beatmap_overall_health'        => $grandFinalHiddenOverallHealth
                         ];
                     }
 
@@ -3150,7 +3299,6 @@ function getTournamentMappool(
                         $grandFinalHardRockOverallSpeed       = $grandFinalHardRockData['beatmapset']['bpm'];
                         $grandFinalHardRockOverallDifficulty  = $grandFinalHardRockData['accuracy'];
                         $grandFinalHardRockOverallHealth      = $grandFinalHardRockData['drain'];
-                        $grandFinalHardRockPassCount          = $grandFinalHardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $grandFinalHardRockId,
@@ -3168,8 +3316,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $grandFinalHardRockLength,
                             'beatmap_overall_speed'         => $grandFinalHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $grandFinalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalHardRockOverallHealth,
-                            'beatmap_pass_count'            => $grandFinalHardRockPassCount
+                            'beatmap_overall_health'        => $grandFinalHardRockOverallHealth
                         ];
                     }
 
@@ -3198,7 +3345,6 @@ function getTournamentMappool(
                         $grandFinalDoubleTimeOverallSpeed       = $grandFinalDoubleTimeData['beatmapset']['bpm'];
                         $grandFinalDoubleTimeOverallDifficulty  = $grandFinalDoubleTimeData['accuracy'];
                         $grandFinalDoubleTimeOverallHealth      = $grandFinalDoubleTimeData['drain'];
-                        $grandFinalDoubleTimePassCount          = $grandFinalDoubleTimeData['passcount'];
 
                         $allMappoolDoubleTimeData[] = [
                             'beatmap_id'                    => $grandFinalDoubleTimeId,
@@ -3216,8 +3362,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $grandFinalDoubleTimeLength,
                             'beatmap_overall_speed'         => $grandFinalDoubleTimeOverallSpeed,
                             'beatmap_overall_difficulty'    => $grandFinalDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalDoubleTimeOverallHealth,
-                            'beatmap_pass_count'            => $grandFinalDoubleTimePassCount
+                            'beatmap_overall_health'        => $grandFinalDoubleTimeOverallHealth
                         ];
                     }
 
@@ -3246,7 +3391,6 @@ function getTournamentMappool(
                         $grandFinalFreeModOverallSpeed       = $grandFinalFreeModData['beatmapset']['bpm'];
                         $grandFinalFreeModOverallDifficulty  = $grandFinalFreeModData['accuracy'];
                         $grandFinalFreeModOverallHealth      = $grandFinalFreeModData['drain'];
-                        $grandFinalFreeModPassCount          = $grandFinalFreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $grandFinalFreeModId,
@@ -3264,8 +3408,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $grandFinalFreeModLength,
                             'beatmap_overall_speed'         => $grandFinalFreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $grandFinalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalFreeModOverallHealth,
-                            'beatmap_pass_count'            => $grandFinalFreeModPassCount
+                            'beatmap_overall_health'        => $grandFinalFreeModOverallHealth
                         ];
                     }
 
@@ -3294,7 +3437,6 @@ function getTournamentMappool(
                         $grandFinalEasyOverallSpeed       = $grandFinalEasyData['beatmapset']['bpm'];
                         $grandFinalEasyOverallDifficulty  = $grandFinalEasyData['accuracy'];
                         $grandFinalEasyOverallHealth      = $grandFinalEasyData['drain'];
-                        $grandFinalEasyPassCount          = $grandFinalEasyData['passcount'];
 
                         $allMappoolEasyData[] = [
                             'beatmap_id'                    => $grandFinalEasyId,
@@ -3312,8 +3454,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $grandFinalEasyLength,
                             'beatmap_overall_speed'         => $grandFinalEasyOverallSpeed,
                             'beatmap_overall_difficulty'    => $grandFinalEasyOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalEasyOverallHealth,
-                            'beatmap_pass_count'            => $grandFinalEasyPassCount
+                            'beatmap_overall_health'        => $grandFinalEasyOverallHealth
                         ];
                     }
 
@@ -3341,7 +3482,6 @@ function getTournamentMappool(
                         $grandFinalHiddenHardRockOverallSpeed       = $grandFinalHiddenHardRockData['beatmapset']['bpm'];
                         $grandFinalHiddenHardRockOverallDifficulty  = $grandFinalHiddenHardRockData['accuracy'];
                         $grandFinalHiddenHardRockOverallHealth      = $grandFinalHiddenHardRockData['drain'];
-                        $grandFinalHiddenHardRockPassCount          = $grandFinalHiddenHardRockData['passcount'];
 
                         $allMappoolHiddenHardRockData[] = [
                             'beatmap_id'                    => $grandFinalHiddenHardRockId,
@@ -3359,8 +3499,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $grandFinalHiddenHardRockLength,
                             'beatmap_overall_speed'         => $grandFinalHiddenHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $grandFinalHiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalHiddenHardRockOverallHealth,
-                            'beatmap_pass_count'            => $grandFinalHiddenHardRockPassCount
+                            'beatmap_overall_health'        => $grandFinalHiddenHardRockOverallHealth
                         ];
                     }
 
@@ -3389,7 +3528,6 @@ function getTournamentMappool(
                         $grandFinalTieBreakerOverallSpeed       = $grandFinalTieBreakerData['beatmapset']['bpm'];
                         $grandFinalTieBreakerOverallDifficulty  = $grandFinalTieBreakerData['accuracy'];
                         $grandFinalTieBreakerOverallHealth      = $grandFinalTieBreakerData['drain'];
-                        $grandFinalTieBreakerPassCount          = $grandFinalTieBreakerData['passcount'];
 
                         $allMappoolTieBreakerData[] = [
                             'beatmap_id'                    => $grandFinalTieBreakerId,
@@ -3407,8 +3545,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $grandFinalTieBreakerLength,
                             'beatmap_overall_speed'         => $grandFinalTieBreakerOverallSpeed,
                             'beatmap_overall_difficulty'    => $grandFinalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalTieBreakerOverallHealth,
-                            'beatmap_pass_count'            => $grandFinalTieBreakerPassCount
+                            'beatmap_overall_health'        => $grandFinalTieBreakerOverallHealth
                         ];
                     }
                     break;
@@ -3447,7 +3584,6 @@ function getTournamentMappool(
                         $allStarNoModOverallSpeed       = $allStarNoModData['beatmapset']['bpm'];
                         $allStarNoModOverallDifficulty  = $allStarNoModData['accuracy'];
                         $allStarNoModOverallHealth      = $allStarNoModData['drain'];
-                        $allStarNoModPassCount          = $allStarNoModData['passcount'];
 
                         $allMappoolNoModData[] = [
                             'beatmap_id'                    => $allStarNoModId,
@@ -3465,8 +3601,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $allStarNoModLength,
                             'beatmap_overall_speed'         => $allStarNoModOverallSpeed,
                             'beatmap_overall_difficulty'    => $allStarNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarNoModOverallHealth,
-                            'beatmap_pass_count'            => $allStarNoModPassCount
+                            'beatmap_overall_health'        => $allStarNoModOverallHealth
                         ];
                     }
 
@@ -3495,7 +3630,6 @@ function getTournamentMappool(
                         $allStarHiddenOverallSpeed       = $allStarHiddenData['beatmapset']['bpm'];
                         $allStarHiddenOverallDifficulty  = $allStarHiddenData['accuracy'];
                         $allStarHiddenOverallHealth      = $allStarHiddenData['drain'];
-                        $allStarHiddenPassCount          = $allStarHiddenData['passcount'];
 
                         $allMappoolHiddenData[] = [
                             'beatmap_id'                    => $allStarHiddenId,
@@ -3513,8 +3647,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $allStarHiddenLength,
                             'beatmap_overall_speed'         => $allStarHiddenOverallSpeed,
                             'beatmap_overall_difficulty'    => $allStarHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarHiddenOverallHealth,
-                            'beatmap_pass_count'            => $allStarHiddenPassCount
+                            'beatmap_overall_health'        => $allStarHiddenOverallHealth
                         ];
                     }
 
@@ -3543,7 +3676,6 @@ function getTournamentMappool(
                         $allStarHardRockOverallSpeed       = $allStarHardRockData['beatmapset']['bpm'];
                         $allStarHardRockOverallDifficulty  = $allStarHardRockData['accuracy'];
                         $allStarHardRockOverallHealth      = $allStarHardRockData['drain'];
-                        $allStarHardRockPassCount          = $allStarHardRockData['passcount'];
 
                         $allMappoolHardRockData[] = [
                             'beatmap_id'                    => $allStarHardRockId,
@@ -3561,8 +3693,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $allStarHardRockLength,
                             'beatmap_overall_speed'         => $allStarHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $allStarHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarHardRockOverallHealth,
-                            'beatmap_pass_count'            => $allStarHardRockPassCount
+                            'beatmap_overall_health'        => $allStarHardRockOverallHealth
                         ];
                     }
 
@@ -3591,7 +3722,6 @@ function getTournamentMappool(
                         $allStarDoubleTimeOverallSpeed       = $allStarDoubleTimeData['beatmapset']['bpm'];
                         $allStarDoubleTimeOverallDifficulty  = $allStarDoubleTimeData['accuracy'];
                         $allStarDoubleTimeOverallHealth      = $allStarDoubleTimeData['drain'];
-                        $allStarDoubleTimePassCount          = $allStarDoubleTimeData['passcount'];
 
                         $allMappoolDoubleTimeData[] = [
                             'beatmap_id'                    => $allStarDoubleTimeId,
@@ -3609,8 +3739,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $allStarDoubleTimeLength,
                             'beatmap_overall_speed'         => $allStarDoubleTimeOverallSpeed,
                             'beatmap_overall_difficulty'    => $allStarDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarDoubleTimeOverallHealth,
-                            'beatmap_pass_count'            => $allStarDoubleTimePassCount
+                            'beatmap_overall_health'        => $allStarDoubleTimeOverallHealth
                         ];
                     }
 
@@ -3639,7 +3768,6 @@ function getTournamentMappool(
                         $allStarFreeModOverallSpeed       = $allStarFreeModData['beatmapset']['bpm'];
                         $allStarFreeModOverallDifficulty  = $allStarFreeModData['accuracy'];
                         $allStarFreeModOverallHealth      = $allStarFreeModData['drain'];
-                        $allStarFreeModPassCount          = $allStarFreeModData['passcount'];
 
                         $allMappoolFreeModData[] = [
                             'beatmap_id'                    => $allStarFreeModId,
@@ -3657,8 +3785,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $allStarFreeModLength,
                             'beatmap_overall_speed'         => $allStarFreeModOverallSpeed,
                             'beatmap_overall_difficulty'    => $allStarFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarFreeModOverallHealth,
-                            'beatmap_pass_count'            => $allStarFreeModPassCount
+                            'beatmap_overall_health'        => $allStarFreeModOverallHealth
                         ];
                     }
 
@@ -3687,7 +3814,6 @@ function getTournamentMappool(
                         $allStarEasyOverallSpeed       = $allStarEasyData['beatmapset']['bpm'];
                         $allStarEasyOverallDifficulty  = $allStarEasyData['accuracy'];
                         $allStarEasyOverallHealth      = $allStarEasyData['drain'];
-                        $allStarEasyPassCount          = $allStarEasyData['passcount'];
 
                         $allMappoolEasyData[] = [
                             'beatmap_id'                    => $allStarEasyId,
@@ -3705,8 +3831,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $allStarEasyLength,
                             'beatmap_overall_speed'         => $allStarEasyOverallSpeed,
                             'beatmap_overall_difficulty'    => $allStarEasyOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarEasyOverallHealth,
-                            'beatmap_pass_count'            => $allStarEasyPassCount
+                            'beatmap_overall_health'        => $allStarEasyOverallHealth
                         ];
                     }
 
@@ -3734,7 +3859,6 @@ function getTournamentMappool(
                         $allStarHiddenHardRockOverallSpeed       = $allStarHiddenHardRockData['beatmapset']['bpm'];
                         $allStarHiddenHardRockOverallDifficulty  = $allStarHiddenHardRockData['accuracy'];
                         $allStarHiddenHardRockOverallHealth      = $allStarHiddenHardRockData['drain'];
-                        $allStarHiddenHardRockPassCount          = $allStarHiddenHardRockData['passcount'];
 
                         $allMappoolHiddenHardRockData[] = [
                             'beatmap_id'                    => $allStarHiddenHardRockId,
@@ -3752,8 +3876,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $allStarHiddenHardRockLength,
                             'beatmap_overall_speed'         => $allStarHiddenHardRockOverallSpeed,
                             'beatmap_overall_difficulty'    => $allStarHiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarHiddenHardRockOverallHealth,
-                            'beatmap_pass_count'            => $allStarHiddenHardRockPassCount
+                            'beatmap_overall_health'        => $allStarHiddenHardRockOverallHealth
                         ];
                     }
 
@@ -3782,7 +3905,6 @@ function getTournamentMappool(
                         $allStarTieBreakerOverallSpeed       = $allStarTieBreakerData['beatmapset']['bpm'];
                         $allStarTieBreakerOverallDifficulty  = $allStarTieBreakerData['accuracy'];
                         $allStarTieBreakerOverallHealth      = $allStarTieBreakerData['drain'];
-                        $allStarTieBreakerPassCount          = $allStarTieBreakerData['passcount'];
 
                         $allMappoolTieBreakerData[] = [
                             'beatmap_id'                    => $allStarTieBreakerId,
@@ -3800,8 +3922,7 @@ function getTournamentMappool(
                             'beatmap_length'                => $allStarTieBreakerLength,
                             'beatmap_overall_speed'         => $allStarTieBreakerOverallSpeed,
                             'beatmap_overall_difficulty'    => $allStarTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarTieBreakerOverallHealth,
-                            'beatmap_pass_count'            => $allStarTieBreakerPassCount
+                            'beatmap_overall_health'        => $allStarTieBreakerOverallHealth
                         ];
                     }
                     break;
