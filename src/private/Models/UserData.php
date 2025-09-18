@@ -58,20 +58,31 @@ function checkUserData(
     $checkStatement->bindParam(':userId', $id, PDO::PARAM_INT);
 
     $successCheckLogMessage = sprintf(
-        "Check successfully for user ID [%d]",
+        "User data check existed for user ID [%d]",
         $id
     );
     $unsuccessCheckLogMessage = sprintf(
-        "Check unsuccessfully for user ID [%d]",
+        "User data check not existed for user ID [%d]",
         $id
     );
 
     if ($checkStatement->execute()) {
-        error_log(
-            message: $successCheckLogMessage,
-            message_type: 0
-        );
-        return true;
+        // Checking trick: https://www.php.net/manual/en/pdostatement.fetchcolumn.php#100522
+        $existUserId = $checkStatement->fetchColumn(column: 0);
+
+        if (!$existUserId) {
+            error_log(
+                message: $unsuccessCheckLogMessage,
+                message_type: 0
+            );
+            return false;
+        } else {
+            error_log(
+                message: $successCheckLogMessage,
+                message_type: 0
+            );
+            return true;
+        }
     } else {
         error_log(
             message: $unsuccessCheckLogMessage,

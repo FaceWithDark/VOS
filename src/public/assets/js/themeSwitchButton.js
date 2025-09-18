@@ -1,3 +1,5 @@
+"use strict"; // Don't ask me why I need to do this, JS sucks in all shapes
+
 /**
  * Set theme mode for dynamic theme switch button.
  * @param {String} themeMode - theme change indicator
