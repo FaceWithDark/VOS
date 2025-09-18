@@ -24,7 +24,6 @@ function getBeatmapData(array $data): null
         $beatmapOverallSpeed        = $beatmap_data['beatmap_overall_speed'];
         $beatmapOverallDifficulty   = $beatmap_data['beatmap_overall_difficulty'];
         $beatmapOverallHealth       = $beatmap_data['beatmap_overall_health'];
-        $beatmapPassCount           = $beatmap_data['beatmap_pass_count'];
         $beatmapDatabase            = $GLOBALS['votDatabaseHandle'];
 
         if (!checkBeatmapData(id: $beatmapId, database_handle: $beatmapDatabase)) {
@@ -45,7 +44,6 @@ function getBeatmapData(array $data): null
                 bpm: $beatmapOverallSpeed,
                 od: $beatmapOverallDifficulty,
                 hp: $beatmapOverallHealth,
-                pass_count: $beatmapPassCount,
                 database_handle: $beatmapDatabase
             );
         } else {
@@ -107,7 +105,6 @@ function createBeatmapData(
     float $bpm,
     float $od,
     float $hp,
-    int $pass_count,
     object $database_handle
 ): string | bool {
     $insertQuery = "
@@ -128,8 +125,7 @@ function createBeatmapData(
                 beatmapLength,
                 beatmapOverallSpeed,
                 beatmapOverallDifficulty,
-                beatmapOverallHealth,
-                beatmapPassCount
+                beatmapOverallHealth
             )
         VALUES
             (
@@ -148,8 +144,7 @@ function createBeatmapData(
                 :beatmapLength,
                 :beatmapOverallSpeed,
                 :beatmapOverallDifficulty,
-                :beatmapOverallHealth,
-                :beatmapPassCount
+                :beatmapOverallHealth
             );
     ";
 
@@ -172,7 +167,6 @@ function createBeatmapData(
     $insertStatement->bindParam(':beatmapOverallSpeed',         $bpm,               PDO::PARAM_STR);
     $insertStatement->bindParam(':beatmapOverallDifficulty',    $od,                PDO::PARAM_STR);
     $insertStatement->bindParam(':beatmapOverallHealth',        $hp,                PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapPassCount',            $pass_count,        PDO::PARAM_INT);
 
     $successInsertLogMessage    = sprintf("Insert successfully for beatmap ID: %d", $beatmap_id);
     $unsuccessInsertLogMessage  = sprintf("Insert unsuccessfully for beatmap ID: %d", $beatmap_id);
@@ -213,8 +207,7 @@ function readBeatmapData(
             vb.beatmapLength,
             vb.beatmapOverallSpeed,
             vb.beatmapOverallDifficulty,
-            vb.beatmapOverallHealth,
-            vb.beatmapPassCount
+            vb.beatmapOverallHealth
         FROM
             VotBeatmap vb
         JOIN
@@ -232,31 +225,32 @@ function readBeatmapData(
                 WHEN 'NM4' THEN 4
                 WHEN 'NM5' THEN 5
                 WHEN 'NM6' THEN 6
+                WHEN 'NM7' THEN 7
 
-                WHEN 'HD1' THEN 7
-                WHEN 'HD2' THEN 8
+                WHEN 'HD1' THEN 8
+                WHEN 'HD2' THEN 9
 
-                WHEN 'HR1' THEN 9
-                WHEN 'HR2' THEN 10
+                WHEN 'HR1' THEN 10
+                WHEN 'HR2' THEN 11
 
-                WHEN 'DT1' THEN 11
-                WHEN 'NC1' THEN 11
-                WHEN 'DT2' THEN 12
-                WHEN 'NC2' THEN 12
+                WHEN 'DT1' THEN 12
+                WHEN 'NC1' THEN 12
+                WHEN 'DT2' THEN 13
+                WHEN 'NC2' THEN 13
 
-                WHEN 'FM1' THEN 13
-                WHEN 'FM2' THEN 14
-                WHEN 'FM3' THEN 15
+                WHEN 'FM1' THEN 14
+                WHEN 'FM2' THEN 15
+                WHEN 'FM3' THEN 16
 
-                WHEN 'EZ' THEN 16
+                WHEN 'EZ' THEN 17
 
-                WHEN 'HDHR' THEN 17
+                WHEN 'HDHR' THEN 18
 
-                WHEN 'FL' THEN 18
+                WHEN 'FL' THEN 19
 
-                WHEN 'TB' THEN 19
+                WHEN 'TB' THEN 20
 
-                ELSE 19
+                ELSE 21
             END) ASC;
     ";
 

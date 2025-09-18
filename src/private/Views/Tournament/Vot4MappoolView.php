@@ -57,7 +57,6 @@ require __DIR__ . '/../../Configurations/Length.php';
             $vot4TournamentBeatmapOverallSpeed        = sprintf('%.2f', $vot4TournamentBeatmapData['beatmapOverallSpeed']);
             $vot4TournamentBeatmapOverallDifficulty   = sprintf('%.2f', $vot4TournamentBeatmapData['beatmapOverallDifficulty']);
             $vot4TournamentBeatmapOverallHealth       = sprintf('%.2f', $vot4TournamentBeatmapData['beatmapOverallHealth']);
-            $vot4TournamentBeatmapPassCount           = $vot4TournamentBeatmapData['beatmapPassCount'];
 
             $beatmapDisplayTemplate =
                 <<<EOL
@@ -107,10 +106,6 @@ require __DIR__ . '/../../Configurations/Length.php';
                         <div class="song-hp">
                             <p>HP:</p>
                             <p>$vot4TournamentBeatmapOverallHealth</p>
-                        </div>
-                        <div class="song-pass">
-                            <p>Pass:</p>
-                            <p>$vot4TournamentBeatmapPassCount</p>
                         </div>
                     </div>
                 </div>
