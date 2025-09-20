@@ -134,7 +134,12 @@ switch ($httpRedirectRequest) {
 
     case '/setting':
         if (!isset($_COOKIE['vot_access_token'])) {
-            // Setting can only be change when the user logged in
+            // No direct access to this page without access token ('logout' scenario)
+            // TODO: Find a way to retrieve the IP address of the person that trying to access the page
+            error_log(
+                message: "Access denied to [SETTING] page due to no access token found from user!!!",
+                message_type: 0
+            );
             exit(header(
                 header: 'Location: /home',
                 replace: true,
@@ -147,37 +152,109 @@ switch ($httpRedirectRequest) {
             break;
         }
 
-        // TODO: === filter access to each of this path [START]. ===
     case '/setting/admin':
         if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Setting/AdminSettingView.php';
+            // No direct access to this page without access token ('logout' scenario)
+            // TODO: Find a way to retrieve the IP address of the person that trying to access the page
+            error_log(
+                message: "Access denied to [ADMIN SETTING] page due to no access token found from user!!!",
+                message_type: 0
+            );
+            exit(header(
+                header: 'Location: /home',
+                replace: true,
+                response_code: 302
+            ));
+            break;
         } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Setting/AdminSettingView.php';
+            $osuUserAccessToken = $_COOKIE['vot_access_token'];
+            $osuUserData = getOsuUserData(token: $osuUserAccessToken);
+
+            if ($osuUserData['id'] !== 19817503) {
+                // No direct access to this page without admin permission ('login' scenario)
+                // TODO: Find a way to retrieve the IP address of the person that trying to access the page
+                error_log(
+                    message: "Access denied to [ADMIN SETTING] page due to no admin permission!!!",
+                    message_type: 0
+                );
+                exit(header(
+                    header: 'Location: /home',
+                    replace: true,
+                    response_code: 302
+                ));
+                break;
+            } else {
+                // Direct access granted for user with admin permission
+                require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+                require __DIR__ . '/../Views/Setting/AdminSettingView.php';
+                break;
+            }
         }
-        break;
 
     case '/setting/tournament':
         if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Setting/TournamentSettingView.php';
+            // No direct access to this page without access token ('logout' scenario)
+            // TODO: Find a way to retrieve the IP address of the person that trying to access the page
+            error_log(
+                message: "Access denied to [TOURNAMENT SETTING] page due to no access token found from user!!!",
+                message_type: 0
+            );
+            exit(header(
+                header: 'Location: /home',
+                replace: true,
+                response_code: 302
+            ));
+            break;
         } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Setting/TournamentSettingView.php';
+            $osuUserAccessToken = $_COOKIE['vot_access_token'];
+            $osuUserData = getOsuUserData(token: $osuUserAccessToken);
+
+            // Website owner can access this role along with user that have proper role to access this page
+            if (
+                ($osuUserData['id'] !== 19817503)   ||
+                ($osuUserData['id'] !== 9623142)    ||
+                ($osuUserData['id'] !== 16039831)
+            ) {
+                // No direct access to this page without tournament host permission ('login' scenario)
+                // TODO: Find a way to retrieve the IP address of the person that trying to access the page
+                error_log(
+                    message: "Access denied to [TOURNAMENT SETTING] page due to no tournament host permission!!!",
+                    message_type: 0
+                );
+                exit(header(
+                    header: 'Location: /home',
+                    replace: true,
+                    response_code: 302
+                ));
+                break;
+            } else {
+                // Direct access granted for user with tournament host permission
+                require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
+                require __DIR__ . '/../Views/Setting/TournamentSettingView.php';
+                break;
+            }
         }
-        break;
 
     case '/setting/user':
         if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Setting/UserSettingView.php';
+            // No direct access to this page without access token ('logout' scenario)
+            // TODO: Find a way to retrieve the IP address of the person that trying to access the page
+            error_log(
+                message: "Access denied to [USER SETTING] page due to no access token found from user!!!",
+                message_type: 0
+            );
+            exit(header(
+                header: 'Location: /home',
+                replace: true,
+                response_code: 302
+            ));
+            break;
         } else {
+            // Direct access granted for authenticated user
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
             require __DIR__ . '/../Views/Setting/UserSettingView.php';
         }
         break;
-    // TODO: === filter access to each of this path [END]. ===
 
     case '/vot4':
         if (!isset($_COOKIE['vot_access_token'])) {
