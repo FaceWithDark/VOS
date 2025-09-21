@@ -24,13 +24,11 @@ function getCustomSongData(array $data): null
         $customSongOverallSpeed         = $custom_song_data['custom_song_overall_speed'];
         $customSongOverallDifficulty    = $custom_song_data['custom_song_overall_difficulty'];
         $customSongOverallHealth        = $custom_song_data['custom_song_overall_health'];
-        $customSongPassCount            = $custom_song_data['custom_song_pass_count'];
-        $customSongCustomIndicator      = $custom_song_data['custom_song_indicator'];
         $customSongDatabase             = $GLOBALS['votDatabaseHandle'];
 
         if (!checkCustomSongData(id: $customSongId, database_handle: $customSongDatabase)) {
             createCustomSongData(
-                id: $customSongId,
+                beatmap_id: $customSongId,
                 round_id: $customSongRoundId,
                 tournament_id: $customSongTournamentId,
                 type: $customSongType,
@@ -46,8 +44,6 @@ function getCustomSongData(array $data): null
                 bpm: $customSongOverallSpeed,
                 od: $customSongOverallDifficulty,
                 hp: $customSongOverallHealth,
-                pass_count: $customSongPassCount,
-                custom_indicator: $customSongCustomIndicator,
                 database_handle: $customSongDatabase
             );
         } else {
@@ -94,7 +90,7 @@ function checkCustomSongData(
 
 // Create
 function createCustomSongData(
-    int $id,
+    int $beatmap_id,
     string $round_id,
     string $tournament_id,
     string $type,
@@ -110,9 +106,8 @@ function createCustomSongData(
     float $bpm,
     float $od,
     float $hp,
-    int $pass_count,
-    bool $custom_indicator,
-    object $database_handle
+    object $database_handle,
+    bool $custom_indicator = true // Indicator for custom song enabled by default
 ): string | bool {
     $insertQuery = "
     INSERT INTO
@@ -162,7 +157,7 @@ function createCustomSongData(
     $insertStatement = $database_handle->prepare($insertQuery);
     // Surprisingly, PDO method doesn't have a proper way to handle float data
     // type. Reference: https://stackoverflow.com/a/1335191
-    $insertStatement->bindParam(':customSongId',                    $id,                PDO::PARAM_INT);
+    $insertStatement->bindParam(':customSongId',                    $beatmap_id,        PDO::PARAM_INT);
     $insertStatement->bindParam(':roundId',                         $round_id,          PDO::PARAM_STR);
     $insertStatement->bindParam(':tournamentId',                    $tournament_id,     PDO::PARAM_STR);
     $insertStatement->bindParam(':customSongType',                  $type,              PDO::PARAM_STR);
@@ -178,11 +173,10 @@ function createCustomSongData(
     $insertStatement->bindParam(':customSongOverallSpeed',          $bpm,               PDO::PARAM_STR);
     $insertStatement->bindParam(':customSongOverallDifficulty',     $od,                PDO::PARAM_STR);
     $insertStatement->bindParam(':customSongOverallHealth',         $hp,                PDO::PARAM_STR);
-    $insertStatement->bindParam(':customSongPassCount',             $pass_count,        PDO::PARAM_INT);
     $insertStatement->bindParam(':customSongIndicator',             $custom_indicator,  PDO::PARAM_INT); // Boolean data type just basically means '1' & '0' in MariaDB
 
-    $successInsertLogMessage    = sprintf("Insert successfully for custom song ID: %d", $id);
-    $unsuccessInsertLogMessage  = sprintf("Insert unsuccessfully for custom song ID: %d", $id);
+    $successInsertLogMessage    = sprintf("Insert successfully for custom song ID: %d", $beatmap_id);
+    $unsuccessInsertLogMessage  = sprintf("Insert unsuccessfully for custom song ID: %d", $beatmap_id);
 
     if ($insertStatement->execute()) {
         error_log(message: $successInsertLogMessage, message_type: 0);
