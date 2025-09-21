@@ -13,6 +13,7 @@ require __DIR__ . '/../../Configurations/Length.php';
 <section class="custom-song-vot-page">
     <form action="/song/vot" method="get">
         <button type="submit" name="tournament" value="DEFAULT">Default</button>
+        <button type="submit" name="tournament" value="VOT5">VOT5</button>
         <button type="submit" name="tournament" value="VOT4">VOT4</button>
         <button type="submit" name="tournament" value="VOT3">VOT3</button>
         <button type="submit" name="tournament" value="VOT2">VOT2</button>
