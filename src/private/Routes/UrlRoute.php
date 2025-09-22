@@ -125,9 +125,7 @@ switch ($httpRedirectRequest) {
                 // Perform the MVC, after button get clicked
                 require __DIR__ . '/../Views/Song/SongVotView.php';
                 $votTournamentName = $_GET['tournament'];
-                getTournamentCustomSong(
-                    name: $votTournamentName
-                );
+                getTournamentCustomSong(name: $votTournamentName);
             }
         }
         break;

@@ -29,7 +29,7 @@ require __DIR__ . '/../../Configurations/Length.php';
         $votTournamentName = $_GET['tournament'];
 
         $votTournamentCustomSongData = readCustomSongData(
-            name: $votTournamentName,
+            tournament: $votTournamentName,
             database_handle: $votTournamentDatabase
         );
 
@@ -49,7 +49,6 @@ require __DIR__ . '/../../Configurations/Length.php';
             $votTournamentCustomSongOverallSpeed        = sprintf('%.2f', $votTournamentCustomSongDisplayData['beatmapOverallSpeed']);
             $votTournamentCustomSongOverallDifficulty   = sprintf('%.2f', $votTournamentCustomSongDisplayData['beatmapOverallDifficulty']);
             $votTournamentCustomSongOverallHealth       = sprintf('%.2f', $votTournamentCustomSongDisplayData['beatmapOverallHealth']);
-            $votTournamentCustomSongPassCount           = $votTournamentCustomSongDisplayData['beatmapPassCount'];
 
             $customSongDisplayTemplate =
                 <<<EOL
@@ -105,9 +104,6 @@ require __DIR__ . '/../../Configurations/Length.php';
                             </div>
                             <div class="custom-song-hp">
                                 <p>HP: $votTournamentCustomSongOverallHealth</p>
-                            </div>
-                            <div class="custom-song-pass">
-                                <p>Pass: $votTournamentCustomSongPassCount</p>
                             </div>
                         </div>
                     </div>

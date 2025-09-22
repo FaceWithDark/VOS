@@ -557,8 +557,7 @@ body section.custom-song-vot-page div.box-container div.custom-song-footer div.c
 body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-length,
 body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-speed,
 body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-od,
-body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-hp,
-body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-pass {
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-hp {
 	display: flex;
 	flex-direction: row;
 	padding: 0rem 1.5rem;
@@ -574,8 +573,7 @@ body section.custom-song-vot-page div.box-container div.custom-song-footer div.c
 body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-length p,
 body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-speed p,
 body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-od p,
-body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-hp p,
-body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-pass p {
+body section.custom-song-vot-page div.box-container div.custom-song-footer div.custom-song-attributes div.custom-song-hp p {
 	font-weight: bold;
 	font-size: 1.025rem;
 }
