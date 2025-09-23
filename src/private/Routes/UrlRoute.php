@@ -10,7 +10,6 @@ require __DIR__ . '/../Controllers/UserDataController.php';
 require __DIR__ . '/../Controllers/LogOutController.php';
 require __DIR__ . '/../Controllers/LogInController.php';
 require __DIR__ . '/../Controllers/MappoolController.php';
-require __DIR__ . '/../Controllers/StaffController.php';
 require __DIR__ . '/../Controllers/SongController.php';
 
 $httpRedirectRequest = parse_url(url: $_SERVER['REQUEST_URI'], component: PHP_URL_PATH);
@@ -300,37 +299,14 @@ switch ($httpRedirectRequest) {
 
     case '/vot4/staff':
         if (!isset($_COOKIE['vot_access_token'])) {
-            // No need to fetch new staff data (if any), read staff data
-            // straight away within the include 'View' file
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Tournament/Vot4StaffView.php';
+            require __DIR__ . '/../Controllers/StaffController.php';
+            break;
         } else {
-            // In need of fetching new staff data (if any) using the below
-            // data fetching method
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-
-            if (!isset($_GET['role'])) {
-                // Do nothing, show the page only
-                require __DIR__ . '/../Views/Tournament/Vot4StaffView.php';
-            } else {
-                // Perform the MVC, after button get clicked
-                require __DIR__ . '/../Views/Tournament/Vot4StaffView.php';
-                $vot4TournamentName = explode(
-                    separator: '/',
-                    string: trim(
-                        string: $_SERVER['REQUEST_URI'],
-                        characters: '/'
-                    ),
-                    limit: PHP_INT_MAX
-                )[0];
-                $vot4StaffRole = $_GET['role'];
-                getTournamentStaff(
-                    name: $vot4TournamentName,
-                    role: $vot4StaffRole
-                );
-            }
+            require __DIR__ . '/../Controllers/StaffController.php';
+            break;
         }
-        break;
 
     case '/vot5':
         if (!isset($_COOKIE['vot_access_token'])) {
