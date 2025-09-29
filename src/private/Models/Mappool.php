@@ -5,90 +5,155 @@ declare(strict_types=1);
 require __DIR__ . '/../Configurations/Database.php';
 
 
-function getBeatmapData(array $data): null
-{
-    foreach ($data as $beatmap_data) {
-        $beatmapId                  = $beatmap_data['beatmap_id'];
-        $roundId                    = $beatmap_data['beatmap_round_id'];
-        $tournamentId               = $beatmap_data['beatmap_tournament_id'];
-        $beatmapType                = $beatmap_data['beatmap_type'];
-        $beatmapImage               = $beatmap_data['beatmap_image'];
-        $beatmapUrl                 = $beatmap_data['beatmap_url'];
-        $beatmapName                = $beatmap_data['beatmap_name'];
-        $beatmapDifficultyName      = $beatmap_data['beatmap_difficulty_name'];
-        $beatmapFeatureArtist       = $beatmap_data['beatmap_feature_artist'];
-        $beatmapMapper              = $beatmap_data['beatmap_mapper'];
-        $beatmapMapperUrl           = $beatmap_data['beatmap_mapper_url'];
-        $beatmapDifficulty          = $beatmap_data['beatmap_difficulty'];
-        $beatmapLength              = $beatmap_data['beatmap_length'];
-        $beatmapOverallSpeed        = $beatmap_data['beatmap_overall_speed'];
-        $beatmapOverallDifficulty   = $beatmap_data['beatmap_overall_difficulty'];
-        $beatmapOverallHealth       = $beatmap_data['beatmap_overall_health'];
-        $beatmapDatabase            = $GLOBALS['votDatabaseHandle'];
+function getMappoolData(
+    int $id,
+    string $token
+): array | bool {
+    $httpAuthorisationType  = $token;
+    $httpAcceptType         = 'application/json';
+    $httpContentType        = 'application/json';
+    $beatmapUrl             = "https://osu.ppy.sh/api/v2/beatmaps/{$id}";
 
-        if (!checkBeatmapData(id: $beatmapId, database_handle: $beatmapDatabase)) {
-            createBeatmapData(
-                beatmap_id: $beatmapId,
-                round_id: $roundId,
-                tournament_id: $tournamentId,
-                type: $beatmapType,
-                image: $beatmapImage,
-                url: $beatmapUrl,
-                name: $beatmapName,
-                diff_name: $beatmapDifficultyName,
-                fa: $beatmapFeatureArtist,
-                mapper: $beatmapMapper,
-                mapper_url: $beatmapMapperUrl,
-                diff: $beatmapDifficulty,
-                length: $beatmapLength,
-                bpm: $beatmapOverallSpeed,
-                od: $beatmapOverallDifficulty,
-                hp: $beatmapOverallHealth,
-                database_handle: $beatmapDatabase
-            );
+    if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+        $httpHeaderRequest = [
+            "Authorization: Bearer {$httpAuthorisationType}",
+            "Accept: {$httpAcceptType}",
+            "Content-Type: {$httpContentType}",
+        ];
+
+        # CURL session will be handled manually through curl_setopt()
+        $mappoolCurlHandle = curl_init(url: null);
+
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_URL, value: $beatmapUrl);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HEADER, value: 0);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
+
+        $mappoolCurlResponse = curl_exec(handle: $mappoolCurlHandle);
+
+        if (curl_errno(handle: $mappoolCurlHandle)) {
+            error_log(curl_error(handle: $mappoolCurlHandle));
+            curl_close(handle: $mappoolCurlHandle);
+            return false; // An error occurred during the API call
+
         } else {
-            // TODO: UPDATE query here (change the 'view' table only, not the actual table if all data stay the same).
-            error_log(message: 'Beatmap data exist, simply ignoring it...', message_type: 0);
-        };
+            $mappoolUsableData = json_decode(
+                json: $mappoolCurlResponse,
+                associative: true,
+                depth: 512,
+                flags: 0
+            );
+
+            curl_close(handle: $mappoolCurlHandle);
+            return $mappoolUsableData;
+        }
+    } else {
+        $httpHeaderRequest = array(
+            "Authorization: Bearer {$httpAuthorisationType}",
+            "Accept: {$httpAcceptType}",
+            "Content-Type: {$httpContentType}",
+        );
+
+        # CURL session will be handled manually through curl_setopt()
+        $mappoolCurlHandle = curl_init(url: null);
+
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_URL, value: $beatmapUrl);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HEADER, value: 0);
+        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
+
+        $mappoolCurlResponse = curl_exec(handle: $mappoolCurlHandle);
+
+        if (curl_errno(handle: $mappoolCurlHandle)) {
+            error_log(curl_error(handle: $mappoolCurlHandle));
+            curl_close(handle: $mappoolCurlHandle);
+            return false; // An error occurred during the API call
+
+        } else {
+            $mappoolUsableData = json_decode(
+                json: $mappoolCurlResponse,
+                associative: true,
+                depth: 512,
+                flags: 0
+            );
+
+            curl_close(handle: $mappoolCurlHandle);
+            return $mappoolUsableData;
+        }
     }
-    return null;
 }
 
 
-function checkBeatmapData(
+function checkMappoolData(
     int $id,
-    object $database_handle
-): int | bool {
+    string $round,
+    string $tournament
+): bool {
+    // IDE cannot recognise PDO object at runtime somehow
+    global $votDatabaseHandle;
+
+    $successCheckLogMessage = sprintf(
+        "[%s] mappool data check in [%s] tournament existed for beatmap ID [%d].",
+        $round,
+        $tournament,
+        $id
+    );
+    $unsuccessCheckLogMessage = sprintf(
+        "[%s] mappool data check in [%s] tournament not existed for beatmap ID [%d].",
+        $round,
+        $tournament,
+        $id
+    );
+
     $checkQuery = "
         SELECT
-            COUNT(beatmapId)
+            beatmapId,
+            roundId,
+            tournamentId
         FROM
             VotBeatmap
         WHERE
-            beatmapId = :beatmapId;
+            beatmapId = :beatmapId
+        AND
+            roundId = :roundId
+        AND
+            tournamentId = :tournamentId;
     ";
 
-    $checkStatement = $database_handle->prepare($checkQuery);
-    $checkStatement->bindParam(':beatmapId', $id, PDO::PARAM_INT);
-
-    $successCheckLogMessage    = sprintf("Check successfully for beatmap ID: %d", $id);
-    $unsuccessCheckLogMessage  = sprintf("Check unsuccessfully for beatmap ID: %d", $id);
+    $checkStatement = $votDatabaseHandle->prepare($checkQuery);
+    $checkStatement->bindParam(':beatmapId',        $id,            PDO::PARAM_INT);
+    $checkStatement->bindParam(':roundId',          $round,         PDO::PARAM_STR);
+    $checkStatement->bindParam(':tournamentId',     $tournament,    PDO::PARAM_STR);
 
     if ($checkStatement->execute()) {
-        error_log(message: $successCheckLogMessage, message_type: 0);
-        $checkAllUserData = $checkStatement->fetchColumn(
-            column: 0
-        );
-        return $checkAllUserData;
+        // Checking trick: https://www.php.net/manual/en/pdostatement.fetchcolumn.php#100522
+        $existBeatmapCustomSong = $checkStatement->fetchColumn(column: 0);
+
+        if (!$existBeatmapCustomSong) {
+            error_log(
+                message: $unsuccessCheckLogMessage,
+                message_type: 0
+            );
+            return false;
+        } else {
+            error_log(
+                message: $successCheckLogMessage,
+                message_type: 0
+            );
+            return true;
+        }
     } else {
-        error_log(message: $unsuccessCheckLogMessage, message_type: 0);
+        error_log(
+            message: $unsuccessCheckLogMessage,
+            message_type: 0
+        );
         return false;
     }
 }
 
 
 // Create
-function createBeatmapData(
+function createMappoolData(
     int $beatmap_id,
     string $round_id,
     string $tournament_id,
@@ -105,11 +170,27 @@ function createBeatmapData(
     float $bpm,
     float $od,
     float $hp,
-    object $database_handle
-): string | bool {
+    bool $custom_indicator = false // Indicator for non-custom song enabled by default
+): bool {
+    // IDE cannot recognise PDO object at runtime somehow
+    global $votDatabaseHandle;
+
+    $successInsertLogMessage = sprintf(
+        "Insert successfully for [%s] mappool in [%s] tournament with beatmap ID [%d].",
+        $round_id,
+        $tournament_id,
+        $beatmap_id
+    );
+    $unsuccessInsertLogMessage = sprintf(
+        "Insert unsuccessfully for [%s] mappool in [%s] tournament with beatmap ID [%d].",
+        $round_id,
+        $tournament_id,
+        $beatmap_id
+    );
+
     $insertQuery = "
-        INSERT INTO
-            VotBeatmap (
+        INSERT INTO VotBeatmap
+            (
                 beatmapId,
                 roundId,
                 tournamentId,
@@ -125,76 +206,94 @@ function createBeatmapData(
                 beatmapLength,
                 beatmapOverallSpeed,
                 beatmapOverallDifficulty,
-                beatmapOverallHealth
+                beatmapOverallHealth,
+                beatmapCustom
             )
         VALUES
             (
-                :beatmapId,
+                :customSongId,
                 :roundId,
                 :tournamentId,
-                :beatmapType,
-                :beatmapImage,
-                :beatmapUrl,
-                :beatmapName,
-                :beatmapDifficultyName,
-                :beatmapFeatureArtist,
-                :beatmapMapper,
-                :beatmapMapperUrl,
-                :beatmapDifficulty,
-                :beatmapLength,
-                :beatmapOverallSpeed,
-                :beatmapOverallDifficulty,
-                :beatmapOverallHealth
+                :customSongType,
+                :customSongImage,
+                :customSongUrl,
+                :customSongName,
+                :customSongDifficultyName,
+                :customSongFeatureArtist,
+                :customSongMapper,
+                :customSongMapperUrl,
+                :customSongDifficulty,
+                :customSongLength,
+                :customSongOverallSpeed,
+                :customSongOverallDifficulty,
+                :customSongOverallHealth,
+                :customSongIndicator
             );
     ";
 
-    $insertStatement = $database_handle->prepare($insertQuery);
+    $insertStatement = $votDatabaseHandle->prepare($insertQuery);
     // Surprisingly, PDO method doesn't have a proper way to handle float data
     // type. Reference: https://stackoverflow.com/a/1335191
-    $insertStatement->bindParam(':beatmapId',                   $beatmap_id,        PDO::PARAM_INT);
-    $insertStatement->bindParam(':roundId',                     $round_id,          PDO::PARAM_STR);
-    $insertStatement->bindParam(':tournamentId',                $tournament_id,     PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapType',                 $type,              PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapImage',                $image,             PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapUrl',                  $url,               PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapName',                 $name,              PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapDifficultyName',       $diff_name,         PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapFeatureArtist',        $fa,                PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapMapper',               $mapper,            PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapMapperUrl',            $mapper_url,        PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapDifficulty',           $diff,              PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapLength',               $length,            PDO::PARAM_INT);
-    $insertStatement->bindParam(':beatmapOverallSpeed',         $bpm,               PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapOverallDifficulty',    $od,                PDO::PARAM_STR);
-    $insertStatement->bindParam(':beatmapOverallHealth',        $hp,                PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongId',                    $beatmap_id,        PDO::PARAM_INT);
+    $insertStatement->bindParam(':roundId',                         $round_id,          PDO::PARAM_STR);
+    $insertStatement->bindParam(':tournamentId',                    $tournament_id,     PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongType',                  $type,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongImage',                 $image,             PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongUrl',                   $url,               PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongName',                  $name,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongDifficultyName',        $diff_name,         PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongFeatureArtist',         $fa,                PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongMapper',                $mapper,            PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongMapperUrl',             $mapper_url,        PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongDifficulty',            $diff,              PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongLength',                $length,            PDO::PARAM_INT);
+    $insertStatement->bindParam(':customSongOverallSpeed',          $bpm,               PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongOverallDifficulty',     $od,                PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongOverallHealth',         $hp,                PDO::PARAM_STR);
+    $insertStatement->bindParam(':customSongIndicator',             $custom_indicator,  PDO::PARAM_INT);
 
-    $successInsertLogMessage    = sprintf("Insert successfully for beatmap ID: %d", $beatmap_id);
-    $unsuccessInsertLogMessage  = sprintf("Insert unsuccessfully for beatmap ID: %d", $beatmap_id);
-
-    if ($insertStatement->execute()) {
-        error_log(message: $successInsertLogMessage, message_type: 0);
-        $totalInsertLogMessage = sprintf(
-            "Total beatmap data successfully inserted: %d",
-            $insertStatement->rowCount()
-        );
-        return $totalInsertLogMessage;
-    } else {
-        error_log(message: $unsuccessInsertLogMessage, message_type: 0);
-        return false;
+    try {
+        if ($insertStatement->execute()) {
+            error_log(
+                message: $successInsertLogMessage,
+                message_type: 0
+            );
+            return true;
+        } else {
+            error_log(
+                message: $unsuccessInsertLogMessage,
+                message_type: 0
+            );
+            return false;
+        }
+    } catch (PDOException $exception) {
+        // Kills the page and show the error for debugging (most likely syntax error)
+        die("Insert error!! Reason: " . $exception->getmessage());
     }
 }
 
 
 // Read
-function readBeatmapData(
-    string $round_name,
-    string $tournament_name,
-    object $database_handle
-): array | bool {
+function readMappoolData(
+    string $round,
+    string $tournament,
+): array {
+    // IDE cannot recognise PDO object at runtime somehow
+    global $votDatabaseHandle;
+
+    $successReadLogMessage = sprintf(
+        "Read successfully for all [%s] mappool data in [%s] tournament.",
+        $round,
+        $tournament
+    );
+    $unsuccessReadLogMessage = sprintf(
+        "Read unsuccessfully for all [%s] mappool data in [%s] tournament.",
+        $round,
+        $tournament
+    );
+
     $readQuery = "
         SELECT
-            vt.tournamentName,
-            vr.roundName,
             vb.beatmapType,
             vb.beatmapImage,
             vb.beatmapUrl,
@@ -215,8 +314,7 @@ function readBeatmapData(
         JOIN
             VotTournament vt ON vb.tournamentId = vt.tournamentId
         WHERE
-            vr.roundId = :roundId
-            AND vt.tournamentId = :tournamentId
+            vr.roundId = :roundId AND vt.tournamentId = :tournamentId
         ORDER BY
             (CASE vb.beatmapType
                 WHEN 'NM1' THEN 1
@@ -252,47 +350,119 @@ function readBeatmapData(
 
                 ELSE 21
             END) ASC;
-    ";
+        ";
 
-    $readStatement = $database_handle->prepare($readQuery);
-    if ($round_name !== 'ASTR') {
-        // Edge case not needed, perform the reading logic as usual
-        $readStatement->bindParam(':roundId',       $round_name,        PDO::PARAM_STR);
-        $readStatement->bindParam(':tournamentId',  $tournament_name,   PDO::PARAM_STR);
-    } else {
-        // bindParam() 2nd parameter is a 'lvalue' type so I can't pass the string straight away
-        $allStarEdgeCaseBypass = 'GF';
-        /*
-        Because All Star mappool is basically the same as Grand
-        Final mappool, so I'll just being a bit hacky here by
-        reading Grand Final mappool data straight away. Take a
-        look at the 'MappoolController.php' file at line 2207
-        to see why doing so is beneficial
-        */
-        $readStatement->bindParam(':roundId',       $allStarEdgeCaseBypass,     PDO::PARAM_STR);
-        $readStatement->bindParam(':tournamentId',  $tournament_name,           PDO::PARAM_STR);
-    }
+    switch ($tournament) {
+        case 'VOT5':
+            $readStatement = $votDatabaseHandle->prepare($readQuery);
+            $readStatement->bindParam(':tournamentId', $tournament, PDO::PARAM_STR);
 
-    $successReadLogMessage = sprintf(
-        "Read successfully for all mappool data from %s round within %s",
-        $round_name,
-        strtoupper(string: $tournament_name)
-    );
-    $unsuccessReadLogMessage = sprintf(
-        "Read unsuccessfully for all mappool data from %s round within %s",
-        $round_name,
-        strtoupper(string: $tournament_name)
-    );
+            switch ($round) {
+                // No need to handle [ASTR] case as mentioned in
+                // <MappoolController.php> file at line 1467.
+                case 'QLF':
+                case 'RO16':
+                case 'GSW1':
+                case 'GSW2':
+                case 'SF':
+                case 'FNL':
+                case 'GF':
+                    $readStatement->bindParam(':roundId', $round, PDO::PARAM_STR);
 
-    if ($readStatement->execute()) {
-        error_log(message: $successReadLogMessage, message_type: 0);
-        $readAllMappoolData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
-        return $readAllMappoolData;
-    } else {
-        error_log(message: $unsuccessReadLogMessage, message_type: 0);
-        return false;
+                    try {
+                        if ($readStatement->execute()) {
+                            error_log(
+                                message: $successReadLogMessage,
+                                message_type: 0
+                            );
+                            $mappoolViewData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
+                            return $mappoolViewData;
+                        } else {
+                            error_log(
+                                message: $unsuccessReadLogMessage,
+                                message_type: 0
+                            );
+                            return [];
+                        }
+                    } catch (PDOException $exception) {
+                        // Kills the page and show the error for debugging (most likely no data exists)
+                        die("Read error!! Reason: " . $exception->getmessage());
+                    }
+                    break;
+
+                default:
+                    // TODO: proper invalid GET request handling
+                    echo "<strong>What are you tryin' to do, huh?</strong>";
+                    return [];
+                    break;
+            }
+
+        case 'VOT4':
+            $readStatement = $votDatabaseHandle->prepare($readQuery);
+            $readStatement->bindParam(':tournamentId', $tournament, PDO::PARAM_STR);
+
+            switch ($round) {
+                // No need to handle [ASTR] case as mentioned in
+                // <MappoolController.php> file at line 1467.
+                case 'QLF':
+                case 'RO16':
+                case 'QF':
+                case 'SF':
+                case 'FNL':
+                case 'GF':
+                    $readStatement->bindParam(':roundId', $round, PDO::PARAM_STR);
+
+                    try {
+                        if ($readStatement->execute()) {
+                            error_log(
+                                message: $successReadLogMessage,
+                                message_type: 0
+                            );
+                            $mappoolViewData = $readStatement->fetchAll(mode: PDO::FETCH_ASSOC);
+                            return $mappoolViewData;
+                        } else {
+                            error_log(
+                                message: $unsuccessReadLogMessage,
+                                message_type: 0
+                            );
+                            return [];
+                        }
+                    } catch (PDOException $exception) {
+                        // Kills the page and show the error for debugging (most likely no data exists)
+                        die("Read error!! Reason: " . $exception->getmessage());
+                    }
+                    break;
+
+                default:
+                    // TODO: proper invalid GET request handling
+                    echo "<strong>What are you tryin' to do, huh?</strong>";
+                    return [];
+                    break;
+            }
+
+        case 'VOT3':
+            echo "COMMING SOON!!!";
+            return [];
+            break;
+
+        case 'VOT2':
+            echo "COMMING SOON!!!";
+            return [];
+            break;
+
+        case 'VOT1':
+            echo "COMMING SOON!!!";
+            return [];
+            break;
+
+        default:
+            // TODO: proper invalid GET request handling
+            echo "<strong>What are you tryin' to do, huh?</strong>";
+            return [];
+            break;
     }
 }
+
 
 // Update
 // Delete
