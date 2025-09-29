@@ -83,20 +83,20 @@ function checkCustomSongData(
     );
 
     $checkQuery = "
-    SELECT
-        beatmapId,
-        roundId,
-        tournamentId
-    FROM
-        VotBeatmap
-    WHERE
-        beatmapId = :beatmapId
-    AND
-        roundId = :roundId
-    AND
-        tournamentId = :tournamentId
-    AND
-        beatmapCustom = 1;
+        SELECT
+            beatmapId,
+            roundId,
+            tournamentId
+        FROM
+            VotBeatmap
+        WHERE
+            beatmapId = :beatmapId
+        AND
+            roundId = :roundId
+        AND
+            tournamentId = :tournamentId
+        AND
+            beatmapCustom = 1;
     ";
 
     $checkStatement = $database_handle->prepare($checkQuery);
