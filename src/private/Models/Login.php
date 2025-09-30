@@ -5,6 +5,119 @@ declare(strict_types=1);
 require __DIR__ . '/../Configurations/Database.php';
 
 
+function getOsuUser(
+    $token
+): array {
+    $allOsuUserData         = [];
+    $osuUserData            = getOsuUserData(token: $token);
+
+    $osuUserId              = $osuUserData['id'];
+    $osuUserName            = $osuUserData['username'];
+    $osuUserFlag            = $osuUserData['country_code'];
+    $osuUserImage           = $osuUserData['avatar_url'];
+    $osuUserUrl             = "https://osu.ppy.sh/users/{$osuUserData['id']}";
+    $osuUserRank            = $osuUserData['statistics']['global_rank'];
+    $osuUserTimeZone        = getUserTimeZone()['baseOffset'];
+    $osuUserRoleId          = 'USR';    // All user have user-level access by default
+    $osuUserTournamemtId    = 'NONE';   // All user belong to none tournament by default
+
+
+    $allOsuUserData[]       = [
+        'osu_user_id'               => $osuUserId,
+        'osu_user_name'             => $osuUserName,
+        'osu_user_flag'             => $osuUserFlag,
+        'osu_user_image'            => $osuUserImage,
+        'osu_user_url'              => $osuUserUrl,
+        'osu_user_rank'             => $osuUserRank,
+        'osu_user_time_zone'        => $osuUserTimeZone,
+        'osu_user_role_id'          => $osuUserRoleId,
+        'osu_user_tournament_id'    => $osuUserTournamemtId
+    ];
+
+    getUserData(data: $allOsuUserData);
+
+    return $allOsuUserData;
+}
+
+
+function getOsuUserData(
+    string $token
+): array | bool {
+    $httpAuthorisationType  = $token;
+    $httpAcceptType         = 'application/json';
+    $httpContentType        = 'application/json';
+    $osuUserUrl             = 'https://osu.ppy.sh/api/v2/me/taiko';
+
+    if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+        $httpHeaderRequest = [
+            "Authorization: Bearer {$httpAuthorisationType}",
+            "Accept: $httpAcceptType",
+            "Content-Type: $httpContentType",
+        ];
+
+        # CURL session will be handled manually through curl_setopt()
+        $osuUserCurlHandle = curl_init(url: null);
+
+        curl_setopt(handle: $osuUserCurlHandle, option: CURLOPT_URL, value: $osuUserUrl);
+        curl_setopt(handle: $osuUserCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
+        curl_setopt(handle: $osuUserCurlHandle, option: CURLOPT_HEADER, value: 0);
+        curl_setopt(handle: $osuUserCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
+
+        $osuUserCurlResponse = curl_exec(handle: $osuUserCurlHandle);
+
+        if (curl_errno(handle: $osuUserCurlHandle)) {
+            error_log(curl_error(handle: $osuUserCurlHandle));
+            curl_close(handle: $osuUserCurlHandle);
+            return false; // An error occurred during the API call
+
+        } else {
+            $osuUserReadableData = json_decode(
+                json: $osuUserCurlResponse,
+                associative: true,
+                depth: 512,
+                flags: 0
+            );
+
+            curl_close(handle: $osuUserCurlHandle);
+            return $osuUserReadableData;
+        }
+    } else {
+        $httpHeaderRequest = array(
+            "Authorization: Bearer {$httpAuthorisationType}",
+            "Accept: $httpAcceptType",
+            "Content-Type: $httpContentType",
+        );
+
+        # CURL session will be handled manually through curl_setopt()
+        $osuUserCurlHandle = curl_init(url: null);
+
+        curl_setopt(handle: $osuUserCurlHandle, option: CURLOPT_URL, value: $osuUserUrl);
+        curl_setopt(handle: $osuUserCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
+        curl_setopt(handle: $osuUserCurlHandle, option: CURLOPT_HEADER, value: 0);
+        curl_setopt(handle: $osuUserCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
+
+        $osuUserCurlResponse = curl_exec(handle: $osuUserCurlHandle);
+
+        if (curl_errno(handle: $osuUserCurlHandle)) {
+            error_log(curl_error(handle: $osuUserCurlHandle));
+            curl_close(handle: $osuUserCurlHandle);
+            return false; // An error occurred during the API call
+
+        } else {
+            $osuUserReadableData = json_decode(
+                json: $osuUserCurlResponse,
+                associative: true,
+                depth: 512,
+                flags: 0
+            );
+
+            curl_close(handle: $osuUserCurlHandle);
+            return $osuUserReadableData;
+        }
+    }
+}
+
+
 function getUserData(array $data): null
 {
     foreach ($data as $user_data) {
