@@ -2,12 +2,8 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
-// Helper function wrapped in its own file
-require __DIR__ . '/../Configurations/TimeZone.php';
-
 // Controller function wrapped in its own file
 require __DIR__ . '/../Controllers/LogOutController.php';
-require __DIR__ . '/../Controllers/LogInController.php';
 
 $httpRedirectRequest = parse_url(
     url: $_SERVER['REQUEST_URI'],
@@ -45,17 +41,14 @@ switch ($httpRedirectRequest) {
         }
 
     case '/login':
-        if (isset($_COOKIE['vot_access_token'])) {
-            echo "Seriously? Aren't you already logged in bro??";
+        if (
+            !isset($_COOKIE['vot_access_id']) &&
+            !isset($_COOKIE['vot_access_token'])
+        ) {
+            echo '<a href="/home">Bro, do not try to do that...</a></p>';
             break;
         } else {
-            // getUserLogIn();
             require __DIR__ . '/../Controllers/LoginController.php';
-
-            /* $userAccessToken    = $_COOKIE['vot_access_token'];
-            $osuUserData        = getOsuUser(token: $userAccessToken);
-            $_SESSION['id']     = $osuUserData[0]['osu_user_id']; // Only one user data per unique token used so it is safe to do so
-            */
             break;
         }
 
