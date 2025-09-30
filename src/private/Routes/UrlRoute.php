@@ -2,8 +2,6 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
-// Controller function wrapped in its own file
-require __DIR__ . '/../Controllers/LogOutController.php';
 
 $httpRedirectRequest = parse_url(
     url: $_SERVER['REQUEST_URI'],
@@ -44,6 +42,18 @@ switch ($httpRedirectRequest) {
             break;
         } else {
             require __DIR__ . '/../Controllers/LoginController.php';
+            break;
+        }
+
+    case '/logout':
+        if (
+            !isset($_COOKIE['vot_access_id']) &&
+            !isset($_COOKIE['vot_access_token'])
+        ) {
+            echo '<a href="/home">Are you for real bro? You are not even login yet...</a></p>';
+            break;
+        } else {
+            require __DIR__ . '/../Controllers/LogoutController.php';
             break;
         }
 
@@ -252,37 +262,6 @@ switch ($httpRedirectRequest) {
             }
         }
         break;
-
-
-    case '/logout':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            exit(header(
-                header: 'Location: /home',
-                replace: true,
-                response_code: 302
-            ));
-            break;
-        } else {
-            session_start(
-                options: [
-                    'name' => 'vot_access_id',
-                    'cookie_lifetime' => 86400,
-                    'cookie_httponly' => 1,
-                    'read_and_close' => true
-                ]
-            );
-
-            $userAccessId       = $_SESSION['id'];
-            $userAccesstoken    = $_COOKIE['vot_access_token'];
-
-            getUserLogOut(
-                id: $userAccessId,
-                cookie: $userAccesstoken
-            );
-
-            require __DIR__ . '/../Views/Home/LogOutView.php';
-            break;
-        }
 
     default:
         // Any URL paths that I haven't configured will be sent back to 'Home' page

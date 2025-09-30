@@ -9,9 +9,9 @@ require __DIR__ . '/../Configurations/TimeZone.php';
 // Run the session first before any output buffers
 session_start(
     options: [
-        'name' => 'vot_access_id',
-        'cookie_lifetime' => 86400,
-        'cookie_httponly' => 1
+        'name'              => 'vot_access_id',
+        'cookie_lifetime'   => 86400,
+        'cookie_httponly'   => 1
     ]
 );
 session_regenerate_id(delete_old_session: true);
