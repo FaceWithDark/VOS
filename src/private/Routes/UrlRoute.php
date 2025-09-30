@@ -16,46 +16,20 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/authorise':
-        if (isset($_COOKIE['vot_access_token'])) {
-            echo "Seriously? Aren't you already logged in bro??";
-            break;
-        } else {
-            require __DIR__ . '/../Controllers/AuthoriseController.php';
-            break;
-        }
+        require __DIR__ . '/../Controllers/AuthoriseController.php';
+        break;
 
     case '/callback':
-        if (isset($_COOKIE['vot_access_token'])) {
-            echo "Seriously? Aren't you already logged in bro??";
-            break;
-        } else {
-            require __DIR__ . '/../Controllers/CallbackController.php';
-            break;
-        }
+        require __DIR__ . '/../Controllers/CallbackController.php';
+        break;
 
     case '/login':
-        if (
-            !isset($_COOKIE['vot_access_id']) &&
-            !isset($_COOKIE['vot_access_token'])
-        ) {
-            echo '<a href="/home">Bro, do not try to do that...</a></p>';
-            break;
-        } else {
-            require __DIR__ . '/../Controllers/LoginController.php';
-            break;
-        }
+        require __DIR__ . '/../Controllers/LoginController.php';
+        break;
 
     case '/logout':
-        if (
-            !isset($_COOKIE['vot_access_id']) &&
-            !isset($_COOKIE['vot_access_token'])
-        ) {
-            echo '<a href="/home">Are you for real bro? You are not even login yet...</a></p>';
-            break;
-        } else {
-            require __DIR__ . '/../Controllers/LogoutController.php';
-            break;
-        }
+        require __DIR__ . '/../Controllers/LogoutController.php';
+        break;
 
     case '/archive':
         require __DIR__ . '/../Controllers/NavigationBarController.php';
@@ -234,33 +208,7 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/entry':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            // Deny everyone access to entry file ('logout' scenario) even the website owner
-            // TODO: Find a way to retrieve the IP address of the person that trying to access the file
-            error_log(message: "Someone tried to access entry file without permission from website owner!!!", message_type: 0);
-            exit(header(
-                header: 'Location: /home',
-                replace: true,
-                response_code: 302
-            ));
-        } else {
-            $osuUserAccessToken = $_COOKIE['vot_access_token'];
-            $osuUserData = getOsuUserData(token: $osuUserAccessToken);
-
-            if ($osuUserData['username'] !== 'DeepInDark') {
-                // Deny everyone access to entry file ('login' scenario) expect the website owner
-                // TODO: Find a way to retrieve the IP address of the person that trying to access the file
-                error_log(message: "Someone tried to access entry file without permission from website owner!!!", message_type: 0);
-                exit(header(
-                    header: 'Location: /home',
-                    replace: true,
-                    response_code: 302
-                ));
-            } else {
-                // Only me (the website owner) can access entry file
-                require __DIR__ . '/../Views/EntryView.php';
-            }
-        }
+        require __DIR__ . '/../Controllers/EntryController.php';
         break;
 
     default:
