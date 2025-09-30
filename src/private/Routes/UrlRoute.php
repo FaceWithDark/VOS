@@ -13,13 +13,8 @@ $httpRedirectRequest = parse_url(
 switch ($httpRedirectRequest) {
     case '/':
     case '/home':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Home/HomeView.php';
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Home/HomeView.php';
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Views/Home/HomeView.php';
         break;
 
     case '/authorise':
@@ -53,63 +48,33 @@ switch ($httpRedirectRequest) {
         }
 
     case '/archive':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Archive/ArchiveTournamentView.php';
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Archive/ArchiveTournamentView.php';
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Views/Archive/ArchiveTournamentView.php';
         break;
 
     case '/archive/vot':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Archive/ArchiveVotView.php';
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Archive/ArchiveVotView.php';
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Views/Archive/ArchiveVotView.php';
         break;
 
     case '/staff':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Staff/StaffTournamentView.php';
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Staff/StaffTournamentView.php';
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Views/Staff/StaffTournamentView.php';
         break;
 
     case '/staff/vot':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Staff/StaffVotView.php';
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Staff/StaffVotView.php';
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Views/Staff/StaffVotView.php';
         break;
 
     case '/song':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Song/SongTournamentView.php';
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Song/SongTournamentView.php';
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Views/Song/SongTournamentView.php';
         break;
 
     case '/song/vot':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Controllers/SongController.php';
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Controllers/SongController.php';
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Controllers/SongController.php';
         break;
 
     case '/setting':
@@ -237,48 +202,26 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/vot4':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Tournament/Vot4TournamentView.php';
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Tournament/Vot4TournamentView.php';
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Views/Tournament/Vot4TournamentView.php';
         break;
 
     case '/vot5':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Tournament/Vot5TournamentView.php';
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Views/Tournament/Vot5TournamentView.php';
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Views/Tournament/Vot5TournamentView.php';
         break;
 
     case '/vot4/mappool':
     case '/vot5/mappool':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Controllers/MappoolController.php';
-            break;
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Controllers/MappoolController.php';
-            break;
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Controllers/MappoolController.php';
+        break;
 
     case '/vot4/staff':
     case '/vot5/staff':
-        if (!isset($_COOKIE['vot_access_token'])) {
-            require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Controllers/StaffController.php';
-            break;
-        } else {
-            require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-            require __DIR__ . '/../Controllers/StaffController.php';
-            break;
-        }
+        require __DIR__ . '/../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../Controllers/StaffController.php';
+        break;
 
     case '/entry':
         if (!isset($_COOKIE['vot_access_token'])) {
