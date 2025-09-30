@@ -276,7 +276,7 @@ function createMappoolData(
 // Read
 function readMappoolData(
     string $round,
-    string $tournament,
+    string $tournament
 ): array {
     // IDE cannot recognise PDO object at runtime somehow
     global $votDatabaseHandle;

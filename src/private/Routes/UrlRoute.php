@@ -9,9 +9,11 @@ require __DIR__ . '/../Configurations/TimeZone.php';
 require __DIR__ . '/../Controllers/UserDataController.php';
 require __DIR__ . '/../Controllers/LogOutController.php';
 require __DIR__ . '/../Controllers/LogInController.php';
-require __DIR__ . '/../Controllers/SongController.php';
 
-$httpRedirectRequest = parse_url(url: $_SERVER['REQUEST_URI'], component: PHP_URL_PATH);
+$httpRedirectRequest = parse_url(
+    url: $_SERVER['REQUEST_URI'],
+    component: PHP_URL_PATH
+);
 
 switch ($httpRedirectRequest) {
     case '/':
@@ -103,24 +105,11 @@ switch ($httpRedirectRequest) {
 
     case '/song/vot':
         if (!isset($_COOKIE['vot_access_token'])) {
-            // No need to fetch new custom song data (if any), read custom song
-            // data straight away within the include 'View' file
             require __DIR__ . '/../Views/NavigationBar/UnauthorsiedNavigationBarView.php';
-            require __DIR__ . '/../Views/Song/SongVotView.php';
+            require __DIR__ . '/../Controllers/SongController.php';
         } else {
-            // In need of fetching new custom song data (if any) using the below
-            // data fetching method
             require __DIR__ . '/../Views/NavigationBar/AuthorisedNavigationBarView.php';
-
-            if (!isset($_GET['tournament'])) {
-                // Do nothing, show the page only
-                require __DIR__ . '/../Views/Song/SongVotView.php';
-            } else {
-                // Perform the MVC, after button get clicked
-                require __DIR__ . '/../Views/Song/SongVotView.php';
-                $votTournamentName = $_GET['tournament'];
-                getTournamentCustomSong(name: $votTournamentName);
-            }
+            require __DIR__ . '/../Controllers/SongController.php';
         }
         break;
 
