@@ -2,8 +2,8 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
-require __DIR__ . '/../Models/Login.php';
-require __DIR__ . '/../Configurations/TimeZone.php';
+require __DIR__ . '/../../Models/Login.php';
+require __DIR__ . '/../../Configurations/TimeZone.php';
 
 
 if (
@@ -44,13 +44,16 @@ if (
             url: $userUrl,
             rank: $userRank,
             time_zone: $userTimeZone,
-            database_handle: $userDatabase,
             role_id: $userRoleId,
             tournament_id: $userTournamentId
         );
     } else {
-        // TODO: UPDATE query here (change the 'view' table only, not the actual table if all data stay the same).
-        error_log(message: 'User data exist, simply ignoring it...', message_type: 0);
+        // TODO: UPDATE query here (change the 'view' table only, not the actual
+        // table if all data stay the same).
+        error_log(
+            message: 'User data exist, simply ignoring it...',
+            message_type: 0
+        );
     };
 
     // NOTE: there might be a better way than this 'cause my current role logic
@@ -58,5 +61,5 @@ if (
     $_SESSION['id'] = $userId; // Every user have their own unique token
 
     // Show the page again after actions have been done
-    require __DIR__ . '/../Views/Home/LoginView.php';
+    require __DIR__ . '/../../Views/Home/LoginView.php';
 }

@@ -14,14 +14,6 @@ switch ($httpRedirectRequest) {
         require __DIR__ . '/../Controllers/Home/HomeController.php';
         break;
 
-    case '/authorise':
-        require __DIR__ . '/../Controllers/Home/AuthoriseController.php';
-        break;
-
-    case '/callback':
-        require __DIR__ . '/../Controllers/Home/CallbackController.php';
-        break;
-
     case '/login':
         require __DIR__ . '/../Controllers/Home/LoginController.php';
         break;
@@ -98,12 +90,20 @@ switch ($httpRedirectRequest) {
         require __DIR__ . '/../Controllers/StaffController.php';
         break;
 
+    case '/authorise':
+        require __DIR__ . '/../Controllers/AuthoriseController.php';
+        break;
+
+    case '/callback':
+        require __DIR__ . '/../Controllers/CallbackController.php';
+        break;
+
     case '/entry':
         require __DIR__ . '/../Controllers/EntryController.php';
         break;
 
     default:
-        // Any URL paths that I haven't configured will be sent back to 'Home' page
+        // Non-configured URL paths will default direct to [HOME] page
         exit(header(
             header: 'Location: /home',
             replace: true,
