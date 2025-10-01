@@ -63,24 +63,20 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/vot4':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
-        require __DIR__ . '/../Views/Tournament/Vot4TournamentView.php';
+        require __DIR__ . '/../Controllers/Tournament/Vot4Controller.php';
         break;
 
     case '/vot5':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
-        require __DIR__ . '/../Views/Tournament/Vot5TournamentView.php';
+        require __DIR__ . '/../Controllers/Tournament/Vot5Controller.php';
         break;
 
     case '/vot4/mappool':
     case '/vot5/mappool':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
         require __DIR__ . '/../Controllers/MappoolController.php';
         break;
 
     case '/vot4/staff':
     case '/vot5/staff':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
         require __DIR__ . '/../Controllers/StaffController.php';
         break;
 

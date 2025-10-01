@@ -21,10 +21,12 @@ switch ($votTournamentName) {
     case 'VOT4':
         if (!isset($_GET['role'])) {
             // Just show the page without any actions
-            require __DIR__ . '/../Views/Tournament/Vot4StaffView.php';
+            require __DIR__ . '/NavigationBarController.php';
+            require __DIR__ . '/../Views/Tournament/StaffVot4View.php';
         } else {
             // Show the page again after actions have been done
-            require __DIR__ . '/../Views/Tournament/Vot4StaffView.php';
+            require __DIR__ . '/NavigationBarController.php';
+            require __DIR__ . '/../Views/Tournament/StaffVot4View.php';
             $vot4RoleName = $_GET['role'];
 
             switch ($vot4RoleName) {
