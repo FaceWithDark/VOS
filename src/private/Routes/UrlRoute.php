@@ -11,24 +11,23 @@ $httpRedirectRequest = parse_url(
 switch ($httpRedirectRequest) {
     case '/':
     case '/home':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
-        require __DIR__ . '/../Views/Home/HomeView.php';
+        require __DIR__ . '/../Controllers/Home/HomeController.php';
         break;
 
     case '/authorise':
-        require __DIR__ . '/../Controllers/AuthoriseController.php';
+        require __DIR__ . '/../Controllers/Home/AuthoriseController.php';
         break;
 
     case '/callback':
-        require __DIR__ . '/../Controllers/CallbackController.php';
+        require __DIR__ . '/../Controllers/Home/CallbackController.php';
         break;
 
     case '/login':
-        require __DIR__ . '/../Controllers/LoginController.php';
+        require __DIR__ . '/../Controllers/Home/LoginController.php';
         break;
 
     case '/logout':
-        require __DIR__ . '/../Controllers/LogoutController.php';
+        require __DIR__ . '/../Controllers/Home/LogoutController.php';
         break;
 
     case '/archive':
