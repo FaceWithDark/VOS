@@ -42,5 +42,5 @@ if (
     );
 
     // Show the page again after actions have been done
-    require __DIR__ . '/../Views/Home/LogoutView.php';
+    require __DIR__ . '/../../Views/Home/LogoutView.php';
 }
