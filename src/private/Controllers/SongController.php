@@ -8,10 +8,12 @@ require __DIR__ . '/../Configurations/Length.php';
 
 if (!isset($_GET['tournament'])) {
     // Just show the page without any actions
-    require __DIR__ . '/../Views/Song/SongVotView.php';
+    require __DIR__ . '/NavigationBarController.php';
+    require __DIR__ . '/../Views/Song/VotSongView.php';
 } else {
     // Show the page again after actions have been done
-    require __DIR__ . '/../Views/Song/SongVotView.php';
+    require __DIR__ . '/NavigationBarController.php';
+    require __DIR__ . '/../Views/Song/VotSongView.php';
     $votTournamentName = $_GET['tournament'];
 
     // Regex returns a boolean value so this is the way to do it

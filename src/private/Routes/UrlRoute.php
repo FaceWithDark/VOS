@@ -39,12 +39,10 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/song':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
-        require __DIR__ . '/../Views/Song/SongTournamentView.php';
+        require __DIR__ . '/../Controllers/Song/GeneralSongController.php';
         break;
 
     case '/song/vot':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
         require __DIR__ . '/../Controllers/SongController.php';
         break;
 
