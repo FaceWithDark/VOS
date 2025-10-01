@@ -23,13 +23,11 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/archive':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
-        require __DIR__ . '/../Views/Archive/ArchiveTournamentView.php';
+        require __DIR__ . '/../Controllers/Archive/GeneralArchiveController.php';
         break;
 
     case '/archive/vot':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
-        require __DIR__ . '/../Views/Archive/ArchiveVotView.php';
+        require __DIR__ . '/../Controllers/Archive/VotArchiveController.php';
         break;
 
     case '/staff':
