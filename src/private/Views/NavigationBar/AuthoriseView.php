@@ -1,18 +1,3 @@
-<?php
-# Not so much like static types, but at least it does feel better having this here
-declare(strict_types=1);
-
-require __DIR__ . '/../../Models/UserData.php';
-
-session_start(
-    options: [
-        'name' => 'vot_access_id',
-        'cookie_lifetime' => 86400,
-        'cookie_httponly' => 1
-    ]
-);
-?>
-
 <!-- XHTML 1.0 compatible -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -130,33 +115,6 @@ session_start(
         <div class="top-navigation-section">
             <i class="bx bx-menu" id="collapsible-icon"></i>
         </div>
-
-        <?php
-        $votUserId          = $_SESSION['id'];
-        $votUserDatabase    = $GLOBALS['votDatabaseHandle'];
-
-        $votUserData        = readUserData(
-            id: $votUserId,
-            database_handle: $votUserDatabase
-        );
-
-        $votUserName    = htmlspecialchars($votUserData['userName']);
-        $votUserImage   = htmlspecialchars($votUserData['userImage']);
-        $votUserUrl     = htmlspecialchars($votUserData['userUrl']);
-
-        $userDisplayTemplate =
-            <<<EOL
-            <div class="middle-navigation-first-section">
-                <a href="$votUserUrl">
-                    <img src="$votUserImage" alt="User Avatar" class="user-image">
-                    <p>$votUserName</p>
-                </a>
-            </div>
-            EOL;
-
-        // It would be much more nasty if I tried to output this using the traditional mixed HTML & PHP codes
-        echo $userDisplayTemplate;
-        ?>
 
         <div class="middle-navigation-second-section">
             <ul>
