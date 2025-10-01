@@ -35,11 +35,13 @@ switch ($votTournamentName) {
     case 'VOT5':
         if (!isset($_GET['round'])) {
             // Just show the page without any actions
-            require __DIR__ . '/../Views/Tournament/Vot5MappoolView.php';
+            require __DIR__ . '/NavigationBarController.php';
+            require __DIR__ . '/../Views/Tournament/MappoolVot5View.php';
             break;
         } else {
             // Show the page again after actions have been done
-            require __DIR__ . '/../Views/Tournament/Vot5MappoolView.php';
+            require __DIR__ . '/NavigationBarController.php';
+            require __DIR__ . '/../Views/Tournament/MappoolVot5View.php';
             $vot5RoundName = $_GET['round'];
 
             // Regex returns a boolean value so this is the way to do it
@@ -1484,11 +1486,14 @@ switch ($votTournamentName) {
     case 'VOT4':
         if (!isset($_GET['round'])) {
             // Just show the page without any actions
-            require __DIR__ . '/../Views/Tournament/Vot4MappoolView.php';
+            require __DIR__ . '/NavigationBarController.php';
+            require __DIR__ . '/../Views/Tournament/MappoolVot4View.php';
             break;
         } else {
             // Show the page again after actions have been done
-            require __DIR__ . '/../Views/Tournament/Vot4MappoolView.php';
+            require __DIR__ . '/NavigationBarController.php';
+            require __DIR__ . '/../Views/Tournament/MappoolVot4View.php';
+
             $vot4RoundName = $_GET['round'];
 
             // Regex returns a boolean value so this is the way to do it
