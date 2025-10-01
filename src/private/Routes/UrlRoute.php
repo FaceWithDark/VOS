@@ -31,13 +31,11 @@ switch ($httpRedirectRequest) {
         break;
 
     case '/staff':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
-        require __DIR__ . '/../Views/Staff/StaffTournamentView.php';
+        require __DIR__ . '/../Controllers/Staff/GeneralStaffController.php';
         break;
 
     case '/staff/vot':
-        require __DIR__ . '/../Controllers/NavigationBarController.php';
-        require __DIR__ . '/../Views/Staff/StaffVotView.php';
+        require __DIR__ . '/../Controllers/Staff/VotStaffController.php';
         break;
 
     case '/song':
