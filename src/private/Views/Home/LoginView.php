@@ -1,10 +1,3 @@
-<?php
-# Not so much like static types, but at least it does feel better having this here
-declare(strict_types=1);
-
-require __DIR__ . '/../../Models/UserData.php';
-?>
-
 <!-- XHTML 1.0 compatible -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
