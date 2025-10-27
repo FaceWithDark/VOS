@@ -2,32 +2,27 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
+require __DIR__ . '/../Models/Song.php';
+require __DIR__ . '/../Configurations/Length.php';
 
-function getTournamentCustomSong(
-    string $name
-): array {
-    $customSongJsonData         = __DIR__ . '/../Datas/Song/CustomSongData.json';
 
-    $allCustomSongData          = [];
+if (!isset($_GET['tournament'])) {
+    // Just show the page without any actions
+    require __DIR__ . '/NavigationBarController.php';
+    require __DIR__ . '/../Views/Song/VotSongView.php';
+} else {
+    // Show the page again after actions have been done
+    require __DIR__ . '/NavigationBarController.php';
+    require __DIR__ . '/../Views/Song/VotSongView.php';
+    $votTournamentName = $_GET['tournament'];
 
-    $lowerCaseTournamentName    = strtolower(string: $name);
-    $customSongAccessToken      = $_COOKIE['vot_access_token'];
-
-    $customSongViewableJsonData = file_get_contents(
-        filename: $customSongJsonData,
-        use_include_path: false,
-        context: null,
-        offset: 0,
-        length: null
-    );
-
-    $customSongReadableJsonData = json_decode(
-        json: $customSongViewableJsonData,
-        associative: true
-    );
-
-    switch ($name) {
-        case 'DEFAULT':
+    // Regex returns a boolean value so this is the way to do it
+    switch (true) {
+        // *** ALL TOURNAMENTS SONG DATA ***
+        case preg_match(
+            pattern: '/^(default|DEFAULT)$/i',
+            subject: $votTournamentName
+        ):
             /*
              *==================================================================
              * Because filter custom song data by default is basically fetching
@@ -41,298 +36,325 @@ function getTournamentCustomSong(
              */
 
 
-            /*** VOT5 CUSTOM SONG DATA ***/
-            foreach ($customSongReadableJsonData['vot5'] as $vot5CustomSongJsonData) {
+            $abbreviateTournamentNames = [
+                'VOT5',
+                'VOT4',
+                'VOT3',
+                'VOT2',
+                'VOT1'
+            ];
 
-                $vot5CustomSongRoundData    = $vot5CustomSongJsonData['custom_song_round'];
-                $vot5CustomSongIdJsonData   = $vot5CustomSongJsonData['custom_song_id'];
-                $vot5CustomSongModData      = $vot5CustomSongJsonData['custom_song_mod'];
+            foreach ($abbreviateTournamentNames as $abbreviateTournamentName) {
+                $tournamentSongViewData = readSongData(tournament: $abbreviateTournamentName);
 
-                $vot5CustomSongData = getTournamentCustomSongData(
-                    id: $vot5CustomSongIdJsonData,
-                    token: $customSongAccessToken
-                );
+                foreach ($tournamentSongViewData as $tournamentSongData) {
+                    $tournamentSongTournament          = htmlspecialchars($tournamentSongData['tournamentName']);
+                    $tournamentSongRound               = htmlspecialchars($tournamentSongData['roundName']);
+                    $tournamentSongType                = htmlspecialchars($tournamentSongData['beatmapType']);
+                    $tournamentSongImage               = htmlspecialchars($tournamentSongData['beatmapImage']);
+                    $tournamentSongUrl                 = htmlspecialchars($tournamentSongData['beatmapUrl']);
+                    $tournamentSongName                = htmlspecialchars($tournamentSongData['beatmapName']);
+                    $tournamentSongDifficultyName      = htmlspecialchars($tournamentSongData['beatmapDifficultyName']);
+                    $tournamentSongFeatureArtist       = htmlspecialchars($tournamentSongData['beatmapFeatureArtist']);
+                    $tournamentSongMapper              = htmlspecialchars($tournamentSongData['beatmapMapper']);
+                    $tournamentSongMapperUrl           = htmlspecialchars($tournamentSongData['beatmapMapperUrl']);
+                    $tournamentSongDifficulty          = htmlspecialchars($tournamentSongData['beatmapDifficulty']);
+                    $tournamentSongLength              = timeStampFormat(number: $tournamentSongData['beatmapLength']);
+                    $tournamentSongOverallSpeed        = sprintf('%.2f', $tournamentSongData['beatmapOverallSpeed']);
+                    $tournamentSongOverallDifficulty   = sprintf('%.2f', $tournamentSongData['beatmapOverallDifficulty']);
+                    $tournamentSongOverallHealth       = sprintf('%.2f', $tournamentSongData['beatmapOverallHealth']);
 
-                $vot5CustomSongId                   = $vot5CustomSongData['id'];
-                $vot5CustomSongRoundId              = $vot5CustomSongRoundData;
-                $vot5CustomSongTournamentId         = 'VOT5';
-                $vot5CustomSongType                 = $vot5CustomSongModData;
-                $vot5CustomSongImage                = $vot5CustomSongData['beatmapset']['covers']['cover'];
-                $vot5CustomSongUrl                  = $vot5CustomSongData['url'];
-                $vot5CustomSongName                 = $vot5CustomSongData['beatmapset']['title'];
-                $vot5CustomSongDifficultyName       = $vot5CustomSongData['version'];
-                $vot5CustomSongFeatureArtist        = $vot5CustomSongData['beatmapset']['artist'];
-                $vot5CustomSongMapper               = $vot5CustomSongData['beatmapset']['creator'];
-                $vot5CustomSongMapperUrl            = "https://osu.ppy.sh/users/{$vot5CustomSongData['beatmapset']['user_id']}";
-                $vot5CustomSongDifficulty           = $vot5CustomSongData['difficulty_rating'];
-                $vot5CustomSongLength               = $vot5CustomSongData['total_length'];
-                $vot5CustomSongOverallSpeed         = $vot5CustomSongData['beatmapset']['bpm'];
-                $vot5CustomSongOverallDifficulty    = $vot5CustomSongData['accuracy'];
-                $vot5CustomSongOverallHealth        = $vot5CustomSongData['drain'];
+                    $songInformationTemplate =
+                        <<<EOL
+                    <section class="custom-song-vot-page">
+                        <div class="box-container">
+                            <div class="custom-song-header">
+                                <div class="custom-song-tournament">
+                                    <h1>- $tournamentSongTournament -</h1>
+                                </div>
+                                <div class="custom-song-round">
+                                    <h1>- $tournamentSongRound -</h1>
+                                </div>
+                                <div class="custom-song-type">
+                                    <h1>- $tournamentSongType -</h1>
+                                </div>
+                            </div>
 
-                $allCustomSongData[] = [
-                    'custom_song_id'                    => $vot5CustomSongId,
-                    'custom_song_round_id'              => $vot5CustomSongRoundId,
-                    'custom_song_tournament_id'         => $vot5CustomSongTournamentId,
-                    'custom_song_type'                  => $vot5CustomSongType,
-                    'custom_song_image'                 => $vot5CustomSongImage,
-                    'custom_song_url'                   => $vot5CustomSongUrl,
-                    'custom_song_name'                  => $vot5CustomSongName,
-                    'custom_song_difficulty_name'       => $vot5CustomSongDifficultyName,
-                    'custom_song_feature_artist'        => $vot5CustomSongFeatureArtist,
-                    'custom_song_mapper'                => $vot5CustomSongMapper,
-                    'custom_song_mapper_url'            => $vot5CustomSongMapperUrl,
-                    'custom_song_difficulty'            => $vot5CustomSongDifficulty,
-                    'custom_song_length'                => $vot5CustomSongLength,
-                    'custom_song_overall_speed'         => $vot5CustomSongOverallSpeed,
-                    'custom_song_overall_difficulty'    => $vot5CustomSongOverallDifficulty,
-                    'custom_song_overall_health'        => $vot5CustomSongOverallHealth
-                ];
-            }
+                            <div class="custom-song-body">
+                                <div class="custom-song-image">
+                                    <a href="$tournamentSongUrl">
+                                        <img src="$tournamentSongImage" alt="VOT4 Custom Song Image">
+                                    </a>
+                                </div>
+                            </div>
 
+                            <div class="custom-song-footer">
+                                <div class="custom-song-name">
+                                    <h2>$tournamentSongName [$tournamentSongDifficultyName]</h2>
+                                </div>
 
-            /*** VOT4 CUSTOM SONG DATA ***/
-            foreach ($customSongReadableJsonData['vot4'] as $vot4CustomSongJsonData) {
+                                <div class="custom-song-feature-artist">
+                                    <h3>Song by $tournamentSongFeatureArtist</h3>
+                                </div>
 
-                $vot4CustomSongRoundData    = $vot4CustomSongJsonData['custom_song_round'];
-                $vot4CustomSongIdJsonData   = $vot4CustomSongJsonData['custom_song_id'];
-                $vot4CustomSongModData      = $vot4CustomSongJsonData['custom_song_mod'];
+                                <div class="custom-song-mapper">
+                                    <h4>Created by <a href="$tournamentSongMapperUrl">$tournamentSongMapper</a></h4>
+                                </div>
 
-                $vot4CustomSongData = getTournamentCustomSongData(
-                    id: $vot4CustomSongIdJsonData,
-                    token: $customSongAccessToken
-                );
+                                <div class="custom-song-attributes">
+                                    <div class="custom-song-star-rating">
+                                        <p>SR: $tournamentSongDifficulty</p>
+                                    </div>
+                                    <div class="custom-song-length">
+                                        <p>Length: $tournamentSongLength</p>
+                                    </div>
+                                    <div class="custom-song-speed">
+                                        <p>BPM: $tournamentSongOverallSpeed</p>
+                                    </div>
+                                </div>
 
-                $vot4CustomSongId                   = $vot4CustomSongData['id'];
-                $vot4CustomSongRoundId              = $vot4CustomSongRoundData;
-                $vot4CustomSongTournamentId         = 'VOT4';
-                $vot4CustomSongType                 = $vot4CustomSongModData;
-                $vot4CustomSongImage                = $vot4CustomSongData['beatmapset']['covers']['cover'];
-                $vot4CustomSongUrl                  = $vot4CustomSongData['url'];
-                $vot4CustomSongName                 = $vot4CustomSongData['beatmapset']['title'];
-                $vot4CustomSongDifficultyName       = $vot4CustomSongData['version'];
-                $vot4CustomSongFeatureArtist        = $vot4CustomSongData['beatmapset']['artist'];
-                $vot4CustomSongMapper               = $vot4CustomSongData['beatmapset']['creator'];
-                $vot4CustomSongMapperUrl            = "https://osu.ppy.sh/users/{$vot4CustomSongData['beatmapset']['user_id']}";
-                $vot4CustomSongDifficulty           = $vot4CustomSongData['difficulty_rating'];
-                $vot4CustomSongLength               = $vot4CustomSongData['total_length'];
-                $vot4CustomSongOverallSpeed         = $vot4CustomSongData['beatmapset']['bpm'];
-                $vot4CustomSongOverallDifficulty    = $vot4CustomSongData['accuracy'];
-                $vot4CustomSongOverallHealth        = $vot4CustomSongData['drain'];
+                                <div class="custom-song-attributes">
+                                    <div class="custom-song-od">
+                                        <p>OD: $tournamentSongOverallDifficulty</p>
+                                    </div>
+                                    <div class="custom-song-hp">
+                                        <p>HP: $tournamentSongOverallHealth</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    EOL;
 
-                $allCustomSongData[] = [
-                    'custom_song_id'                    => $vot4CustomSongId,
-                    'custom_song_round_id'              => $vot4CustomSongRoundId,
-                    'custom_song_tournament_id'         => $vot4CustomSongTournamentId,
-                    'custom_song_type'                  => $vot4CustomSongType,
-                    'custom_song_image'                 => $vot4CustomSongImage,
-                    'custom_song_url'                   => $vot4CustomSongUrl,
-                    'custom_song_name'                  => $vot4CustomSongName,
-                    'custom_song_difficulty_name'       => $vot4CustomSongDifficultyName,
-                    'custom_song_feature_artist'        => $vot4CustomSongFeatureArtist,
-                    'custom_song_mapper'                => $vot4CustomSongMapper,
-                    'custom_song_mapper_url'            => $vot4CustomSongMapperUrl,
-                    'custom_song_difficulty'            => $vot4CustomSongDifficulty,
-                    'custom_song_length'                => $vot4CustomSongLength,
-                    'custom_song_overall_speed'         => $vot4CustomSongOverallSpeed,
-                    'custom_song_overall_difficulty'    => $vot4CustomSongOverallDifficulty,
-                    'custom_song_overall_health'        => $vot4CustomSongOverallHealth
-                ];
+                    // It would be much more nasty if I tried to output this using
+                    // the traditional mixed HTML & PHP codes
+                    echo $songInformationTemplate;
+                }
             }
             break;
 
-        case 'VOT5':
-            foreach ($customSongReadableJsonData[$lowerCaseTournamentName] as $vot5CustomSongJsonData) {
-                $vot5CustomSongRoundData    = $vot5CustomSongJsonData['custom_song_round'];
-                $vot5CustomSongIdJsonData   = $vot5CustomSongJsonData['custom_song_id'];
-                $vot5CustomSongModData      = $vot5CustomSongJsonData['custom_song_mod'];
+        // *** VOT5 SONG DATA ***
+        case preg_match(
+            pattern: '/^(vot5|VOT5)$/i',
+            subject: $votTournamentName
+        ):
+            // Database use the abbreviation of each song indicator's name
+            $vot5AbbreviateTournamentName = 'VOT5';
 
-                $vot5CustomSongData = getTournamentCustomSongData(
-                    id: $vot5CustomSongIdJsonData,
-                    token: $customSongAccessToken
-                );
+            $vot5SongViewData = readSongData(
+                tournament: $vot5AbbreviateTournamentName
+            );
 
-                $vot5CustomSongId                   = $vot5CustomSongData['id'];
-                $vot5CustomSongRoundId              = $vot5CustomSongRoundData;
-                $vot5CustomSongTournamentId         = $name;
-                $vot5CustomSongType                 = $vot5CustomSongModData;
-                $vot5CustomSongImage                = $vot5CustomSongData['beatmapset']['covers']['cover'];
-                $vot5CustomSongUrl                  = $vot5CustomSongData['url'];
-                $vot5CustomSongName                 = $vot5CustomSongData['beatmapset']['title'];
-                $vot5CustomSongDifficultyName       = $vot5CustomSongData['version'];
-                $vot5CustomSongFeatureArtist        = $vot5CustomSongData['beatmapset']['artist'];
-                $vot5CustomSongMapper               = $vot5CustomSongData['beatmapset']['creator'];
-                $vot5CustomSongMapperUrl            = "https://osu.ppy.sh/users/{$vot5CustomSongData['beatmapset']['user_id']}";
-                $vot5CustomSongDifficulty           = $vot5CustomSongData['difficulty_rating'];
-                $vot5CustomSongLength               = $vot5CustomSongData['total_length'];
-                $vot5CustomSongOverallSpeed         = $vot5CustomSongData['beatmapset']['bpm'];
-                $vot5CustomSongOverallDifficulty    = $vot5CustomSongData['accuracy'];
-                $vot5CustomSongOverallHealth        = $vot5CustomSongData['drain'];
+            foreach ($vot5SongViewData as $vot5SongData) {
+                $vot5SongTournament          = htmlspecialchars($vot5SongData['tournamentName']);
+                $vot5SongRound               = htmlspecialchars($vot5SongData['roundName']);
+                $vot5SongType                = htmlspecialchars($vot5SongData['beatmapType']);
+                $vot5SongImage               = htmlspecialchars($vot5SongData['beatmapImage']);
+                $vot5SongUrl                 = htmlspecialchars($vot5SongData['beatmapUrl']);
+                $vot5SongName                = htmlspecialchars($vot5SongData['beatmapName']);
+                $vot5SongDifficultyName      = htmlspecialchars($vot5SongData['beatmapDifficultyName']);
+                $vot5SongFeatureArtist       = htmlspecialchars($vot5SongData['beatmapFeatureArtist']);
+                $vot5SongMapper              = htmlspecialchars($vot5SongData['beatmapMapper']);
+                $vot5SongMapperUrl           = htmlspecialchars($vot5SongData['beatmapMapperUrl']);
+                $vot5SongDifficulty          = htmlspecialchars($vot5SongData['beatmapDifficulty']);
+                $vot5SongLength              = timeStampFormat(number: $vot5SongData['beatmapLength']);
+                $vot5SongOverallSpeed        = sprintf('%.2f', $vot5SongData['beatmapOverallSpeed']);
+                $vot5SongOverallDifficulty   = sprintf('%.2f', $vot5SongData['beatmapOverallDifficulty']);
+                $vot5SongOverallHealth       = sprintf('%.2f', $vot5SongData['beatmapOverallHealth']);
 
-                $allCustomSongData[] = [
-                    'custom_song_id'                    => $vot5CustomSongId,
-                    'custom_song_round_id'              => $vot5CustomSongRoundId,
-                    'custom_song_tournament_id'         => $vot5CustomSongTournamentId,
-                    'custom_song_type'                  => $vot5CustomSongType,
-                    'custom_song_image'                 => $vot5CustomSongImage,
-                    'custom_song_url'                   => $vot5CustomSongUrl,
-                    'custom_song_name'                  => $vot5CustomSongName,
-                    'custom_song_difficulty_name'       => $vot5CustomSongDifficultyName,
-                    'custom_song_feature_artist'        => $vot5CustomSongFeatureArtist,
-                    'custom_song_mapper'                => $vot5CustomSongMapper,
-                    'custom_song_mapper_url'            => $vot5CustomSongMapperUrl,
-                    'custom_song_difficulty'            => $vot5CustomSongDifficulty,
-                    'custom_song_length'                => $vot5CustomSongLength,
-                    'custom_song_overall_speed'         => $vot5CustomSongOverallSpeed,
-                    'custom_song_overall_difficulty'    => $vot5CustomSongOverallDifficulty,
-                    'custom_song_overall_health'        => $vot5CustomSongOverallHealth
-                ];
+                $songInformationTemplate =
+                    <<<EOL
+                    <section class="custom-song-vot-page">
+                        <div class="box-container">
+                            <div class="custom-song-header">
+                                <div class="custom-song-tournament">
+                                    <h1>- $vot5SongTournament -</h1>
+                                </div>
+                                <div class="custom-song-round">
+                                    <h1>- $vot5SongRound -</h1>
+                                </div>
+                                <div class="custom-song-type">
+                                    <h1>- $vot5SongType -</h1>
+                                </div>
+                            </div>
+
+                            <div class="custom-song-body">
+                                <div class="custom-song-image">
+                                    <a href="$vot5SongUrl">
+                                        <img src="$vot5SongImage" alt="VOT4 Custom Song Image">
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="custom-song-footer">
+                                <div class="custom-song-name">
+                                    <h2>$vot5SongName [$vot5SongDifficultyName]</h2>
+                                </div>
+
+                                <div class="custom-song-feature-artist">
+                                    <h3>Song by $vot5SongFeatureArtist</h3>
+                                </div>
+
+                                <div class="custom-song-mapper">
+                                    <h4>Created by <a href="$vot5SongMapperUrl">$vot5SongMapper</a></h4>
+                                </div>
+
+                                <div class="custom-song-attributes">
+                                    <div class="custom-song-star-rating">
+                                        <p>SR: $vot5SongDifficulty</p>
+                                    </div>
+                                    <div class="custom-song-length">
+                                        <p>Length: $vot5SongLength</p>
+                                    </div>
+                                    <div class="custom-song-speed">
+                                        <p>BPM: $vot5SongOverallSpeed</p>
+                                    </div>
+                                </div>
+
+                                <div class="custom-song-attributes">
+                                    <div class="custom-song-od">
+                                        <p>OD: $vot5SongOverallDifficulty</p>
+                                    </div>
+                                    <div class="custom-song-hp">
+                                        <p>HP: $vot5SongOverallHealth</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    EOL;
+
+                // It would be much more nasty if I tried to output this using
+                // the traditional mixed HTML & PHP codes
+                echo $songInformationTemplate;
             }
             break;
 
-        case 'VOT4':
-            foreach ($customSongReadableJsonData[$lowerCaseTournamentName] as $vot4CustomSongJsonData) {
-                $vot4CustomSongRoundData    = $vot4CustomSongJsonData['custom_song_round'];
-                $vot4CustomSongIdJsonData   = $vot4CustomSongJsonData['custom_song_id'];
-                $vot4CustomSongModData      = $vot4CustomSongJsonData['custom_song_mod'];
+        // *** VOT4 SONG DATA ***
+        case preg_match(
+            pattern: '/^(vot4|VOT4)$/i',
+            subject: $votTournamentName
+        ):
+            // Database use the abbreviation of each song indicator's name
+            $vot4AbbreviateTournamentName = 'VOT4';
 
-                $vot4CustomSongData = getTournamentCustomSongData(
-                    id: $vot4CustomSongIdJsonData,
-                    token: $customSongAccessToken
-                );
+            $vot4SongViewData = readSongData(
+                tournament: $vot4AbbreviateTournamentName
+            );
 
-                $vot4CustomSongId                   = $vot4CustomSongData['id'];
-                $vot4CustomSongRoundId              = $vot4CustomSongRoundData;
-                $vot4CustomSongTournamentId         = $name;
-                $vot4CustomSongType                 = $vot4CustomSongModData;
-                $vot4CustomSongImage                = $vot4CustomSongData['beatmapset']['covers']['cover'];
-                $vot4CustomSongUrl                  = $vot4CustomSongData['url'];
-                $vot4CustomSongName                 = $vot4CustomSongData['beatmapset']['title'];
-                $vot4CustomSongDifficultyName       = $vot4CustomSongData['version'];
-                $vot4CustomSongFeatureArtist        = $vot4CustomSongData['beatmapset']['artist'];
-                $vot4CustomSongMapper               = $vot4CustomSongData['beatmapset']['creator'];
-                $vot4CustomSongMapperUrl            = "https://osu.ppy.sh/users/{$vot4CustomSongData['beatmapset']['user_id']}";
-                $vot4CustomSongDifficulty           = $vot4CustomSongData['difficulty_rating'];
-                $vot4CustomSongLength               = $vot4CustomSongData['total_length'];
-                $vot4CustomSongOverallSpeed         = $vot4CustomSongData['beatmapset']['bpm'];
-                $vot4CustomSongOverallDifficulty    = $vot4CustomSongData['accuracy'];
-                $vot4CustomSongOverallHealth        = $vot4CustomSongData['drain'];
+            foreach ($vot4SongViewData as $vot4SongData) {
+                $vot4SongTournament          = htmlspecialchars($vot4SongData['tournamentName']);
+                $vot4SongRound               = htmlspecialchars($vot4SongData['roundName']);
+                $vot4SongType                = htmlspecialchars($vot4SongData['beatmapType']);
+                $vot4SongImage               = htmlspecialchars($vot4SongData['beatmapImage']);
+                $vot4SongUrl                 = htmlspecialchars($vot4SongData['beatmapUrl']);
+                $vot4SongName                = htmlspecialchars($vot4SongData['beatmapName']);
+                $vot4SongDifficultyName      = htmlspecialchars($vot4SongData['beatmapDifficultyName']);
+                $vot4SongFeatureArtist       = htmlspecialchars($vot4SongData['beatmapFeatureArtist']);
+                $vot4SongMapper              = htmlspecialchars($vot4SongData['beatmapMapper']);
+                $vot4SongMapperUrl           = htmlspecialchars($vot4SongData['beatmapMapperUrl']);
+                $vot4SongDifficulty          = htmlspecialchars($vot4SongData['beatmapDifficulty']);
+                $vot4SongLength              = timeStampFormat(number: $vot4SongData['beatmapLength']);
+                $vot4SongOverallSpeed        = sprintf('%.2f', $vot4SongData['beatmapOverallSpeed']);
+                $vot4SongOverallDifficulty   = sprintf('%.2f', $vot4SongData['beatmapOverallDifficulty']);
+                $vot4SongOverallHealth       = sprintf('%.2f', $vot4SongData['beatmapOverallHealth']);
 
-                $allCustomSongData[] = [
-                    'custom_song_id'                    => $vot4CustomSongId,
-                    'custom_song_round_id'              => $vot4CustomSongRoundId,
-                    'custom_song_tournament_id'         => $vot4CustomSongTournamentId,
-                    'custom_song_type'                  => $vot4CustomSongType,
-                    'custom_song_image'                 => $vot4CustomSongImage,
-                    'custom_song_url'                   => $vot4CustomSongUrl,
-                    'custom_song_name'                  => $vot4CustomSongName,
-                    'custom_song_difficulty_name'       => $vot4CustomSongDifficultyName,
-                    'custom_song_feature_artist'        => $vot4CustomSongFeatureArtist,
-                    'custom_song_mapper'                => $vot4CustomSongMapper,
-                    'custom_song_mapper_url'            => $vot4CustomSongMapperUrl,
-                    'custom_song_difficulty'            => $vot4CustomSongDifficulty,
-                    'custom_song_length'                => $vot4CustomSongLength,
-                    'custom_song_overall_speed'         => $vot4CustomSongOverallSpeed,
-                    'custom_song_overall_difficulty'    => $vot4CustomSongOverallDifficulty,
-                    'custom_song_overall_health'        => $vot4CustomSongOverallHealth
-                ];
+                $songInformationTemplate =
+                    <<<EOL
+                    <section class="custom-song-vot-page">
+                        <div class="box-container">
+                            <div class="custom-song-header">
+                                <div class="custom-song-tournament">
+                                    <h1>- $vot4SongTournament -</h1>
+                                </div>
+                                <div class="custom-song-round">
+                                    <h1>- $vot4SongRound -</h1>
+                                </div>
+                                <div class="custom-song-type">
+                                    <h1>- $vot4SongType -</h1>
+                                </div>
+                            </div>
+
+                            <div class="custom-song-body">
+                                <div class="custom-song-image">
+                                    <a href="$vot4SongUrl">
+                                        <img src="$vot4SongImage" alt="VOT4 Custom Song Image">
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="custom-song-footer">
+                                <div class="custom-song-name">
+                                    <h2>$vot4SongName [$vot4SongDifficultyName]</h2>
+                                </div>
+
+                                <div class="custom-song-feature-artist">
+                                    <h3>Song by $vot4SongFeatureArtist</h3>
+                                </div>
+
+                                <div class="custom-song-mapper">
+                                    <h4>Created by <a href="$vot4SongMapperUrl">$vot4SongMapper</a></h4>
+                                </div>
+
+                                <div class="custom-song-attributes">
+                                    <div class="custom-song-star-rating">
+                                        <p>SR: $vot4SongDifficulty</p>
+                                    </div>
+                                    <div class="custom-song-length">
+                                        <p>Length: $vot4SongLength</p>
+                                    </div>
+                                    <div class="custom-song-speed">
+                                        <p>BPM: $vot4SongOverallSpeed</p>
+                                    </div>
+                                </div>
+
+                                <div class="custom-song-attributes">
+                                    <div class="custom-song-od">
+                                        <p>OD: $vot4SongOverallDifficulty</p>
+                                    </div>
+                                    <div class="custom-song-hp">
+                                        <p>HP: $vot4SongOverallHealth</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    EOL;
+
+                // It would be much more nasty if I tried to output this using
+                // the traditional mixed HTML & PHP codes
+                echo $songInformationTemplate;
             }
             break;
 
-        case 'VOT3':
+        // *** VOT3 SONG DATA ***
+        case preg_match(
+            pattern: '/^(vot3|VOT3)$/i',
+            subject: $votTournamentName
+        ):
+            echo 'COMING SOON!! (VOT3)';
             break;
 
-        case 'VOT2':
+        // *** VOT2 SONG DATA ***
+        case preg_match(
+            pattern: '/^(vot2|VOT2)$/i',
+            subject: $votTournamentName
+        ):
+            echo 'COMING SOON!! (VOT2)';
             break;
 
-        case 'VOT1':
+        // *** VOT1 SONG DATA ***
+        case preg_match(
+            pattern: '/^(vot1|VOT1)$/i',
+            subject: $votTournamentName
+        ):
+            echo 'COMING SOON!! (VOT1)';
             break;
 
         default:
-            # code...
+            // TODO: proper handling
+            require_once __DIR__ . '/../Configurations/PrettyArray.php';
+            echo array_dump(readSongData(tournament: $votTournamentName));
             break;
-    }
-
-    getCustomSongData(data: $allCustomSongData);
-
-    return $allCustomSongData;
-}
-
-
-function getTournamentCustomSongData(
-    int $id,
-    string $token
-): array | bool {
-    $httpAuthorisationType  = $token;
-    $httpAcceptType         = 'application/json';
-    $httpContentType        = 'application/json';
-    $customSongUrl          = "https://osu.ppy.sh/api/v2/beatmaps/{$id}";
-
-    if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-        $httpHeaderRequest = [
-            "Authorization: Bearer {$httpAuthorisationType}",
-            "Accept: {$httpAcceptType}",
-            "Content-Type: {$httpContentType}",
-        ];
-
-        # CURL session will be handled manually through curl_setopt()
-        $customSongCurlHandle = curl_init(url: null);
-
-        curl_setopt(handle: $customSongCurlHandle, option: CURLOPT_URL, value: $customSongUrl);
-        curl_setopt(handle: $customSongCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
-        curl_setopt(handle: $customSongCurlHandle, option: CURLOPT_HEADER, value: 0);
-        curl_setopt(handle: $customSongCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
-
-        $customSongCurlResponse = curl_exec(handle: $customSongCurlHandle);
-
-        if (curl_errno(handle: $customSongCurlHandle)) {
-            error_log(curl_error(handle: $customSongCurlHandle));
-            curl_close(handle: $customSongCurlHandle);
-            return false; // An error occurred during the API call
-
-        } else {
-            $customSongReadableData = json_decode(
-                json: $customSongCurlResponse,
-                associative: true,
-                depth: 512,
-                flags: 0
-            );
-
-            curl_close(handle: $customSongCurlHandle);
-            return $customSongReadableData;
-        }
-    } else {
-        $httpHeaderRequest = array(
-            "Authorization: Bearer {$httpAuthorisationType}",
-            "Accept: {$httpAcceptType}",
-            "Content-Type: {$httpContentType}",
-        );
-
-        # CURL session will be handled manually through curl_setopt()
-        $customSongCurlHandle = curl_init(url: null);
-
-        curl_setopt(handle: $customSongCurlHandle, option: CURLOPT_URL, value: $customSongUrl);
-        curl_setopt(handle: $customSongCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
-        curl_setopt(handle: $customSongCurlHandle, option: CURLOPT_HEADER, value: 0);
-        curl_setopt(handle: $customSongCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
-
-        $customSongCurlResponse = curl_exec(handle: $customSongCurlHandle);
-
-        if (curl_errno(handle: $customSongCurlHandle)) {
-            error_log(curl_error(handle: $customSongCurlHandle));
-            curl_close(handle: $customSongCurlHandle);
-            return false; // An error occurred during the API call
-
-        } else {
-            $customSongReadableData = json_decode(
-                json: $customSongCurlResponse,
-                associative: true,
-                depth: 512,
-                flags: 0
-            );
-
-            curl_close(handle: $customSongCurlHandle);
-            return $customSongReadableData;
-        }
     }
 }

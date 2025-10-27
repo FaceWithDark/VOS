@@ -2,4048 +2,2950 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
-
-function getTournamentMappool(
-    string $name,
-    string $round
-): array {
-    $mappoolJsonData = __DIR__ . '/../Datas/Tournament/VotMappoolData.json';
-
-    $allMappoolNoModData            = [];
-    $allMappoolHiddenData           = [];
-    $allMappoolHardRockData         = [];
-    $allMappoolDoubleTimeData       = [];
-    $allMappoolNightCoreData        = []; // VOT5 using a different pooling format
-    $allMappoolFreeModData          = [];
-    $allMappoolEasyData             = [];
-    $allMappoolFlashLightData       = []; // VOT5 using a different pooling format
-    $allMappoolHiddenHardRockData   = [];
-    $allMappoolTieBreakerData       = [];
-
-    $mappoolAccessToken = $_COOKIE['vot_access_token'];
-
-    $mappoolViewableJsonData = file_get_contents(
-        filename: $mappoolJsonData,
-        use_include_path: false,
-        context: null,
-        offset: 0,
-        length: null
-    );
-
-    $mappoolReadableJsonData = json_decode(
-        json: $mappoolViewableJsonData,
-        associative: true
-    );
-
-    switch ($name) {
-        case 'vot5':
-            switch ($round) {
-                case 'GSW1':
-                    /*** GROUP STAGE (WEEK 1) NM BEATMAP DATA ***/
-                    $groupStageWeekOneNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($groupStageWeekOneNoModJsonData as $groupStageWeekOneNoModJsonType => $groupStageWeekOneNoModJsonId) {
-                        $groupStageWeekOneNoModData = getTournamentMappoolData(
-                            id: $groupStageWeekOneNoModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $groupStageWeekOneNoModId                 = $groupStageWeekOneNoModData['id'];
-                        $groupStageWeekOneNoModRoundId            = $round;
-                        $groupStageWeekOneNoModTournamentId       = strtoupper(string: $name);
-                        $groupStageWeekOneNoModType               = $groupStageWeekOneNoModJsonType;
-                        $groupStageWeekOneNoModImage              = $groupStageWeekOneNoModData['beatmapset']['covers']['cover'];
-                        $groupStageWeekOneNoModUrl                = $groupStageWeekOneNoModData['url'];
-                        $groupStageWeekOneNoModName               = $groupStageWeekOneNoModData['beatmapset']['title'];
-                        $groupStageWeekOneNoModDifficultyName     = $groupStageWeekOneNoModData['version'];
-                        $groupStageWeekOneNoModFeatureArtist      = $groupStageWeekOneNoModData['beatmapset']['artist'];
-                        $groupStageWeekOneNoModMapper             = $groupStageWeekOneNoModData['beatmapset']['creator'];
-                        $groupStageWeekOneNoModMapperUrl          = "https://osu.ppy.sh/users/{$groupStageWeekOneNoModData['beatmapset']['user_id']}";
-                        $groupStageWeekOneNoModDifficulty         = $groupStageWeekOneNoModData['difficulty_rating'];
-                        $groupStageWeekOneNoModLength             = $groupStageWeekOneNoModData['total_length'];
-                        $groupStageWeekOneNoModOverallSpeed       = $groupStageWeekOneNoModData['beatmapset']['bpm'];
-                        $groupStageWeekOneNoModOverallDifficulty  = $groupStageWeekOneNoModData['accuracy'];
-                        $groupStageWeekOneNoModOverallHealth      = $groupStageWeekOneNoModData['drain'];
-
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $groupStageWeekOneNoModId,
-                            'beatmap_round_id'              => $groupStageWeekOneNoModRoundId,
-                            'beatmap_tournament_id'         => $groupStageWeekOneNoModTournamentId,
-                            'beatmap_type'                  => $groupStageWeekOneNoModType,
-                            'beatmap_image'                 => $groupStageWeekOneNoModImage,
-                            'beatmap_url'                   => $groupStageWeekOneNoModUrl,
-                            'beatmap_name'                  => $groupStageWeekOneNoModName,
-                            'beatmap_difficulty_name'       => $groupStageWeekOneNoModDifficultyName,
-                            'beatmap_feature_artist'        => $groupStageWeekOneNoModFeatureArtist,
-                            'beatmap_mapper'                => $groupStageWeekOneNoModMapper,
-                            'beatmap_mapper_url'            => $groupStageWeekOneNoModMapperUrl,
-                            'beatmap_difficulty'            => $groupStageWeekOneNoModDifficulty,
-                            'beatmap_length'                => $groupStageWeekOneNoModLength,
-                            'beatmap_overall_speed'         => $groupStageWeekOneNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $groupStageWeekOneNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneNoModOverallHealth
-                        ];
-                    }
-
-
-                    /*** GROUP STAGE (WEEK 1) HD BEATMAP DATA ***/
-                    $groupStageWeekOneHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($groupStageWeekOneHiddenJsonData as $groupStageWeekOneHiddenJsonType => $groupStageWeekOneHiddenJsonId) {
-                        $groupStageWeekOneHiddenData = getTournamentMappoolData(
-                            id: $groupStageWeekOneHiddenJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $groupStageWeekOneHiddenId                 = $groupStageWeekOneHiddenData['id'];
-                        $groupStageWeekOneHiddenRoundId            = $round;
-                        $groupStageWeekOneHiddenTournamentId       = strtoupper(string: $name);
-                        $groupStageWeekOneHiddenType               = $groupStageWeekOneHiddenJsonType;
-                        $groupStageWeekOneHiddenImage              = $groupStageWeekOneHiddenData['beatmapset']['covers']['cover'];
-                        $groupStageWeekOneHiddenUrl                = $groupStageWeekOneHiddenData['url'];
-                        $groupStageWeekOneHiddenName               = $groupStageWeekOneHiddenData['beatmapset']['title'];
-                        $groupStageWeekOneHiddenDifficultyName     = $groupStageWeekOneHiddenData['version'];
-                        $groupStageWeekOneHiddenFeatureArtist      = $groupStageWeekOneHiddenData['beatmapset']['artist'];
-                        $groupStageWeekOneHiddenMapper             = $groupStageWeekOneHiddenData['beatmapset']['creator'];
-                        $groupStageWeekOneHiddenMapperUrl          = "https://osu.ppy.sh/users/{$groupStageWeekOneHiddenData['beatmapset']['user_id']}";
-                        $groupStageWeekOneHiddenDifficulty         = $groupStageWeekOneHiddenData['difficulty_rating'];
-                        $groupStageWeekOneHiddenLength             = $groupStageWeekOneHiddenData['total_length'];
-                        $groupStageWeekOneHiddenOverallSpeed       = $groupStageWeekOneHiddenData['beatmapset']['bpm'];
-                        $groupStageWeekOneHiddenOverallDifficulty  = $groupStageWeekOneHiddenData['accuracy'];
-                        $groupStageWeekOneHiddenOverallHealth      = $groupStageWeekOneHiddenData['drain'];
-
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $groupStageWeekOneHiddenId,
-                            'beatmap_round_id'              => $groupStageWeekOneHiddenRoundId,
-                            'beatmap_tournament_id'         => $groupStageWeekOneHiddenTournamentId,
-                            'beatmap_type'                  => $groupStageWeekOneHiddenType,
-                            'beatmap_image'                 => $groupStageWeekOneHiddenImage,
-                            'beatmap_url'                   => $groupStageWeekOneHiddenUrl,
-                            'beatmap_name'                  => $groupStageWeekOneHiddenName,
-                            'beatmap_difficulty_name'       => $groupStageWeekOneHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $groupStageWeekOneHiddenFeatureArtist,
-                            'beatmap_mapper'                => $groupStageWeekOneHiddenMapper,
-                            'beatmap_mapper_url'            => $groupStageWeekOneHiddenMapperUrl,
-                            'beatmap_difficulty'            => $groupStageWeekOneHiddenDifficulty,
-                            'beatmap_length'                => $groupStageWeekOneHiddenLength,
-                            'beatmap_overall_speed'         => $groupStageWeekOneHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $groupStageWeekOneHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneHiddenOverallHealth
-                        ];
-                    }
-
-
-                    /*** GROUP STAGE (WEEK 1) HR BEATMAP DATA ***/
-                    $groupStageWeekOneHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($groupStageWeekOneHardRockJsonData as $groupStageWeekOneHardRockJsonType => $groupStageWeekOneHardRockJsonId) {
-                        $groupStageWeekOneHardRockData = getTournamentMappoolData(
-                            id: $groupStageWeekOneHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $groupStageWeekOneHardRockId                 = $groupStageWeekOneHardRockData['id'];
-                        $groupStageWeekOneHardRockRoundId            = $round;
-                        $groupStageWeekOneHardRockTournamentId       = strtoupper(string: $name);
-                        $groupStageWeekOneHardRockType               = $groupStageWeekOneHardRockJsonType;
-                        $groupStageWeekOneHardRockImage              = $groupStageWeekOneHardRockData['beatmapset']['covers']['cover'];
-                        $groupStageWeekOneHardRockUrl                = $groupStageWeekOneHardRockData['url'];
-                        $groupStageWeekOneHardRockName               = $groupStageWeekOneHardRockData['beatmapset']['title'];
-                        $groupStageWeekOneHardRockDifficultyName     = $groupStageWeekOneHardRockData['version'];
-                        $groupStageWeekOneHardRockFeatureArtist      = $groupStageWeekOneHardRockData['beatmapset']['artist'];
-                        $groupStageWeekOneHardRockMapper             = $groupStageWeekOneHardRockData['beatmapset']['creator'];
-                        $groupStageWeekOneHardRockMapperUrl          = "https://osu.ppy.sh/users/{$groupStageWeekOneHardRockData['beatmapset']['user_id']}";
-                        $groupStageWeekOneHardRockDifficulty         = $groupStageWeekOneHardRockData['difficulty_rating'];
-                        $groupStageWeekOneHardRockLength             = $groupStageWeekOneHardRockData['total_length'];
-                        $groupStageWeekOneHardRockOverallSpeed       = $groupStageWeekOneHardRockData['beatmapset']['bpm'];
-                        $groupStageWeekOneHardRockOverallDifficulty  = $groupStageWeekOneHardRockData['accuracy'];
-                        $groupStageWeekOneHardRockOverallHealth      = $groupStageWeekOneHardRockData['drain'];
-
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $groupStageWeekOneHardRockId,
-                            'beatmap_round_id'              => $groupStageWeekOneHardRockRoundId,
-                            'beatmap_tournament_id'         => $groupStageWeekOneHardRockTournamentId,
-                            'beatmap_type'                  => $groupStageWeekOneHardRockType,
-                            'beatmap_image'                 => $groupStageWeekOneHardRockImage,
-                            'beatmap_url'                   => $groupStageWeekOneHardRockUrl,
-                            'beatmap_name'                  => $groupStageWeekOneHardRockName,
-                            'beatmap_difficulty_name'       => $groupStageWeekOneHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $groupStageWeekOneHardRockFeatureArtist,
-                            'beatmap_mapper'                => $groupStageWeekOneHardRockMapper,
-                            'beatmap_mapper_url'            => $groupStageWeekOneHardRockMapperUrl,
-                            'beatmap_difficulty'            => $groupStageWeekOneHardRockDifficulty,
-                            'beatmap_length'                => $groupStageWeekOneHardRockLength,
-                            'beatmap_overall_speed'         => $groupStageWeekOneHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $groupStageWeekOneHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** GROUP STAGE (WEEK 1) NC BEATMAP DATA ***/
-                    $groupStageWeekOneNightCoreJsonData = $mappoolReadableJsonData[$name][$round]['NC'];
-                    foreach ($groupStageWeekOneNightCoreJsonData as $groupStageWeekOneNightCoreJsonType => $groupStageWeekOneNightCoreJsonId) {
-                        $groupStageWeekOneNightCoreData = getTournamentMappoolData(
-                            id: $groupStageWeekOneNightCoreJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $groupStageWeekOneNightCoreId                 = $groupStageWeekOneNightCoreData['id'];
-                        $groupStageWeekOneNightCoreRoundId            = $round;
-                        $groupStageWeekOneNightCoreTournamentId       = strtoupper(string: $name);
-                        $groupStageWeekOneNightCoreType               = $groupStageWeekOneNightCoreJsonType;
-                        $groupStageWeekOneNightCoreImage              = $groupStageWeekOneNightCoreData['beatmapset']['covers']['cover'];
-                        $groupStageWeekOneNightCoreUrl                = $groupStageWeekOneNightCoreData['url'];
-                        $groupStageWeekOneNightCoreName               = $groupStageWeekOneNightCoreData['beatmapset']['title'];
-                        $groupStageWeekOneNightCoreDifficultyName     = $groupStageWeekOneNightCoreData['version'];
-                        $groupStageWeekOneNightCoreFeatureArtist      = $groupStageWeekOneNightCoreData['beatmapset']['artist'];
-                        $groupStageWeekOneNightCoreMapper             = $groupStageWeekOneNightCoreData['beatmapset']['creator'];
-                        $groupStageWeekOneNightCoreMapperUrl          = "https://osu.ppy.sh/users/{$groupStageWeekOneNightCoreData['beatmapset']['user_id']}";
-                        $groupStageWeekOneNightCoreDifficulty         = $groupStageWeekOneNightCoreData['difficulty_rating'];
-                        $groupStageWeekOneNightCoreLength             = $groupStageWeekOneNightCoreData['total_length'];
-                        $groupStageWeekOneNightCoreOverallSpeed       = $groupStageWeekOneNightCoreData['beatmapset']['bpm'];
-                        $groupStageWeekOneNightCoreOverallDifficulty  = $groupStageWeekOneNightCoreData['accuracy'];
-                        $groupStageWeekOneNightCoreOverallHealth      = $groupStageWeekOneNightCoreData['drain'];
-
-                        $allMappoolNightCoreData[] = [
-                            'beatmap_id'                    => $groupStageWeekOneNightCoreId,
-                            'beatmap_round_id'              => $groupStageWeekOneNightCoreRoundId,
-                            'beatmap_tournament_id'         => $groupStageWeekOneNightCoreTournamentId,
-                            'beatmap_type'                  => $groupStageWeekOneNightCoreType,
-                            'beatmap_image'                 => $groupStageWeekOneNightCoreImage,
-                            'beatmap_url'                   => $groupStageWeekOneNightCoreUrl,
-                            'beatmap_name'                  => $groupStageWeekOneNightCoreName,
-                            'beatmap_difficulty_name'       => $groupStageWeekOneNightCoreDifficultyName,
-                            'beatmap_feature_artist'        => $groupStageWeekOneNightCoreFeatureArtist,
-                            'beatmap_mapper'                => $groupStageWeekOneNightCoreMapper,
-                            'beatmap_mapper_url'            => $groupStageWeekOneNightCoreMapperUrl,
-                            'beatmap_difficulty'            => $groupStageWeekOneNightCoreDifficulty,
-                            'beatmap_length'                => $groupStageWeekOneNightCoreLength,
-                            'beatmap_overall_speed'         => $groupStageWeekOneNightCoreOverallSpeed,
-                            'beatmap_overall_difficulty'    => $groupStageWeekOneNightCoreOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneNightCoreOverallHealth
-                        ];
-                    }
-
-
-                    /*** GROUP STAGE (WEEK 1) FM BEATMAP DATA ***/
-                    $groupStageWeekOneFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($groupStageWeekOneFreeModJsonData as $groupStageWeekOneFreeModJsonType => $groupStageWeekOneFreeModJsonId) {
-                        $groupStageWeekOneFreeModData = getTournamentMappoolData(
-                            id: $groupStageWeekOneFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $groupStageWeekOneFreeModId                 = $groupStageWeekOneFreeModData['id'];
-                        $groupStageWeekOneFreeModRoundId            = $round;
-                        $groupStageWeekOneFreeModTournamentId       = strtoupper(string: $name);
-                        $groupStageWeekOneFreeModType               = $groupStageWeekOneFreeModJsonType;
-                        $groupStageWeekOneFreeModImage              = $groupStageWeekOneFreeModData['beatmapset']['covers']['cover'];
-                        $groupStageWeekOneFreeModUrl                = $groupStageWeekOneFreeModData['url'];
-                        $groupStageWeekOneFreeModName               = $groupStageWeekOneFreeModData['beatmapset']['title'];
-                        $groupStageWeekOneFreeModDifficultyName     = $groupStageWeekOneFreeModData['version'];
-                        $groupStageWeekOneFreeModFeatureArtist      = $groupStageWeekOneFreeModData['beatmapset']['artist'];
-                        $groupStageWeekOneFreeModMapper             = $groupStageWeekOneFreeModData['beatmapset']['creator'];
-                        $groupStageWeekOneFreeModMapperUrl          = "https://osu.ppy.sh/users/{$groupStageWeekOneFreeModData['beatmapset']['user_id']}";
-                        $groupStageWeekOneFreeModDifficulty         = $groupStageWeekOneFreeModData['difficulty_rating'];
-                        $groupStageWeekOneFreeModLength             = $groupStageWeekOneFreeModData['total_length'];
-                        $groupStageWeekOneFreeModOverallSpeed       = $groupStageWeekOneFreeModData['beatmapset']['bpm'];
-                        $groupStageWeekOneFreeModOverallDifficulty  = $groupStageWeekOneFreeModData['accuracy'];
-                        $groupStageWeekOneFreeModOverallHealth      = $groupStageWeekOneFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $groupStageWeekOneFreeModId,
-                            'beatmap_round_id'              => $groupStageWeekOneFreeModRoundId,
-                            'beatmap_tournament_id'         => $groupStageWeekOneFreeModTournamentId,
-                            'beatmap_type'                  => $groupStageWeekOneFreeModType,
-                            'beatmap_image'                 => $groupStageWeekOneFreeModImage,
-                            'beatmap_url'                   => $groupStageWeekOneFreeModUrl,
-                            'beatmap_name'                  => $groupStageWeekOneFreeModName,
-                            'beatmap_difficulty_name'       => $groupStageWeekOneFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $groupStageWeekOneFreeModFeatureArtist,
-                            'beatmap_mapper'                => $groupStageWeekOneFreeModMapper,
-                            'beatmap_mapper_url'            => $groupStageWeekOneFreeModMapperUrl,
-                            'beatmap_difficulty'            => $groupStageWeekOneFreeModDifficulty,
-                            'beatmap_length'                => $groupStageWeekOneFreeModLength,
-                            'beatmap_overall_speed'         => $groupStageWeekOneFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $groupStageWeekOneFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneFreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** GROUP STAGE (WEEK 1) TB BEATMAP DATA ***/
-                    $groupStageWeekOneTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
-                    foreach ($groupStageWeekOneTieBreakerJsonData as $groupStageWeekOneTieBreakerJsonType => $groupStageWeekOneTieBreakerJsonId) {
-                        $groupStageWeekOneTieBreakerData = getTournamentMappoolData(
-                            id: $groupStageWeekOneTieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $groupStageWeekOneTieBreakerId                 = $groupStageWeekOneTieBreakerData['id'];
-                        $groupStageWeekOneTieBreakerRoundId            = $round;
-                        $groupStageWeekOneTieBreakerTournamentId       = strtoupper(string: $name);
-                        $groupStageWeekOneTieBreakerType               = $groupStageWeekOneTieBreakerJsonType;
-                        $groupStageWeekOneTieBreakerImage              = $groupStageWeekOneTieBreakerData['beatmapset']['covers']['cover'];
-                        $groupStageWeekOneTieBreakerUrl                = $groupStageWeekOneTieBreakerData['url'];
-                        $groupStageWeekOneTieBreakerName               = $groupStageWeekOneTieBreakerData['beatmapset']['title'];
-                        $groupStageWeekOneTieBreakerDifficultyName     = $groupStageWeekOneTieBreakerData['version'];
-                        $groupStageWeekOneTieBreakerFeatureArtist      = $groupStageWeekOneTieBreakerData['beatmapset']['artist'];
-                        $groupStageWeekOneTieBreakerMapper             = $groupStageWeekOneTieBreakerData['beatmapset']['creator'];
-                        $groupStageWeekOneTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$groupStageWeekOneTieBreakerData['beatmapset']['user_id']}";
-                        $groupStageWeekOneTieBreakerDifficulty         = $groupStageWeekOneTieBreakerData['difficulty_rating'];
-                        $groupStageWeekOneTieBreakerLength             = $groupStageWeekOneTieBreakerData['total_length'];
-                        $groupStageWeekOneTieBreakerOverallSpeed       = $groupStageWeekOneTieBreakerData['beatmapset']['bpm'];
-                        $groupStageWeekOneTieBreakerOverallDifficulty  = $groupStageWeekOneTieBreakerData['accuracy'];
-                        $groupStageWeekOneTieBreakerOverallHealth      = $groupStageWeekOneTieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $groupStageWeekOneTieBreakerId,
-                            'beatmap_round_id'              => $groupStageWeekOneTieBreakerRoundId,
-                            'beatmap_tournament_id'         => $groupStageWeekOneTieBreakerTournamentId,
-                            'beatmap_type'                  => $groupStageWeekOneTieBreakerType,
-                            'beatmap_image'                 => $groupStageWeekOneTieBreakerImage,
-                            'beatmap_url'                   => $groupStageWeekOneTieBreakerUrl,
-                            'beatmap_name'                  => $groupStageWeekOneTieBreakerName,
-                            'beatmap_difficulty_name'       => $groupStageWeekOneTieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $groupStageWeekOneTieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $groupStageWeekOneTieBreakerMapper,
-                            'beatmap_mapper_url'            => $groupStageWeekOneTieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $groupStageWeekOneTieBreakerDifficulty,
-                            'beatmap_length'                => $groupStageWeekOneTieBreakerLength,
-                            'beatmap_overall_speed'         => $groupStageWeekOneTieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $groupStageWeekOneTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekOneTieBreakerOverallHealth
-                        ];
-                    }
-                    break;
-
-                // VOT5 using a different matching format
-                case 'GSW2':
-                    /*** GROUP STAGE (WEEK 2) NM BEATMAP DATA ***/
-                    $GroupStageWeekTwoNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($GroupStageWeekTwoNoModJsonData as $GroupStageWeekTwoNoModJsonType => $GroupStageWeekTwoNoModJsonId) {
-                        $GroupStageWeekTwoNoModData = getTournamentMappoolData(
-                            id: $GroupStageWeekTwoNoModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $GroupStageWeekTwoNoModId                 = $GroupStageWeekTwoNoModData['id'];
-                        $GroupStageWeekTwoNoModRoundId            = $round;
-                        $GroupStageWeekTwoNoModTournamentId       = strtoupper(string: $name);
-                        $GroupStageWeekTwoNoModType               = $GroupStageWeekTwoNoModJsonType;
-                        $GroupStageWeekTwoNoModImage              = $GroupStageWeekTwoNoModData['beatmapset']['covers']['cover'];
-                        $GroupStageWeekTwoNoModUrl                = $GroupStageWeekTwoNoModData['url'];
-                        $GroupStageWeekTwoNoModName               = $GroupStageWeekTwoNoModData['beatmapset']['title'];
-                        $GroupStageWeekTwoNoModDifficultyName     = $GroupStageWeekTwoNoModData['version'];
-                        $GroupStageWeekTwoNoModFeatureArtist      = $GroupStageWeekTwoNoModData['beatmapset']['artist'];
-                        $GroupStageWeekTwoNoModMapper             = $GroupStageWeekTwoNoModData['beatmapset']['creator'];
-                        $GroupStageWeekTwoNoModMapperUrl          = "https://osu.ppy.sh/users/{$GroupStageWeekTwoNoModData['beatmapset']['user_id']}";
-                        $GroupStageWeekTwoNoModDifficulty         = $GroupStageWeekTwoNoModData['difficulty_rating'];
-                        $GroupStageWeekTwoNoModLength             = $GroupStageWeekTwoNoModData['total_length'];
-                        $GroupStageWeekTwoNoModOverallSpeed       = $GroupStageWeekTwoNoModData['beatmapset']['bpm'];
-                        $GroupStageWeekTwoNoModOverallDifficulty  = $GroupStageWeekTwoNoModData['accuracy'];
-                        $GroupStageWeekTwoNoModOverallHealth      = $GroupStageWeekTwoNoModData['drain'];
-
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $GroupStageWeekTwoNoModId,
-                            'beatmap_round_id'              => $GroupStageWeekTwoNoModRoundId,
-                            'beatmap_tournament_id'         => $GroupStageWeekTwoNoModTournamentId,
-                            'beatmap_type'                  => $GroupStageWeekTwoNoModType,
-                            'beatmap_image'                 => $GroupStageWeekTwoNoModImage,
-                            'beatmap_url'                   => $GroupStageWeekTwoNoModUrl,
-                            'beatmap_name'                  => $GroupStageWeekTwoNoModName,
-                            'beatmap_difficulty_name'       => $GroupStageWeekTwoNoModDifficultyName,
-                            'beatmap_feature_artist'        => $GroupStageWeekTwoNoModFeatureArtist,
-                            'beatmap_mapper'                => $GroupStageWeekTwoNoModMapper,
-                            'beatmap_mapper_url'            => $GroupStageWeekTwoNoModMapperUrl,
-                            'beatmap_difficulty'            => $GroupStageWeekTwoNoModDifficulty,
-                            'beatmap_length'                => $GroupStageWeekTwoNoModLength,
-                            'beatmap_overall_speed'         => $GroupStageWeekTwoNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $GroupStageWeekTwoNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $GroupStageWeekTwoNoModOverallHealth
-                        ];
-                    }
-
-
-                    /*** GROUP STAGE (WEEK 2) HD BEATMAP DATA ***/
-                    $GroupStageWeekTwoHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($GroupStageWeekTwoHiddenJsonData as $GroupStageWeekTwoHiddenJsonType => $GroupStageWeekTwoHiddenJsonId) {
-                        $GroupStageWeekTwoHiddenData = getTournamentMappoolData(
-                            id: $GroupStageWeekTwoHiddenJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $GroupStageWeekTwoHiddenId                 = $GroupStageWeekTwoHiddenData['id'];
-                        $GroupStageWeekTwoHiddenRoundId            = $round;
-                        $GroupStageWeekTwoHiddenTournamentId       = strtoupper(string: $name);
-                        $GroupStageWeekTwoHiddenType               = $GroupStageWeekTwoHiddenJsonType;
-                        $GroupStageWeekTwoHiddenImage              = $GroupStageWeekTwoHiddenData['beatmapset']['covers']['cover'];
-                        $GroupStageWeekTwoHiddenUrl                = $GroupStageWeekTwoHiddenData['url'];
-                        $GroupStageWeekTwoHiddenName               = $GroupStageWeekTwoHiddenData['beatmapset']['title'];
-                        $GroupStageWeekTwoHiddenDifficultyName     = $GroupStageWeekTwoHiddenData['version'];
-                        $GroupStageWeekTwoHiddenFeatureArtist      = $GroupStageWeekTwoHiddenData['beatmapset']['artist'];
-                        $GroupStageWeekTwoHiddenMapper             = $GroupStageWeekTwoHiddenData['beatmapset']['creator'];
-                        $GroupStageWeekTwoHiddenMapperUrl          = "https://osu.ppy.sh/users/{$GroupStageWeekTwoHiddenData['beatmapset']['user_id']}";
-                        $GroupStageWeekTwoHiddenDifficulty         = $GroupStageWeekTwoHiddenData['difficulty_rating'];
-                        $GroupStageWeekTwoHiddenLength             = $GroupStageWeekTwoHiddenData['total_length'];
-                        $GroupStageWeekTwoHiddenOverallSpeed       = $GroupStageWeekTwoHiddenData['beatmapset']['bpm'];
-                        $GroupStageWeekTwoHiddenOverallDifficulty  = $GroupStageWeekTwoHiddenData['accuracy'];
-                        $GroupStageWeekTwoHiddenOverallHealth      = $GroupStageWeekTwoHiddenData['drain'];
-
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $GroupStageWeekTwoHiddenId,
-                            'beatmap_round_id'              => $GroupStageWeekTwoHiddenRoundId,
-                            'beatmap_tournament_id'         => $GroupStageWeekTwoHiddenTournamentId,
-                            'beatmap_type'                  => $GroupStageWeekTwoHiddenType,
-                            'beatmap_image'                 => $GroupStageWeekTwoHiddenImage,
-                            'beatmap_url'                   => $GroupStageWeekTwoHiddenUrl,
-                            'beatmap_name'                  => $GroupStageWeekTwoHiddenName,
-                            'beatmap_difficulty_name'       => $GroupStageWeekTwoHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $GroupStageWeekTwoHiddenFeatureArtist,
-                            'beatmap_mapper'                => $GroupStageWeekTwoHiddenMapper,
-                            'beatmap_mapper_url'            => $GroupStageWeekTwoHiddenMapperUrl,
-                            'beatmap_difficulty'            => $GroupStageWeekTwoHiddenDifficulty,
-                            'beatmap_length'                => $GroupStageWeekTwoHiddenLength,
-                            'beatmap_overall_speed'         => $GroupStageWeekTwoHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $GroupStageWeekTwoHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $GroupStageWeekTwoHiddenOverallHealth
-                        ];
-                    }
-
-
-                    /*** GROUP STAGE (WEEK 2) HR BEATMAP DATA ***/
-                    $GroupStageWeekTwoHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($GroupStageWeekTwoHardRockJsonData as $GroupStageWeekTwoHardRockJsonType => $GroupStageWeekTwoHardRockJsonId) {
-                        $GroupStageWeekTwoHardRockData = getTournamentMappoolData(
-                            id: $GroupStageWeekTwoHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $GroupStageWeekTwoHardRockId                 = $GroupStageWeekTwoHardRockData['id'];
-                        $GroupStageWeekTwoHardRockRoundId            = $round;
-                        $GroupStageWeekTwoHardRockTournamentId       = strtoupper(string: $name);
-                        $GroupStageWeekTwoHardRockType               = $GroupStageWeekTwoHardRockJsonType;
-                        $GroupStageWeekTwoHardRockImage              = $GroupStageWeekTwoHardRockData['beatmapset']['covers']['cover'];
-                        $GroupStageWeekTwoHardRockUrl                = $GroupStageWeekTwoHardRockData['url'];
-                        $GroupStageWeekTwoHardRockName               = $GroupStageWeekTwoHardRockData['beatmapset']['title'];
-                        $GroupStageWeekTwoHardRockDifficultyName     = $GroupStageWeekTwoHardRockData['version'];
-                        $GroupStageWeekTwoHardRockFeatureArtist      = $GroupStageWeekTwoHardRockData['beatmapset']['artist'];
-                        $GroupStageWeekTwoHardRockMapper             = $GroupStageWeekTwoHardRockData['beatmapset']['creator'];
-                        $GroupStageWeekTwoHardRockMapperUrl          = "https://osu.ppy.sh/users/{$GroupStageWeekTwoHardRockData['beatmapset']['user_id']}";
-                        $GroupStageWeekTwoHardRockDifficulty         = $GroupStageWeekTwoHardRockData['difficulty_rating'];
-                        $GroupStageWeekTwoHardRockLength             = $GroupStageWeekTwoHardRockData['total_length'];
-                        $GroupStageWeekTwoHardRockOverallSpeed       = $GroupStageWeekTwoHardRockData['beatmapset']['bpm'];
-                        $GroupStageWeekTwoHardRockOverallDifficulty  = $GroupStageWeekTwoHardRockData['accuracy'];
-                        $GroupStageWeekTwoHardRockOverallHealth      = $GroupStageWeekTwoHardRockData['drain'];
-
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $GroupStageWeekTwoHardRockId,
-                            'beatmap_round_id'              => $GroupStageWeekTwoHardRockRoundId,
-                            'beatmap_tournament_id'         => $GroupStageWeekTwoHardRockTournamentId,
-                            'beatmap_type'                  => $GroupStageWeekTwoHardRockType,
-                            'beatmap_image'                 => $GroupStageWeekTwoHardRockImage,
-                            'beatmap_url'                   => $GroupStageWeekTwoHardRockUrl,
-                            'beatmap_name'                  => $GroupStageWeekTwoHardRockName,
-                            'beatmap_difficulty_name'       => $GroupStageWeekTwoHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $GroupStageWeekTwoHardRockFeatureArtist,
-                            'beatmap_mapper'                => $GroupStageWeekTwoHardRockMapper,
-                            'beatmap_mapper_url'            => $GroupStageWeekTwoHardRockMapperUrl,
-                            'beatmap_difficulty'            => $GroupStageWeekTwoHardRockDifficulty,
-                            'beatmap_length'                => $GroupStageWeekTwoHardRockLength,
-                            'beatmap_overall_speed'         => $GroupStageWeekTwoHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $GroupStageWeekTwoHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $GroupStageWeekTwoHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** GROUP STAGE (WEEK 2) NC BEATMAP DATA ***/
-                    $GroupStageWeekTwoNightCoreJsonData = $mappoolReadableJsonData[$name][$round]['NC'];
-                    foreach ($GroupStageWeekTwoNightCoreJsonData as $GroupStageWeekTwoNightCoreJsonType => $GroupStageWeekTwoNightCoreJsonId) {
-                        $GroupStageWeekTwoNightCoreData = getTournamentMappoolData(
-                            id: $GroupStageWeekTwoNightCoreJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $GroupStageWeekTwoNightCoreId                 = $GroupStageWeekTwoNightCoreData['id'];
-                        $GroupStageWeekTwoNightCoreRoundId            = $round;
-                        $GroupStageWeekTwoNightCoreTournamentId       = strtoupper(string: $name);
-                        $GroupStageWeekTwoNightCoreType               = $GroupStageWeekTwoNightCoreJsonType;
-                        $GroupStageWeekTwoNightCoreImage              = $GroupStageWeekTwoNightCoreData['beatmapset']['covers']['cover'];
-                        $GroupStageWeekTwoNightCoreUrl                = $GroupStageWeekTwoNightCoreData['url'];
-                        $GroupStageWeekTwoNightCoreName               = $GroupStageWeekTwoNightCoreData['beatmapset']['title'];
-                        $GroupStageWeekTwoNightCoreDifficultyName     = $GroupStageWeekTwoNightCoreData['version'];
-                        $GroupStageWeekTwoNightCoreFeatureArtist      = $GroupStageWeekTwoNightCoreData['beatmapset']['artist'];
-                        $GroupStageWeekTwoNightCoreMapper             = $GroupStageWeekTwoNightCoreData['beatmapset']['creator'];
-                        $GroupStageWeekTwoNightCoreMapperUrl          = "https://osu.ppy.sh/users/{$GroupStageWeekTwoNightCoreData['beatmapset']['user_id']}";
-                        $GroupStageWeekTwoNightCoreDifficulty         = $GroupStageWeekTwoNightCoreData['difficulty_rating'];
-                        $GroupStageWeekTwoNightCoreLength             = $GroupStageWeekTwoNightCoreData['total_length'];
-                        $GroupStageWeekTwoNightCoreOverallSpeed       = $GroupStageWeekTwoNightCoreData['beatmapset']['bpm'];
-                        $GroupStageWeekTwoNightCoreOverallDifficulty  = $GroupStageWeekTwoNightCoreData['accuracy'];
-                        $GroupStageWeekTwoNightCoreOverallHealth      = $GroupStageWeekTwoNightCoreData['drain'];
-
-                        $allMappoolNightCoreData[] = [
-                            'beatmap_id'                    => $GroupStageWeekTwoNightCoreId,
-                            'beatmap_round_id'              => $GroupStageWeekTwoNightCoreRoundId,
-                            'beatmap_tournament_id'         => $GroupStageWeekTwoNightCoreTournamentId,
-                            'beatmap_type'                  => $GroupStageWeekTwoNightCoreType,
-                            'beatmap_image'                 => $GroupStageWeekTwoNightCoreImage,
-                            'beatmap_url'                   => $GroupStageWeekTwoNightCoreUrl,
-                            'beatmap_name'                  => $GroupStageWeekTwoNightCoreName,
-                            'beatmap_difficulty_name'       => $GroupStageWeekTwoNightCoreDifficultyName,
-                            'beatmap_feature_artist'        => $GroupStageWeekTwoNightCoreFeatureArtist,
-                            'beatmap_mapper'                => $GroupStageWeekTwoNightCoreMapper,
-                            'beatmap_mapper_url'            => $GroupStageWeekTwoNightCoreMapperUrl,
-                            'beatmap_difficulty'            => $GroupStageWeekTwoNightCoreDifficulty,
-                            'beatmap_length'                => $GroupStageWeekTwoNightCoreLength,
-                            'beatmap_overall_speed'         => $GroupStageWeekTwoNightCoreOverallSpeed,
-                            'beatmap_overall_difficulty'    => $GroupStageWeekTwoNightCoreOverallDifficulty,
-                            'beatmap_overall_health'        => $GroupStageWeekTwoNightCoreOverallHealth
-                        ];
-                    }
-
-
-                    /*** GROUP STAGE (WEEK 2) FM BEATMAP DATA ***/
-                    $GroupStageWeekTwoFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($GroupStageWeekTwoFreeModJsonData as $GroupStageWeekTwoFreeModJsonType => $GroupStageWeekTwoFreeModJsonId) {
-                        $GroupStageWeekTwoFreeModData = getTournamentMappoolData(
-                            id: $GroupStageWeekTwoFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $GroupStageWeekTwoFreeModId                 = $GroupStageWeekTwoFreeModData['id'];
-                        $GroupStageWeekTwoFreeModRoundId            = $round;
-                        $GroupStageWeekTwoFreeModTournamentId       = strtoupper(string: $name);
-                        $GroupStageWeekTwoFreeModType               = $GroupStageWeekTwoFreeModJsonType;
-                        $GroupStageWeekTwoFreeModImage              = $GroupStageWeekTwoFreeModData['beatmapset']['covers']['cover'];
-                        $GroupStageWeekTwoFreeModUrl                = $GroupStageWeekTwoFreeModData['url'];
-                        $GroupStageWeekTwoFreeModName               = $GroupStageWeekTwoFreeModData['beatmapset']['title'];
-                        $GroupStageWeekTwoFreeModDifficultyName     = $GroupStageWeekTwoFreeModData['version'];
-                        $GroupStageWeekTwoFreeModFeatureArtist      = $GroupStageWeekTwoFreeModData['beatmapset']['artist'];
-                        $GroupStageWeekTwoFreeModMapper             = $GroupStageWeekTwoFreeModData['beatmapset']['creator'];
-                        $GroupStageWeekTwoFreeModMapperUrl          = "https://osu.ppy.sh/users/{$GroupStageWeekTwoFreeModData['beatmapset']['user_id']}";
-                        $GroupStageWeekTwoFreeModDifficulty         = $GroupStageWeekTwoFreeModData['difficulty_rating'];
-                        $GroupStageWeekTwoFreeModLength             = $GroupStageWeekTwoFreeModData['total_length'];
-                        $GroupStageWeekTwoFreeModOverallSpeed       = $GroupStageWeekTwoFreeModData['beatmapset']['bpm'];
-                        $GroupStageWeekTwoFreeModOverallDifficulty  = $GroupStageWeekTwoFreeModData['accuracy'];
-                        $GroupStageWeekTwoFreeModOverallHealth      = $GroupStageWeekTwoFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $GroupStageWeekTwoFreeModId,
-                            'beatmap_round_id'              => $GroupStageWeekTwoFreeModRoundId,
-                            'beatmap_tournament_id'         => $GroupStageWeekTwoFreeModTournamentId,
-                            'beatmap_type'                  => $GroupStageWeekTwoFreeModType,
-                            'beatmap_image'                 => $GroupStageWeekTwoFreeModImage,
-                            'beatmap_url'                   => $GroupStageWeekTwoFreeModUrl,
-                            'beatmap_name'                  => $GroupStageWeekTwoFreeModName,
-                            'beatmap_difficulty_name'       => $GroupStageWeekTwoFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $GroupStageWeekTwoFreeModFeatureArtist,
-                            'beatmap_mapper'                => $GroupStageWeekTwoFreeModMapper,
-                            'beatmap_mapper_url'            => $GroupStageWeekTwoFreeModMapperUrl,
-                            'beatmap_difficulty'            => $GroupStageWeekTwoFreeModDifficulty,
-                            'beatmap_length'                => $GroupStageWeekTwoFreeModLength,
-                            'beatmap_overall_speed'         => $GroupStageWeekTwoFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $GroupStageWeekTwoFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $GroupStageWeekTwoFreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** GROUP STAGE (WEEK 2) TB BEATMAP DATA ***/
-                    $groupStageWeekTwoTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
-                    foreach ($groupStageWeekTwoTieBreakerJsonData as $groupStageWeekTwoTieBreakerJsonType => $groupStageWeekTwoTieBreakerJsonId) {
-                        $groupStageWeekTwoTieBreakerData = getTournamentMappoolData(
-                            id: $groupStageWeekTwoTieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $groupStageWeekTwoTieBreakerId                 = $groupStageWeekTwoTieBreakerData['id'];
-                        $groupStageWeekTwoTieBreakerRoundId            = $round;
-                        $groupStageWeekTwoTieBreakerTournamentId       = strtoupper(string: $name);
-                        $groupStageWeekTwoTieBreakerType               = $groupStageWeekTwoTieBreakerJsonType;
-                        $groupStageWeekTwoTieBreakerImage              = $groupStageWeekTwoTieBreakerData['beatmapset']['covers']['cover'];
-                        $groupStageWeekTwoTieBreakerUrl                = $groupStageWeekTwoTieBreakerData['url'];
-                        $groupStageWeekTwoTieBreakerName               = $groupStageWeekTwoTieBreakerData['beatmapset']['title'];
-                        $groupStageWeekTwoTieBreakerDifficultyName     = $groupStageWeekTwoTieBreakerData['version'];
-                        $groupStageWeekTwoTieBreakerFeatureArtist      = $groupStageWeekTwoTieBreakerData['beatmapset']['artist'];
-                        $groupStageWeekTwoTieBreakerMapper             = $groupStageWeekTwoTieBreakerData['beatmapset']['creator'];
-                        $groupStageWeekTwoTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$groupStageWeekTwoTieBreakerData['beatmapset']['user_id']}";
-                        $groupStageWeekTwoTieBreakerDifficulty         = $groupStageWeekTwoTieBreakerData['difficulty_rating'];
-                        $groupStageWeekTwoTieBreakerLength             = $groupStageWeekTwoTieBreakerData['total_length'];
-                        $groupStageWeekTwoTieBreakerOverallSpeed       = $groupStageWeekTwoTieBreakerData['beatmapset']['bpm'];
-                        $groupStageWeekTwoTieBreakerOverallDifficulty  = $groupStageWeekTwoTieBreakerData['accuracy'];
-                        $groupStageWeekTwoTieBreakerOverallHealth      = $groupStageWeekTwoTieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $groupStageWeekTwoTieBreakerId,
-                            'beatmap_round_id'              => $groupStageWeekTwoTieBreakerRoundId,
-                            'beatmap_tournament_id'         => $groupStageWeekTwoTieBreakerTournamentId,
-                            'beatmap_type'                  => $groupStageWeekTwoTieBreakerType,
-                            'beatmap_image'                 => $groupStageWeekTwoTieBreakerImage,
-                            'beatmap_url'                   => $groupStageWeekTwoTieBreakerUrl,
-                            'beatmap_name'                  => $groupStageWeekTwoTieBreakerName,
-                            'beatmap_difficulty_name'       => $groupStageWeekTwoTieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $groupStageWeekTwoTieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $groupStageWeekTwoTieBreakerMapper,
-                            'beatmap_mapper_url'            => $groupStageWeekTwoTieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $groupStageWeekTwoTieBreakerDifficulty,
-                            'beatmap_length'                => $groupStageWeekTwoTieBreakerLength,
-                            'beatmap_overall_speed'         => $groupStageWeekTwoTieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $groupStageWeekTwoTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $groupStageWeekTwoTieBreakerOverallHealth
-                        ];
-                    }
-                    break;
-
-                case 'SF':
-                    /*** SEMI FINAL NM BEATMAP DATA ***/
-                    $semiFinalNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($semiFinalNoModJsonData as $semiFinalNoModJsonType => $semiFinalNoModJsonId) {
-                        $semiFinalNoModData = getTournamentMappoolData(
-                            id: $semiFinalNoModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalNoModId                 = $semiFinalNoModData['id'];
-                        $semiFinalNoModRoundId            = $round;
-                        $semiFinalNoModTournamentId       = strtoupper(string: $name);
-                        $semiFinalNoModType               = $semiFinalNoModJsonType;
-                        $semiFinalNoModImage              = $semiFinalNoModData['beatmapset']['covers']['cover'];
-                        $semiFinalNoModUrl                = $semiFinalNoModData['url'];
-                        $semiFinalNoModName               = $semiFinalNoModData['beatmapset']['title'];
-                        $semiFinalNoModDifficultyName     = $semiFinalNoModData['version'];
-                        $semiFinalNoModFeatureArtist      = $semiFinalNoModData['beatmapset']['artist'];
-                        $semiFinalNoModMapper             = $semiFinalNoModData['beatmapset']['creator'];
-                        $semiFinalNoModMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalNoModData['beatmapset']['user_id']}";
-                        $semiFinalNoModDifficulty         = $semiFinalNoModData['difficulty_rating'];
-                        $semiFinalNoModLength             = $semiFinalNoModData['total_length'];
-                        $semiFinalNoModOverallSpeed       = $semiFinalNoModData['beatmapset']['bpm'];
-                        $semiFinalNoModOverallDifficulty  = $semiFinalNoModData['accuracy'];
-                        $semiFinalNoModOverallHealth      = $semiFinalNoModData['drain'];
-
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $semiFinalNoModId,
-                            'beatmap_round_id'              => $semiFinalNoModRoundId,
-                            'beatmap_tournament_id'         => $semiFinalNoModTournamentId,
-                            'beatmap_type'                  => $semiFinalNoModType,
-                            'beatmap_image'                 => $semiFinalNoModImage,
-                            'beatmap_url'                   => $semiFinalNoModUrl,
-                            'beatmap_name'                  => $semiFinalNoModName,
-                            'beatmap_difficulty_name'       => $semiFinalNoModDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalNoModFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalNoModMapper,
-                            'beatmap_mapper_url'            => $semiFinalNoModMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalNoModDifficulty,
-                            'beatmap_length'                => $semiFinalNoModLength,
-                            'beatmap_overall_speed'         => $semiFinalNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalNoModOverallHealth
-                        ];
-                    }
-
-
-                    /*** SEMI FINAL HD BEATMAP DATA ***/
-                    $semiFinalHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($semiFinalHiddenJsonData as $semiFinalHiddenJsonType => $semiFinalHiddenJsonId) {
-                        $semiFinalHiddenData = getTournamentMappoolData(
-                            id: $semiFinalHiddenJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalHiddenId                 = $semiFinalHiddenData['id'];
-                        $semiFinalHiddenRoundId            = $round;
-                        $semiFinalHiddenTournamentId       = strtoupper(string: $name);
-                        $semiFinalHiddenType               = $semiFinalHiddenJsonType;
-                        $semiFinalHiddenImage              = $semiFinalHiddenData['beatmapset']['covers']['cover'];
-                        $semiFinalHiddenUrl                = $semiFinalHiddenData['url'];
-                        $semiFinalHiddenName               = $semiFinalHiddenData['beatmapset']['title'];
-                        $semiFinalHiddenDifficultyName     = $semiFinalHiddenData['version'];
-                        $semiFinalHiddenFeatureArtist      = $semiFinalHiddenData['beatmapset']['artist'];
-                        $semiFinalHiddenMapper             = $semiFinalHiddenData['beatmapset']['creator'];
-                        $semiFinalHiddenMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalHiddenData['beatmapset']['user_id']}";
-                        $semiFinalHiddenDifficulty         = $semiFinalHiddenData['difficulty_rating'];
-                        $semiFinalHiddenLength             = $semiFinalHiddenData['total_length'];
-                        $semiFinalHiddenOverallSpeed       = $semiFinalHiddenData['beatmapset']['bpm'];
-                        $semiFinalHiddenOverallDifficulty  = $semiFinalHiddenData['accuracy'];
-                        $semiFinalHiddenOverallHealth      = $semiFinalHiddenData['drain'];
-
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $semiFinalHiddenId,
-                            'beatmap_round_id'              => $semiFinalHiddenRoundId,
-                            'beatmap_tournament_id'         => $semiFinalHiddenTournamentId,
-                            'beatmap_type'                  => $semiFinalHiddenType,
-                            'beatmap_image'                 => $semiFinalHiddenImage,
-                            'beatmap_url'                   => $semiFinalHiddenUrl,
-                            'beatmap_name'                  => $semiFinalHiddenName,
-                            'beatmap_difficulty_name'       => $semiFinalHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalHiddenFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalHiddenMapper,
-                            'beatmap_mapper_url'            => $semiFinalHiddenMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalHiddenDifficulty,
-                            'beatmap_length'                => $semiFinalHiddenLength,
-                            'beatmap_overall_speed'         => $semiFinalHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalHiddenOverallHealth
-                        ];
-                    }
-
-
-                    /*** SEMI FINAL HR BEATMAP DATA ***/
-                    $semiFinalHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($semiFinalHardRockJsonData as $semiFinalHardRockJsonType => $semiFinalHardRockJsonId) {
-                        $semiFinalHardRockData = getTournamentMappoolData(
-                            id: $semiFinalHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalHardRockId                 = $semiFinalHardRockData['id'];
-                        $semiFinalHardRockRoundId            = $round;
-                        $semiFinalHardRockTournamentId       = strtoupper(string: $name);
-                        $semiFinalHardRockType               = $semiFinalHardRockJsonType;
-                        $semiFinalHardRockImage              = $semiFinalHardRockData['beatmapset']['covers']['cover'];
-                        $semiFinalHardRockUrl                = $semiFinalHardRockData['url'];
-                        $semiFinalHardRockName               = $semiFinalHardRockData['beatmapset']['title'];
-                        $semiFinalHardRockDifficultyName     = $semiFinalHardRockData['version'];
-                        $semiFinalHardRockFeatureArtist      = $semiFinalHardRockData['beatmapset']['artist'];
-                        $semiFinalHardRockMapper             = $semiFinalHardRockData['beatmapset']['creator'];
-                        $semiFinalHardRockMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalHardRockData['beatmapset']['user_id']}";
-                        $semiFinalHardRockDifficulty         = $semiFinalHardRockData['difficulty_rating'];
-                        $semiFinalHardRockLength             = $semiFinalHardRockData['total_length'];
-                        $semiFinalHardRockOverallSpeed       = $semiFinalHardRockData['beatmapset']['bpm'];
-                        $semiFinalHardRockOverallDifficulty  = $semiFinalHardRockData['accuracy'];
-                        $semiFinalHardRockOverallHealth      = $semiFinalHardRockData['drain'];
-
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $semiFinalHardRockId,
-                            'beatmap_round_id'              => $semiFinalHardRockRoundId,
-                            'beatmap_tournament_id'         => $semiFinalHardRockTournamentId,
-                            'beatmap_type'                  => $semiFinalHardRockType,
-                            'beatmap_image'                 => $semiFinalHardRockImage,
-                            'beatmap_url'                   => $semiFinalHardRockUrl,
-                            'beatmap_name'                  => $semiFinalHardRockName,
-                            'beatmap_difficulty_name'       => $semiFinalHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalHardRockFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalHardRockMapper,
-                            'beatmap_mapper_url'            => $semiFinalHardRockMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalHardRockDifficulty,
-                            'beatmap_length'                => $semiFinalHardRockLength,
-                            'beatmap_overall_speed'         => $semiFinalHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** SEMI FINAL NC BEATMAP DATA ***/
-                    $semiFinalNightCoreJsonData = $mappoolReadableJsonData[$name][$round]['NC'];
-                    foreach ($semiFinalNightCoreJsonData as $semiFinalNightCoreJsonType => $semiFinalNightCoreJsonId) {
-                        $semiFinalNightCoreData = getTournamentMappoolData(
-                            id: $semiFinalNightCoreJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalNightCoreId                 = $semiFinalNightCoreData['id'];
-                        $semiFinalNightCoreRoundId            = $round;
-                        $semiFinalNightCoreTournamentId       = strtoupper(string: $name);
-                        $semiFinalNightCoreType               = $semiFinalNightCoreJsonType;
-                        $semiFinalNightCoreImage              = $semiFinalNightCoreData['beatmapset']['covers']['cover'];
-                        $semiFinalNightCoreUrl                = $semiFinalNightCoreData['url'];
-                        $semiFinalNightCoreName               = $semiFinalNightCoreData['beatmapset']['title'];
-                        $semiFinalNightCoreDifficultyName     = $semiFinalNightCoreData['version'];
-                        $semiFinalNightCoreFeatureArtist      = $semiFinalNightCoreData['beatmapset']['artist'];
-                        $semiFinalNightCoreMapper             = $semiFinalNightCoreData['beatmapset']['creator'];
-                        $semiFinalNightCoreMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalNightCoreData['beatmapset']['user_id']}";
-                        $semiFinalNightCoreDifficulty         = $semiFinalNightCoreData['difficulty_rating'];
-                        $semiFinalNightCoreLength             = $semiFinalNightCoreData['total_length'];
-                        $semiFinalNightCoreOverallSpeed       = $semiFinalNightCoreData['beatmapset']['bpm'];
-                        $semiFinalNightCoreOverallDifficulty  = $semiFinalNightCoreData['accuracy'];
-                        $semiFinalNightCoreOverallHealth      = $semiFinalNightCoreData['drain'];
-
-                        $allMappoolNightCoreData[] = [
-                            'beatmap_id'                    => $semiFinalNightCoreId,
-                            'beatmap_round_id'              => $semiFinalNightCoreRoundId,
-                            'beatmap_tournament_id'         => $semiFinalNightCoreTournamentId,
-                            'beatmap_type'                  => $semiFinalNightCoreType,
-                            'beatmap_image'                 => $semiFinalNightCoreImage,
-                            'beatmap_url'                   => $semiFinalNightCoreUrl,
-                            'beatmap_name'                  => $semiFinalNightCoreName,
-                            'beatmap_difficulty_name'       => $semiFinalNightCoreDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalNightCoreFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalNightCoreMapper,
-                            'beatmap_mapper_url'            => $semiFinalNightCoreMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalNightCoreDifficulty,
-                            'beatmap_length'                => $semiFinalNightCoreLength,
-                            'beatmap_overall_speed'         => $semiFinalNightCoreOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalNightCoreOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalNightCoreOverallHealth
-                        ];
-                    }
-
-
-                    /*** SEMI FINAL FM BEATMAP DATA ***/
-                    $semiFinalFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($semiFinalFreeModJsonData as $semiFinalFreeModJsonType => $semiFinalFreeModJsonId) {
-                        $semiFinalFreeModData = getTournamentMappoolData(
-                            id: $semiFinalFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalFreeModId                 = $semiFinalFreeModData['id'];
-                        $semiFinalFreeModRoundId            = $round;
-                        $semiFinalFreeModTournamentId       = strtoupper(string: $name);
-                        $semiFinalFreeModType               = $semiFinalFreeModJsonType;
-                        $semiFinalFreeModImage              = $semiFinalFreeModData['beatmapset']['covers']['cover'];
-                        $semiFinalFreeModUrl                = $semiFinalFreeModData['url'];
-                        $semiFinalFreeModName               = $semiFinalFreeModData['beatmapset']['title'];
-                        $semiFinalFreeModDifficultyName     = $semiFinalFreeModData['version'];
-                        $semiFinalFreeModFeatureArtist      = $semiFinalFreeModData['beatmapset']['artist'];
-                        $semiFinalFreeModMapper             = $semiFinalFreeModData['beatmapset']['creator'];
-                        $semiFinalFreeModMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalFreeModData['beatmapset']['user_id']}";
-                        $semiFinalFreeModDifficulty         = $semiFinalFreeModData['difficulty_rating'];
-                        $semiFinalFreeModLength             = $semiFinalFreeModData['total_length'];
-                        $semiFinalFreeModOverallSpeed       = $semiFinalFreeModData['beatmapset']['bpm'];
-                        $semiFinalFreeModOverallDifficulty  = $semiFinalFreeModData['accuracy'];
-                        $semiFinalFreeModOverallHealth      = $semiFinalFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $semiFinalFreeModId,
-                            'beatmap_round_id'              => $semiFinalFreeModRoundId,
-                            'beatmap_tournament_id'         => $semiFinalFreeModTournamentId,
-                            'beatmap_type'                  => $semiFinalFreeModType,
-                            'beatmap_image'                 => $semiFinalFreeModImage,
-                            'beatmap_url'                   => $semiFinalFreeModUrl,
-                            'beatmap_name'                  => $semiFinalFreeModName,
-                            'beatmap_difficulty_name'       => $semiFinalFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalFreeModFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalFreeModMapper,
-                            'beatmap_mapper_url'            => $semiFinalFreeModMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalFreeModDifficulty,
-                            'beatmap_length'                => $semiFinalFreeModLength,
-                            'beatmap_overall_speed'         => $semiFinalFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalFreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** SEMI FINAL FL BEATMAP DATA ***/
-                    $semiFinalFlashLightJsonData = $mappoolReadableJsonData[$name][$round]['FL'];
-                    foreach ($semiFinalFlashLightJsonData as $semiFinalFlashLightJsonType => $semiFinalFlashLightJsonId) {
-                        $semiFinalFlashLightData = getTournamentMappoolData(
-                            id: $semiFinalFlashLightJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalFlashLightId                 = $semiFinalFlashLightData['id'];
-                        $semiFinalFlashLightRoundId            = $round;
-                        $semiFinalFlashLightTournamentId       = strtoupper(string: $name);
-                        $semiFinalFlashLightType               = $semiFinalFlashLightJsonType;
-                        $semiFinalFlashLightImage              = $semiFinalFlashLightData['beatmapset']['covers']['cover'];
-                        $semiFinalFlashLightUrl                = $semiFinalFlashLightData['url'];
-                        $semiFinalFlashLightName               = $semiFinalFlashLightData['beatmapset']['title'];
-                        $semiFinalFlashLightDifficultyName     = $semiFinalFlashLightData['version'];
-                        $semiFinalFlashLightFeatureArtist      = $semiFinalFlashLightData['beatmapset']['artist'];
-                        $semiFinalFlashLightMapper             = $semiFinalFlashLightData['beatmapset']['creator'];
-                        $semiFinalFlashLightMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalFlashLightData['beatmapset']['user_id']}";
-                        $semiFinalFlashLightDifficulty         = $semiFinalFlashLightData['difficulty_rating'];
-                        $semiFinalFlashLightLength             = $semiFinalFlashLightData['total_length'];
-                        $semiFinalFlashLightOverallSpeed       = $semiFinalFlashLightData['beatmapset']['bpm'];
-                        $semiFinalFlashLightOverallDifficulty  = $semiFinalFlashLightData['accuracy'];
-                        $semiFinalFlashLightOverallHealth      = $semiFinalFlashLightData['drain'];
-
-                        $allMappoolFlashLightData[] = [
-                            'beatmap_id'                    => $semiFinalFlashLightId,
-                            'beatmap_round_id'              => $semiFinalFlashLightRoundId,
-                            'beatmap_tournament_id'         => $semiFinalFlashLightTournamentId,
-                            'beatmap_type'                  => $semiFinalFlashLightType,
-                            'beatmap_image'                 => $semiFinalFlashLightImage,
-                            'beatmap_url'                   => $semiFinalFlashLightUrl,
-                            'beatmap_name'                  => $semiFinalFlashLightName,
-                            'beatmap_difficulty_name'       => $semiFinalFlashLightDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalFlashLightFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalFlashLightMapper,
-                            'beatmap_mapper_url'            => $semiFinalFlashLightMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalFlashLightDifficulty,
-                            'beatmap_length'                => $semiFinalFlashLightLength,
-                            'beatmap_overall_speed'         => $semiFinalFlashLightOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalFlashLightOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalFlashLightOverallHealth
-                        ];
-                    }
-
-
-                    /*** SEMI FINAL TB BEATMAP DATA ***/
-                    $semiFinalTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
-                    foreach ($semiFinalTieBreakerJsonData as $semiFinalTieBreakerJsonType => $semiFinalTieBreakerJsonId) {
-                        $semiFinalTieBreakerData = getTournamentMappoolData(
-                            id: $semiFinalTieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalTieBreakerId                 = $semiFinalTieBreakerData['id'];
-                        $semiFinalTieBreakerRoundId            = $round;
-                        $semiFinalTieBreakerTournamentId       = strtoupper(string: $name);
-                        $semiFinalTieBreakerType               = $semiFinalTieBreakerJsonType;
-                        $semiFinalTieBreakerImage              = $semiFinalTieBreakerData['beatmapset']['covers']['cover'];
-                        $semiFinalTieBreakerUrl                = $semiFinalTieBreakerData['url'];
-                        $semiFinalTieBreakerName               = $semiFinalTieBreakerData['beatmapset']['title'];
-                        $semiFinalTieBreakerDifficultyName     = $semiFinalTieBreakerData['version'];
-                        $semiFinalTieBreakerFeatureArtist      = $semiFinalTieBreakerData['beatmapset']['artist'];
-                        $semiFinalTieBreakerMapper             = $semiFinalTieBreakerData['beatmapset']['creator'];
-                        $semiFinalTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalTieBreakerData['beatmapset']['user_id']}";
-                        $semiFinalTieBreakerDifficulty         = $semiFinalTieBreakerData['difficulty_rating'];
-                        $semiFinalTieBreakerLength             = $semiFinalTieBreakerData['total_length'];
-                        $semiFinalTieBreakerOverallSpeed       = $semiFinalTieBreakerData['beatmapset']['bpm'];
-                        $semiFinalTieBreakerOverallDifficulty  = $semiFinalTieBreakerData['accuracy'];
-                        $semiFinalTieBreakerOverallHealth      = $semiFinalTieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $semiFinalTieBreakerId,
-                            'beatmap_round_id'              => $semiFinalTieBreakerRoundId,
-                            'beatmap_tournament_id'         => $semiFinalTieBreakerTournamentId,
-                            'beatmap_type'                  => $semiFinalTieBreakerType,
-                            'beatmap_image'                 => $semiFinalTieBreakerImage,
-                            'beatmap_url'                   => $semiFinalTieBreakerUrl,
-                            'beatmap_name'                  => $semiFinalTieBreakerName,
-                            'beatmap_difficulty_name'       => $semiFinalTieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalTieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalTieBreakerMapper,
-                            'beatmap_mapper_url'            => $semiFinalTieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalTieBreakerDifficulty,
-                            'beatmap_length'                => $semiFinalTieBreakerLength,
-                            'beatmap_overall_speed'         => $semiFinalTieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalTieBreakerOverallHealth
-                        ];
-                    }
-                    break;
-
-                case 'FNL':
-                    /*** FINAL NM BEATMAP DATA ***/
-                    $finalNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($finalNoModJsonData as $finalNoModJsonType => $finalNoModJsonId) {
-                        $finalNoModData = getTournamentMappoolData(
-                            id: $finalNoModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $finalNoModId                 = $finalNoModData['id'];
-                        $finalNoModRoundId            = $round;
-                        $finalNoModTournamentId       = strtoupper(string: $name);
-                        $finalNoModType               = $finalNoModJsonType;
-                        $finalNoModImage              = $finalNoModData['beatmapset']['covers']['cover'];
-                        $finalNoModUrl                = $finalNoModData['url'];
-                        $finalNoModName               = $finalNoModData['beatmapset']['title'];
-                        $finalNoModDifficultyName     = $finalNoModData['version'];
-                        $finalNoModFeatureArtist      = $finalNoModData['beatmapset']['artist'];
-                        $finalNoModMapper             = $finalNoModData['beatmapset']['creator'];
-                        $finalNoModMapperUrl          = "https://osu.ppy.sh/users/{$finalNoModData['beatmapset']['user_id']}";
-                        $finalNoModDifficulty         = $finalNoModData['difficulty_rating'];
-                        $finalNoModLength             = $finalNoModData['total_length'];
-                        $finalNoModOverallSpeed       = $finalNoModData['beatmapset']['bpm'];
-                        $finalNoModOverallDifficulty  = $finalNoModData['accuracy'];
-                        $finalNoModOverallHealth      = $finalNoModData['drain'];
-
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $finalNoModId,
-                            'beatmap_round_id'              => $finalNoModRoundId,
-                            'beatmap_tournament_id'         => $finalNoModTournamentId,
-                            'beatmap_type'                  => $finalNoModType,
-                            'beatmap_image'                 => $finalNoModImage,
-                            'beatmap_url'                   => $finalNoModUrl,
-                            'beatmap_name'                  => $finalNoModName,
-                            'beatmap_difficulty_name'       => $finalNoModDifficultyName,
-                            'beatmap_feature_artist'        => $finalNoModFeatureArtist,
-                            'beatmap_mapper'                => $finalNoModMapper,
-                            'beatmap_mapper_url'            => $finalNoModMapperUrl,
-                            'beatmap_difficulty'            => $finalNoModDifficulty,
-                            'beatmap_length'                => $finalNoModLength,
-                            'beatmap_overall_speed'         => $finalNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $finalNoModOverallHealth
-                        ];
-                    }
-
-
-                    /*** FINAL HD BEATMAP DATA ***/
-                    $finalHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($finalHiddenJsonData as $finalHiddenJsonType => $finalHiddenJsonId) {
-                        $finalHiddenData = getTournamentMappoolData(
-                            id: $finalHiddenJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $finalHiddenId                 = $finalHiddenData['id'];
-                        $finalHiddenRoundId            = $round;
-                        $finalHiddenTournamentId       = strtoupper(string: $name);
-                        $finalHiddenType               = $finalHiddenJsonType;
-                        $finalHiddenImage              = $finalHiddenData['beatmapset']['covers']['cover'];
-                        $finalHiddenUrl                = $finalHiddenData['url'];
-                        $finalHiddenName               = $finalHiddenData['beatmapset']['title'];
-                        $finalHiddenDifficultyName     = $finalHiddenData['version'];
-                        $finalHiddenFeatureArtist      = $finalHiddenData['beatmapset']['artist'];
-                        $finalHiddenMapper             = $finalHiddenData['beatmapset']['creator'];
-                        $finalHiddenMapperUrl          = "https://osu.ppy.sh/users/{$finalHiddenData['beatmapset']['user_id']}";
-                        $finalHiddenDifficulty         = $finalHiddenData['difficulty_rating'];
-                        $finalHiddenLength             = $finalHiddenData['total_length'];
-                        $finalHiddenOverallSpeed       = $finalHiddenData['beatmapset']['bpm'];
-                        $finalHiddenOverallDifficulty  = $finalHiddenData['accuracy'];
-                        $finalHiddenOverallHealth      = $finalHiddenData['drain'];
-
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $finalHiddenId,
-                            'beatmap_round_id'              => $finalHiddenRoundId,
-                            'beatmap_tournament_id'         => $finalHiddenTournamentId,
-                            'beatmap_type'                  => $finalHiddenType,
-                            'beatmap_image'                 => $finalHiddenImage,
-                            'beatmap_url'                   => $finalHiddenUrl,
-                            'beatmap_name'                  => $finalHiddenName,
-                            'beatmap_difficulty_name'       => $finalHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $finalHiddenFeatureArtist,
-                            'beatmap_mapper'                => $finalHiddenMapper,
-                            'beatmap_mapper_url'            => $finalHiddenMapperUrl,
-                            'beatmap_difficulty'            => $finalHiddenDifficulty,
-                            'beatmap_length'                => $finalHiddenLength,
-                            'beatmap_overall_speed'         => $finalHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $finalHiddenOverallHealth
-                        ];
-                    }
-
-
-                    /*** FINAL HR BEATMAP DATA ***/
-                    $finalHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($finalHardRockJsonData as $finalHardRockJsonType => $finalHardRockJsonId) {
-                        $finalHardRockData = getTournamentMappoolData(
-                            id: $finalHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $finalHardRockId                 = $finalHardRockData['id'];
-                        $finalHardRockRoundId            = $round;
-                        $finalHardRockTournamentId       = strtoupper(string: $name);
-                        $finalHardRockType               = $finalHardRockJsonType;
-                        $finalHardRockImage              = $finalHardRockData['beatmapset']['covers']['cover'];
-                        $finalHardRockUrl                = $finalHardRockData['url'];
-                        $finalHardRockName               = $finalHardRockData['beatmapset']['title'];
-                        $finalHardRockDifficultyName     = $finalHardRockData['version'];
-                        $finalHardRockFeatureArtist      = $finalHardRockData['beatmapset']['artist'];
-                        $finalHardRockMapper             = $finalHardRockData['beatmapset']['creator'];
-                        $finalHardRockMapperUrl          = "https://osu.ppy.sh/users/{$finalHardRockData['beatmapset']['user_id']}";
-                        $finalHardRockDifficulty         = $finalHardRockData['difficulty_rating'];
-                        $finalHardRockLength             = $finalHardRockData['total_length'];
-                        $finalHardRockOverallSpeed       = $finalHardRockData['beatmapset']['bpm'];
-                        $finalHardRockOverallDifficulty  = $finalHardRockData['accuracy'];
-                        $finalHardRockOverallHealth      = $finalHardRockData['drain'];
-
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $finalHardRockId,
-                            'beatmap_round_id'              => $finalHardRockRoundId,
-                            'beatmap_tournament_id'         => $finalHardRockTournamentId,
-                            'beatmap_type'                  => $finalHardRockType,
-                            'beatmap_image'                 => $finalHardRockImage,
-                            'beatmap_url'                   => $finalHardRockUrl,
-                            'beatmap_name'                  => $finalHardRockName,
-                            'beatmap_difficulty_name'       => $finalHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $finalHardRockFeatureArtist,
-                            'beatmap_mapper'                => $finalHardRockMapper,
-                            'beatmap_mapper_url'            => $finalHardRockMapperUrl,
-                            'beatmap_difficulty'            => $finalHardRockDifficulty,
-                            'beatmap_length'                => $finalHardRockLength,
-                            'beatmap_overall_speed'         => $finalHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $finalHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** FINAL NC BEATMAP DATA ***/
-                    $finalNightCoreJsonData = $mappoolReadableJsonData[$name][$round]['NC'];
-                    foreach ($finalNightCoreJsonData as $finalNightCoreJsonType => $finalNightCoreJsonId) {
-                        $finalNightCoreData = getTournamentMappoolData(
-                            id: $finalNightCoreJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $finalNightCoreId                 = $finalNightCoreData['id'];
-                        $finalNightCoreRoundId            = $round;
-                        $finalNightCoreTournamentId       = strtoupper(string: $name);
-                        $finalNightCoreType               = $finalNightCoreJsonType;
-                        $finalNightCoreImage              = $finalNightCoreData['beatmapset']['covers']['cover'];
-                        $finalNightCoreUrl                = $finalNightCoreData['url'];
-                        $finalNightCoreName               = $finalNightCoreData['beatmapset']['title'];
-                        $finalNightCoreDifficultyName     = $finalNightCoreData['version'];
-                        $finalNightCoreFeatureArtist      = $finalNightCoreData['beatmapset']['artist'];
-                        $finalNightCoreMapper             = $finalNightCoreData['beatmapset']['creator'];
-                        $finalNightCoreMapperUrl          = "https://osu.ppy.sh/users/{$finalNightCoreData['beatmapset']['user_id']}";
-                        $finalNightCoreDifficulty         = $finalNightCoreData['difficulty_rating'];
-                        $finalNightCoreLength             = $finalNightCoreData['total_length'];
-                        $finalNightCoreOverallSpeed       = $finalNightCoreData['beatmapset']['bpm'];
-                        $finalNightCoreOverallDifficulty  = $finalNightCoreData['accuracy'];
-                        $finalNightCoreOverallHealth      = $finalNightCoreData['drain'];
-
-                        $allMappoolNightCoreData[] = [
-                            'beatmap_id'                    => $finalNightCoreId,
-                            'beatmap_round_id'              => $finalNightCoreRoundId,
-                            'beatmap_tournament_id'         => $finalNightCoreTournamentId,
-                            'beatmap_type'                  => $finalNightCoreType,
-                            'beatmap_image'                 => $finalNightCoreImage,
-                            'beatmap_url'                   => $finalNightCoreUrl,
-                            'beatmap_name'                  => $finalNightCoreName,
-                            'beatmap_difficulty_name'       => $finalNightCoreDifficultyName,
-                            'beatmap_feature_artist'        => $finalNightCoreFeatureArtist,
-                            'beatmap_mapper'                => $finalNightCoreMapper,
-                            'beatmap_mapper_url'            => $finalNightCoreMapperUrl,
-                            'beatmap_difficulty'            => $finalNightCoreDifficulty,
-                            'beatmap_length'                => $finalNightCoreLength,
-                            'beatmap_overall_speed'         => $finalNightCoreOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalNightCoreOverallDifficulty,
-                            'beatmap_overall_health'        => $finalNightCoreOverallHealth
-                        ];
-                    }
-
-
-                    /*** FINAL FM BEATMAP DATA ***/
-                    $finalFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($finalFreeModJsonData as $finalFreeModJsonType => $finalFreeModJsonId) {
-                        $finalFreeModData = getTournamentMappoolData(
-                            id: $finalFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $finalFreeModId                 = $finalFreeModData['id'];
-                        $finalFreeModRoundId            = $round;
-                        $finalFreeModTournamentId       = strtoupper(string: $name);
-                        $finalFreeModType               = $finalFreeModJsonType;
-                        $finalFreeModImage              = $finalFreeModData['beatmapset']['covers']['cover'];
-                        $finalFreeModUrl                = $finalFreeModData['url'];
-                        $finalFreeModName               = $finalFreeModData['beatmapset']['title'];
-                        $finalFreeModDifficultyName     = $finalFreeModData['version'];
-                        $finalFreeModFeatureArtist      = $finalFreeModData['beatmapset']['artist'];
-                        $finalFreeModMapper             = $finalFreeModData['beatmapset']['creator'];
-                        $finalFreeModMapperUrl          = "https://osu.ppy.sh/users/{$finalFreeModData['beatmapset']['user_id']}";
-                        $finalFreeModDifficulty         = $finalFreeModData['difficulty_rating'];
-                        $finalFreeModLength             = $finalFreeModData['total_length'];
-                        $finalFreeModOverallSpeed       = $finalFreeModData['beatmapset']['bpm'];
-                        $finalFreeModOverallDifficulty  = $finalFreeModData['accuracy'];
-                        $finalFreeModOverallHealth      = $finalFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $finalFreeModId,
-                            'beatmap_round_id'              => $finalFreeModRoundId,
-                            'beatmap_tournament_id'         => $finalFreeModTournamentId,
-                            'beatmap_type'                  => $finalFreeModType,
-                            'beatmap_image'                 => $finalFreeModImage,
-                            'beatmap_url'                   => $finalFreeModUrl,
-                            'beatmap_name'                  => $finalFreeModName,
-                            'beatmap_difficulty_name'       => $finalFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $finalFreeModFeatureArtist,
-                            'beatmap_mapper'                => $finalFreeModMapper,
-                            'beatmap_mapper_url'            => $finalFreeModMapperUrl,
-                            'beatmap_difficulty'            => $finalFreeModDifficulty,
-                            'beatmap_length'                => $finalFreeModLength,
-                            'beatmap_overall_speed'         => $finalFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $finalFreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** FINAL TB BEATMAP DATA ***/
-                    $finalTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
-                    foreach ($finalTieBreakerJsonData as $finalTieBreakerJsonType => $finalTieBreakerJsonId) {
-                        $finalTieBreakerData = getTournamentMappoolData(
-                            id: $finalTieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $finalTieBreakerId                 = $finalTieBreakerData['id'];
-                        $finalTieBreakerRoundId            = $round;
-                        $finalTieBreakerTournamentId       = strtoupper(string: $name);
-                        $finalTieBreakerType               = $finalTieBreakerJsonType;
-                        $finalTieBreakerImage              = $finalTieBreakerData['beatmapset']['covers']['cover'];
-                        $finalTieBreakerUrl                = $finalTieBreakerData['url'];
-                        $finalTieBreakerName               = $finalTieBreakerData['beatmapset']['title'];
-                        $finalTieBreakerDifficultyName     = $finalTieBreakerData['version'];
-                        $finalTieBreakerFeatureArtist      = $finalTieBreakerData['beatmapset']['artist'];
-                        $finalTieBreakerMapper             = $finalTieBreakerData['beatmapset']['creator'];
-                        $finalTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$finalTieBreakerData['beatmapset']['user_id']}";
-                        $finalTieBreakerDifficulty         = $finalTieBreakerData['difficulty_rating'];
-                        $finalTieBreakerLength             = $finalTieBreakerData['total_length'];
-                        $finalTieBreakerOverallSpeed       = $finalTieBreakerData['beatmapset']['bpm'];
-                        $finalTieBreakerOverallDifficulty  = $finalTieBreakerData['accuracy'];
-                        $finalTieBreakerOverallHealth      = $finalTieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $finalTieBreakerId,
-                            'beatmap_round_id'              => $finalTieBreakerRoundId,
-                            'beatmap_tournament_id'         => $finalTieBreakerTournamentId,
-                            'beatmap_type'                  => $finalTieBreakerType,
-                            'beatmap_image'                 => $finalTieBreakerImage,
-                            'beatmap_url'                   => $finalTieBreakerUrl,
-                            'beatmap_name'                  => $finalTieBreakerName,
-                            'beatmap_difficulty_name'       => $finalTieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $finalTieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $finalTieBreakerMapper,
-                            'beatmap_mapper_url'            => $finalTieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $finalTieBreakerDifficulty,
-                            'beatmap_length'                => $finalTieBreakerLength,
-                            'beatmap_overall_speed'         => $finalTieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $finalTieBreakerOverallHealth
-                        ];
-                    }
-                    break;
-
-                case 'GF':
-                    /*** GRAND FINAL NM BEATMAP DATA ***/
-                    $grandFinalNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($grandFinalNoModJsonData as $grandFinalNoModJsonType => $grandFinalNoModJsonId) {
-                        $grandFinalNoModData = getTournamentMappoolData(
-                            id: $grandFinalNoModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $grandFinalNoModId                 = $grandFinalNoModData['id'];
-                        $grandFinalNoModRoundId            = $round;
-                        $grandFinalNoModTournamentId       = strtoupper(string: $name);
-                        $grandFinalNoModType               = $grandFinalNoModJsonType;
-                        $grandFinalNoModImage              = $grandFinalNoModData['beatmapset']['covers']['cover'];
-                        $grandFinalNoModUrl                = $grandFinalNoModData['url'];
-                        $grandFinalNoModName               = $grandFinalNoModData['beatmapset']['title'];
-                        $grandFinalNoModDifficultyName     = $grandFinalNoModData['version'];
-                        $grandFinalNoModFeatureArtist      = $grandFinalNoModData['beatmapset']['artist'];
-                        $grandFinalNoModMapper             = $grandFinalNoModData['beatmapset']['creator'];
-                        $grandFinalNoModMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalNoModData['beatmapset']['user_id']}";
-                        $grandFinalNoModDifficulty         = $grandFinalNoModData['difficulty_rating'];
-                        $grandFinalNoModLength             = $grandFinalNoModData['total_length'];
-                        $grandFinalNoModOverallSpeed       = $grandFinalNoModData['beatmapset']['bpm'];
-                        $grandFinalNoModOverallDifficulty  = $grandFinalNoModData['accuracy'];
-                        $grandFinalNoModOverallHealth      = $grandFinalNoModData['drain'];
-
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $grandFinalNoModId,
-                            'beatmap_round_id'              => $grandFinalNoModRoundId,
-                            'beatmap_tournament_id'         => $grandFinalNoModTournamentId,
-                            'beatmap_type'                  => $grandFinalNoModType,
-                            'beatmap_image'                 => $grandFinalNoModImage,
-                            'beatmap_url'                   => $grandFinalNoModUrl,
-                            'beatmap_name'                  => $grandFinalNoModName,
-                            'beatmap_difficulty_name'       => $grandFinalNoModDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalNoModFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalNoModMapper,
-                            'beatmap_mapper_url'            => $grandFinalNoModMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalNoModDifficulty,
-                            'beatmap_length'                => $grandFinalNoModLength,
-                            'beatmap_overall_speed'         => $grandFinalNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalNoModOverallHealth
-                        ];
-                    }
-
-
-                    /*** GRAND FINAL HD BEATMAP DATA ***/
-                    $grandFinalHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($grandFinalHiddenJsonData as $grandFinalHiddenJsonType => $grandFinalHiddenJsonId) {
-                        $grandFinalHiddenData = getTournamentMappoolData(
-                            id: $grandFinalHiddenJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $grandFinalHiddenId                 = $grandFinalHiddenData['id'];
-                        $grandFinalHiddenRoundId            = $round;
-                        $grandFinalHiddenTournamentId       = strtoupper(string: $name);
-                        $grandFinalHiddenType               = $grandFinalHiddenJsonType;
-                        $grandFinalHiddenImage              = $grandFinalHiddenData['beatmapset']['covers']['cover'];
-                        $grandFinalHiddenUrl                = $grandFinalHiddenData['url'];
-                        $grandFinalHiddenName               = $grandFinalHiddenData['beatmapset']['title'];
-                        $grandFinalHiddenDifficultyName     = $grandFinalHiddenData['version'];
-                        $grandFinalHiddenFeatureArtist      = $grandFinalHiddenData['beatmapset']['artist'];
-                        $grandFinalHiddenMapper             = $grandFinalHiddenData['beatmapset']['creator'];
-                        $grandFinalHiddenMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalHiddenData['beatmapset']['user_id']}";
-                        $grandFinalHiddenDifficulty         = $grandFinalHiddenData['difficulty_rating'];
-                        $grandFinalHiddenLength             = $grandFinalHiddenData['total_length'];
-                        $grandFinalHiddenOverallSpeed       = $grandFinalHiddenData['beatmapset']['bpm'];
-                        $grandFinalHiddenOverallDifficulty  = $grandFinalHiddenData['accuracy'];
-                        $grandFinalHiddenOverallHealth      = $grandFinalHiddenData['drain'];
-
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $grandFinalHiddenId,
-                            'beatmap_round_id'              => $grandFinalHiddenRoundId,
-                            'beatmap_tournament_id'         => $grandFinalHiddenTournamentId,
-                            'beatmap_type'                  => $grandFinalHiddenType,
-                            'beatmap_image'                 => $grandFinalHiddenImage,
-                            'beatmap_url'                   => $grandFinalHiddenUrl,
-                            'beatmap_name'                  => $grandFinalHiddenName,
-                            'beatmap_difficulty_name'       => $grandFinalHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalHiddenFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalHiddenMapper,
-                            'beatmap_mapper_url'            => $grandFinalHiddenMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalHiddenDifficulty,
-                            'beatmap_length'                => $grandFinalHiddenLength,
-                            'beatmap_overall_speed'         => $grandFinalHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalHiddenOverallHealth
-                        ];
-                    }
-
-
-                    /*** GRAND FINAL HR BEATMAP DATA ***/
-                    $grandFinalHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($grandFinalHardRockJsonData as $grandFinalHardRockJsonType => $grandFinalHardRockJsonId) {
-                        $grandFinalHardRockData = getTournamentMappoolData(
-                            id: $grandFinalHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $grandFinalHardRockId                 = $grandFinalHardRockData['id'];
-                        $grandFinalHardRockRoundId            = $round;
-                        $grandFinalHardRockTournamentId       = strtoupper(string: $name);
-                        $grandFinalHardRockType               = $grandFinalHardRockJsonType;
-                        $grandFinalHardRockImage              = $grandFinalHardRockData['beatmapset']['covers']['cover'];
-                        $grandFinalHardRockUrl                = $grandFinalHardRockData['url'];
-                        $grandFinalHardRockName               = $grandFinalHardRockData['beatmapset']['title'];
-                        $grandFinalHardRockDifficultyName     = $grandFinalHardRockData['version'];
-                        $grandFinalHardRockFeatureArtist      = $grandFinalHardRockData['beatmapset']['artist'];
-                        $grandFinalHardRockMapper             = $grandFinalHardRockData['beatmapset']['creator'];
-                        $grandFinalHardRockMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalHardRockData['beatmapset']['user_id']}";
-                        $grandFinalHardRockDifficulty         = $grandFinalHardRockData['difficulty_rating'];
-                        $grandFinalHardRockLength             = $grandFinalHardRockData['total_length'];
-                        $grandFinalHardRockOverallSpeed       = $grandFinalHardRockData['beatmapset']['bpm'];
-                        $grandFinalHardRockOverallDifficulty  = $grandFinalHardRockData['accuracy'];
-                        $grandFinalHardRockOverallHealth      = $grandFinalHardRockData['drain'];
-
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $grandFinalHardRockId,
-                            'beatmap_round_id'              => $grandFinalHardRockRoundId,
-                            'beatmap_tournament_id'         => $grandFinalHardRockTournamentId,
-                            'beatmap_type'                  => $grandFinalHardRockType,
-                            'beatmap_image'                 => $grandFinalHardRockImage,
-                            'beatmap_url'                   => $grandFinalHardRockUrl,
-                            'beatmap_name'                  => $grandFinalHardRockName,
-                            'beatmap_difficulty_name'       => $grandFinalHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalHardRockFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalHardRockMapper,
-                            'beatmap_mapper_url'            => $grandFinalHardRockMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalHardRockDifficulty,
-                            'beatmap_length'                => $grandFinalHardRockLength,
-                            'beatmap_overall_speed'         => $grandFinalHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** GRAND FINAL NC BEATMAP DATA ***/
-                    $grandFinalNightCoreJsonData = $mappoolReadableJsonData[$name][$round]['NC'];
-                    foreach ($grandFinalNightCoreJsonData as $grandFinalNightCoreJsonType => $grandFinalNightCoreJsonId) {
-                        $grandFinalNightCoreData = getTournamentMappoolData(
-                            id: $grandFinalNightCoreJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $grandFinalNightCoreId                 = $grandFinalNightCoreData['id'];
-                        $grandFinalNightCoreRoundId            = $round;
-                        $grandFinalNightCoreTournamentId       = strtoupper(string: $name);
-                        $grandFinalNightCoreType               = $grandFinalNightCoreJsonType;
-                        $grandFinalNightCoreImage              = $grandFinalNightCoreData['beatmapset']['covers']['cover'];
-                        $grandFinalNightCoreUrl                = $grandFinalNightCoreData['url'];
-                        $grandFinalNightCoreName               = $grandFinalNightCoreData['beatmapset']['title'];
-                        $grandFinalNightCoreDifficultyName     = $grandFinalNightCoreData['version'];
-                        $grandFinalNightCoreFeatureArtist      = $grandFinalNightCoreData['beatmapset']['artist'];
-                        $grandFinalNightCoreMapper             = $grandFinalNightCoreData['beatmapset']['creator'];
-                        $grandFinalNightCoreMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalNightCoreData['beatmapset']['user_id']}";
-                        $grandFinalNightCoreDifficulty         = $grandFinalNightCoreData['difficulty_rating'];
-                        $grandFinalNightCoreLength             = $grandFinalNightCoreData['total_length'];
-                        $grandFinalNightCoreOverallSpeed       = $grandFinalNightCoreData['beatmapset']['bpm'];
-                        $grandFinalNightCoreOverallDifficulty  = $grandFinalNightCoreData['accuracy'];
-                        $grandFinalNightCoreOverallHealth      = $grandFinalNightCoreData['drain'];
-
-                        $allMappoolNightCoreData[] = [
-                            'beatmap_id'                    => $grandFinalNightCoreId,
-                            'beatmap_round_id'              => $grandFinalNightCoreRoundId,
-                            'beatmap_tournament_id'         => $grandFinalNightCoreTournamentId,
-                            'beatmap_type'                  => $grandFinalNightCoreType,
-                            'beatmap_image'                 => $grandFinalNightCoreImage,
-                            'beatmap_url'                   => $grandFinalNightCoreUrl,
-                            'beatmap_name'                  => $grandFinalNightCoreName,
-                            'beatmap_difficulty_name'       => $grandFinalNightCoreDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalNightCoreFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalNightCoreMapper,
-                            'beatmap_mapper_url'            => $grandFinalNightCoreMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalNightCoreDifficulty,
-                            'beatmap_length'                => $grandFinalNightCoreLength,
-                            'beatmap_overall_speed'         => $grandFinalNightCoreOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalNightCoreOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalNightCoreOverallHealth
-                        ];
-                    }
-
-
-                    /*** GRAND FINAL FM BEATMAP DATA ***/
-                    $grandFinalFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($grandFinalFreeModJsonData as $grandFinalFreeModJsonType => $grandFinalFreeModJsonId) {
-                        $grandFinalFreeModData = getTournamentMappoolData(
-                            id: $grandFinalFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $grandFinalFreeModId                 = $grandFinalFreeModData['id'];
-                        $grandFinalFreeModRoundId            = $round;
-                        $grandFinalFreeModTournamentId       = strtoupper(string: $name);
-                        $grandFinalFreeModType               = $grandFinalFreeModJsonType;
-                        $grandFinalFreeModImage              = $grandFinalFreeModData['beatmapset']['covers']['cover'];
-                        $grandFinalFreeModUrl                = $grandFinalFreeModData['url'];
-                        $grandFinalFreeModName               = $grandFinalFreeModData['beatmapset']['title'];
-                        $grandFinalFreeModDifficultyName     = $grandFinalFreeModData['version'];
-                        $grandFinalFreeModFeatureArtist      = $grandFinalFreeModData['beatmapset']['artist'];
-                        $grandFinalFreeModMapper             = $grandFinalFreeModData['beatmapset']['creator'];
-                        $grandFinalFreeModMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalFreeModData['beatmapset']['user_id']}";
-                        $grandFinalFreeModDifficulty         = $grandFinalFreeModData['difficulty_rating'];
-                        $grandFinalFreeModLength             = $grandFinalFreeModData['total_length'];
-                        $grandFinalFreeModOverallSpeed       = $grandFinalFreeModData['beatmapset']['bpm'];
-                        $grandFinalFreeModOverallDifficulty  = $grandFinalFreeModData['accuracy'];
-                        $grandFinalFreeModOverallHealth      = $grandFinalFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $grandFinalFreeModId,
-                            'beatmap_round_id'              => $grandFinalFreeModRoundId,
-                            'beatmap_tournament_id'         => $grandFinalFreeModTournamentId,
-                            'beatmap_type'                  => $grandFinalFreeModType,
-                            'beatmap_image'                 => $grandFinalFreeModImage,
-                            'beatmap_url'                   => $grandFinalFreeModUrl,
-                            'beatmap_name'                  => $grandFinalFreeModName,
-                            'beatmap_difficulty_name'       => $grandFinalFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalFreeModFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalFreeModMapper,
-                            'beatmap_mapper_url'            => $grandFinalFreeModMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalFreeModDifficulty,
-                            'beatmap_length'                => $grandFinalFreeModLength,
-                            'beatmap_overall_speed'         => $grandFinalFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalFreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** GRAND FINAL TB BEATMAP DATA ***/
-                    $grandFinalTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
-                    foreach ($grandFinalTieBreakerJsonData as $grandFinalTieBreakerJsonType => $grandFinalTieBreakerJsonId) {
-                        $grandFinalTieBreakerData = getTournamentMappoolData(
-                            id: $grandFinalTieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $grandFinalTieBreakerId                 = $grandFinalTieBreakerData['id'];
-                        $grandFinalTieBreakerRoundId            = $round;
-                        $grandFinalTieBreakerTournamentId       = strtoupper(string: $name);
-                        $grandFinalTieBreakerType               = $grandFinalTieBreakerJsonType;
-                        $grandFinalTieBreakerImage              = $grandFinalTieBreakerData['beatmapset']['covers']['cover'];
-                        $grandFinalTieBreakerUrl                = $grandFinalTieBreakerData['url'];
-                        $grandFinalTieBreakerName               = $grandFinalTieBreakerData['beatmapset']['title'];
-                        $grandFinalTieBreakerDifficultyName     = $grandFinalTieBreakerData['version'];
-                        $grandFinalTieBreakerFeatureArtist      = $grandFinalTieBreakerData['beatmapset']['artist'];
-                        $grandFinalTieBreakerMapper             = $grandFinalTieBreakerData['beatmapset']['creator'];
-                        $grandFinalTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalTieBreakerData['beatmapset']['user_id']}";
-                        $grandFinalTieBreakerDifficulty         = $grandFinalTieBreakerData['difficulty_rating'];
-                        $grandFinalTieBreakerLength             = $grandFinalTieBreakerData['total_length'];
-                        $grandFinalTieBreakerOverallSpeed       = $grandFinalTieBreakerData['beatmapset']['bpm'];
-                        $grandFinalTieBreakerOverallDifficulty  = $grandFinalTieBreakerData['accuracy'];
-                        $grandFinalTieBreakerOverallHealth      = $grandFinalTieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $grandFinalTieBreakerId,
-                            'beatmap_round_id'              => $grandFinalTieBreakerRoundId,
-                            'beatmap_tournament_id'         => $grandFinalTieBreakerTournamentId,
-                            'beatmap_type'                  => $grandFinalTieBreakerType,
-                            'beatmap_image'                 => $grandFinalTieBreakerImage,
-                            'beatmap_url'                   => $grandFinalTieBreakerUrl,
-                            'beatmap_name'                  => $grandFinalTieBreakerName,
-                            'beatmap_difficulty_name'       => $grandFinalTieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalTieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalTieBreakerMapper,
-                            'beatmap_mapper_url'            => $grandFinalTieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalTieBreakerDifficulty,
-                            'beatmap_length'                => $grandFinalTieBreakerLength,
-                            'beatmap_overall_speed'         => $grandFinalTieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalTieBreakerOverallHealth
-                        ];
-                    }
-                    break;
-
-                default:
-                    # code...
-                    break;
-            }
+require __DIR__ . '/../Models/Mappool.php';
+require __DIR__ . '/../Configurations/Length.php';
+
+
+// Simply: "/<tournament-name>/staff" --> "<TOURNAMENT-NAME>"
+$votTournamentName = strtoupper(
+    string: explode(
+        separator: '/',
+        string: trim(
+            string: $_SERVER['REQUEST_URI'],
+            characters: '/'
+        ),
+        limit: PHP_INT_MAX
+    )[0]
+);
+
+$votMappoolJsonData = __DIR__ . '/../Datas/Tournament/VotMappoolData.json';
+$votMappoolJsonViewableData = file_get_contents(
+    filename: $votMappoolJsonData,
+    use_include_path: false,
+    context: null,
+    offset: 0,
+    length: null
+);
+$votMappoolJsonUsableData = json_decode(
+    json: $votMappoolJsonViewableData,
+    associative: true
+);
+
+switch ($votTournamentName) {
+    case 'VOT5':
+        if (!isset($_GET['round'])) {
+            // Just show the page without any actions
+            require __DIR__ . '/NavigationBarController.php';
+            require __DIR__ . '/../Views/Tournament/MappoolVot5View.php';
             break;
+        } else {
+            // Show the page again after actions have been done
+            require __DIR__ . '/NavigationBarController.php';
+            require __DIR__ . '/../Views/Tournament/MappoolVot5View.php';
+            $vot5RoundName = $_GET['round'];
 
-        case 'vot4':
-            switch ($round) {
-                case 'QLF':
-                    /*** QUALIFIER NM BEATMAP DATA ***/
-                    $qualifierNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($qualifierNoModJsonData as $qualifierNoModJsonType => $qualifierNoModJsonId) {
-                        $qualifierNoModData = getTournamentMappoolData(
-                            id: $qualifierNoModJsonId,
-                            token: $mappoolAccessToken
+            // Regex returns a boolean value so this is the way to do it
+            switch (true) {
+                // *** VOT5 QUALIFIER MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(qualifiers|qlf|qlfs)$/i',
+                    subject: $vot5RoundName
+                ):
+                    // Database use the abbreviation of each round's name
+                    $vot5AbbreviateRoundName = 'QLF';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot5QualifierMappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $qualifierNoModId                 = $qualifierNoModData['id'];
-                        $qualifierNoModRoundId            = $round;
-                        $qualifierNoModTournamentId       = strtoupper(string: $name);
-                        $qualifierNoModType               = $qualifierNoModJsonType;
-                        $qualifierNoModImage              = $qualifierNoModData['beatmapset']['covers']['cover'];
-                        $qualifierNoModUrl                = $qualifierNoModData['url'];
-                        $qualifierNoModName               = $qualifierNoModData['beatmapset']['title'];
-                        $qualifierNoModDifficultyName     = $qualifierNoModData['version'];
-                        $qualifierNoModFeatureArtist      = $qualifierNoModData['beatmapset']['artist'];
-                        $qualifierNoModMapper             = $qualifierNoModData['beatmapset']['creator'];
-                        $qualifierNoModMapperUrl          = "https://osu.ppy.sh/users/{$qualifierNoModData['beatmapset']['user_id']}";
-                        $qualifierNoModDifficulty         = $qualifierNoModData['difficulty_rating'];
-                        $qualifierNoModLength             = $qualifierNoModData['total_length'];
-                        $qualifierNoModOverallSpeed       = $qualifierNoModData['beatmapset']['bpm'];
-                        $qualifierNoModOverallDifficulty  = $qualifierNoModData['accuracy'];
-                        $qualifierNoModOverallHealth      = $qualifierNoModData['drain'];
+                        foreach ($vot5QualifierMappoolViewData as $vot5QualifierMappoolData) {
+                            $vot5QualifierMappoolType                = htmlspecialchars($vot5QualifierMappoolData['beatmapType']);
+                            $vot5QualifierMappoolImage               = htmlspecialchars($vot5QualifierMappoolData['beatmapImage']);
+                            $vot5QualifierMappoolUrl                 = htmlspecialchars($vot5QualifierMappoolData['beatmapUrl']);
+                            $vot5QualifierMappoolName                = htmlspecialchars($vot5QualifierMappoolData['beatmapName']);
+                            $vot5QualifierMappoolDifficultyName      = htmlspecialchars($vot5QualifierMappoolData['beatmapDifficultyName']);
+                            $vot5QualifierMappoolFeatureArtist       = htmlspecialchars($vot5QualifierMappoolData['beatmapFeatureArtist']);
+                            $vot5QualifierMappoolMapper              = htmlspecialchars($vot5QualifierMappoolData['beatmapMapper']);
+                            $vot5QualifierMappoolMapperUrl           = htmlspecialchars($vot5QualifierMappoolData['beatmapMapperUrl']);
+                            $vot5QualifierMappoolDifficulty          = htmlspecialchars($vot5QualifierMappoolData['beatmapDifficulty']);
+                            $vot5QualifierMappoolLength              = timeStampFormat(number: $vot5QualifierMappoolData['beatmapLength']);
+                            $vot5QualifierMappoolOverallSpeed        = sprintf('%.2f', $vot5QualifierMappoolData['beatmapOverallSpeed']);
+                            $vot5QualifierMappoolOverallDifficulty   = sprintf('%.2f', $vot5QualifierMappoolData['beatmapOverallDifficulty']);
+                            $vot5QualifierMappoolOverallHealth       = sprintf('%.2f', $vot5QualifierMappoolData['beatmapOverallHealth']);
 
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $qualifierNoModId,
-                            'beatmap_round_id'              => $qualifierNoModRoundId,
-                            'beatmap_tournament_id'         => $qualifierNoModTournamentId,
-                            'beatmap_type'                  => $qualifierNoModType,
-                            'beatmap_image'                 => $qualifierNoModImage,
-                            'beatmap_url'                   => $qualifierNoModUrl,
-                            'beatmap_name'                  => $qualifierNoModName,
-                            'beatmap_difficulty_name'       => $qualifierNoModDifficultyName,
-                            'beatmap_feature_artist'        => $qualifierNoModFeatureArtist,
-                            'beatmap_mapper'                => $qualifierNoModMapper,
-                            'beatmap_mapper_url'            => $qualifierNoModMapperUrl,
-                            'beatmap_difficulty'            => $qualifierNoModDifficulty,
-                            'beatmap_length'                => $qualifierNoModLength,
-                            'beatmap_overall_speed'         => $qualifierNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $qualifierNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $qualifierNoModOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5QualifierMappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5QualifierMappoolUrl">
+                                                <img src="$vot5QualifierMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** QUALIFIER HD BEATMAP DATA ***/
-                    $qualifierHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($qualifierHiddenJsonData as $qualifierHiddenJsonType => $qualifierHiddenJsonId) {
-                        $qualifierHiddenData = getTournamentMappoolData(
-                            id: $qualifierHiddenJsonId,
-                            token: $mappoolAccessToken
+                                        <div class="song-name">
+                                            <h2>$vot5QualifierMappoolName [$vot5QualifierMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5QualifierMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5QualifierMappoolMapperUrl">$vot5QualifierMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5QualifierMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5QualifierMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5QualifierMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5QualifierMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5QualifierMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot5QualifierJsonData = $votMappoolJsonUsableData[$votTournamentName][$vot5AbbreviateRoundName];
+                        foreach ($vot5QualifierJsonData as $vot5QualifierJsonType => $vot5QualifierJsonId) {
+                            $vot5QualifierData = getMappoolData(
+                                id: $vot5QualifierJsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot5QualifierId                = $vot5QualifierData['id'];
+                            $vot5QualifierRoundId           = $vot5AbbreviateRoundName;
+                            $vot5QualifierTournamentId      = $votTournamentName;
+                            $vot5QualifierType              = $vot5QualifierJsonType;
+                            $vot5QualifierImage             = $vot5QualifierData['beatmapset']['covers']['cover'];
+                            $vot5QualifierUrl               = $vot5QualifierData['url'];
+                            $vot5QualifierName              = $vot5QualifierData['beatmapset']['title'];
+                            $vot5QualifierDifficultyName    = $vot5QualifierData['version'];
+                            $vot5QualifierFeatureArtist     = $vot5QualifierData['beatmapset']['artist'];
+                            $vot5QualifierMapper            = $vot5QualifierData['beatmapset']['creator'];
+                            $vot5QualifierMapperUrl         = "https://osu.ppy.sh/users/{$vot5QualifierData['beatmapset']['user_id']}";
+                            $vot5QualifierDifficulty        = $vot5QualifierData['difficulty_rating'];
+                            $vot5QualifierLength            = $vot5QualifierData['total_length'];
+                            $vot5QualifierOverallSpeed      = $vot5QualifierData['beatmapset']['bpm'];
+                            $vot5QualifierOverallDifficulty = $vot5QualifierData['accuracy'];
+                            $vot5QualifierOverallHealth     = $vot5QualifierData['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot5QualifierId,
+                                    round: $vot5QualifierRoundId,
+                                    tournament: $vot5QualifierTournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot5QualifierId,
+                                    round_id: $vot5QualifierRoundId,
+                                    tournament_id: $vot5QualifierTournamentId,
+                                    type: $vot5QualifierType,
+                                    image: $vot5QualifierImage,
+                                    url: $vot5QualifierUrl,
+                                    name: $vot5QualifierName,
+                                    diff_name: $vot5QualifierDifficultyName,
+                                    fa: $vot5QualifierFeatureArtist,
+                                    mapper: $vot5QualifierMapper,
+                                    mapper_url: $vot5QualifierMapperUrl,
+                                    diff: $vot5QualifierDifficulty,
+                                    length: $vot5QualifierLength,
+                                    bpm: $vot5QualifierOverallSpeed,
+                                    od: $vot5QualifierOverallDifficulty,
+                                    hp: $vot5QualifierOverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot5QualifierMappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $qualifierHiddenId                 = $qualifierHiddenData['id'];
-                        $qualifierHiddenRoundId            = $round;
-                        $qualifierHiddenTournamentId       = strtoupper(string: $name);
-                        $qualifierHiddenType               = $qualifierHiddenJsonType;
-                        $qualifierHiddenImage              = $qualifierHiddenData['beatmapset']['covers']['cover'];
-                        $qualifierHiddenUrl                = $qualifierHiddenData['url'];
-                        $qualifierHiddenName               = $qualifierHiddenData['beatmapset']['title'];
-                        $qualifierHiddenDifficultyName     = $qualifierHiddenData['version'];
-                        $qualifierHiddenFeatureArtist      = $qualifierHiddenData['beatmapset']['artist'];
-                        $qualifierHiddenMapper             = $qualifierHiddenData['beatmapset']['creator'];
-                        $qualifierHiddenMapperUrl          = "https://osu.ppy.sh/users/{$qualifierHiddenData['beatmapset']['user_id']}";
-                        $qualifierHiddenDifficulty         = $qualifierHiddenData['difficulty_rating'];
-                        $qualifierHiddenLength             = $qualifierHiddenData['total_length'];
-                        $qualifierHiddenOverallSpeed       = $qualifierHiddenData['beatmapset']['bpm'];
-                        $qualifierHiddenOverallDifficulty  = $qualifierHiddenData['accuracy'];
-                        $qualifierHiddenOverallHealth      = $qualifierHiddenData['drain'];
+                        foreach ($vot5QualifierMappoolViewData as $vot5QualifierMappoolData) {
+                            $vot5QualifierMappoolType                = htmlspecialchars($vot5QualifierMappoolData['beatmapType']);
+                            $vot5QualifierMappoolImage               = htmlspecialchars($vot5QualifierMappoolData['beatmapImage']);
+                            $vot5QualifierMappoolUrl                 = htmlspecialchars($vot5QualifierMappoolData['beatmapUrl']);
+                            $vot5QualifierMappoolName                = htmlspecialchars($vot5QualifierMappoolData['beatmapName']);
+                            $vot5QualifierMappoolDifficultyName      = htmlspecialchars($vot5QualifierMappoolData['beatmapDifficultyName']);
+                            $vot5QualifierMappoolFeatureArtist       = htmlspecialchars($vot5QualifierMappoolData['beatmapFeatureArtist']);
+                            $vot5QualifierMappoolMapper              = htmlspecialchars($vot5QualifierMappoolData['beatmapMapper']);
+                            $vot5QualifierMappoolMapperUrl           = htmlspecialchars($vot5QualifierMappoolData['beatmapMapperUrl']);
+                            $vot5QualifierMappoolDifficulty          = htmlspecialchars($vot5QualifierMappoolData['beatmapDifficulty']);
+                            $vot5QualifierMappoolLength              = timeStampFormat(number: $vot5QualifierMappoolData['beatmapLength']);
+                            $vot5QualifierMappoolOverallSpeed        = sprintf('%.2f', $vot5QualifierMappoolData['beatmapOverallSpeed']);
+                            $vot5QualifierMappoolOverallDifficulty   = sprintf('%.2f', $vot5QualifierMappoolData['beatmapOverallDifficulty']);
+                            $vot5QualifierMappoolOverallHealth       = sprintf('%.2f', $vot5QualifierMappoolData['beatmapOverallHealth']);
 
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $qualifierHiddenId,
-                            'beatmap_round_id'              => $qualifierHiddenRoundId,
-                            'beatmap_tournament_id'         => $qualifierHiddenTournamentId,
-                            'beatmap_type'                  => $qualifierHiddenType,
-                            'beatmap_image'                 => $qualifierHiddenImage,
-                            'beatmap_url'                   => $qualifierHiddenUrl,
-                            'beatmap_name'                  => $qualifierHiddenName,
-                            'beatmap_difficulty_name'       => $qualifierHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $qualifierHiddenFeatureArtist,
-                            'beatmap_mapper'                => $qualifierHiddenMapper,
-                            'beatmap_mapper_url'            => $qualifierHiddenMapperUrl,
-                            'beatmap_difficulty'            => $qualifierHiddenDifficulty,
-                            'beatmap_length'                => $qualifierHiddenLength,
-                            'beatmap_overall_speed'         => $qualifierHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $qualifierHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $qualifierHiddenOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5QualifierMappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5QualifierMappoolUrl">
+                                                <img src="$vot5QualifierMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** QUALIFIER HR BEATMAP DATA ***/
-                    $qualifierHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($qualifierHardRockJsonData as $qualifierHardRockJsonType => $qualifierHardRockJsonId) {
-                        $qualifierHardRockData = getTournamentMappoolData(
-                            id: $qualifierHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-name">
+                                            <h2>$vot5QualifierMappoolName [$vot5QualifierMappoolDifficultyName]</h2>
+                                        </div>
 
-                        $qualifierHardRockId                 = $qualifierHardRockData['id'];
-                        $qualifierHardRockRoundId            = $round;
-                        $qualifierHardRockTournamentId       = strtoupper(string: $name);
-                        $qualifierHardRockType               = $qualifierHardRockJsonType;
-                        $qualifierHardRockImage              = $qualifierHardRockData['beatmapset']['covers']['cover'];
-                        $qualifierHardRockUrl                = $qualifierHardRockData['url'];
-                        $qualifierHardRockName               = $qualifierHardRockData['beatmapset']['title'];
-                        $qualifierHardRockDifficultyName     = $qualifierHardRockData['version'];
-                        $qualifierHardRockFeatureArtist      = $qualifierHardRockData['beatmapset']['artist'];
-                        $qualifierHardRockMapper             = $qualifierHardRockData['beatmapset']['creator'];
-                        $qualifierHardRockMapperUrl          = "https://osu.ppy.sh/users/{$qualifierHardRockData['beatmapset']['user_id']}";
-                        $qualifierHardRockDifficulty         = $qualifierHardRockData['difficulty_rating'];
-                        $qualifierHardRockLength             = $qualifierHardRockData['total_length'];
-                        $qualifierHardRockOverallSpeed       = $qualifierHardRockData['beatmapset']['bpm'];
-                        $qualifierHardRockOverallDifficulty  = $qualifierHardRockData['accuracy'];
-                        $qualifierHardRockOverallHealth      = $qualifierHardRockData['drain'];
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5QualifierMappoolFeatureArtist</h3>
+                                        </div>
 
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $qualifierHardRockId,
-                            'beatmap_round_id'              => $qualifierHardRockRoundId,
-                            'beatmap_tournament_id'         => $qualifierHardRockTournamentId,
-                            'beatmap_type'                  => $qualifierHardRockType,
-                            'beatmap_image'                 => $qualifierHardRockImage,
-                            'beatmap_url'                   => $qualifierHardRockUrl,
-                            'beatmap_name'                  => $qualifierHardRockName,
-                            'beatmap_difficulty_name'       => $qualifierHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $qualifierHardRockFeatureArtist,
-                            'beatmap_mapper'                => $qualifierHardRockMapper,
-                            'beatmap_mapper_url'            => $qualifierHardRockMapperUrl,
-                            'beatmap_difficulty'            => $qualifierHardRockDifficulty,
-                            'beatmap_length'                => $qualifierHardRockLength,
-                            'beatmap_overall_speed'         => $qualifierHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $qualifierHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $qualifierHardRockOverallHealth
-                        ];
-                    }
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5QualifierMappoolMapperUrl">$vot5QualifierMappoolMapper</a></h4>
+                                        </div>
 
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5QualifierMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5QualifierMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5QualifierMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
 
-                    /*** QUALIFIER DT BEATMAP DATA ***/
-                    $qualifierDoubleTimeJsonData = $mappoolReadableJsonData[$name][$round]['DT'];
-                    foreach ($qualifierDoubleTimeJsonData as $qualifierDoubleTimeJsonType => $qualifierDoubleTimeJsonId) {
-                        $qualifierDoubleTimeData = getTournamentMappoolData(
-                            id: $qualifierDoubleTimeJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5QualifierMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5QualifierMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
 
-                        $qualifierDoubleTimeId                 = $qualifierDoubleTimeData['id'];
-                        $qualifierDoubleTimeRoundId            = $round;
-                        $qualifierDoubleTimeTournamentId       = strtoupper(string: $name);
-                        $qualifierDoubleTimeType               = $qualifierDoubleTimeJsonType;
-                        $qualifierDoubleTimeImage              = $qualifierDoubleTimeData['beatmapset']['covers']['cover'];
-                        $qualifierDoubleTimeUrl                = $qualifierDoubleTimeData['url'];
-                        $qualifierDoubleTimeName               = $qualifierDoubleTimeData['beatmapset']['title'];
-                        $qualifierDoubleTimeDifficultyName     = $qualifierDoubleTimeData['version'];
-                        $qualifierDoubleTimeFeatureArtist      = $qualifierDoubleTimeData['beatmapset']['artist'];
-                        $qualifierDoubleTimeMapper             = $qualifierDoubleTimeData['beatmapset']['creator'];
-                        $qualifierDoubleTimeMapperUrl          = "https://osu.ppy.sh/users/{$qualifierDoubleTimeData['beatmapset']['user_id']}";
-                        $qualifierDoubleTimeDifficulty         = $qualifierDoubleTimeData['difficulty_rating'];
-                        $qualifierDoubleTimeLength             = $qualifierDoubleTimeData['total_length'];
-                        $qualifierDoubleTimeOverallSpeed       = $qualifierDoubleTimeData['beatmapset']['bpm'];
-                        $qualifierDoubleTimeOverallDifficulty  = $qualifierDoubleTimeData['accuracy'];
-                        $qualifierDoubleTimeOverallHealth      = $qualifierDoubleTimeData['drain'];
-
-                        $allMappoolDoubleTimeData[] = [
-                            'beatmap_id'                    => $qualifierDoubleTimeId,
-                            'beatmap_round_id'              => $qualifierDoubleTimeRoundId,
-                            'beatmap_tournament_id'         => $qualifierDoubleTimeTournamentId,
-                            'beatmap_type'                  => $qualifierDoubleTimeType,
-                            'beatmap_image'                 => $qualifierDoubleTimeImage,
-                            'beatmap_url'                   => $qualifierDoubleTimeUrl,
-                            'beatmap_name'                  => $qualifierDoubleTimeName,
-                            'beatmap_difficulty_name'       => $qualifierDoubleTimeDifficultyName,
-                            'beatmap_feature_artist'        => $qualifierDoubleTimeFeatureArtist,
-                            'beatmap_mapper'                => $qualifierDoubleTimeMapper,
-                            'beatmap_mapper_url'            => $qualifierDoubleTimeMapperUrl,
-                            'beatmap_difficulty'            => $qualifierDoubleTimeDifficulty,
-                            'beatmap_length'                => $qualifierDoubleTimeLength,
-                            'beatmap_overall_speed'         => $qualifierDoubleTimeOverallSpeed,
-                            'beatmap_overall_difficulty'    => $qualifierDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $qualifierDoubleTimeOverallHealth
-                        ];
-                    }
-
-
-                    /*** QUALIFIER FM BEATMAP DATA ***/
-                    $qualifierFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($qualifierFreeModJsonData as $qualifierFreeModJsonType => $qualifierFreeModJsonId) {
-                        $qualifierFreeModData = getTournamentMappoolData(
-                            id: $qualifierFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $qualifierFreeModId                 = $qualifierFreeModData['id'];
-                        $qualifierFreeModRoundId            = $round;
-                        $qualifierFreeModTournamentId       = strtoupper(string: $name);
-                        $qualifierFreeModType               = $qualifierFreeModJsonType;
-                        $qualifierFreeModImage              = $qualifierFreeModData['beatmapset']['covers']['cover'];
-                        $qualifierFreeModUrl                = $qualifierFreeModData['url'];
-                        $qualifierFreeModName               = $qualifierFreeModData['beatmapset']['title'];
-                        $qualifierFreeModDifficultyName     = $qualifierFreeModData['version'];
-                        $qualifierFreeModFeatureArtist      = $qualifierFreeModData['beatmapset']['artist'];
-                        $qualifierFreeModMapper             = $qualifierFreeModData['beatmapset']['creator'];
-                        $qualifierFreeModMapperUrl          = "https://osu.ppy.sh/users/{$qualifierFreeModData['beatmapset']['user_id']}";
-                        $qualifierFreeModDifficulty         = $qualifierFreeModData['difficulty_rating'];
-                        $qualifierFreeModLength             = $qualifierFreeModData['total_length'];
-                        $qualifierFreeModOverallSpeed       = $qualifierFreeModData['beatmapset']['bpm'];
-                        $qualifierFreeModOverallDifficulty  = $qualifierFreeModData['accuracy'];
-                        $qualifierFreeModOverallHealth      = $qualifierFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $qualifierFreeModId,
-                            'beatmap_round_id'              => $qualifierFreeModRoundId,
-                            'beatmap_tournament_id'         => $qualifierFreeModTournamentId,
-                            'beatmap_type'                  => $qualifierFreeModType,
-                            'beatmap_image'                 => $qualifierFreeModImage,
-                            'beatmap_url'                   => $qualifierFreeModUrl,
-                            'beatmap_name'                  => $qualifierFreeModName,
-                            'beatmap_difficulty_name'       => $qualifierFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $qualifierFreeModFeatureArtist,
-                            'beatmap_mapper'                => $qualifierFreeModMapper,
-                            'beatmap_mapper_url'            => $qualifierFreeModMapperUrl,
-                            'beatmap_difficulty'            => $qualifierFreeModDifficulty,
-                            'beatmap_length'                => $qualifierFreeModLength,
-                            'beatmap_overall_speed'         => $qualifierFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $qualifierFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $qualifierFreeModOverallHealth
-                        ];
-                    }
-                    break;
-
-                case 'RO16':
-                    /*** ROUND OF 16 NM BEATMAP DATA ***/
-                    $roundOf16NoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($roundOf16NoModJsonData as $roundOf16NoModJsonType => $roundOf16NoModJsonId) {
-                        $roundOf16NoModData = getTournamentMappoolData(
-                            id: $roundOf16NoModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $roundOf16NoModId                 = $roundOf16NoModData['id'];
-                        $roundOf16NoModRoundId            = $round;
-                        $roundOf16NoModTournamentId       = strtoupper(string: $name);
-                        $roundOf16NoModType               = $roundOf16NoModJsonType;
-                        $roundOf16NoModImage              = $roundOf16NoModData['beatmapset']['covers']['cover'];
-                        $roundOf16NoModUrl                = $roundOf16NoModData['url'];
-                        $roundOf16NoModName               = $roundOf16NoModData['beatmapset']['title'];
-                        $roundOf16NoModDifficultyName     = $roundOf16NoModData['version'];
-                        $roundOf16NoModFeatureArtist      = $roundOf16NoModData['beatmapset']['artist'];
-                        $roundOf16NoModMapper             = $roundOf16NoModData['beatmapset']['creator'];
-                        $roundOf16NoModMapperUrl          = "https://osu.ppy.sh/users/{$roundOf16NoModData['beatmapset']['user_id']}";
-                        $roundOf16NoModDifficulty         = $roundOf16NoModData['difficulty_rating'];
-                        $roundOf16NoModLength             = $roundOf16NoModData['total_length'];
-                        $roundOf16NoModOverallSpeed       = $roundOf16NoModData['beatmapset']['bpm'];
-                        $roundOf16NoModOverallDifficulty  = $roundOf16NoModData['accuracy'];
-                        $roundOf16NoModOverallHealth      = $roundOf16NoModData['drain'];
-
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $roundOf16NoModId,
-                            'beatmap_round_id'              => $roundOf16NoModRoundId,
-                            'beatmap_tournament_id'         => $roundOf16NoModTournamentId,
-                            'beatmap_type'                  => $roundOf16NoModType,
-                            'beatmap_image'                 => $roundOf16NoModImage,
-                            'beatmap_url'                   => $roundOf16NoModUrl,
-                            'beatmap_name'                  => $roundOf16NoModName,
-                            'beatmap_difficulty_name'       => $roundOf16NoModDifficultyName,
-                            'beatmap_feature_artist'        => $roundOf16NoModFeatureArtist,
-                            'beatmap_mapper'                => $roundOf16NoModMapper,
-                            'beatmap_mapper_url'            => $roundOf16NoModMapperUrl,
-                            'beatmap_difficulty'            => $roundOf16NoModDifficulty,
-                            'beatmap_length'                => $roundOf16NoModLength,
-                            'beatmap_overall_speed'         => $roundOf16NoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $roundOf16NoModOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16NoModOverallHealth
-                        ];
-                    }
-
-
-                    /*** ROUND OF 16 HD BEATMAP DATA ***/
-                    $roundOf16HiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($roundOf16HiddenJsonData as $roundOf16HiddenJsonType => $roundOf16HiddenJsonId) {
-                        $roundOf16HiddenData = getTournamentMappoolData(
-                            id: $roundOf16HiddenJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $roundOf16HiddenId                 = $roundOf16HiddenData['id'];
-                        $roundOf16HiddenRoundId            = $round;
-                        $roundOf16HiddenTournamentId       = strtoupper(string: $name);
-                        $roundOf16HiddenType               = $roundOf16HiddenJsonType;
-                        $roundOf16HiddenImage              = $roundOf16HiddenData['beatmapset']['covers']['cover'];
-                        $roundOf16HiddenUrl                = $roundOf16HiddenData['url'];
-                        $roundOf16HiddenName               = $roundOf16HiddenData['beatmapset']['title'];
-                        $roundOf16HiddenDifficultyName     = $roundOf16HiddenData['version'];
-                        $roundOf16HiddenFeatureArtist      = $roundOf16HiddenData['beatmapset']['artist'];
-                        $roundOf16HiddenMapper             = $roundOf16HiddenData['beatmapset']['creator'];
-                        $roundOf16HiddenMapperUrl          = "https://osu.ppy.sh/users/{$roundOf16HiddenData['beatmapset']['user_id']}";
-                        $roundOf16HiddenDifficulty         = $roundOf16HiddenData['difficulty_rating'];
-                        $roundOf16HiddenLength             = $roundOf16HiddenData['total_length'];
-                        $roundOf16HiddenOverallSpeed       = $roundOf16HiddenData['beatmapset']['bpm'];
-                        $roundOf16HiddenOverallDifficulty  = $roundOf16HiddenData['accuracy'];
-                        $roundOf16HiddenOverallHealth      = $roundOf16HiddenData['drain'];
-
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $roundOf16HiddenId,
-                            'beatmap_round_id'              => $roundOf16HiddenRoundId,
-                            'beatmap_tournament_id'         => $roundOf16HiddenTournamentId,
-                            'beatmap_type'                  => $roundOf16HiddenType,
-                            'beatmap_image'                 => $roundOf16HiddenImage,
-                            'beatmap_url'                   => $roundOf16HiddenUrl,
-                            'beatmap_name'                  => $roundOf16HiddenName,
-                            'beatmap_difficulty_name'       => $roundOf16HiddenDifficultyName,
-                            'beatmap_feature_artist'        => $roundOf16HiddenFeatureArtist,
-                            'beatmap_mapper'                => $roundOf16HiddenMapper,
-                            'beatmap_mapper_url'            => $roundOf16HiddenMapperUrl,
-                            'beatmap_difficulty'            => $roundOf16HiddenDifficulty,
-                            'beatmap_length'                => $roundOf16HiddenLength,
-                            'beatmap_overall_speed'         => $roundOf16HiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $roundOf16HiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16HiddenOverallHealth
-                        ];
-                    }
-
-
-                    /*** ROUND OF 16 HR BEATMAP DATA ***/
-                    $roundOf16HardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($roundOf16HardRockJsonData as $roundOf16HardRockJsonType => $roundOf16HardRockJsonId) {
-                        $roundOf16HardRockData = getTournamentMappoolData(
-                            id: $roundOf16HardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $roundOf16HardRockId                 = $roundOf16HardRockData['id'];
-                        $roundOf16HardRockRoundId            = $round;
-                        $roundOf16HardRockTournamentId       = strtoupper(string: $name);
-                        $roundOf16HardRockType               = $roundOf16HardRockJsonType;
-                        $roundOf16HardRockImage              = $roundOf16HardRockData['beatmapset']['covers']['cover'];
-                        $roundOf16HardRockUrl                = $roundOf16HardRockData['url'];
-                        $roundOf16HardRockName               = $roundOf16HardRockData['beatmapset']['title'];
-                        $roundOf16HardRockDifficultyName     = $roundOf16HardRockData['version'];
-                        $roundOf16HardRockFeatureArtist      = $roundOf16HardRockData['beatmapset']['artist'];
-                        $roundOf16HardRockMapper             = $roundOf16HardRockData['beatmapset']['creator'];
-                        $roundOf16HardRockMapperUrl          = "https://osu.ppy.sh/users/{$roundOf16HardRockData['beatmapset']['user_id']}";
-                        $roundOf16HardRockDifficulty         = $roundOf16HardRockData['difficulty_rating'];
-                        $roundOf16HardRockLength             = $roundOf16HardRockData['total_length'];
-                        $roundOf16HardRockOverallSpeed       = $roundOf16HardRockData['beatmapset']['bpm'];
-                        $roundOf16HardRockOverallDifficulty  = $roundOf16HardRockData['accuracy'];
-                        $roundOf16HardRockOverallHealth      = $roundOf16HardRockData['drain'];
-
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $roundOf16HardRockId,
-                            'beatmap_round_id'              => $roundOf16HardRockRoundId,
-                            'beatmap_tournament_id'         => $roundOf16HardRockTournamentId,
-                            'beatmap_type'                  => $roundOf16HardRockType,
-                            'beatmap_image'                 => $roundOf16HardRockImage,
-                            'beatmap_url'                   => $roundOf16HardRockUrl,
-                            'beatmap_name'                  => $roundOf16HardRockName,
-                            'beatmap_difficulty_name'       => $roundOf16HardRockDifficultyName,
-                            'beatmap_feature_artist'        => $roundOf16HardRockFeatureArtist,
-                            'beatmap_mapper'                => $roundOf16HardRockMapper,
-                            'beatmap_mapper_url'            => $roundOf16HardRockMapperUrl,
-                            'beatmap_difficulty'            => $roundOf16HardRockDifficulty,
-                            'beatmap_length'                => $roundOf16HardRockLength,
-                            'beatmap_overall_speed'         => $roundOf16HardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $roundOf16HardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16HardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** ROUND OF 16 DT BEATMAP DATA ***/
-                    $roundOf16DoubleTimeJsonData = $mappoolReadableJsonData[$name][$round]['DT'];
-                    foreach ($roundOf16DoubleTimeJsonData as $roundOf16DoubleTimeJsonType => $roundOf16DoubleTimeJsonId) {
-                        $roundOf16DoubleTimeData = getTournamentMappoolData(
-                            id: $roundOf16DoubleTimeJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $roundOf16DoubleTimeId                 = $roundOf16DoubleTimeData['id'];
-                        $roundOf16DoubleTimeRoundId            = $round;
-                        $roundOf16DoubleTimeTournamentId       = strtoupper(string: $name);
-                        $roundOf16DoubleTimeType               = $roundOf16DoubleTimeJsonType;
-                        $roundOf16DoubleTimeImage              = $roundOf16DoubleTimeData['beatmapset']['covers']['cover'];
-                        $roundOf16DoubleTimeUrl                = $roundOf16DoubleTimeData['url'];
-                        $roundOf16DoubleTimeName               = $roundOf16DoubleTimeData['beatmapset']['title'];
-                        $roundOf16DoubleTimeDifficultyName     = $roundOf16DoubleTimeData['version'];
-                        $roundOf16DoubleTimeFeatureArtist      = $roundOf16DoubleTimeData['beatmapset']['artist'];
-                        $roundOf16DoubleTimeMapper             = $roundOf16DoubleTimeData['beatmapset']['creator'];
-                        $roundOf16DoubleTimeMapperUrl          = "https://osu.ppy.sh/users/{$roundOf16DoubleTimeData['beatmapset']['user_id']}";
-                        $roundOf16DoubleTimeDifficulty         = $roundOf16DoubleTimeData['difficulty_rating'];
-                        $roundOf16DoubleTimeLength             = $roundOf16DoubleTimeData['total_length'];
-                        $roundOf16DoubleTimeOverallSpeed       = $roundOf16DoubleTimeData['beatmapset']['bpm'];
-                        $roundOf16DoubleTimeOverallDifficulty  = $roundOf16DoubleTimeData['accuracy'];
-                        $roundOf16DoubleTimeOverallHealth      = $roundOf16DoubleTimeData['drain'];
-
-                        $allMappoolDoubleTimeData[] = [
-                            'beatmap_id'                    => $roundOf16DoubleTimeId,
-                            'beatmap_round_id'              => $roundOf16DoubleTimeRoundId,
-                            'beatmap_tournament_id'         => $roundOf16DoubleTimeTournamentId,
-                            'beatmap_type'                  => $roundOf16DoubleTimeType,
-                            'beatmap_image'                 => $roundOf16DoubleTimeImage,
-                            'beatmap_url'                   => $roundOf16DoubleTimeUrl,
-                            'beatmap_name'                  => $roundOf16DoubleTimeName,
-                            'beatmap_difficulty_name'       => $roundOf16DoubleTimeDifficultyName,
-                            'beatmap_feature_artist'        => $roundOf16DoubleTimeFeatureArtist,
-                            'beatmap_mapper'                => $roundOf16DoubleTimeMapper,
-                            'beatmap_mapper_url'            => $roundOf16DoubleTimeMapperUrl,
-                            'beatmap_difficulty'            => $roundOf16DoubleTimeDifficulty,
-                            'beatmap_length'                => $roundOf16DoubleTimeLength,
-                            'beatmap_overall_speed'         => $roundOf16DoubleTimeOverallSpeed,
-                            'beatmap_overall_difficulty'    => $roundOf16DoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16DoubleTimeOverallHealth
-                        ];
-                    }
-
-
-                    /*** ROUND OF 16 FM BEATMAP DATA ***/
-                    $roundOf16FreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($roundOf16FreeModJsonData as $roundOf16FreeModJsonType => $roundOf16FreeModJsonId) {
-                        $roundOf16FreeModData = getTournamentMappoolData(
-                            id: $roundOf16FreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $roundOf16FreeModId                 = $roundOf16FreeModData['id'];
-                        $roundOf16FreeModRoundId            = $round;
-                        $roundOf16FreeModTournamentId       = strtoupper(string: $name);
-                        $roundOf16FreeModType               = $roundOf16FreeModJsonType;
-                        $roundOf16FreeModImage              = $roundOf16FreeModData['beatmapset']['covers']['cover'];
-                        $roundOf16FreeModUrl                = $roundOf16FreeModData['url'];
-                        $roundOf16FreeModName               = $roundOf16FreeModData['beatmapset']['title'];
-                        $roundOf16FreeModDifficultyName     = $roundOf16FreeModData['version'];
-                        $roundOf16FreeModFeatureArtist      = $roundOf16FreeModData['beatmapset']['artist'];
-                        $roundOf16FreeModMapper             = $roundOf16FreeModData['beatmapset']['creator'];
-                        $roundOf16FreeModMapperUrl          = "https://osu.ppy.sh/users/{$roundOf16FreeModData['beatmapset']['user_id']}";
-                        $roundOf16FreeModDifficulty         = $roundOf16FreeModData['difficulty_rating'];
-                        $roundOf16FreeModLength             = $roundOf16FreeModData['total_length'];
-                        $roundOf16FreeModOverallSpeed       = $roundOf16FreeModData['beatmapset']['bpm'];
-                        $roundOf16FreeModOverallDifficulty  = $roundOf16FreeModData['accuracy'];
-                        $roundOf16FreeModOverallHealth      = $roundOf16FreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $roundOf16FreeModId,
-                            'beatmap_round_id'              => $roundOf16FreeModRoundId,
-                            'beatmap_tournament_id'         => $roundOf16FreeModTournamentId,
-                            'beatmap_type'                  => $roundOf16FreeModType,
-                            'beatmap_image'                 => $roundOf16FreeModImage,
-                            'beatmap_url'                   => $roundOf16FreeModUrl,
-                            'beatmap_name'                  => $roundOf16FreeModName,
-                            'beatmap_difficulty_name'       => $roundOf16FreeModDifficultyName,
-                            'beatmap_feature_artist'        => $roundOf16FreeModFeatureArtist,
-                            'beatmap_mapper'                => $roundOf16FreeModMapper,
-                            'beatmap_mapper_url'            => $roundOf16FreeModMapperUrl,
-                            'beatmap_difficulty'            => $roundOf16FreeModDifficulty,
-                            'beatmap_length'                => $roundOf16FreeModLength,
-                            'beatmap_overall_speed'         => $roundOf16FreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $roundOf16FreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16FreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** ROUND OF 16 EZ BEATMAP DATA ***/
-                    $roundOf16EasyJsonData = $mappoolReadableJsonData[$name][$round]['EZ'];
-                    foreach ($roundOf16EasyJsonData as $roundOf16EasyJsonType => $roundOf16EasyJsonId) {
-                        $roundOf16EasyData = getTournamentMappoolData(
-                            id: $roundOf16EasyJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $roundOf16EasyId                 = $roundOf16EasyData['id'];
-                        $roundOf16EasyRoundId            = $round;
-                        $roundOf16EasyTournamentId       = strtoupper(string: $name);
-                        $roundOf16EasyType               = $roundOf16EasyJsonType;
-                        $roundOf16EasyImage              = $roundOf16EasyData['beatmapset']['covers']['cover'];
-                        $roundOf16EasyUrl                = $roundOf16EasyData['url'];
-                        $roundOf16EasyName               = $roundOf16EasyData['beatmapset']['title'];
-                        $roundOf16EasyDifficultyName     = $roundOf16EasyData['version'];
-                        $roundOf16EasyFeatureArtist      = $roundOf16EasyData['beatmapset']['artist'];
-                        $roundOf16EasyMapper             = $roundOf16EasyData['beatmapset']['creator'];
-                        $roundOf16EasyMapperUrl          = "https://osu.ppy.sh/users/{$roundOf16EasyData['beatmapset']['user_id']}";
-                        $roundOf16EasyDifficulty         = $roundOf16EasyData['difficulty_rating'];
-                        $roundOf16EasyLength             = $roundOf16EasyData['total_length'];
-                        $roundOf16EasyOverallSpeed       = $roundOf16EasyData['beatmapset']['bpm'];
-                        $roundOf16EasyOverallDifficulty  = $roundOf16EasyData['accuracy'];
-                        $roundOf16EasyOverallHealth      = $roundOf16EasyData['drain'];
-
-                        $allMappoolEasyData[] = [
-                            'beatmap_id'                    => $roundOf16EasyId,
-                            'beatmap_round_id'              => $roundOf16EasyRoundId,
-                            'beatmap_tournament_id'         => $roundOf16EasyTournamentId,
-                            'beatmap_type'                  => $roundOf16EasyType,
-                            'beatmap_image'                 => $roundOf16EasyImage,
-                            'beatmap_url'                   => $roundOf16EasyUrl,
-                            'beatmap_name'                  => $roundOf16EasyName,
-                            'beatmap_difficulty_name'       => $roundOf16EasyDifficultyName,
-                            'beatmap_feature_artist'        => $roundOf16EasyFeatureArtist,
-                            'beatmap_mapper'                => $roundOf16EasyMapper,
-                            'beatmap_mapper_url'            => $roundOf16EasyMapperUrl,
-                            'beatmap_difficulty'            => $roundOf16EasyDifficulty,
-                            'beatmap_length'                => $roundOf16EasyLength,
-                            'beatmap_overall_speed'         => $roundOf16EasyOverallSpeed,
-                            'beatmap_overall_difficulty'    => $roundOf16EasyOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16EasyOverallHealth
-                        ];
-                    }
-
-                    /*** ROUND OF 16 HDHR BEATMAP DATA ***/
-                    $roundOf16HiddenHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HDHR'];
-                    foreach ($roundOf16HiddenHardRockJsonData as $roundOf16HiddenHardRockJsonType => $roundOf16HiddenHardRockJsonId) {
-                        $roundOf16HiddenHardRockData = getTournamentMappoolData(
-                            id: $roundOf16HiddenHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $roundOf16HiddenHardRockId                 = $roundOf16HiddenHardRockData['id'];
-                        $roundOf16HiddenHardRockRoundId            = $round;
-                        $roundOf16HiddenHardRockTournamentId       = strtoupper(string: $name);
-                        $roundOf16HiddenHardRockType               = $roundOf16HiddenHardRockJsonType;
-                        $roundOf16HiddenHardRockImage              = $roundOf16HiddenHardRockData['beatmapset']['covers']['cover'];
-                        $roundOf16HiddenHardRockUrl                = $roundOf16HiddenHardRockData['url'];
-                        $roundOf16HiddenHardRockName               = $roundOf16HiddenHardRockData['beatmapset']['title'];
-                        $roundOf16HiddenHardRockDifficultyName     = $roundOf16HiddenHardRockData['version'];
-                        $roundOf16HiddenHardRockFeatureArtist      = $roundOf16HiddenHardRockData['beatmapset']['artist'];
-                        $roundOf16HiddenHardRockMapper             = $roundOf16HiddenHardRockData['beatmapset']['creator'];
-                        $roundOf16HiddenHardRockMapperUrl          = "https://osu.ppy.sh/users/{$roundOf16HiddenHardRockData['beatmapset']['user_id']}";
-                        $roundOf16HiddenHardRockDifficulty         = $roundOf16HiddenHardRockData['difficulty_rating'];
-                        $roundOf16HiddenHardRockLength             = $roundOf16HiddenHardRockData['total_length'];
-                        $roundOf16HiddenHardRockOverallSpeed       = $roundOf16HiddenHardRockData['beatmapset']['bpm'];
-                        $roundOf16HiddenHardRockOverallDifficulty  = $roundOf16HiddenHardRockData['accuracy'];
-                        $roundOf16HiddenHardRockOverallHealth      = $roundOf16HiddenHardRockData['drain'];
-
-                        $allMappoolHiddenHardRockData[] = [
-                            'beatmap_id'                    => $roundOf16HiddenHardRockId,
-                            'beatmap_round_id'              => $roundOf16HiddenHardRockRoundId,
-                            'beatmap_tournament_id'         => $roundOf16HiddenHardRockTournamentId,
-                            'beatmap_type'                  => $roundOf16HiddenHardRockType,
-                            'beatmap_image'                 => $roundOf16HiddenHardRockImage,
-                            'beatmap_url'                   => $roundOf16HiddenHardRockUrl,
-                            'beatmap_name'                  => $roundOf16HiddenHardRockName,
-                            'beatmap_difficulty_name'       => $roundOf16HiddenHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $roundOf16HiddenHardRockFeatureArtist,
-                            'beatmap_mapper'                => $roundOf16HiddenHardRockMapper,
-                            'beatmap_mapper_url'            => $roundOf16HiddenHardRockMapperUrl,
-                            'beatmap_difficulty'            => $roundOf16HiddenHardRockDifficulty,
-                            'beatmap_length'                => $roundOf16HiddenHardRockLength,
-                            'beatmap_overall_speed'         => $roundOf16HiddenHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $roundOf16HiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16HiddenHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** ROUND OF 16 TB BEATMAP DATA ***/
-                    $roundOf16TieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
-                    foreach ($roundOf16TieBreakerJsonData as $roundOf16TieBreakerJsonType => $roundOf16TieBreakerJsonId) {
-                        $roundOf16TieBreakerData = getTournamentMappoolData(
-                            id: $roundOf16TieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $roundOf16TieBreakerId                 = $roundOf16TieBreakerData['id'];
-                        $roundOf16TieBreakerRoundId            = $round;
-                        $roundOf16TieBreakerTournamentId       = strtoupper(string: $name);
-                        $roundOf16TieBreakerType               = $roundOf16TieBreakerJsonType;
-                        $roundOf16TieBreakerImage              = $roundOf16TieBreakerData['beatmapset']['covers']['cover'];
-                        $roundOf16TieBreakerUrl                = $roundOf16TieBreakerData['url'];
-                        $roundOf16TieBreakerName               = $roundOf16TieBreakerData['beatmapset']['title'];
-                        $roundOf16TieBreakerDifficultyName     = $roundOf16TieBreakerData['version'];
-                        $roundOf16TieBreakerFeatureArtist      = $roundOf16TieBreakerData['beatmapset']['artist'];
-                        $roundOf16TieBreakerMapper             = $roundOf16TieBreakerData['beatmapset']['creator'];
-                        $roundOf16TieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$roundOf16TieBreakerData['beatmapset']['user_id']}";
-                        $roundOf16TieBreakerDifficulty         = $roundOf16TieBreakerData['difficulty_rating'];
-                        $roundOf16TieBreakerLength             = $roundOf16TieBreakerData['total_length'];
-                        $roundOf16TieBreakerOverallSpeed       = $roundOf16TieBreakerData['beatmapset']['bpm'];
-                        $roundOf16TieBreakerOverallDifficulty  = $roundOf16TieBreakerData['accuracy'];
-                        $roundOf16TieBreakerOverallHealth      = $roundOf16TieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $roundOf16TieBreakerId,
-                            'beatmap_round_id'              => $roundOf16TieBreakerRoundId,
-                            'beatmap_tournament_id'         => $roundOf16TieBreakerTournamentId,
-                            'beatmap_type'                  => $roundOf16TieBreakerType,
-                            'beatmap_image'                 => $roundOf16TieBreakerImage,
-                            'beatmap_url'                   => $roundOf16TieBreakerUrl,
-                            'beatmap_name'                  => $roundOf16TieBreakerName,
-                            'beatmap_difficulty_name'       => $roundOf16TieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $roundOf16TieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $roundOf16TieBreakerMapper,
-                            'beatmap_mapper_url'            => $roundOf16TieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $roundOf16TieBreakerDifficulty,
-                            'beatmap_length'                => $roundOf16TieBreakerLength,
-                            'beatmap_overall_speed'         => $roundOf16TieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $roundOf16TieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $roundOf16TieBreakerOverallHealth
-                        ];
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
                     }
                     break;
 
-                case 'QF':
-                    /*** QUARTER FINAL NM BEATMAP DATA ***/
-                    $quarterFinalNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($quarterFinalNoModJsonData as $quarterFinalNoModJsonType => $quarterFinalNoModJsonId) {
-                        $quarterFinalNoModData = getTournamentMappoolData(
-                            id: $quarterFinalNoModJsonId,
-                            token: $mappoolAccessToken
+                // *** VOT5 GROUP STAGE (WEEK 1) MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(groupstagesweek1|groupstageweek1|GroupStagesWeek1|GroupStageWeek1|GROUPSTAGEWEEK1)$/i',
+                    subject: $vot5RoundName
+                ):
+                    // Database use the abbreviation of each round's name
+                    $vot5AbbreviateRoundName = 'GSW1';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot5GroupStageWeek1MappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $quarterFinalNoModId                 = $quarterFinalNoModData['id'];
-                        $quarterFinalNoModRoundId            = $round;
-                        $quarterFinalNoModTournamentId       = strtoupper(string: $name);
-                        $quarterFinalNoModType               = $quarterFinalNoModJsonType;
-                        $quarterFinalNoModImage              = $quarterFinalNoModData['beatmapset']['covers']['cover'];
-                        $quarterFinalNoModUrl                = $quarterFinalNoModData['url'];
-                        $quarterFinalNoModName               = $quarterFinalNoModData['beatmapset']['title'];
-                        $quarterFinalNoModDifficultyName     = $quarterFinalNoModData['version'];
-                        $quarterFinalNoModFeatureArtist      = $quarterFinalNoModData['beatmapset']['artist'];
-                        $quarterFinalNoModMapper             = $quarterFinalNoModData['beatmapset']['creator'];
-                        $quarterFinalNoModMapperUrl          = "https://osu.ppy.sh/users/{$quarterFinalNoModData['beatmapset']['user_id']}";
-                        $quarterFinalNoModDifficulty         = $quarterFinalNoModData['difficulty_rating'];
-                        $quarterFinalNoModLength             = $quarterFinalNoModData['total_length'];
-                        $quarterFinalNoModOverallSpeed       = $quarterFinalNoModData['beatmapset']['bpm'];
-                        $quarterFinalNoModOverallDifficulty  = $quarterFinalNoModData['accuracy'];
-                        $quarterFinalNoModOverallHealth      = $quarterFinalNoModData['drain'];
+                        foreach ($vot5GroupStageWeek1MappoolViewData as $vot5GroupStageWeek1MappoolData) {
+                            $vot5GroupStageWeek1MappoolType                = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapType']);
+                            $vot5GroupStageWeek1MappoolImage               = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapImage']);
+                            $vot5GroupStageWeek1MappoolUrl                 = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapUrl']);
+                            $vot5GroupStageWeek1MappoolName                = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapName']);
+                            $vot5GroupStageWeek1MappoolDifficultyName      = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapDifficultyName']);
+                            $vot5GroupStageWeek1MappoolFeatureArtist       = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapFeatureArtist']);
+                            $vot5GroupStageWeek1MappoolMapper              = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapMapper']);
+                            $vot5GroupStageWeek1MappoolMapperUrl           = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapMapperUrl']);
+                            $vot5GroupStageWeek1MappoolDifficulty          = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapDifficulty']);
+                            $vot5GroupStageWeek1MappoolLength              = timeStampFormat(number: $vot5GroupStageWeek1MappoolData['beatmapLength']);
+                            $vot5GroupStageWeek1MappoolOverallSpeed        = sprintf('%.2f', $vot5GroupStageWeek1MappoolData['beatmapOverallSpeed']);
+                            $vot5GroupStageWeek1MappoolOverallDifficulty   = sprintf('%.2f', $vot5GroupStageWeek1MappoolData['beatmapOverallDifficulty']);
+                            $vot5GroupStageWeek1MappoolOverallHealth       = sprintf('%.2f', $vot5GroupStageWeek1MappoolData['beatmapOverallHealth']);
 
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $quarterFinalNoModId,
-                            'beatmap_round_id'              => $quarterFinalNoModRoundId,
-                            'beatmap_tournament_id'         => $quarterFinalNoModTournamentId,
-                            'beatmap_type'                  => $quarterFinalNoModType,
-                            'beatmap_image'                 => $quarterFinalNoModImage,
-                            'beatmap_url'                   => $quarterFinalNoModUrl,
-                            'beatmap_name'                  => $quarterFinalNoModName,
-                            'beatmap_difficulty_name'       => $quarterFinalNoModDifficultyName,
-                            'beatmap_feature_artist'        => $quarterFinalNoModFeatureArtist,
-                            'beatmap_mapper'                => $quarterFinalNoModMapper,
-                            'beatmap_mapper_url'            => $quarterFinalNoModMapperUrl,
-                            'beatmap_difficulty'            => $quarterFinalNoModDifficulty,
-                            'beatmap_length'                => $quarterFinalNoModLength,
-                            'beatmap_overall_speed'         => $quarterFinalNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $quarterFinalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalNoModOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5GroupStageWeek1MappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5GroupStageWeek1MappoolUrl">
+                                                <img src="$vot5GroupStageWeek1MappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** QUARTER FINAL HD BEATMAP DATA ***/
-                    $quarterFinalHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($quarterFinalHiddenJsonData as $quarterFinalHiddenJsonType => $quarterFinalHiddenJsonId) {
-                        $quarterFinalHiddenData = getTournamentMappoolData(
-                            id: $quarterFinalHiddenJsonId,
-                            token: $mappoolAccessToken
+                                        <div class="song-name">
+                                            <h2>$vot5GroupStageWeek1MappoolName [$vot5GroupStageWeek1MappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5GroupStageWeek1MappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5GroupStageWeek1MappoolMapperUrl">$vot5GroupStageWeek1MappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5GroupStageWeek1MappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5GroupStageWeek1MappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5GroupStageWeek1MappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5GroupStageWeek1MappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5GroupStageWeek1MappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot5GroupStageWeek1JsonData = $votMappoolJsonUsableData[$votTournamentName][$vot5AbbreviateRoundName];
+                        foreach ($vot5GroupStageWeek1JsonData as $vot5GroupStageWeek1JsonType => $vot5GroupStageWeek1JsonId) {
+                            $vot5GroupStageWeek1Data = getMappoolData(
+                                id: $vot5GroupStageWeek1JsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot5GroupStageWeek1Id                = $vot5GroupStageWeek1Data['id'];
+                            $vot5GroupStageWeek1RoundId           = $vot5AbbreviateRoundName;
+                            $vot5GroupStageWeek1TournamentId      = $votTournamentName;
+                            $vot5GroupStageWeek1Type              = $vot5GroupStageWeek1JsonType;
+                            $vot5GroupStageWeek1Image             = $vot5GroupStageWeek1Data['beatmapset']['covers']['cover'];
+                            $vot5GroupStageWeek1Url               = $vot5GroupStageWeek1Data['url'];
+                            $vot5GroupStageWeek1Name              = $vot5GroupStageWeek1Data['beatmapset']['title'];
+                            $vot5GroupStageWeek1DifficultyName    = $vot5GroupStageWeek1Data['version'];
+                            $vot5GroupStageWeek1FeatureArtist     = $vot5GroupStageWeek1Data['beatmapset']['artist'];
+                            $vot5GroupStageWeek1Mapper            = $vot5GroupStageWeek1Data['beatmapset']['creator'];
+                            $vot5GroupStageWeek1MapperUrl         = "https://osu.ppy.sh/users/{$vot5GroupStageWeek1Data['beatmapset']['user_id']}";
+                            $vot5GroupStageWeek1Difficulty        = $vot5GroupStageWeek1Data['difficulty_rating'];
+                            $vot5GroupStageWeek1Length            = $vot5GroupStageWeek1Data['total_length'];
+                            $vot5GroupStageWeek1OverallSpeed      = $vot5GroupStageWeek1Data['beatmapset']['bpm'];
+                            $vot5GroupStageWeek1OverallDifficulty = $vot5GroupStageWeek1Data['accuracy'];
+                            $vot5GroupStageWeek1OverallHealth     = $vot5GroupStageWeek1Data['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot5GroupStageWeek1Id,
+                                    round: $vot5GroupStageWeek1RoundId,
+                                    tournament: $vot5GroupStageWeek1TournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot5GroupStageWeek1Id,
+                                    round_id: $vot5GroupStageWeek1RoundId,
+                                    tournament_id: $vot5GroupStageWeek1TournamentId,
+                                    type: $vot5GroupStageWeek1Type,
+                                    image: $vot5GroupStageWeek1Image,
+                                    url: $vot5GroupStageWeek1Url,
+                                    name: $vot5GroupStageWeek1Name,
+                                    diff_name: $vot5GroupStageWeek1DifficultyName,
+                                    fa: $vot5GroupStageWeek1FeatureArtist,
+                                    mapper: $vot5GroupStageWeek1Mapper,
+                                    mapper_url: $vot5GroupStageWeek1MapperUrl,
+                                    diff: $vot5GroupStageWeek1Difficulty,
+                                    length: $vot5GroupStageWeek1Length,
+                                    bpm: $vot5GroupStageWeek1OverallSpeed,
+                                    od: $vot5GroupStageWeek1OverallDifficulty,
+                                    hp: $vot5GroupStageWeek1OverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot5GroupStageWeek1MappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $quarterFinalHiddenId                 = $quarterFinalHiddenData['id'];
-                        $quarterFinalHiddenRoundId            = $round;
-                        $quarterFinalHiddenTournamentId       = strtoupper(string: $name);
-                        $quarterFinalHiddenType               = $quarterFinalHiddenJsonType;
-                        $quarterFinalHiddenImage              = $quarterFinalHiddenData['beatmapset']['covers']['cover'];
-                        $quarterFinalHiddenUrl                = $quarterFinalHiddenData['url'];
-                        $quarterFinalHiddenName               = $quarterFinalHiddenData['beatmapset']['title'];
-                        $quarterFinalHiddenDifficultyName     = $quarterFinalHiddenData['version'];
-                        $quarterFinalHiddenFeatureArtist      = $quarterFinalHiddenData['beatmapset']['artist'];
-                        $quarterFinalHiddenMapper             = $quarterFinalHiddenData['beatmapset']['creator'];
-                        $quarterFinalHiddenMapperUrl          = "https://osu.ppy.sh/users/{$quarterFinalHiddenData['beatmapset']['user_id']}";
-                        $quarterFinalHiddenDifficulty         = $quarterFinalHiddenData['difficulty_rating'];
-                        $quarterFinalHiddenLength             = $quarterFinalHiddenData['total_length'];
-                        $quarterFinalHiddenOverallSpeed       = $quarterFinalHiddenData['beatmapset']['bpm'];
-                        $quarterFinalHiddenOverallDifficulty  = $quarterFinalHiddenData['accuracy'];
-                        $quarterFinalHiddenOverallHealth      = $quarterFinalHiddenData['drain'];
+                        foreach ($vot5GroupStageWeek1MappoolViewData as $vot5GroupStageWeek1MappoolData) {
+                            $vot5GroupStageWeek1MappoolType                = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapType']);
+                            $vot5GroupStageWeek1MappoolImage               = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapImage']);
+                            $vot5GroupStageWeek1MappoolUrl                 = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapUrl']);
+                            $vot5GroupStageWeek1MappoolName                = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapName']);
+                            $vot5GroupStageWeek1MappoolDifficultyName      = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapDifficultyName']);
+                            $vot5GroupStageWeek1MappoolFeatureArtist       = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapFeatureArtist']);
+                            $vot5GroupStageWeek1MappoolMapper              = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapMapper']);
+                            $vot5GroupStageWeek1MappoolMapperUrl           = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapMapperUrl']);
+                            $vot5GroupStageWeek1MappoolDifficulty          = htmlspecialchars($vot5GroupStageWeek1MappoolData['beatmapDifficulty']);
+                            $vot5GroupStageWeek1MappoolLength              = timeStampFormat(number: $vot5GroupStageWeek1MappoolData['beatmapLength']);
+                            $vot5GroupStageWeek1MappoolOverallSpeed        = sprintf('%.2f', $vot5GroupStageWeek1MappoolData['beatmapOverallSpeed']);
+                            $vot5GroupStageWeek1MappoolOverallDifficulty   = sprintf('%.2f', $vot5GroupStageWeek1MappoolData['beatmapOverallDifficulty']);
+                            $vot5GroupStageWeek1MappoolOverallHealth       = sprintf('%.2f', $vot5GroupStageWeek1MappoolData['beatmapOverallHealth']);
 
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $quarterFinalHiddenId,
-                            'beatmap_round_id'              => $quarterFinalHiddenRoundId,
-                            'beatmap_tournament_id'         => $quarterFinalHiddenTournamentId,
-                            'beatmap_type'                  => $quarterFinalHiddenType,
-                            'beatmap_image'                 => $quarterFinalHiddenImage,
-                            'beatmap_url'                   => $quarterFinalHiddenUrl,
-                            'beatmap_name'                  => $quarterFinalHiddenName,
-                            'beatmap_difficulty_name'       => $quarterFinalHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $quarterFinalHiddenFeatureArtist,
-                            'beatmap_mapper'                => $quarterFinalHiddenMapper,
-                            'beatmap_mapper_url'            => $quarterFinalHiddenMapperUrl,
-                            'beatmap_difficulty'            => $quarterFinalHiddenDifficulty,
-                            'beatmap_length'                => $quarterFinalHiddenLength,
-                            'beatmap_overall_speed'         => $quarterFinalHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $quarterFinalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalHiddenOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5GroupStageWeek1MappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5GroupStageWeek1MappoolUrl">
+                                                <img src="$vot5GroupStageWeek1MappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** QUARTER FINAL HR BEATMAP DATA ***/
-                    $quarterFinalHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($quarterFinalHardRockJsonData as $quarterFinalHardRockJsonType => $quarterFinalHardRockJsonId) {
-                        $quarterFinalHardRockData = getTournamentMappoolData(
-                            id: $quarterFinalHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-name">
+                                            <h2>$vot5GroupStageWeek1MappoolName [$vot5GroupStageWeek1MappoolDifficultyName]</h2>
+                                        </div>
 
-                        $quarterFinalHardRockId                 = $quarterFinalHardRockData['id'];
-                        $quarterFinalHardRockRoundId            = $round;
-                        $quarterFinalHardRockTournamentId       = strtoupper(string: $name);
-                        $quarterFinalHardRockType               = $quarterFinalHardRockJsonType;
-                        $quarterFinalHardRockImage              = $quarterFinalHardRockData['beatmapset']['covers']['cover'];
-                        $quarterFinalHardRockUrl                = $quarterFinalHardRockData['url'];
-                        $quarterFinalHardRockName               = $quarterFinalHardRockData['beatmapset']['title'];
-                        $quarterFinalHardRockDifficultyName     = $quarterFinalHardRockData['version'];
-                        $quarterFinalHardRockFeatureArtist      = $quarterFinalHardRockData['beatmapset']['artist'];
-                        $quarterFinalHardRockMapper             = $quarterFinalHardRockData['beatmapset']['creator'];
-                        $quarterFinalHardRockMapperUrl          = "https://osu.ppy.sh/users/{$quarterFinalHardRockData['beatmapset']['user_id']}";
-                        $quarterFinalHardRockDifficulty         = $quarterFinalHardRockData['difficulty_rating'];
-                        $quarterFinalHardRockLength             = $quarterFinalHardRockData['total_length'];
-                        $quarterFinalHardRockOverallSpeed       = $quarterFinalHardRockData['beatmapset']['bpm'];
-                        $quarterFinalHardRockOverallDifficulty  = $quarterFinalHardRockData['accuracy'];
-                        $quarterFinalHardRockOverallHealth      = $quarterFinalHardRockData['drain'];
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5GroupStageWeek1MappoolFeatureArtist</h3>
+                                        </div>
 
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $quarterFinalHardRockId,
-                            'beatmap_round_id'              => $quarterFinalHardRockRoundId,
-                            'beatmap_tournament_id'         => $quarterFinalHardRockTournamentId,
-                            'beatmap_type'                  => $quarterFinalHardRockType,
-                            'beatmap_image'                 => $quarterFinalHardRockImage,
-                            'beatmap_url'                   => $quarterFinalHardRockUrl,
-                            'beatmap_name'                  => $quarterFinalHardRockName,
-                            'beatmap_difficulty_name'       => $quarterFinalHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $quarterFinalHardRockFeatureArtist,
-                            'beatmap_mapper'                => $quarterFinalHardRockMapper,
-                            'beatmap_mapper_url'            => $quarterFinalHardRockMapperUrl,
-                            'beatmap_difficulty'            => $quarterFinalHardRockDifficulty,
-                            'beatmap_length'                => $quarterFinalHardRockLength,
-                            'beatmap_overall_speed'         => $quarterFinalHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $quarterFinalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalHardRockOverallHealth
-                        ];
-                    }
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5GroupStageWeek1MappoolMapperUrl">$vot5GroupStageWeek1MappoolMapper</a></h4>
+                                        </div>
 
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5GroupStageWeek1MappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5GroupStageWeek1MappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5GroupStageWeek1MappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
 
-                    /*** QUARTER FINAL DT BEATMAP DATA ***/
-                    $quarterFinalDoubleTimeJsonData = $mappoolReadableJsonData[$name][$round]['DT'];
-                    foreach ($quarterFinalDoubleTimeJsonData as $quarterFinalDoubleTimeJsonType => $quarterFinalDoubleTimeJsonId) {
-                        $quarterFinalDoubleTimeData = getTournamentMappoolData(
-                            id: $quarterFinalDoubleTimeJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5GroupStageWeek1MappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5GroupStageWeek1MappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
 
-                        $quarterFinalDoubleTimeId                 = $quarterFinalDoubleTimeData['id'];
-                        $quarterFinalDoubleTimeRoundId            = $round;
-                        $quarterFinalDoubleTimeTournamentId       = strtoupper(string: $name);
-                        $quarterFinalDoubleTimeType               = $quarterFinalDoubleTimeJsonType;
-                        $quarterFinalDoubleTimeImage              = $quarterFinalDoubleTimeData['beatmapset']['covers']['cover'];
-                        $quarterFinalDoubleTimeUrl                = $quarterFinalDoubleTimeData['url'];
-                        $quarterFinalDoubleTimeName               = $quarterFinalDoubleTimeData['beatmapset']['title'];
-                        $quarterFinalDoubleTimeDifficultyName     = $quarterFinalDoubleTimeData['version'];
-                        $quarterFinalDoubleTimeFeatureArtist      = $quarterFinalDoubleTimeData['beatmapset']['artist'];
-                        $quarterFinalDoubleTimeMapper             = $quarterFinalDoubleTimeData['beatmapset']['creator'];
-                        $quarterFinalDoubleTimeMapperUrl          = "https://osu.ppy.sh/users/{$quarterFinalDoubleTimeData['beatmapset']['user_id']}";
-                        $quarterFinalDoubleTimeDifficulty         = $quarterFinalDoubleTimeData['difficulty_rating'];
-                        $quarterFinalDoubleTimeLength             = $quarterFinalDoubleTimeData['total_length'];
-                        $quarterFinalDoubleTimeOverallSpeed       = $quarterFinalDoubleTimeData['beatmapset']['bpm'];
-                        $quarterFinalDoubleTimeOverallDifficulty  = $quarterFinalDoubleTimeData['accuracy'];
-                        $quarterFinalDoubleTimeOverallHealth      = $quarterFinalDoubleTimeData['drain'];
-
-                        $allMappoolDoubleTimeData[] = [
-                            'beatmap_id'                    => $quarterFinalDoubleTimeId,
-                            'beatmap_round_id'              => $quarterFinalDoubleTimeRoundId,
-                            'beatmap_tournament_id'         => $quarterFinalDoubleTimeTournamentId,
-                            'beatmap_type'                  => $quarterFinalDoubleTimeType,
-                            'beatmap_image'                 => $quarterFinalDoubleTimeImage,
-                            'beatmap_url'                   => $quarterFinalDoubleTimeUrl,
-                            'beatmap_name'                  => $quarterFinalDoubleTimeName,
-                            'beatmap_difficulty_name'       => $quarterFinalDoubleTimeDifficultyName,
-                            'beatmap_feature_artist'        => $quarterFinalDoubleTimeFeatureArtist,
-                            'beatmap_mapper'                => $quarterFinalDoubleTimeMapper,
-                            'beatmap_mapper_url'            => $quarterFinalDoubleTimeMapperUrl,
-                            'beatmap_difficulty'            => $quarterFinalDoubleTimeDifficulty,
-                            'beatmap_length'                => $quarterFinalDoubleTimeLength,
-                            'beatmap_overall_speed'         => $quarterFinalDoubleTimeOverallSpeed,
-                            'beatmap_overall_difficulty'    => $quarterFinalDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalDoubleTimeOverallHealth
-                        ];
-                    }
-
-
-                    /*** QUARTER FINAL FM BEATMAP DATA ***/
-                    $quarterFinalFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($quarterFinalFreeModJsonData as $quarterFinalFreeModJsonType => $quarterFinalFreeModJsonId) {
-                        $quarterFinalFreeModData = getTournamentMappoolData(
-                            id: $quarterFinalFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $quarterFinalFreeModId                 = $quarterFinalFreeModData['id'];
-                        $quarterFinalFreeModRoundId            = $round;
-                        $quarterFinalFreeModTournamentId       = strtoupper(string: $name);
-                        $quarterFinalFreeModType               = $quarterFinalFreeModJsonType;
-                        $quarterFinalFreeModImage              = $quarterFinalFreeModData['beatmapset']['covers']['cover'];
-                        $quarterFinalFreeModUrl                = $quarterFinalFreeModData['url'];
-                        $quarterFinalFreeModName               = $quarterFinalFreeModData['beatmapset']['title'];
-                        $quarterFinalFreeModDifficultyName     = $quarterFinalFreeModData['version'];
-                        $quarterFinalFreeModFeatureArtist      = $quarterFinalFreeModData['beatmapset']['artist'];
-                        $quarterFinalFreeModMapper             = $quarterFinalFreeModData['beatmapset']['creator'];
-                        $quarterFinalFreeModMapperUrl          = "https://osu.ppy.sh/users/{$quarterFinalFreeModData['beatmapset']['user_id']}";
-                        $quarterFinalFreeModDifficulty         = $quarterFinalFreeModData['difficulty_rating'];
-                        $quarterFinalFreeModLength             = $quarterFinalFreeModData['total_length'];
-                        $quarterFinalFreeModOverallSpeed       = $quarterFinalFreeModData['beatmapset']['bpm'];
-                        $quarterFinalFreeModOverallDifficulty  = $quarterFinalFreeModData['accuracy'];
-                        $quarterFinalFreeModOverallHealth      = $quarterFinalFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $quarterFinalFreeModId,
-                            'beatmap_round_id'              => $quarterFinalFreeModRoundId,
-                            'beatmap_tournament_id'         => $quarterFinalFreeModTournamentId,
-                            'beatmap_type'                  => $quarterFinalFreeModType,
-                            'beatmap_image'                 => $quarterFinalFreeModImage,
-                            'beatmap_url'                   => $quarterFinalFreeModUrl,
-                            'beatmap_name'                  => $quarterFinalFreeModName,
-                            'beatmap_difficulty_name'       => $quarterFinalFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $quarterFinalFreeModFeatureArtist,
-                            'beatmap_mapper'                => $quarterFinalFreeModMapper,
-                            'beatmap_mapper_url'            => $quarterFinalFreeModMapperUrl,
-                            'beatmap_difficulty'            => $quarterFinalFreeModDifficulty,
-                            'beatmap_length'                => $quarterFinalFreeModLength,
-                            'beatmap_overall_speed'         => $quarterFinalFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $quarterFinalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalFreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** QUARTER FINAL EZ BEATMAP DATA ***/
-                    $quarterFinalEasyJsonData = $mappoolReadableJsonData[$name][$round]['EZ'];
-                    foreach ($quarterFinalEasyJsonData as $quarterFinalEasyJsonType => $quarterFinalEasyJsonId) {
-                        $quarterFinalEasyData = getTournamentMappoolData(
-                            id: $quarterFinalEasyJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $quarterFinalEasyId                 = $quarterFinalEasyData['id'];
-                        $quarterFinalEasyRoundId            = $round;
-                        $quarterFinalEasyTournamentId       = strtoupper(string: $name);
-                        $quarterFinalEasyType               = $quarterFinalEasyJsonType;
-                        $quarterFinalEasyImage              = $quarterFinalEasyData['beatmapset']['covers']['cover'];
-                        $quarterFinalEasyUrl                = $quarterFinalEasyData['url'];
-                        $quarterFinalEasyName               = $quarterFinalEasyData['beatmapset']['title'];
-                        $quarterFinalEasyDifficultyName     = $quarterFinalEasyData['version'];
-                        $quarterFinalEasyFeatureArtist      = $quarterFinalEasyData['beatmapset']['artist'];
-                        $quarterFinalEasyMapper             = $quarterFinalEasyData['beatmapset']['creator'];
-                        $quarterFinalEasyMapperUrl          = "https://osu.ppy.sh/users/{$quarterFinalEasyData['beatmapset']['user_id']}";
-                        $quarterFinalEasyDifficulty         = $quarterFinalEasyData['difficulty_rating'];
-                        $quarterFinalEasyLength             = $quarterFinalEasyData['total_length'];
-                        $quarterFinalEasyOverallSpeed       = $quarterFinalEasyData['beatmapset']['bpm'];
-                        $quarterFinalEasyOverallDifficulty  = $quarterFinalEasyData['accuracy'];
-                        $quarterFinalEasyOverallHealth      = $quarterFinalEasyData['drain'];
-
-                        $allMappoolEasyData[] = [
-                            'beatmap_id'                    => $quarterFinalEasyId,
-                            'beatmap_round_id'              => $quarterFinalEasyRoundId,
-                            'beatmap_tournament_id'         => $quarterFinalEasyTournamentId,
-                            'beatmap_type'                  => $quarterFinalEasyType,
-                            'beatmap_image'                 => $quarterFinalEasyImage,
-                            'beatmap_url'                   => $quarterFinalEasyUrl,
-                            'beatmap_name'                  => $quarterFinalEasyName,
-                            'beatmap_difficulty_name'       => $quarterFinalEasyDifficultyName,
-                            'beatmap_feature_artist'        => $quarterFinalEasyFeatureArtist,
-                            'beatmap_mapper'                => $quarterFinalEasyMapper,
-                            'beatmap_mapper_url'            => $quarterFinalEasyMapperUrl,
-                            'beatmap_difficulty'            => $quarterFinalEasyDifficulty,
-                            'beatmap_length'                => $quarterFinalEasyLength,
-                            'beatmap_overall_speed'         => $quarterFinalEasyOverallSpeed,
-                            'beatmap_overall_difficulty'    => $quarterFinalEasyOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalEasyOverallHealth
-                        ];
-                    }
-
-                    /*** QUARTER FINAL HDHR BEATMAP DATA ***/
-                    $quarterFinalHiddenHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HDHR'];
-                    foreach ($quarterFinalHiddenHardRockJsonData as $quarterFinalHiddenHardRockJsonType => $quarterFinalHiddenHardRockJsonId) {
-                        $quarterFinalHiddenHardRockData = getTournamentMappoolData(
-                            id: $quarterFinalHiddenHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $quarterFinalHiddenHardRockId                 = $quarterFinalHiddenHardRockData['id'];
-                        $quarterFinalHiddenHardRockRoundId            = $round;
-                        $quarterFinalHiddenHardRockTournamentId       = strtoupper(string: $name);
-                        $quarterFinalHiddenHardRockType               = $quarterFinalHiddenHardRockJsonType;
-                        $quarterFinalHiddenHardRockImage              = $quarterFinalHiddenHardRockData['beatmapset']['covers']['cover'];
-                        $quarterFinalHiddenHardRockUrl                = $quarterFinalHiddenHardRockData['url'];
-                        $quarterFinalHiddenHardRockName               = $quarterFinalHiddenHardRockData['beatmapset']['title'];
-                        $quarterFinalHiddenHardRockDifficultyName     = $quarterFinalHiddenHardRockData['version'];
-                        $quarterFinalHiddenHardRockFeatureArtist      = $quarterFinalHiddenHardRockData['beatmapset']['artist'];
-                        $quarterFinalHiddenHardRockMapper             = $quarterFinalHiddenHardRockData['beatmapset']['creator'];
-                        $quarterFinalHiddenHardRockMapperUrl          = "https://osu.ppy.sh/users/{$quarterFinalHiddenHardRockData['beatmapset']['user_id']}";
-                        $quarterFinalHiddenHardRockDifficulty         = $quarterFinalHiddenHardRockData['difficulty_rating'];
-                        $quarterFinalHiddenHardRockLength             = $quarterFinalHiddenHardRockData['total_length'];
-                        $quarterFinalHiddenHardRockOverallSpeed       = $quarterFinalHiddenHardRockData['beatmapset']['bpm'];
-                        $quarterFinalHiddenHardRockOverallDifficulty  = $quarterFinalHiddenHardRockData['accuracy'];
-                        $quarterFinalHiddenHardRockOverallHealth      = $quarterFinalHiddenHardRockData['drain'];
-
-                        $allMappoolHiddenHardRockData[] = [
-                            'beatmap_id'                    => $quarterFinalHiddenHardRockId,
-                            'beatmap_round_id'              => $quarterFinalHiddenHardRockRoundId,
-                            'beatmap_tournament_id'         => $quarterFinalHiddenHardRockTournamentId,
-                            'beatmap_type'                  => $quarterFinalHiddenHardRockType,
-                            'beatmap_image'                 => $quarterFinalHiddenHardRockImage,
-                            'beatmap_url'                   => $quarterFinalHiddenHardRockUrl,
-                            'beatmap_name'                  => $quarterFinalHiddenHardRockName,
-                            'beatmap_difficulty_name'       => $quarterFinalHiddenHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $quarterFinalHiddenHardRockFeatureArtist,
-                            'beatmap_mapper'                => $quarterFinalHiddenHardRockMapper,
-                            'beatmap_mapper_url'            => $quarterFinalHiddenHardRockMapperUrl,
-                            'beatmap_difficulty'            => $quarterFinalHiddenHardRockDifficulty,
-                            'beatmap_length'                => $quarterFinalHiddenHardRockLength,
-                            'beatmap_overall_speed'         => $quarterFinalHiddenHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $quarterFinalHiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalHiddenHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** QUARTER FINAL TB BEATMAP DATA ***/
-                    $quarterFinalTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($quarterFinalTieBreakerJsonData as $quarterFinalTieBreakerJsonType => $quarterFinalTieBreakerJsonId) {
-                        $quarterFinalTieBreakerData = getTournamentMappoolData(
-                            id: $quarterFinalTieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $quarterFinalTieBreakerId                 = $quarterFinalTieBreakerData['id'];
-                        $quarterFinalTieBreakerRoundId            = $round;
-                        $quarterFinalTieBreakerTournamentId       = strtoupper(string: $name);
-                        $quarterFinalTieBreakerType               = $quarterFinalTieBreakerJsonType;
-                        $quarterFinalTieBreakerImage              = $quarterFinalTieBreakerData['beatmapset']['covers']['cover'];
-                        $quarterFinalTieBreakerUrl                = $quarterFinalTieBreakerData['url'];
-                        $quarterFinalTieBreakerName               = $quarterFinalTieBreakerData['beatmapset']['title'];
-                        $quarterFinalTieBreakerDifficultyName     = $quarterFinalTieBreakerData['version'];
-                        $quarterFinalTieBreakerFeatureArtist      = $quarterFinalTieBreakerData['beatmapset']['artist'];
-                        $quarterFinalTieBreakerMapper             = $quarterFinalTieBreakerData['beatmapset']['creator'];
-                        $quarterFinalTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$quarterFinalTieBreakerData['beatmapset']['user_id']}";
-                        $quarterFinalTieBreakerDifficulty         = $quarterFinalTieBreakerData['difficulty_rating'];
-                        $quarterFinalTieBreakerLength             = $quarterFinalTieBreakerData['total_length'];
-                        $quarterFinalTieBreakerOverallSpeed       = $quarterFinalTieBreakerData['beatmapset']['bpm'];
-                        $quarterFinalTieBreakerOverallDifficulty  = $quarterFinalTieBreakerData['accuracy'];
-                        $quarterFinalTieBreakerOverallHealth      = $quarterFinalTieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $quarterFinalTieBreakerId,
-                            'beatmap_round_id'              => $quarterFinalTieBreakerRoundId,
-                            'beatmap_tournament_id'         => $quarterFinalTieBreakerTournamentId,
-                            'beatmap_type'                  => $quarterFinalTieBreakerType,
-                            'beatmap_image'                 => $quarterFinalTieBreakerImage,
-                            'beatmap_url'                   => $quarterFinalTieBreakerUrl,
-                            'beatmap_name'                  => $quarterFinalTieBreakerName,
-                            'beatmap_difficulty_name'       => $quarterFinalTieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $quarterFinalTieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $quarterFinalTieBreakerMapper,
-                            'beatmap_mapper_url'            => $quarterFinalTieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $quarterFinalTieBreakerDifficulty,
-                            'beatmap_length'                => $quarterFinalTieBreakerLength,
-                            'beatmap_overall_speed'         => $quarterFinalTieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $quarterFinalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $quarterFinalTieBreakerOverallHealth
-                        ];
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
                     }
                     break;
 
-                case 'SF':
-                    /*** SEMI FINAL NM BEATMAP DATA ***/
-                    $semiFinalNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($semiFinalNoModJsonData as $semiFinalNoModJsonType => $semiFinalNoModJsonId) {
-                        $semiFinalNoModData = getTournamentMappoolData(
-                            id: $semiFinalNoModJsonId,
-                            token: $mappoolAccessToken
+                // *** VOT5 GROUP STAGE (WEEK 2) MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(groupstagesweek2|groupstageweek2|GroupStagesWeek2|GroupStageWeek2|GROUPSTAGEWEEK2)$/i',
+                    subject: $vot5RoundName
+                ):
+                    // Database use the abbreviation of each round's name
+                    $vot5AbbreviateRoundName = 'GSW2';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot5GroupStageWeek2MappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $semiFinalNoModId                 = $semiFinalNoModData['id'];
-                        $semiFinalNoModRoundId            = $round;
-                        $semiFinalNoModTournamentId       = strtoupper(string: $name);
-                        $semiFinalNoModType               = $semiFinalNoModJsonType;
-                        $semiFinalNoModImage              = $semiFinalNoModData['beatmapset']['covers']['cover'];
-                        $semiFinalNoModUrl                = $semiFinalNoModData['url'];
-                        $semiFinalNoModName               = $semiFinalNoModData['beatmapset']['title'];
-                        $semiFinalNoModDifficultyName     = $semiFinalNoModData['version'];
-                        $semiFinalNoModFeatureArtist      = $semiFinalNoModData['beatmapset']['artist'];
-                        $semiFinalNoModMapper             = $semiFinalNoModData['beatmapset']['creator'];
-                        $semiFinalNoModMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalNoModData['beatmapset']['user_id']}";
-                        $semiFinalNoModDifficulty         = $semiFinalNoModData['difficulty_rating'];
-                        $semiFinalNoModLength             = $semiFinalNoModData['total_length'];
-                        $semiFinalNoModOverallSpeed       = $semiFinalNoModData['beatmapset']['bpm'];
-                        $semiFinalNoModOverallDifficulty  = $semiFinalNoModData['accuracy'];
-                        $semiFinalNoModOverallHealth      = $semiFinalNoModData['drain'];
+                        foreach ($vot5GroupStageWeek2MappoolViewData as $vot5GroupStageWeek2MappoolData) {
+                            $vot5GroupStageWeek2MappoolType                = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapType']);
+                            $vot5GroupStageWeek2MappoolImage               = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapImage']);
+                            $vot5GroupStageWeek2MappoolUrl                 = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapUrl']);
+                            $vot5GroupStageWeek2MappoolName                = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapName']);
+                            $vot5GroupStageWeek2MappoolDifficultyName      = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapDifficultyName']);
+                            $vot5GroupStageWeek2MappoolFeatureArtist       = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapFeatureArtist']);
+                            $vot5GroupStageWeek2MappoolMapper              = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapMapper']);
+                            $vot5GroupStageWeek2MappoolMapperUrl           = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapMapperUrl']);
+                            $vot5GroupStageWeek2MappoolDifficulty          = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapDifficulty']);
+                            $vot5GroupStageWeek2MappoolLength              = timeStampFormat(number: $vot5GroupStageWeek2MappoolData['beatmapLength']);
+                            $vot5GroupStageWeek2MappoolOverallSpeed        = sprintf('%.2f', $vot5GroupStageWeek2MappoolData['beatmapOverallSpeed']);
+                            $vot5GroupStageWeek2MappoolOverallDifficulty   = sprintf('%.2f', $vot5GroupStageWeek2MappoolData['beatmapOverallDifficulty']);
+                            $vot5GroupStageWeek2MappoolOverallHealth       = sprintf('%.2f', $vot5GroupStageWeek2MappoolData['beatmapOverallHealth']);
 
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $semiFinalNoModId,
-                            'beatmap_round_id'              => $semiFinalNoModRoundId,
-                            'beatmap_tournament_id'         => $semiFinalNoModTournamentId,
-                            'beatmap_type'                  => $semiFinalNoModType,
-                            'beatmap_image'                 => $semiFinalNoModImage,
-                            'beatmap_url'                   => $semiFinalNoModUrl,
-                            'beatmap_name'                  => $semiFinalNoModName,
-                            'beatmap_difficulty_name'       => $semiFinalNoModDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalNoModFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalNoModMapper,
-                            'beatmap_mapper_url'            => $semiFinalNoModMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalNoModDifficulty,
-                            'beatmap_length'                => $semiFinalNoModLength,
-                            'beatmap_overall_speed'         => $semiFinalNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalNoModOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5GroupStageWeek2MappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5GroupStageWeek2MappoolUrl">
+                                                <img src="$vot5GroupStageWeek2MappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** SEMI FINAL HD BEATMAP DATA ***/
-                    $semiFinalHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($semiFinalHiddenJsonData as $semiFinalHiddenJsonType => $semiFinalHiddenJsonId) {
-                        $semiFinalHiddenData = getTournamentMappoolData(
-                            id: $semiFinalHiddenJsonId,
-                            token: $mappoolAccessToken
+                                        <div class="song-name">
+                                            <h2>$vot5GroupStageWeek2MappoolName [$vot5GroupStageWeek2MappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5GroupStageWeek2MappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5GroupStageWeek2MappoolMapperUrl">$vot5GroupStageWeek2MappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5GroupStageWeek2MappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5GroupStageWeek2MappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5GroupStageWeek2MappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5GroupStageWeek2MappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5GroupStageWeek2MappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot5GroupStageWeek2JsonData = $votMappoolJsonUsableData[$votTournamentName][$vot5AbbreviateRoundName];
+                        foreach ($vot5GroupStageWeek2JsonData as $vot5GroupStageWeek2JsonType => $vot5GroupStageWeek2JsonId) {
+                            $vot5GroupStageWeek2Data = getMappoolData(
+                                id: $vot5GroupStageWeek2JsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot5GroupStageWeek2Id                = $vot5GroupStageWeek2Data['id'];
+                            $vot5GroupStageWeek2RoundId           = $vot5AbbreviateRoundName;
+                            $vot5GroupStageWeek2TournamentId      = $votTournamentName;
+                            $vot5GroupStageWeek2Type              = $vot5GroupStageWeek2JsonType;
+                            $vot5GroupStageWeek2Image             = $vot5GroupStageWeek2Data['beatmapset']['covers']['cover'];
+                            $vot5GroupStageWeek2Url               = $vot5GroupStageWeek2Data['url'];
+                            $vot5GroupStageWeek2Name              = $vot5GroupStageWeek2Data['beatmapset']['title'];
+                            $vot5GroupStageWeek2DifficultyName    = $vot5GroupStageWeek2Data['version'];
+                            $vot5GroupStageWeek2FeatureArtist     = $vot5GroupStageWeek2Data['beatmapset']['artist'];
+                            $vot5GroupStageWeek2Mapper            = $vot5GroupStageWeek2Data['beatmapset']['creator'];
+                            $vot5GroupStageWeek2MapperUrl         = "https://osu.ppy.sh/users/{$vot5GroupStageWeek2Data['beatmapset']['user_id']}";
+                            $vot5GroupStageWeek2Difficulty        = $vot5GroupStageWeek2Data['difficulty_rating'];
+                            $vot5GroupStageWeek2Length            = $vot5GroupStageWeek2Data['total_length'];
+                            $vot5GroupStageWeek2OverallSpeed      = $vot5GroupStageWeek2Data['beatmapset']['bpm'];
+                            $vot5GroupStageWeek2OverallDifficulty = $vot5GroupStageWeek2Data['accuracy'];
+                            $vot5GroupStageWeek2OverallHealth     = $vot5GroupStageWeek2Data['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot5GroupStageWeek2Id,
+                                    round: $vot5GroupStageWeek2RoundId,
+                                    tournament: $vot5GroupStageWeek2TournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot5GroupStageWeek2Id,
+                                    round_id: $vot5GroupStageWeek2RoundId,
+                                    tournament_id: $vot5GroupStageWeek2TournamentId,
+                                    type: $vot5GroupStageWeek2Type,
+                                    image: $vot5GroupStageWeek2Image,
+                                    url: $vot5GroupStageWeek2Url,
+                                    name: $vot5GroupStageWeek2Name,
+                                    diff_name: $vot5GroupStageWeek2DifficultyName,
+                                    fa: $vot5GroupStageWeek2FeatureArtist,
+                                    mapper: $vot5GroupStageWeek2Mapper,
+                                    mapper_url: $vot5GroupStageWeek2MapperUrl,
+                                    diff: $vot5GroupStageWeek2Difficulty,
+                                    length: $vot5GroupStageWeek2Length,
+                                    bpm: $vot5GroupStageWeek2OverallSpeed,
+                                    od: $vot5GroupStageWeek2OverallDifficulty,
+                                    hp: $vot5GroupStageWeek2OverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot5GroupStageWeek2MappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $semiFinalHiddenId                 = $semiFinalHiddenData['id'];
-                        $semiFinalHiddenRoundId            = $round;
-                        $semiFinalHiddenTournamentId       = strtoupper(string: $name);
-                        $semiFinalHiddenType               = $semiFinalHiddenJsonType;
-                        $semiFinalHiddenImage              = $semiFinalHiddenData['beatmapset']['covers']['cover'];
-                        $semiFinalHiddenUrl                = $semiFinalHiddenData['url'];
-                        $semiFinalHiddenName               = $semiFinalHiddenData['beatmapset']['title'];
-                        $semiFinalHiddenDifficultyName     = $semiFinalHiddenData['version'];
-                        $semiFinalHiddenFeatureArtist      = $semiFinalHiddenData['beatmapset']['artist'];
-                        $semiFinalHiddenMapper             = $semiFinalHiddenData['beatmapset']['creator'];
-                        $semiFinalHiddenMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalHiddenData['beatmapset']['user_id']}";
-                        $semiFinalHiddenDifficulty         = $semiFinalHiddenData['difficulty_rating'];
-                        $semiFinalHiddenLength             = $semiFinalHiddenData['total_length'];
-                        $semiFinalHiddenOverallSpeed       = $semiFinalHiddenData['beatmapset']['bpm'];
-                        $semiFinalHiddenOverallDifficulty  = $semiFinalHiddenData['accuracy'];
-                        $semiFinalHiddenOverallHealth      = $semiFinalHiddenData['drain'];
+                        foreach ($vot5GroupStageWeek2MappoolViewData as $vot5GroupStageWeek2MappoolData) {
+                            $vot5GroupStageWeek2MappoolType                = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapType']);
+                            $vot5GroupStageWeek2MappoolImage               = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapImage']);
+                            $vot5GroupStageWeek2MappoolUrl                 = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapUrl']);
+                            $vot5GroupStageWeek2MappoolName                = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapName']);
+                            $vot5GroupStageWeek2MappoolDifficultyName      = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapDifficultyName']);
+                            $vot5GroupStageWeek2MappoolFeatureArtist       = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapFeatureArtist']);
+                            $vot5GroupStageWeek2MappoolMapper              = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapMapper']);
+                            $vot5GroupStageWeek2MappoolMapperUrl           = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapMapperUrl']);
+                            $vot5GroupStageWeek2MappoolDifficulty          = htmlspecialchars($vot5GroupStageWeek2MappoolData['beatmapDifficulty']);
+                            $vot5GroupStageWeek2MappoolLength              = timeStampFormat(number: $vot5GroupStageWeek2MappoolData['beatmapLength']);
+                            $vot5GroupStageWeek2MappoolOverallSpeed        = sprintf('%.2f', $vot5GroupStageWeek2MappoolData['beatmapOverallSpeed']);
+                            $vot5GroupStageWeek2MappoolOverallDifficulty   = sprintf('%.2f', $vot5GroupStageWeek2MappoolData['beatmapOverallDifficulty']);
+                            $vot5GroupStageWeek2MappoolOverallHealth       = sprintf('%.2f', $vot5GroupStageWeek2MappoolData['beatmapOverallHealth']);
 
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $semiFinalHiddenId,
-                            'beatmap_round_id'              => $semiFinalHiddenRoundId,
-                            'beatmap_tournament_id'         => $semiFinalHiddenTournamentId,
-                            'beatmap_type'                  => $semiFinalHiddenType,
-                            'beatmap_image'                 => $semiFinalHiddenImage,
-                            'beatmap_url'                   => $semiFinalHiddenUrl,
-                            'beatmap_name'                  => $semiFinalHiddenName,
-                            'beatmap_difficulty_name'       => $semiFinalHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalHiddenFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalHiddenMapper,
-                            'beatmap_mapper_url'            => $semiFinalHiddenMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalHiddenDifficulty,
-                            'beatmap_length'                => $semiFinalHiddenLength,
-                            'beatmap_overall_speed'         => $semiFinalHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalHiddenOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5GroupStageWeek2MappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5GroupStageWeek2MappoolUrl">
+                                                <img src="$vot5GroupStageWeek2MappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** SEMI FINAL HR BEATMAP DATA ***/
-                    $semiFinalHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($semiFinalHardRockJsonData as $semiFinalHardRockJsonType => $semiFinalHardRockJsonId) {
-                        $semiFinalHardRockData = getTournamentMappoolData(
-                            id: $semiFinalHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-name">
+                                            <h2>$vot5GroupStageWeek2MappoolName [$vot5GroupStageWeek2MappoolDifficultyName]</h2>
+                                        </div>
 
-                        $semiFinalHardRockId                 = $semiFinalHardRockData['id'];
-                        $semiFinalHardRockRoundId            = $round;
-                        $semiFinalHardRockTournamentId       = strtoupper(string: $name);
-                        $semiFinalHardRockType               = $semiFinalHardRockJsonType;
-                        $semiFinalHardRockImage              = $semiFinalHardRockData['beatmapset']['covers']['cover'];
-                        $semiFinalHardRockUrl                = $semiFinalHardRockData['url'];
-                        $semiFinalHardRockName               = $semiFinalHardRockData['beatmapset']['title'];
-                        $semiFinalHardRockDifficultyName     = $semiFinalHardRockData['version'];
-                        $semiFinalHardRockFeatureArtist      = $semiFinalHardRockData['beatmapset']['artist'];
-                        $semiFinalHardRockMapper             = $semiFinalHardRockData['beatmapset']['creator'];
-                        $semiFinalHardRockMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalHardRockData['beatmapset']['user_id']}";
-                        $semiFinalHardRockDifficulty         = $semiFinalHardRockData['difficulty_rating'];
-                        $semiFinalHardRockLength             = $semiFinalHardRockData['total_length'];
-                        $semiFinalHardRockOverallSpeed       = $semiFinalHardRockData['beatmapset']['bpm'];
-                        $semiFinalHardRockOverallDifficulty  = $semiFinalHardRockData['accuracy'];
-                        $semiFinalHardRockOverallHealth      = $semiFinalHardRockData['drain'];
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5GroupStageWeek2MappoolFeatureArtist</h3>
+                                        </div>
 
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $semiFinalHardRockId,
-                            'beatmap_round_id'              => $semiFinalHardRockRoundId,
-                            'beatmap_tournament_id'         => $semiFinalHardRockTournamentId,
-                            'beatmap_type'                  => $semiFinalHardRockType,
-                            'beatmap_image'                 => $semiFinalHardRockImage,
-                            'beatmap_url'                   => $semiFinalHardRockUrl,
-                            'beatmap_name'                  => $semiFinalHardRockName,
-                            'beatmap_difficulty_name'       => $semiFinalHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalHardRockFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalHardRockMapper,
-                            'beatmap_mapper_url'            => $semiFinalHardRockMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalHardRockDifficulty,
-                            'beatmap_length'                => $semiFinalHardRockLength,
-                            'beatmap_overall_speed'         => $semiFinalHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalHardRockOverallHealth
-                        ];
-                    }
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5GroupStageWeek2MappoolMapperUrl">$vot5GroupStageWeek2MappoolMapper</a></h4>
+                                        </div>
 
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5GroupStageWeek2MappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5GroupStageWeek2MappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5GroupStageWeek2MappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
 
-                    /*** SEMI FINAL DT BEATMAP DATA ***/
-                    $semiFinalDoubleTimeJsonData = $mappoolReadableJsonData[$name][$round]['DT'];
-                    foreach ($semiFinalDoubleTimeJsonData as $semiFinalDoubleTimeJsonType => $semiFinalDoubleTimeJsonId) {
-                        $semiFinalDoubleTimeData = getTournamentMappoolData(
-                            id: $semiFinalDoubleTimeJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5GroupStageWeek2MappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5GroupStageWeek2MappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
 
-                        $semiFinalDoubleTimeId                 = $semiFinalDoubleTimeData['id'];
-                        $semiFinalDoubleTimeRoundId            = $round;
-                        $semiFinalDoubleTimeTournamentId       = strtoupper(string: $name);
-                        $semiFinalDoubleTimeType               = $semiFinalDoubleTimeJsonType;
-                        $semiFinalDoubleTimeImage              = $semiFinalDoubleTimeData['beatmapset']['covers']['cover'];
-                        $semiFinalDoubleTimeUrl                = $semiFinalDoubleTimeData['url'];
-                        $semiFinalDoubleTimeName               = $semiFinalDoubleTimeData['beatmapset']['title'];
-                        $semiFinalDoubleTimeDifficultyName     = $semiFinalDoubleTimeData['version'];
-                        $semiFinalDoubleTimeFeatureArtist      = $semiFinalDoubleTimeData['beatmapset']['artist'];
-                        $semiFinalDoubleTimeMapper             = $semiFinalDoubleTimeData['beatmapset']['creator'];
-                        $semiFinalDoubleTimeMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalDoubleTimeData['beatmapset']['user_id']}";
-                        $semiFinalDoubleTimeDifficulty         = $semiFinalDoubleTimeData['difficulty_rating'];
-                        $semiFinalDoubleTimeLength             = $semiFinalDoubleTimeData['total_length'];
-                        $semiFinalDoubleTimeOverallSpeed       = $semiFinalDoubleTimeData['beatmapset']['bpm'];
-                        $semiFinalDoubleTimeOverallDifficulty  = $semiFinalDoubleTimeData['accuracy'];
-                        $semiFinalDoubleTimeOverallHealth      = $semiFinalDoubleTimeData['drain'];
-
-                        $allMappoolDoubleTimeData[] = [
-                            'beatmap_id'                    => $semiFinalDoubleTimeId,
-                            'beatmap_round_id'              => $semiFinalDoubleTimeRoundId,
-                            'beatmap_tournament_id'         => $semiFinalDoubleTimeTournamentId,
-                            'beatmap_type'                  => $semiFinalDoubleTimeType,
-                            'beatmap_image'                 => $semiFinalDoubleTimeImage,
-                            'beatmap_url'                   => $semiFinalDoubleTimeUrl,
-                            'beatmap_name'                  => $semiFinalDoubleTimeName,
-                            'beatmap_difficulty_name'       => $semiFinalDoubleTimeDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalDoubleTimeFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalDoubleTimeMapper,
-                            'beatmap_mapper_url'            => $semiFinalDoubleTimeMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalDoubleTimeDifficulty,
-                            'beatmap_length'                => $semiFinalDoubleTimeLength,
-                            'beatmap_overall_speed'         => $semiFinalDoubleTimeOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalDoubleTimeOverallHealth
-                        ];
-                    }
-
-
-                    /*** SEMI FINAL FM BEATMAP DATA ***/
-                    $semiFinalFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($semiFinalFreeModJsonData as $semiFinalFreeModJsonType => $semiFinalFreeModJsonId) {
-                        $semiFinalFreeModData = getTournamentMappoolData(
-                            id: $semiFinalFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalFreeModId                 = $semiFinalFreeModData['id'];
-                        $semiFinalFreeModRoundId            = $round;
-                        $semiFinalFreeModTournamentId       = strtoupper(string: $name);
-                        $semiFinalFreeModType               = $semiFinalFreeModJsonType;
-                        $semiFinalFreeModImage              = $semiFinalFreeModData['beatmapset']['covers']['cover'];
-                        $semiFinalFreeModUrl                = $semiFinalFreeModData['url'];
-                        $semiFinalFreeModName               = $semiFinalFreeModData['beatmapset']['title'];
-                        $semiFinalFreeModDifficultyName     = $semiFinalFreeModData['version'];
-                        $semiFinalFreeModFeatureArtist      = $semiFinalFreeModData['beatmapset']['artist'];
-                        $semiFinalFreeModMapper             = $semiFinalFreeModData['beatmapset']['creator'];
-                        $semiFinalFreeModMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalFreeModData['beatmapset']['user_id']}";
-                        $semiFinalFreeModDifficulty         = $semiFinalFreeModData['difficulty_rating'];
-                        $semiFinalFreeModLength             = $semiFinalFreeModData['total_length'];
-                        $semiFinalFreeModOverallSpeed       = $semiFinalFreeModData['beatmapset']['bpm'];
-                        $semiFinalFreeModOverallDifficulty  = $semiFinalFreeModData['accuracy'];
-                        $semiFinalFreeModOverallHealth      = $semiFinalFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $semiFinalFreeModId,
-                            'beatmap_round_id'              => $semiFinalFreeModRoundId,
-                            'beatmap_tournament_id'         => $semiFinalFreeModTournamentId,
-                            'beatmap_type'                  => $semiFinalFreeModType,
-                            'beatmap_image'                 => $semiFinalFreeModImage,
-                            'beatmap_url'                   => $semiFinalFreeModUrl,
-                            'beatmap_name'                  => $semiFinalFreeModName,
-                            'beatmap_difficulty_name'       => $semiFinalFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalFreeModFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalFreeModMapper,
-                            'beatmap_mapper_url'            => $semiFinalFreeModMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalFreeModDifficulty,
-                            'beatmap_length'                => $semiFinalFreeModLength,
-                            'beatmap_overall_speed'         => $semiFinalFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalFreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** SEMI FINAL EZ BEATMAP DATA ***/
-                    $semiFinalEasyJsonData = $mappoolReadableJsonData[$name][$round]['EZ'];
-                    foreach ($semiFinalEasyJsonData as $semiFinalEasyJsonType => $semiFinalEasyJsonId) {
-                        $semiFinalEasyData = getTournamentMappoolData(
-                            id: $semiFinalEasyJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalEasyId                 = $semiFinalEasyData['id'];
-                        $semiFinalEasyRoundId            = $round;
-                        $semiFinalEasyTournamentId       = strtoupper(string: $name);
-                        $semiFinalEasyType               = $semiFinalEasyJsonType;
-                        $semiFinalEasyImage              = $semiFinalEasyData['beatmapset']['covers']['cover'];
-                        $semiFinalEasyUrl                = $semiFinalEasyData['url'];
-                        $semiFinalEasyName               = $semiFinalEasyData['beatmapset']['title'];
-                        $semiFinalEasyDifficultyName     = $semiFinalEasyData['version'];
-                        $semiFinalEasyFeatureArtist      = $semiFinalEasyData['beatmapset']['artist'];
-                        $semiFinalEasyMapper             = $semiFinalEasyData['beatmapset']['creator'];
-                        $semiFinalEasyMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalEasyData['beatmapset']['user_id']}";
-                        $semiFinalEasyDifficulty         = $semiFinalEasyData['difficulty_rating'];
-                        $semiFinalEasyLength             = $semiFinalEasyData['total_length'];
-                        $semiFinalEasyOverallSpeed       = $semiFinalEasyData['beatmapset']['bpm'];
-                        $semiFinalEasyOverallDifficulty  = $semiFinalEasyData['accuracy'];
-                        $semiFinalEasyOverallHealth      = $semiFinalEasyData['drain'];
-
-                        $allMappoolEasyData[] = [
-                            'beatmap_id'                    => $semiFinalEasyId,
-                            'beatmap_round_id'              => $semiFinalEasyRoundId,
-                            'beatmap_tournament_id'         => $semiFinalEasyTournamentId,
-                            'beatmap_type'                  => $semiFinalEasyType,
-                            'beatmap_image'                 => $semiFinalEasyImage,
-                            'beatmap_url'                   => $semiFinalEasyUrl,
-                            'beatmap_name'                  => $semiFinalEasyName,
-                            'beatmap_difficulty_name'       => $semiFinalEasyDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalEasyFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalEasyMapper,
-                            'beatmap_mapper_url'            => $semiFinalEasyMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalEasyDifficulty,
-                            'beatmap_length'                => $semiFinalEasyLength,
-                            'beatmap_overall_speed'         => $semiFinalEasyOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalEasyOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalEasyOverallHealth
-                        ];
-                    }
-
-
-                    /*** SEMI FINAL HDHR BEATMAP DATA ***/
-                    $semiFinalHiddenHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HDHR'];
-                    foreach ($semiFinalHiddenHardRockJsonData as $semiFinalHiddenHardRockJsonType => $semiFinalHiddenHardRockJsonId) {
-                        $semiFinalHiddenHardRockData = getTournamentMappoolData(
-                            id: $semiFinalHiddenHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalHiddenHardRockId                 = $semiFinalHiddenHardRockData['id'];
-                        $semiFinalHiddenHardRockRoundId            = $round;
-                        $semiFinalHiddenHardRockTournamentId       = strtoupper(string: $name);
-                        $semiFinalHiddenHardRockType               = $semiFinalHiddenHardRockJsonType;
-                        $semiFinalHiddenHardRockImage              = $semiFinalHiddenHardRockData['beatmapset']['covers']['cover'];
-                        $semiFinalHiddenHardRockUrl                = $semiFinalHiddenHardRockData['url'];
-                        $semiFinalHiddenHardRockName               = $semiFinalHiddenHardRockData['beatmapset']['title'];
-                        $semiFinalHiddenHardRockDifficultyName     = $semiFinalHiddenHardRockData['version'];
-                        $semiFinalHiddenHardRockFeatureArtist      = $semiFinalHiddenHardRockData['beatmapset']['artist'];
-                        $semiFinalHiddenHardRockMapper             = $semiFinalHiddenHardRockData['beatmapset']['creator'];
-                        $semiFinalHiddenHardRockMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalHiddenHardRockData['beatmapset']['user_id']}";
-                        $semiFinalHiddenHardRockDifficulty         = $semiFinalHiddenHardRockData['difficulty_rating'];
-                        $semiFinalHiddenHardRockLength             = $semiFinalHiddenHardRockData['total_length'];
-                        $semiFinalHiddenHardRockOverallSpeed       = $semiFinalHiddenHardRockData['beatmapset']['bpm'];
-                        $semiFinalHiddenHardRockOverallDifficulty  = $semiFinalHiddenHardRockData['accuracy'];
-                        $semiFinalHiddenHardRockOverallHealth      = $semiFinalHiddenHardRockData['drain'];
-
-                        $allMappoolHiddenHardRockData[] = [
-                            'beatmap_id'                    => $semiFinalHiddenHardRockId,
-                            'beatmap_round_id'              => $semiFinalHiddenHardRockRoundId,
-                            'beatmap_tournament_id'         => $semiFinalHiddenHardRockTournamentId,
-                            'beatmap_type'                  => $semiFinalHiddenHardRockType,
-                            'beatmap_image'                 => $semiFinalHiddenHardRockImage,
-                            'beatmap_url'                   => $semiFinalHiddenHardRockUrl,
-                            'beatmap_name'                  => $semiFinalHiddenHardRockName,
-                            'beatmap_difficulty_name'       => $semiFinalHiddenHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalHiddenHardRockFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalHiddenHardRockMapper,
-                            'beatmap_mapper_url'            => $semiFinalHiddenHardRockMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalHiddenHardRockDifficulty,
-                            'beatmap_length'                => $semiFinalHiddenHardRockLength,
-                            'beatmap_overall_speed'         => $semiFinalHiddenHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalHiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalHiddenHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** SEMI FINAL TB BEATMAP DATA ***/
-                    $semiFinalTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
-                    foreach ($semiFinalTieBreakerJsonData as $semiFinalTieBreakerJsonType => $semiFinalTieBreakerJsonId) {
-                        $semiFinalTieBreakerData = getTournamentMappoolData(
-                            id: $semiFinalTieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $semiFinalTieBreakerId                 = $semiFinalTieBreakerData['id'];
-                        $semiFinalTieBreakerRoundId            = $round;
-                        $semiFinalTieBreakerTournamentId       = strtoupper(string: $name);
-                        $semiFinalTieBreakerType               = $semiFinalTieBreakerJsonType;
-                        $semiFinalTieBreakerImage              = $semiFinalTieBreakerData['beatmapset']['covers']['cover'];
-                        $semiFinalTieBreakerUrl                = $semiFinalTieBreakerData['url'];
-                        $semiFinalTieBreakerName               = $semiFinalTieBreakerData['beatmapset']['title'];
-                        $semiFinalTieBreakerDifficultyName     = $semiFinalTieBreakerData['version'];
-                        $semiFinalTieBreakerFeatureArtist      = $semiFinalTieBreakerData['beatmapset']['artist'];
-                        $semiFinalTieBreakerMapper             = $semiFinalTieBreakerData['beatmapset']['creator'];
-                        $semiFinalTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$semiFinalTieBreakerData['beatmapset']['user_id']}";
-                        $semiFinalTieBreakerDifficulty         = $semiFinalTieBreakerData['difficulty_rating'];
-                        $semiFinalTieBreakerLength             = $semiFinalTieBreakerData['total_length'];
-                        $semiFinalTieBreakerOverallSpeed       = $semiFinalTieBreakerData['beatmapset']['bpm'];
-                        $semiFinalTieBreakerOverallDifficulty  = $semiFinalTieBreakerData['accuracy'];
-                        $semiFinalTieBreakerOverallHealth      = $semiFinalTieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $semiFinalTieBreakerId,
-                            'beatmap_round_id'              => $semiFinalTieBreakerRoundId,
-                            'beatmap_tournament_id'         => $semiFinalTieBreakerTournamentId,
-                            'beatmap_type'                  => $semiFinalTieBreakerType,
-                            'beatmap_image'                 => $semiFinalTieBreakerImage,
-                            'beatmap_url'                   => $semiFinalTieBreakerUrl,
-                            'beatmap_name'                  => $semiFinalTieBreakerName,
-                            'beatmap_difficulty_name'       => $semiFinalTieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $semiFinalTieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $semiFinalTieBreakerMapper,
-                            'beatmap_mapper_url'            => $semiFinalTieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $semiFinalTieBreakerDifficulty,
-                            'beatmap_length'                => $semiFinalTieBreakerLength,
-                            'beatmap_overall_speed'         => $semiFinalTieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $semiFinalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $semiFinalTieBreakerOverallHealth
-                        ];
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
                     }
                     break;
 
-                case 'FNL':
-                    /*** FINAL NM BEATMAP DATA ***/
-                    $finalNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($finalNoModJsonData as $finalNoModJsonType => $finalNoModJsonId) {
-                        $finalNoModData = getTournamentMappoolData(
-                            id: $finalNoModJsonId,
-                            token: $mappoolAccessToken
+                // *** VOT5 SEMI FINAL MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(semifinals|sf|sfs)$/i',
+                    subject: $vot5RoundName
+                ):
+                    // Database use the abbreviation of each round's name
+                    $vot5AbbreviateRoundName = 'SF';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot5SemiFinalMappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $finalNoModId                 = $finalNoModData['id'];
-                        $finalNoModRoundId            = $round;
-                        $finalNoModTournamentId       = strtoupper(string: $name);
-                        $finalNoModType               = $finalNoModJsonType;
-                        $finalNoModImage              = $finalNoModData['beatmapset']['covers']['cover'];
-                        $finalNoModUrl                = $finalNoModData['url'];
-                        $finalNoModName               = $finalNoModData['beatmapset']['title'];
-                        $finalNoModDifficultyName     = $finalNoModData['version'];
-                        $finalNoModFeatureArtist      = $finalNoModData['beatmapset']['artist'];
-                        $finalNoModMapper             = $finalNoModData['beatmapset']['creator'];
-                        $finalNoModMapperUrl          = "https://osu.ppy.sh/users/{$finalNoModData['beatmapset']['user_id']}";
-                        $finalNoModDifficulty         = $finalNoModData['difficulty_rating'];
-                        $finalNoModLength             = $finalNoModData['total_length'];
-                        $finalNoModOverallSpeed       = $finalNoModData['beatmapset']['bpm'];
-                        $finalNoModOverallDifficulty  = $finalNoModData['accuracy'];
-                        $finalNoModOverallHealth      = $finalNoModData['drain'];
+                        foreach ($vot5SemiFinalMappoolViewData as $vot5SemiFinalMappoolData) {
+                            $vot5SemiFinalMappoolType                = htmlspecialchars($vot5SemiFinalMappoolData['beatmapType']);
+                            $vot5SemiFinalMappoolImage               = htmlspecialchars($vot5SemiFinalMappoolData['beatmapImage']);
+                            $vot5SemiFinalMappoolUrl                 = htmlspecialchars($vot5SemiFinalMappoolData['beatmapUrl']);
+                            $vot5SemiFinalMappoolName                = htmlspecialchars($vot5SemiFinalMappoolData['beatmapName']);
+                            $vot5SemiFinalMappoolDifficultyName      = htmlspecialchars($vot5SemiFinalMappoolData['beatmapDifficultyName']);
+                            $vot5SemiFinalMappoolFeatureArtist       = htmlspecialchars($vot5SemiFinalMappoolData['beatmapFeatureArtist']);
+                            $vot5SemiFinalMappoolMapper              = htmlspecialchars($vot5SemiFinalMappoolData['beatmapMapper']);
+                            $vot5SemiFinalMappoolMapperUrl           = htmlspecialchars($vot5SemiFinalMappoolData['beatmapMapperUrl']);
+                            $vot5SemiFinalMappoolDifficulty          = htmlspecialchars($vot5SemiFinalMappoolData['beatmapDifficulty']);
+                            $vot5SemiFinalMappoolLength              = timeStampFormat(number: $vot5SemiFinalMappoolData['beatmapLength']);
+                            $vot5SemiFinalMappoolOverallSpeed        = sprintf('%.2f', $vot5SemiFinalMappoolData['beatmapOverallSpeed']);
+                            $vot5SemiFinalMappoolOverallDifficulty   = sprintf('%.2f', $vot5SemiFinalMappoolData['beatmapOverallDifficulty']);
+                            $vot5SemiFinalMappoolOverallHealth       = sprintf('%.2f', $vot5SemiFinalMappoolData['beatmapOverallHealth']);
 
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $finalNoModId,
-                            'beatmap_round_id'              => $finalNoModRoundId,
-                            'beatmap_tournament_id'         => $finalNoModTournamentId,
-                            'beatmap_type'                  => $finalNoModType,
-                            'beatmap_image'                 => $finalNoModImage,
-                            'beatmap_url'                   => $finalNoModUrl,
-                            'beatmap_name'                  => $finalNoModName,
-                            'beatmap_difficulty_name'       => $finalNoModDifficultyName,
-                            'beatmap_feature_artist'        => $finalNoModFeatureArtist,
-                            'beatmap_mapper'                => $finalNoModMapper,
-                            'beatmap_mapper_url'            => $finalNoModMapperUrl,
-                            'beatmap_difficulty'            => $finalNoModDifficulty,
-                            'beatmap_length'                => $finalNoModLength,
-                            'beatmap_overall_speed'         => $finalNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $finalNoModOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5SemiFinalMappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5SemiFinalMappoolUrl">
+                                                <img src="$vot5SemiFinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** FINAL HD BEATMAP DATA ***/
-                    $finalHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($finalHiddenJsonData as $finalHiddenJsonType => $finalHiddenJsonId) {
-                        $finalHiddenData = getTournamentMappoolData(
-                            id: $finalHiddenJsonId,
-                            token: $mappoolAccessToken
+                                        <div class="song-name">
+                                            <h2>$vot5SemiFinalMappoolName [$vot5SemiFinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5SemiFinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5SemiFinalMappoolMapperUrl">$vot5SemiFinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5SemiFinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5SemiFinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5SemiFinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5SemiFinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5SemiFinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot5SemiFinalJsonData = $votMappoolJsonUsableData[$votTournamentName][$vot5AbbreviateRoundName];
+                        foreach ($vot5SemiFinalJsonData as $vot5SemiFinalJsonType => $vot5SemiFinalJsonId) {
+                            $vot5SemiFinalData = getMappoolData(
+                                id: $vot5SemiFinalJsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot5SemiFinalId                = $vot5SemiFinalData['id'];
+                            $vot5SemiFinalRoundId           = $vot5AbbreviateRoundName;
+                            $vot5SemiFinalTournamentId      = $votTournamentName;
+                            $vot5SemiFinalType              = $vot5SemiFinalJsonType;
+                            $vot5SemiFinalImage             = $vot5SemiFinalData['beatmapset']['covers']['cover'];
+                            $vot5SemiFinalUrl               = $vot5SemiFinalData['url'];
+                            $vot5SemiFinalName              = $vot5SemiFinalData['beatmapset']['title'];
+                            $vot5SemiFinalDifficultyName    = $vot5SemiFinalData['version'];
+                            $vot5SemiFinalFeatureArtist     = $vot5SemiFinalData['beatmapset']['artist'];
+                            $vot5SemiFinalMapper            = $vot5SemiFinalData['beatmapset']['creator'];
+                            $vot5SemiFinalMapperUrl         = "https://osu.ppy.sh/users/{$vot5SemiFinalData['beatmapset']['user_id']}";
+                            $vot5SemiFinalDifficulty        = $vot5SemiFinalData['difficulty_rating'];
+                            $vot5SemiFinalLength            = $vot5SemiFinalData['total_length'];
+                            $vot5SemiFinalOverallSpeed      = $vot5SemiFinalData['beatmapset']['bpm'];
+                            $vot5SemiFinalOverallDifficulty = $vot5SemiFinalData['accuracy'];
+                            $vot5SemiFinalOverallHealth     = $vot5SemiFinalData['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot5SemiFinalId,
+                                    round: $vot5SemiFinalRoundId,
+                                    tournament: $vot5SemiFinalTournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot5SemiFinalId,
+                                    round_id: $vot5SemiFinalRoundId,
+                                    tournament_id: $vot5SemiFinalTournamentId,
+                                    type: $vot5SemiFinalType,
+                                    image: $vot5SemiFinalImage,
+                                    url: $vot5SemiFinalUrl,
+                                    name: $vot5SemiFinalName,
+                                    diff_name: $vot5SemiFinalDifficultyName,
+                                    fa: $vot5SemiFinalFeatureArtist,
+                                    mapper: $vot5SemiFinalMapper,
+                                    mapper_url: $vot5SemiFinalMapperUrl,
+                                    diff: $vot5SemiFinalDifficulty,
+                                    length: $vot5SemiFinalLength,
+                                    bpm: $vot5SemiFinalOverallSpeed,
+                                    od: $vot5SemiFinalOverallDifficulty,
+                                    hp: $vot5SemiFinalOverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot5SemiFinalMappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $finalHiddenId                 = $finalHiddenData['id'];
-                        $finalHiddenRoundId            = $round;
-                        $finalHiddenTournamentId       = strtoupper(string: $name);
-                        $finalHiddenType               = $finalHiddenJsonType;
-                        $finalHiddenImage              = $finalHiddenData['beatmapset']['covers']['cover'];
-                        $finalHiddenUrl                = $finalHiddenData['url'];
-                        $finalHiddenName               = $finalHiddenData['beatmapset']['title'];
-                        $finalHiddenDifficultyName     = $finalHiddenData['version'];
-                        $finalHiddenFeatureArtist      = $finalHiddenData['beatmapset']['artist'];
-                        $finalHiddenMapper             = $finalHiddenData['beatmapset']['creator'];
-                        $finalHiddenMapperUrl          = "https://osu.ppy.sh/users/{$finalHiddenData['beatmapset']['user_id']}";
-                        $finalHiddenDifficulty         = $finalHiddenData['difficulty_rating'];
-                        $finalHiddenLength             = $finalHiddenData['total_length'];
-                        $finalHiddenOverallSpeed       = $finalHiddenData['beatmapset']['bpm'];
-                        $finalHiddenOverallDifficulty  = $finalHiddenData['accuracy'];
-                        $finalHiddenOverallHealth      = $finalHiddenData['drain'];
+                        foreach ($vot5SemiFinalMappoolViewData as $vot5SemiFinalMappoolData) {
+                            $vot5SemiFinalMappoolType                = htmlspecialchars($vot5SemiFinalMappoolData['beatmapType']);
+                            $vot5SemiFinalMappoolImage               = htmlspecialchars($vot5SemiFinalMappoolData['beatmapImage']);
+                            $vot5SemiFinalMappoolUrl                 = htmlspecialchars($vot5SemiFinalMappoolData['beatmapUrl']);
+                            $vot5SemiFinalMappoolName                = htmlspecialchars($vot5SemiFinalMappoolData['beatmapName']);
+                            $vot5SemiFinalMappoolDifficultyName      = htmlspecialchars($vot5SemiFinalMappoolData['beatmapDifficultyName']);
+                            $vot5SemiFinalMappoolFeatureArtist       = htmlspecialchars($vot5SemiFinalMappoolData['beatmapFeatureArtist']);
+                            $vot5SemiFinalMappoolMapper              = htmlspecialchars($vot5SemiFinalMappoolData['beatmapMapper']);
+                            $vot5SemiFinalMappoolMapperUrl           = htmlspecialchars($vot5SemiFinalMappoolData['beatmapMapperUrl']);
+                            $vot5SemiFinalMappoolDifficulty          = htmlspecialchars($vot5SemiFinalMappoolData['beatmapDifficulty']);
+                            $vot5SemiFinalMappoolLength              = timeStampFormat(number: $vot5SemiFinalMappoolData['beatmapLength']);
+                            $vot5SemiFinalMappoolOverallSpeed        = sprintf('%.2f', $vot5SemiFinalMappoolData['beatmapOverallSpeed']);
+                            $vot5SemiFinalMappoolOverallDifficulty   = sprintf('%.2f', $vot5SemiFinalMappoolData['beatmapOverallDifficulty']);
+                            $vot5SemiFinalMappoolOverallHealth       = sprintf('%.2f', $vot5SemiFinalMappoolData['beatmapOverallHealth']);
 
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $finalHiddenId,
-                            'beatmap_round_id'              => $finalHiddenRoundId,
-                            'beatmap_tournament_id'         => $finalHiddenTournamentId,
-                            'beatmap_type'                  => $finalHiddenType,
-                            'beatmap_image'                 => $finalHiddenImage,
-                            'beatmap_url'                   => $finalHiddenUrl,
-                            'beatmap_name'                  => $finalHiddenName,
-                            'beatmap_difficulty_name'       => $finalHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $finalHiddenFeatureArtist,
-                            'beatmap_mapper'                => $finalHiddenMapper,
-                            'beatmap_mapper_url'            => $finalHiddenMapperUrl,
-                            'beatmap_difficulty'            => $finalHiddenDifficulty,
-                            'beatmap_length'                => $finalHiddenLength,
-                            'beatmap_overall_speed'         => $finalHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $finalHiddenOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5SemiFinalMappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5SemiFinalMappoolUrl">
+                                                <img src="$vot5SemiFinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** FINAL HR BEATMAP DATA ***/
-                    $finalHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($finalHardRockJsonData as $finalHardRockJsonType => $finalHardRockJsonId) {
-                        $finalHardRockData = getTournamentMappoolData(
-                            id: $finalHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-name">
+                                            <h2>$vot5SemiFinalMappoolName [$vot5SemiFinalMappoolDifficultyName]</h2>
+                                        </div>
 
-                        $finalHardRockId                 = $finalHardRockData['id'];
-                        $finalHardRockRoundId            = $round;
-                        $finalHardRockTournamentId       = strtoupper(string: $name);
-                        $finalHardRockType               = $finalHardRockJsonType;
-                        $finalHardRockImage              = $finalHardRockData['beatmapset']['covers']['cover'];
-                        $finalHardRockUrl                = $finalHardRockData['url'];
-                        $finalHardRockName               = $finalHardRockData['beatmapset']['title'];
-                        $finalHardRockDifficultyName     = $finalHardRockData['version'];
-                        $finalHardRockFeatureArtist      = $finalHardRockData['beatmapset']['artist'];
-                        $finalHardRockMapper             = $finalHardRockData['beatmapset']['creator'];
-                        $finalHardRockMapperUrl          = "https://osu.ppy.sh/users/{$finalHardRockData['beatmapset']['user_id']}";
-                        $finalHardRockDifficulty         = $finalHardRockData['difficulty_rating'];
-                        $finalHardRockLength             = $finalHardRockData['total_length'];
-                        $finalHardRockOverallSpeed       = $finalHardRockData['beatmapset']['bpm'];
-                        $finalHardRockOverallDifficulty  = $finalHardRockData['accuracy'];
-                        $finalHardRockOverallHealth      = $finalHardRockData['drain'];
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5SemiFinalMappoolFeatureArtist</h3>
+                                        </div>
 
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $finalHardRockId,
-                            'beatmap_round_id'              => $finalHardRockRoundId,
-                            'beatmap_tournament_id'         => $finalHardRockTournamentId,
-                            'beatmap_type'                  => $finalHardRockType,
-                            'beatmap_image'                 => $finalHardRockImage,
-                            'beatmap_url'                   => $finalHardRockUrl,
-                            'beatmap_name'                  => $finalHardRockName,
-                            'beatmap_difficulty_name'       => $finalHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $finalHardRockFeatureArtist,
-                            'beatmap_mapper'                => $finalHardRockMapper,
-                            'beatmap_mapper_url'            => $finalHardRockMapperUrl,
-                            'beatmap_difficulty'            => $finalHardRockDifficulty,
-                            'beatmap_length'                => $finalHardRockLength,
-                            'beatmap_overall_speed'         => $finalHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $finalHardRockOverallHealth
-                        ];
-                    }
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5SemiFinalMappoolMapperUrl">$vot5SemiFinalMappoolMapper</a></h4>
+                                        </div>
 
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5SemiFinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5SemiFinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5SemiFinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
 
-                    /*** FINAL DT BEATMAP DATA ***/
-                    $finalDoubleTimeJsonData = $mappoolReadableJsonData[$name][$round]['DT'];
-                    foreach ($finalDoubleTimeJsonData as $finalDoubleTimeJsonType => $finalDoubleTimeJsonId) {
-                        $finalDoubleTimeData = getTournamentMappoolData(
-                            id: $finalDoubleTimeJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5SemiFinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5SemiFinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
 
-                        $finalDoubleTimeId                 = $finalDoubleTimeData['id'];
-                        $finalDoubleTimeRoundId            = $round;
-                        $finalDoubleTimeTournamentId       = strtoupper(string: $name);
-                        $finalDoubleTimeType               = $finalDoubleTimeJsonType;
-                        $finalDoubleTimeImage              = $finalDoubleTimeData['beatmapset']['covers']['cover'];
-                        $finalDoubleTimeUrl                = $finalDoubleTimeData['url'];
-                        $finalDoubleTimeName               = $finalDoubleTimeData['beatmapset']['title'];
-                        $finalDoubleTimeDifficultyName     = $finalDoubleTimeData['version'];
-                        $finalDoubleTimeFeatureArtist      = $finalDoubleTimeData['beatmapset']['artist'];
-                        $finalDoubleTimeMapper             = $finalDoubleTimeData['beatmapset']['creator'];
-                        $finalDoubleTimeMapperUrl          = "https://osu.ppy.sh/users/{$finalDoubleTimeData['beatmapset']['user_id']}";
-                        $finalDoubleTimeDifficulty         = $finalDoubleTimeData['difficulty_rating'];
-                        $finalDoubleTimeLength             = $finalDoubleTimeData['total_length'];
-                        $finalDoubleTimeOverallSpeed       = $finalDoubleTimeData['beatmapset']['bpm'];
-                        $finalDoubleTimeOverallDifficulty  = $finalDoubleTimeData['accuracy'];
-                        $finalDoubleTimeOverallHealth      = $finalDoubleTimeData['drain'];
-
-                        $allMappoolDoubleTimeData[] = [
-                            'beatmap_id'                    => $finalDoubleTimeId,
-                            'beatmap_round_id'              => $finalDoubleTimeRoundId,
-                            'beatmap_tournament_id'         => $finalDoubleTimeTournamentId,
-                            'beatmap_type'                  => $finalDoubleTimeType,
-                            'beatmap_image'                 => $finalDoubleTimeImage,
-                            'beatmap_url'                   => $finalDoubleTimeUrl,
-                            'beatmap_name'                  => $finalDoubleTimeName,
-                            'beatmap_difficulty_name'       => $finalDoubleTimeDifficultyName,
-                            'beatmap_feature_artist'        => $finalDoubleTimeFeatureArtist,
-                            'beatmap_mapper'                => $finalDoubleTimeMapper,
-                            'beatmap_mapper_url'            => $finalDoubleTimeMapperUrl,
-                            'beatmap_difficulty'            => $finalDoubleTimeDifficulty,
-                            'beatmap_length'                => $finalDoubleTimeLength,
-                            'beatmap_overall_speed'         => $finalDoubleTimeOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $finalDoubleTimeOverallHealth
-                        ];
-                    }
-
-
-                    /*** FINAL FM BEATMAP DATA ***/
-                    $finalFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($finalFreeModJsonData as $finalFreeModJsonType => $finalFreeModJsonId) {
-                        $finalFreeModData = getTournamentMappoolData(
-                            id: $finalFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $finalFreeModId                 = $finalFreeModData['id'];
-                        $finalFreeModRoundId            = $round;
-                        $finalFreeModTournamentId       = strtoupper(string: $name);
-                        $finalFreeModType               = $finalFreeModJsonType;
-                        $finalFreeModImage              = $finalFreeModData['beatmapset']['covers']['cover'];
-                        $finalFreeModUrl                = $finalFreeModData['url'];
-                        $finalFreeModName               = $finalFreeModData['beatmapset']['title'];
-                        $finalFreeModDifficultyName     = $finalFreeModData['version'];
-                        $finalFreeModFeatureArtist      = $finalFreeModData['beatmapset']['artist'];
-                        $finalFreeModMapper             = $finalFreeModData['beatmapset']['creator'];
-                        $finalFreeModMapperUrl          = "https://osu.ppy.sh/users/{$finalFreeModData['beatmapset']['user_id']}";
-                        $finalFreeModDifficulty         = $finalFreeModData['difficulty_rating'];
-                        $finalFreeModLength             = $finalFreeModData['total_length'];
-                        $finalFreeModOverallSpeed       = $finalFreeModData['beatmapset']['bpm'];
-                        $finalFreeModOverallDifficulty  = $finalFreeModData['accuracy'];
-                        $finalFreeModOverallHealth      = $finalFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $finalFreeModId,
-                            'beatmap_round_id'              => $finalFreeModRoundId,
-                            'beatmap_tournament_id'         => $finalFreeModTournamentId,
-                            'beatmap_type'                  => $finalFreeModType,
-                            'beatmap_image'                 => $finalFreeModImage,
-                            'beatmap_url'                   => $finalFreeModUrl,
-                            'beatmap_name'                  => $finalFreeModName,
-                            'beatmap_difficulty_name'       => $finalFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $finalFreeModFeatureArtist,
-                            'beatmap_mapper'                => $finalFreeModMapper,
-                            'beatmap_mapper_url'            => $finalFreeModMapperUrl,
-                            'beatmap_difficulty'            => $finalFreeModDifficulty,
-                            'beatmap_length'                => $finalFreeModLength,
-                            'beatmap_overall_speed'         => $finalFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $finalFreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** FINAL EZ BEATMAP DATA ***/
-                    $finalEasyJsonData = $mappoolReadableJsonData[$name][$round]['EZ'];
-                    foreach ($finalEasyJsonData as $finalEasyJsonType => $finalEasyJsonId) {
-                        $finalEasyData = getTournamentMappoolData(
-                            id: $finalEasyJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $finalEasyId                 = $finalEasyData['id'];
-                        $finalEasyRoundId            = $round;
-                        $finalEasyTournamentId       = strtoupper(string: $name);
-                        $finalEasyType               = $finalEasyJsonType;
-                        $finalEasyImage              = $finalEasyData['beatmapset']['covers']['cover'];
-                        $finalEasyUrl                = $finalEasyData['url'];
-                        $finalEasyName               = $finalEasyData['beatmapset']['title'];
-                        $finalEasyDifficultyName     = $finalEasyData['version'];
-                        $finalEasyFeatureArtist      = $finalEasyData['beatmapset']['artist'];
-                        $finalEasyMapper             = $finalEasyData['beatmapset']['creator'];
-                        $finalEasyMapperUrl          = "https://osu.ppy.sh/users/{$finalEasyData['beatmapset']['user_id']}";
-                        $finalEasyDifficulty         = $finalEasyData['difficulty_rating'];
-                        $finalEasyLength             = $finalEasyData['total_length'];
-                        $finalEasyOverallSpeed       = $finalEasyData['beatmapset']['bpm'];
-                        $finalEasyOverallDifficulty  = $finalEasyData['accuracy'];
-                        $finalEasyOverallHealth      = $finalEasyData['drain'];
-
-                        $allMappoolEasyData[] = [
-                            'beatmap_id'                    => $finalEasyId,
-                            'beatmap_round_id'              => $finalEasyRoundId,
-                            'beatmap_tournament_id'         => $finalEasyTournamentId,
-                            'beatmap_type'                  => $finalEasyType,
-                            'beatmap_image'                 => $finalEasyImage,
-                            'beatmap_url'                   => $finalEasyUrl,
-                            'beatmap_name'                  => $finalEasyName,
-                            'beatmap_difficulty_name'       => $finalEasyDifficultyName,
-                            'beatmap_feature_artist'        => $finalEasyFeatureArtist,
-                            'beatmap_mapper'                => $finalEasyMapper,
-                            'beatmap_mapper_url'            => $finalEasyMapperUrl,
-                            'beatmap_difficulty'            => $finalEasyDifficulty,
-                            'beatmap_length'                => $finalEasyLength,
-                            'beatmap_overall_speed'         => $finalEasyOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalEasyOverallDifficulty,
-                            'beatmap_overall_health'        => $finalEasyOverallHealth
-                        ];
-                    }
-
-                    /*** FINAL HDHR BEATMAP DATA ***/
-                    $finalHiddenHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HDHR'];
-                    foreach ($finalHiddenHardRockJsonData as $finalHiddenHardRockJsonType => $finalHiddenHardRockJsonId) {
-                        $finalHiddenHardRockData = getTournamentMappoolData(
-                            id: $finalHiddenHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $finalHiddenHardRockId                 = $finalHiddenHardRockData['id'];
-                        $finalHiddenHardRockRoundId            = $round;
-                        $finalHiddenHardRockTournamentId       = strtoupper(string: $name);
-                        $finalHiddenHardRockType               = $finalHiddenHardRockJsonType;
-                        $finalHiddenHardRockImage              = $finalHiddenHardRockData['beatmapset']['covers']['cover'];
-                        $finalHiddenHardRockUrl                = $finalHiddenHardRockData['url'];
-                        $finalHiddenHardRockName               = $finalHiddenHardRockData['beatmapset']['title'];
-                        $finalHiddenHardRockDifficultyName     = $finalHiddenHardRockData['version'];
-                        $finalHiddenHardRockFeatureArtist      = $finalHiddenHardRockData['beatmapset']['artist'];
-                        $finalHiddenHardRockMapper             = $finalHiddenHardRockData['beatmapset']['creator'];
-                        $finalHiddenHardRockMapperUrl          = "https://osu.ppy.sh/users/{$finalHiddenHardRockData['beatmapset']['user_id']}";
-                        $finalHiddenHardRockDifficulty         = $finalHiddenHardRockData['difficulty_rating'];
-                        $finalHiddenHardRockLength             = $finalHiddenHardRockData['total_length'];
-                        $finalHiddenHardRockOverallSpeed       = $finalHiddenHardRockData['beatmapset']['bpm'];
-                        $finalHiddenHardRockOverallDifficulty  = $finalHiddenHardRockData['accuracy'];
-                        $finalHiddenHardRockOverallHealth      = $finalHiddenHardRockData['drain'];
-
-                        $allMappoolHiddenHardRockData[] = [
-                            'beatmap_id'                    => $finalHiddenHardRockId,
-                            'beatmap_round_id'              => $finalHiddenHardRockRoundId,
-                            'beatmap_tournament_id'         => $finalHiddenHardRockTournamentId,
-                            'beatmap_type'                  => $finalHiddenHardRockType,
-                            'beatmap_image'                 => $finalHiddenHardRockImage,
-                            'beatmap_url'                   => $finalHiddenHardRockUrl,
-                            'beatmap_name'                  => $finalHiddenHardRockName,
-                            'beatmap_difficulty_name'       => $finalHiddenHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $finalHiddenHardRockFeatureArtist,
-                            'beatmap_mapper'                => $finalHiddenHardRockMapper,
-                            'beatmap_mapper_url'            => $finalHiddenHardRockMapperUrl,
-                            'beatmap_difficulty'            => $finalHiddenHardRockDifficulty,
-                            'beatmap_length'                => $finalHiddenHardRockLength,
-                            'beatmap_overall_speed'         => $finalHiddenHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalHiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $finalHiddenHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** FINAL TB BEATMAP DATA ***/
-                    $finalTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
-                    foreach ($finalTieBreakerJsonData as $finalTieBreakerJsonType => $finalTieBreakerJsonId) {
-                        $finalTieBreakerData = getTournamentMappoolData(
-                            id: $finalTieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $finalTieBreakerId                 = $finalTieBreakerData['id'];
-                        $finalTieBreakerRoundId            = $round;
-                        $finalTieBreakerTournamentId       = strtoupper(string: $name);
-                        $finalTieBreakerType               = $finalTieBreakerJsonType;
-                        $finalTieBreakerImage              = $finalTieBreakerData['beatmapset']['covers']['cover'];
-                        $finalTieBreakerUrl                = $finalTieBreakerData['url'];
-                        $finalTieBreakerName               = $finalTieBreakerData['beatmapset']['title'];
-                        $finalTieBreakerDifficultyName     = $finalTieBreakerData['version'];
-                        $finalTieBreakerFeatureArtist      = $finalTieBreakerData['beatmapset']['artist'];
-                        $finalTieBreakerMapper             = $finalTieBreakerData['beatmapset']['creator'];
-                        $finalTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$finalTieBreakerData['beatmapset']['user_id']}";
-                        $finalTieBreakerDifficulty         = $finalTieBreakerData['difficulty_rating'];
-                        $finalTieBreakerLength             = $finalTieBreakerData['total_length'];
-                        $finalTieBreakerOverallSpeed       = $finalTieBreakerData['beatmapset']['bpm'];
-                        $finalTieBreakerOverallDifficulty  = $finalTieBreakerData['accuracy'];
-                        $finalTieBreakerOverallHealth      = $finalTieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $finalTieBreakerId,
-                            'beatmap_round_id'              => $finalTieBreakerRoundId,
-                            'beatmap_tournament_id'         => $finalTieBreakerTournamentId,
-                            'beatmap_type'                  => $finalTieBreakerType,
-                            'beatmap_image'                 => $finalTieBreakerImage,
-                            'beatmap_url'                   => $finalTieBreakerUrl,
-                            'beatmap_name'                  => $finalTieBreakerName,
-                            'beatmap_difficulty_name'       => $finalTieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $finalTieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $finalTieBreakerMapper,
-                            'beatmap_mapper_url'            => $finalTieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $finalTieBreakerDifficulty,
-                            'beatmap_length'                => $finalTieBreakerLength,
-                            'beatmap_overall_speed'         => $finalTieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $finalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $finalTieBreakerOverallHealth
-                        ];
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
                     }
                     break;
 
-                case 'GF':
-                    /*** GRAND FINAL NM BEATMAP DATA ***/
-                    $grandFinalNoModJsonData = $mappoolReadableJsonData[$name][$round]['NM'];
-                    foreach ($grandFinalNoModJsonData as $grandFinalNoModJsonType => $grandFinalNoModJsonId) {
-                        $grandFinalNoModData = getTournamentMappoolData(
-                            id: $grandFinalNoModJsonId,
-                            token: $mappoolAccessToken
+                // *** VOT5 FINAL MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(finals|fnl|fnls)$/i',
+                    subject: $vot5RoundName
+                ):
+                    // Database use the abbreviation of each round's name
+                    $vot5AbbreviateRoundName = 'FNL';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot5FinalMappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $grandFinalNoModId                 = $grandFinalNoModData['id'];
-                        $grandFinalNoModRoundId            = $round;
-                        $grandFinalNoModTournamentId       = strtoupper(string: $name);
-                        $grandFinalNoModType               = $grandFinalNoModJsonType;
-                        $grandFinalNoModImage              = $grandFinalNoModData['beatmapset']['covers']['cover'];
-                        $grandFinalNoModUrl                = $grandFinalNoModData['url'];
-                        $grandFinalNoModName               = $grandFinalNoModData['beatmapset']['title'];
-                        $grandFinalNoModDifficultyName     = $grandFinalNoModData['version'];
-                        $grandFinalNoModFeatureArtist      = $grandFinalNoModData['beatmapset']['artist'];
-                        $grandFinalNoModMapper             = $grandFinalNoModData['beatmapset']['creator'];
-                        $grandFinalNoModMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalNoModData['beatmapset']['user_id']}";
-                        $grandFinalNoModDifficulty         = $grandFinalNoModData['difficulty_rating'];
-                        $grandFinalNoModLength             = $grandFinalNoModData['total_length'];
-                        $grandFinalNoModOverallSpeed       = $grandFinalNoModData['beatmapset']['bpm'];
-                        $grandFinalNoModOverallDifficulty  = $grandFinalNoModData['accuracy'];
-                        $grandFinalNoModOverallHealth      = $grandFinalNoModData['drain'];
+                        foreach ($vot5FinalMappoolViewData as $vot5FinalMappoolData) {
+                            $vot5FinalMappoolType                = htmlspecialchars($vot5FinalMappoolData['beatmapType']);
+                            $vot5FinalMappoolImage               = htmlspecialchars($vot5FinalMappoolData['beatmapImage']);
+                            $vot5FinalMappoolUrl                 = htmlspecialchars($vot5FinalMappoolData['beatmapUrl']);
+                            $vot5FinalMappoolName                = htmlspecialchars($vot5FinalMappoolData['beatmapName']);
+                            $vot5FinalMappoolDifficultyName      = htmlspecialchars($vot5FinalMappoolData['beatmapDifficultyName']);
+                            $vot5FinalMappoolFeatureArtist       = htmlspecialchars($vot5FinalMappoolData['beatmapFeatureArtist']);
+                            $vot5FinalMappoolMapper              = htmlspecialchars($vot5FinalMappoolData['beatmapMapper']);
+                            $vot5FinalMappoolMapperUrl           = htmlspecialchars($vot5FinalMappoolData['beatmapMapperUrl']);
+                            $vot5FinalMappoolDifficulty          = htmlspecialchars($vot5FinalMappoolData['beatmapDifficulty']);
+                            $vot5FinalMappoolLength              = timeStampFormat(number: $vot5FinalMappoolData['beatmapLength']);
+                            $vot5FinalMappoolOverallSpeed        = sprintf('%.2f', $vot5FinalMappoolData['beatmapOverallSpeed']);
+                            $vot5FinalMappoolOverallDifficulty   = sprintf('%.2f', $vot5FinalMappoolData['beatmapOverallDifficulty']);
+                            $vot5FinalMappoolOverallHealth       = sprintf('%.2f', $vot5FinalMappoolData['beatmapOverallHealth']);
 
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $grandFinalNoModId,
-                            'beatmap_round_id'              => $grandFinalNoModRoundId,
-                            'beatmap_tournament_id'         => $grandFinalNoModTournamentId,
-                            'beatmap_type'                  => $grandFinalNoModType,
-                            'beatmap_image'                 => $grandFinalNoModImage,
-                            'beatmap_url'                   => $grandFinalNoModUrl,
-                            'beatmap_name'                  => $grandFinalNoModName,
-                            'beatmap_difficulty_name'       => $grandFinalNoModDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalNoModFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalNoModMapper,
-                            'beatmap_mapper_url'            => $grandFinalNoModMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalNoModDifficulty,
-                            'beatmap_length'                => $grandFinalNoModLength,
-                            'beatmap_overall_speed'         => $grandFinalNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalNoModOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5FinalMappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5FinalMappoolUrl">
+                                                <img src="$vot5FinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** GRAND FINAL HD BEATMAP DATA ***/
-                    $grandFinalHiddenJsonData = $mappoolReadableJsonData[$name][$round]['HD'];
-                    foreach ($grandFinalHiddenJsonData as $grandFinalHiddenJsonType => $grandFinalHiddenJsonId) {
-                        $grandFinalHiddenData = getTournamentMappoolData(
-                            id: $grandFinalHiddenJsonId,
-                            token: $mappoolAccessToken
+                                        <div class="song-name">
+                                            <h2>$vot5FinalMappoolName [$vot5FinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5FinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5FinalMappoolMapperUrl">$vot5FinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5FinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5FinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5FinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5FinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5FinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot5FinalJsonData = $votMappoolJsonUsableData[$votTournamentName][$vot5AbbreviateRoundName];
+                        foreach ($vot5FinalJsonData as $vot5FinalJsonType => $vot5FinalJsonId) {
+                            $vot5FinalData = getMappoolData(
+                                id: $vot5FinalJsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot5FinalId                = $vot5FinalData['id'];
+                            $vot5FinalRoundId           = $vot5AbbreviateRoundName;
+                            $vot5FinalTournamentId      = $votTournamentName;
+                            $vot5FinalType              = $vot5FinalJsonType;
+                            $vot5FinalImage             = $vot5FinalData['beatmapset']['covers']['cover'];
+                            $vot5FinalUrl               = $vot5FinalData['url'];
+                            $vot5FinalName              = $vot5FinalData['beatmapset']['title'];
+                            $vot5FinalDifficultyName    = $vot5FinalData['version'];
+                            $vot5FinalFeatureArtist     = $vot5FinalData['beatmapset']['artist'];
+                            $vot5FinalMapper            = $vot5FinalData['beatmapset']['creator'];
+                            $vot5FinalMapperUrl         = "https://osu.ppy.sh/users/{$vot5FinalData['beatmapset']['user_id']}";
+                            $vot5FinalDifficulty        = $vot5FinalData['difficulty_rating'];
+                            $vot5FinalLength            = $vot5FinalData['total_length'];
+                            $vot5FinalOverallSpeed      = $vot5FinalData['beatmapset']['bpm'];
+                            $vot5FinalOverallDifficulty = $vot5FinalData['accuracy'];
+                            $vot5FinalOverallHealth     = $vot5FinalData['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot5FinalId,
+                                    round: $vot5FinalRoundId,
+                                    tournament: $vot5FinalTournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot5FinalId,
+                                    round_id: $vot5FinalRoundId,
+                                    tournament_id: $vot5FinalTournamentId,
+                                    type: $vot5FinalType,
+                                    image: $vot5FinalImage,
+                                    url: $vot5FinalUrl,
+                                    name: $vot5FinalName,
+                                    diff_name: $vot5FinalDifficultyName,
+                                    fa: $vot5FinalFeatureArtist,
+                                    mapper: $vot5FinalMapper,
+                                    mapper_url: $vot5FinalMapperUrl,
+                                    diff: $vot5FinalDifficulty,
+                                    length: $vot5FinalLength,
+                                    bpm: $vot5FinalOverallSpeed,
+                                    od: $vot5FinalOverallDifficulty,
+                                    hp: $vot5FinalOverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot5FinalMappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $grandFinalHiddenId                 = $grandFinalHiddenData['id'];
-                        $grandFinalHiddenRoundId            = $round;
-                        $grandFinalHiddenTournamentId       = strtoupper(string: $name);
-                        $grandFinalHiddenType               = $grandFinalHiddenJsonType;
-                        $grandFinalHiddenImage              = $grandFinalHiddenData['beatmapset']['covers']['cover'];
-                        $grandFinalHiddenUrl                = $grandFinalHiddenData['url'];
-                        $grandFinalHiddenName               = $grandFinalHiddenData['beatmapset']['title'];
-                        $grandFinalHiddenDifficultyName     = $grandFinalHiddenData['version'];
-                        $grandFinalHiddenFeatureArtist      = $grandFinalHiddenData['beatmapset']['artist'];
-                        $grandFinalHiddenMapper             = $grandFinalHiddenData['beatmapset']['creator'];
-                        $grandFinalHiddenMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalHiddenData['beatmapset']['user_id']}";
-                        $grandFinalHiddenDifficulty         = $grandFinalHiddenData['difficulty_rating'];
-                        $grandFinalHiddenLength             = $grandFinalHiddenData['total_length'];
-                        $grandFinalHiddenOverallSpeed       = $grandFinalHiddenData['beatmapset']['bpm'];
-                        $grandFinalHiddenOverallDifficulty  = $grandFinalHiddenData['accuracy'];
-                        $grandFinalHiddenOverallHealth      = $grandFinalHiddenData['drain'];
+                        foreach ($vot5FinalMappoolViewData as $vot5FinalMappoolData) {
+                            $vot5FinalMappoolType                = htmlspecialchars($vot5FinalMappoolData['beatmapType']);
+                            $vot5FinalMappoolImage               = htmlspecialchars($vot5FinalMappoolData['beatmapImage']);
+                            $vot5FinalMappoolUrl                 = htmlspecialchars($vot5FinalMappoolData['beatmapUrl']);
+                            $vot5FinalMappoolName                = htmlspecialchars($vot5FinalMappoolData['beatmapName']);
+                            $vot5FinalMappoolDifficultyName      = htmlspecialchars($vot5FinalMappoolData['beatmapDifficultyName']);
+                            $vot5FinalMappoolFeatureArtist       = htmlspecialchars($vot5FinalMappoolData['beatmapFeatureArtist']);
+                            $vot5FinalMappoolMapper              = htmlspecialchars($vot5FinalMappoolData['beatmapMapper']);
+                            $vot5FinalMappoolMapperUrl           = htmlspecialchars($vot5FinalMappoolData['beatmapMapperUrl']);
+                            $vot5FinalMappoolDifficulty          = htmlspecialchars($vot5FinalMappoolData['beatmapDifficulty']);
+                            $vot5FinalMappoolLength              = timeStampFormat(number: $vot5FinalMappoolData['beatmapLength']);
+                            $vot5FinalMappoolOverallSpeed        = sprintf('%.2f', $vot5FinalMappoolData['beatmapOverallSpeed']);
+                            $vot5FinalMappoolOverallDifficulty   = sprintf('%.2f', $vot5FinalMappoolData['beatmapOverallDifficulty']);
+                            $vot5FinalMappoolOverallHealth       = sprintf('%.2f', $vot5FinalMappoolData['beatmapOverallHealth']);
 
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $grandFinalHiddenId,
-                            'beatmap_round_id'              => $grandFinalHiddenRoundId,
-                            'beatmap_tournament_id'         => $grandFinalHiddenTournamentId,
-                            'beatmap_type'                  => $grandFinalHiddenType,
-                            'beatmap_image'                 => $grandFinalHiddenImage,
-                            'beatmap_url'                   => $grandFinalHiddenUrl,
-                            'beatmap_name'                  => $grandFinalHiddenName,
-                            'beatmap_difficulty_name'       => $grandFinalHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalHiddenFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalHiddenMapper,
-                            'beatmap_mapper_url'            => $grandFinalHiddenMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalHiddenDifficulty,
-                            'beatmap_length'                => $grandFinalHiddenLength,
-                            'beatmap_overall_speed'         => $grandFinalHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalHiddenOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5FinalMappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5FinalMappoolUrl">
+                                                <img src="$vot5FinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** GRAND FINAL HR BEATMAP DATA ***/
-                    $grandFinalHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HR'];
-                    foreach ($grandFinalHardRockJsonData as $grandFinalHardRockJsonType => $grandFinalHardRockJsonId) {
-                        $grandFinalHardRockData = getTournamentMappoolData(
-                            id: $grandFinalHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-name">
+                                            <h2>$vot5FinalMappoolName [$vot5FinalMappoolDifficultyName]</h2>
+                                        </div>
 
-                        $grandFinalHardRockId                 = $grandFinalHardRockData['id'];
-                        $grandFinalHardRockRoundId            = $round;
-                        $grandFinalHardRockTournamentId       = strtoupper(string: $name);
-                        $grandFinalHardRockType               = $grandFinalHardRockJsonType;
-                        $grandFinalHardRockImage              = $grandFinalHardRockData['beatmapset']['covers']['cover'];
-                        $grandFinalHardRockUrl                = $grandFinalHardRockData['url'];
-                        $grandFinalHardRockName               = $grandFinalHardRockData['beatmapset']['title'];
-                        $grandFinalHardRockDifficultyName     = $grandFinalHardRockData['version'];
-                        $grandFinalHardRockFeatureArtist      = $grandFinalHardRockData['beatmapset']['artist'];
-                        $grandFinalHardRockMapper             = $grandFinalHardRockData['beatmapset']['creator'];
-                        $grandFinalHardRockMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalHardRockData['beatmapset']['user_id']}";
-                        $grandFinalHardRockDifficulty         = $grandFinalHardRockData['difficulty_rating'];
-                        $grandFinalHardRockLength             = $grandFinalHardRockData['total_length'];
-                        $grandFinalHardRockOverallSpeed       = $grandFinalHardRockData['beatmapset']['bpm'];
-                        $grandFinalHardRockOverallDifficulty  = $grandFinalHardRockData['accuracy'];
-                        $grandFinalHardRockOverallHealth      = $grandFinalHardRockData['drain'];
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5FinalMappoolFeatureArtist</h3>
+                                        </div>
 
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $grandFinalHardRockId,
-                            'beatmap_round_id'              => $grandFinalHardRockRoundId,
-                            'beatmap_tournament_id'         => $grandFinalHardRockTournamentId,
-                            'beatmap_type'                  => $grandFinalHardRockType,
-                            'beatmap_image'                 => $grandFinalHardRockImage,
-                            'beatmap_url'                   => $grandFinalHardRockUrl,
-                            'beatmap_name'                  => $grandFinalHardRockName,
-                            'beatmap_difficulty_name'       => $grandFinalHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalHardRockFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalHardRockMapper,
-                            'beatmap_mapper_url'            => $grandFinalHardRockMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalHardRockDifficulty,
-                            'beatmap_length'                => $grandFinalHardRockLength,
-                            'beatmap_overall_speed'         => $grandFinalHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalHardRockOverallHealth
-                        ];
-                    }
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5FinalMappoolMapperUrl">$vot5FinalMappoolMapper</a></h4>
+                                        </div>
 
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5FinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5FinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5FinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
 
-                    /*** GRAND FINAL DT BEATMAP DATA ***/
-                    $grandFinalDoubleTimeJsonData = $mappoolReadableJsonData[$name][$round]['DT'];
-                    foreach ($grandFinalDoubleTimeJsonData as $grandFinalDoubleTimeJsonType => $grandFinalDoubleTimeJsonId) {
-                        $grandFinalDoubleTimeData = getTournamentMappoolData(
-                            id: $grandFinalDoubleTimeJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5FinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5FinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
 
-                        $grandFinalDoubleTimeId                 = $grandFinalDoubleTimeData['id'];
-                        $grandFinalDoubleTimeRoundId            = $round;
-                        $grandFinalDoubleTimeTournamentId       = strtoupper(string: $name);
-                        $grandFinalDoubleTimeType               = $grandFinalDoubleTimeJsonType;
-                        $grandFinalDoubleTimeImage              = $grandFinalDoubleTimeData['beatmapset']['covers']['cover'];
-                        $grandFinalDoubleTimeUrl                = $grandFinalDoubleTimeData['url'];
-                        $grandFinalDoubleTimeName               = $grandFinalDoubleTimeData['beatmapset']['title'];
-                        $grandFinalDoubleTimeDifficultyName     = $grandFinalDoubleTimeData['version'];
-                        $grandFinalDoubleTimeFeatureArtist      = $grandFinalDoubleTimeData['beatmapset']['artist'];
-                        $grandFinalDoubleTimeMapper             = $grandFinalDoubleTimeData['beatmapset']['creator'];
-                        $grandFinalDoubleTimeMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalDoubleTimeData['beatmapset']['user_id']}";
-                        $grandFinalDoubleTimeDifficulty         = $grandFinalDoubleTimeData['difficulty_rating'];
-                        $grandFinalDoubleTimeLength             = $grandFinalDoubleTimeData['total_length'];
-                        $grandFinalDoubleTimeOverallSpeed       = $grandFinalDoubleTimeData['beatmapset']['bpm'];
-                        $grandFinalDoubleTimeOverallDifficulty  = $grandFinalDoubleTimeData['accuracy'];
-                        $grandFinalDoubleTimeOverallHealth      = $grandFinalDoubleTimeData['drain'];
-
-                        $allMappoolDoubleTimeData[] = [
-                            'beatmap_id'                    => $grandFinalDoubleTimeId,
-                            'beatmap_round_id'              => $grandFinalDoubleTimeRoundId,
-                            'beatmap_tournament_id'         => $grandFinalDoubleTimeTournamentId,
-                            'beatmap_type'                  => $grandFinalDoubleTimeType,
-                            'beatmap_image'                 => $grandFinalDoubleTimeImage,
-                            'beatmap_url'                   => $grandFinalDoubleTimeUrl,
-                            'beatmap_name'                  => $grandFinalDoubleTimeName,
-                            'beatmap_difficulty_name'       => $grandFinalDoubleTimeDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalDoubleTimeFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalDoubleTimeMapper,
-                            'beatmap_mapper_url'            => $grandFinalDoubleTimeMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalDoubleTimeDifficulty,
-                            'beatmap_length'                => $grandFinalDoubleTimeLength,
-                            'beatmap_overall_speed'         => $grandFinalDoubleTimeOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalDoubleTimeOverallHealth
-                        ];
-                    }
-
-
-                    /*** GRAND FINAL FM BEATMAP DATA ***/
-                    $grandFinalFreeModJsonData = $mappoolReadableJsonData[$name][$round]['FM'];
-                    foreach ($grandFinalFreeModJsonData as $grandFinalFreeModJsonType => $grandFinalFreeModJsonId) {
-                        $grandFinalFreeModData = getTournamentMappoolData(
-                            id: $grandFinalFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $grandFinalFreeModId                 = $grandFinalFreeModData['id'];
-                        $grandFinalFreeModRoundId            = $round;
-                        $grandFinalFreeModTournamentId       = strtoupper(string: $name);
-                        $grandFinalFreeModType               = $grandFinalFreeModJsonType;
-                        $grandFinalFreeModImage              = $grandFinalFreeModData['beatmapset']['covers']['cover'];
-                        $grandFinalFreeModUrl                = $grandFinalFreeModData['url'];
-                        $grandFinalFreeModName               = $grandFinalFreeModData['beatmapset']['title'];
-                        $grandFinalFreeModDifficultyName     = $grandFinalFreeModData['version'];
-                        $grandFinalFreeModFeatureArtist      = $grandFinalFreeModData['beatmapset']['artist'];
-                        $grandFinalFreeModMapper             = $grandFinalFreeModData['beatmapset']['creator'];
-                        $grandFinalFreeModMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalFreeModData['beatmapset']['user_id']}";
-                        $grandFinalFreeModDifficulty         = $grandFinalFreeModData['difficulty_rating'];
-                        $grandFinalFreeModLength             = $grandFinalFreeModData['total_length'];
-                        $grandFinalFreeModOverallSpeed       = $grandFinalFreeModData['beatmapset']['bpm'];
-                        $grandFinalFreeModOverallDifficulty  = $grandFinalFreeModData['accuracy'];
-                        $grandFinalFreeModOverallHealth      = $grandFinalFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $grandFinalFreeModId,
-                            'beatmap_round_id'              => $grandFinalFreeModRoundId,
-                            'beatmap_tournament_id'         => $grandFinalFreeModTournamentId,
-                            'beatmap_type'                  => $grandFinalFreeModType,
-                            'beatmap_image'                 => $grandFinalFreeModImage,
-                            'beatmap_url'                   => $grandFinalFreeModUrl,
-                            'beatmap_name'                  => $grandFinalFreeModName,
-                            'beatmap_difficulty_name'       => $grandFinalFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalFreeModFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalFreeModMapper,
-                            'beatmap_mapper_url'            => $grandFinalFreeModMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalFreeModDifficulty,
-                            'beatmap_length'                => $grandFinalFreeModLength,
-                            'beatmap_overall_speed'         => $grandFinalFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalFreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** GRAND FINAL EZ BEATMAP DATA ***/
-                    $grandFinalEasyJsonData = $mappoolReadableJsonData[$name][$round]['EZ'];
-                    foreach ($grandFinalEasyJsonData as $grandFinalEasyJsonType => $grandFinalEasyJsonId) {
-                        $grandFinalEasyData = getTournamentMappoolData(
-                            id: $grandFinalEasyJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $grandFinalEasyId                 = $grandFinalEasyData['id'];
-                        $grandFinalEasyRoundId            = $round;
-                        $grandFinalEasyTournamentId       = strtoupper(string: $name);
-                        $grandFinalEasyType               = $grandFinalEasyJsonType;
-                        $grandFinalEasyImage              = $grandFinalEasyData['beatmapset']['covers']['cover'];
-                        $grandFinalEasyUrl                = $grandFinalEasyData['url'];
-                        $grandFinalEasyName               = $grandFinalEasyData['beatmapset']['title'];
-                        $grandFinalEasyDifficultyName     = $grandFinalEasyData['version'];
-                        $grandFinalEasyFeatureArtist      = $grandFinalEasyData['beatmapset']['artist'];
-                        $grandFinalEasyMapper             = $grandFinalEasyData['beatmapset']['creator'];
-                        $grandFinalEasyMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalEasyData['beatmapset']['user_id']}";
-                        $grandFinalEasyDifficulty         = $grandFinalEasyData['difficulty_rating'];
-                        $grandFinalEasyLength             = $grandFinalEasyData['total_length'];
-                        $grandFinalEasyOverallSpeed       = $grandFinalEasyData['beatmapset']['bpm'];
-                        $grandFinalEasyOverallDifficulty  = $grandFinalEasyData['accuracy'];
-                        $grandFinalEasyOverallHealth      = $grandFinalEasyData['drain'];
-
-                        $allMappoolEasyData[] = [
-                            'beatmap_id'                    => $grandFinalEasyId,
-                            'beatmap_round_id'              => $grandFinalEasyRoundId,
-                            'beatmap_tournament_id'         => $grandFinalEasyTournamentId,
-                            'beatmap_type'                  => $grandFinalEasyType,
-                            'beatmap_image'                 => $grandFinalEasyImage,
-                            'beatmap_url'                   => $grandFinalEasyUrl,
-                            'beatmap_name'                  => $grandFinalEasyName,
-                            'beatmap_difficulty_name'       => $grandFinalEasyDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalEasyFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalEasyMapper,
-                            'beatmap_mapper_url'            => $grandFinalEasyMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalEasyDifficulty,
-                            'beatmap_length'                => $grandFinalEasyLength,
-                            'beatmap_overall_speed'         => $grandFinalEasyOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalEasyOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalEasyOverallHealth
-                        ];
-                    }
-
-                    /*** GRAND FINAL HDHR BEATMAP DATA ***/
-                    $grandFinalHiddenHardRockJsonData = $mappoolReadableJsonData[$name][$round]['HDHR'];
-                    foreach ($grandFinalHiddenHardRockJsonData as $grandFinalHiddenHardRockJsonType => $grandFinalHiddenHardRockJsonId) {
-                        $grandFinalHiddenHardRockData = getTournamentMappoolData(
-                            id: $grandFinalHiddenHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $grandFinalHiddenHardRockId                 = $grandFinalHiddenHardRockData['id'];
-                        $grandFinalHiddenHardRockRoundId            = $round;
-                        $grandFinalHiddenHardRockTournamentId       = strtoupper(string: $name);
-                        $grandFinalHiddenHardRockType               = $grandFinalHiddenHardRockJsonType;
-                        $grandFinalHiddenHardRockImage              = $grandFinalHiddenHardRockData['beatmapset']['covers']['cover'];
-                        $grandFinalHiddenHardRockUrl                = $grandFinalHiddenHardRockData['url'];
-                        $grandFinalHiddenHardRockName               = $grandFinalHiddenHardRockData['beatmapset']['title'];
-                        $grandFinalHiddenHardRockDifficultyName     = $grandFinalHiddenHardRockData['version'];
-                        $grandFinalHiddenHardRockFeatureArtist      = $grandFinalHiddenHardRockData['beatmapset']['artist'];
-                        $grandFinalHiddenHardRockMapper             = $grandFinalHiddenHardRockData['beatmapset']['creator'];
-                        $grandFinalHiddenHardRockMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalHiddenHardRockData['beatmapset']['user_id']}";
-                        $grandFinalHiddenHardRockDifficulty         = $grandFinalHiddenHardRockData['difficulty_rating'];
-                        $grandFinalHiddenHardRockLength             = $grandFinalHiddenHardRockData['total_length'];
-                        $grandFinalHiddenHardRockOverallSpeed       = $grandFinalHiddenHardRockData['beatmapset']['bpm'];
-                        $grandFinalHiddenHardRockOverallDifficulty  = $grandFinalHiddenHardRockData['accuracy'];
-                        $grandFinalHiddenHardRockOverallHealth      = $grandFinalHiddenHardRockData['drain'];
-
-                        $allMappoolHiddenHardRockData[] = [
-                            'beatmap_id'                    => $grandFinalHiddenHardRockId,
-                            'beatmap_round_id'              => $grandFinalHiddenHardRockRoundId,
-                            'beatmap_tournament_id'         => $grandFinalHiddenHardRockTournamentId,
-                            'beatmap_type'                  => $grandFinalHiddenHardRockType,
-                            'beatmap_image'                 => $grandFinalHiddenHardRockImage,
-                            'beatmap_url'                   => $grandFinalHiddenHardRockUrl,
-                            'beatmap_name'                  => $grandFinalHiddenHardRockName,
-                            'beatmap_difficulty_name'       => $grandFinalHiddenHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalHiddenHardRockFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalHiddenHardRockMapper,
-                            'beatmap_mapper_url'            => $grandFinalHiddenHardRockMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalHiddenHardRockDifficulty,
-                            'beatmap_length'                => $grandFinalHiddenHardRockLength,
-                            'beatmap_overall_speed'         => $grandFinalHiddenHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalHiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalHiddenHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** GRAND FINAL TB BEATMAP DATA ***/
-                    $grandFinalTieBreakerJsonData = $mappoolReadableJsonData[$name][$round]['TB'];
-                    foreach ($grandFinalTieBreakerJsonData as $grandFinalTieBreakerJsonType => $grandFinalTieBreakerJsonId) {
-                        $grandFinalTieBreakerData = getTournamentMappoolData(
-                            id: $grandFinalTieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $grandFinalTieBreakerId                 = $grandFinalTieBreakerData['id'];
-                        $grandFinalTieBreakerRoundId            = $round;
-                        $grandFinalTieBreakerTournamentId       = strtoupper(string: $name);
-                        $grandFinalTieBreakerType               = $grandFinalTieBreakerJsonType;
-                        $grandFinalTieBreakerImage              = $grandFinalTieBreakerData['beatmapset']['covers']['cover'];
-                        $grandFinalTieBreakerUrl                = $grandFinalTieBreakerData['url'];
-                        $grandFinalTieBreakerName               = $grandFinalTieBreakerData['beatmapset']['title'];
-                        $grandFinalTieBreakerDifficultyName     = $grandFinalTieBreakerData['version'];
-                        $grandFinalTieBreakerFeatureArtist      = $grandFinalTieBreakerData['beatmapset']['artist'];
-                        $grandFinalTieBreakerMapper             = $grandFinalTieBreakerData['beatmapset']['creator'];
-                        $grandFinalTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$grandFinalTieBreakerData['beatmapset']['user_id']}";
-                        $grandFinalTieBreakerDifficulty         = $grandFinalTieBreakerData['difficulty_rating'];
-                        $grandFinalTieBreakerLength             = $grandFinalTieBreakerData['total_length'];
-                        $grandFinalTieBreakerOverallSpeed       = $grandFinalTieBreakerData['beatmapset']['bpm'];
-                        $grandFinalTieBreakerOverallDifficulty  = $grandFinalTieBreakerData['accuracy'];
-                        $grandFinalTieBreakerOverallHealth      = $grandFinalTieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $grandFinalTieBreakerId,
-                            'beatmap_round_id'              => $grandFinalTieBreakerRoundId,
-                            'beatmap_tournament_id'         => $grandFinalTieBreakerTournamentId,
-                            'beatmap_type'                  => $grandFinalTieBreakerType,
-                            'beatmap_image'                 => $grandFinalTieBreakerImage,
-                            'beatmap_url'                   => $grandFinalTieBreakerUrl,
-                            'beatmap_name'                  => $grandFinalTieBreakerName,
-                            'beatmap_difficulty_name'       => $grandFinalTieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $grandFinalTieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $grandFinalTieBreakerMapper,
-                            'beatmap_mapper_url'            => $grandFinalTieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $grandFinalTieBreakerDifficulty,
-                            'beatmap_length'                => $grandFinalTieBreakerLength,
-                            'beatmap_overall_speed'         => $grandFinalTieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $grandFinalTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $grandFinalTieBreakerOverallHealth
-                        ];
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
                     }
                     break;
 
-                case 'ASTR':
-                    /*** ALL STAR NM BEATMAP DATA ***/
-                    $allStarEdgeCaseName = 'GF'; // It's easier to replace a variable than having to type multiple same string together
-
-                    $allStarNoModJsonData = $mappoolReadableJsonData[$name][$allStarEdgeCaseName]['NM'];
+                // *** VOT5 GRAND FINAL & ALL STAR MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(grandfinals|gf|gfs)$/i',
+                    subject: $vot5RoundName
+                ):
+                case preg_match(
+                    pattern: '/^(allstars|astr|astrs|alstr|alstrs)$/i',
+                    subject: $vot5RoundName
+                ):
                     /*
-                        Because All Star mappool is basically the same as Grand
-                        Final mappool, so I'll just being a bit hacky here by
-                        using Grand Final mappool data straight away. This'll
-                        prevent me adding the same beatmap ID into the database,
-                        which violate the uniqueness of ID column in the table.
-                        */
-                    foreach ($allStarNoModJsonData as $allStarNoModJsonType => $allStarNoModJsonId) {
-                        $allStarNoModData = getTournamentMappoolData(
-                            id: $allStarNoModJsonId,
-                            token: $mappoolAccessToken
+                     *==========================================================
+                     * Because [All STAR] mappool is basically the same as
+                     * [GRAND FINAL] mappool, so I'll just being a bit lazy here
+                     * by using the [GRAND FINAL] mappool data directly. This'll
+                     * prevent me from adding the same beatmap ID into the
+                     * database, which violate the uniqueness of primary key
+                     * (beatmap ID) attribute.
+                     *==========================================================
+                     */
+
+
+                    // Database use the abbreviation of each round's name
+                    $vot5AbbreviateRoundName = 'GF';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot5GrandFinalMappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $allStarNoModId                 = $allStarNoModData['id'];
-                        $allStarNoModRoundId            = $allStarEdgeCaseName;
-                        $allStarNoModTournamentId       = strtoupper(string: $name);
-                        $allStarNoModType               = $allStarNoModJsonType;
-                        $allStarNoModImage              = $allStarNoModData['beatmapset']['covers']['cover'];
-                        $allStarNoModUrl                = $allStarNoModData['url'];
-                        $allStarNoModName               = $allStarNoModData['beatmapset']['title'];
-                        $allStarNoModDifficultyName     = $allStarNoModData['version'];
-                        $allStarNoModFeatureArtist      = $allStarNoModData['beatmapset']['artist'];
-                        $allStarNoModMapper             = $allStarNoModData['beatmapset']['creator'];
-                        $allStarNoModMapperUrl          = "https://osu.ppy.sh/users/{$allStarNoModData['beatmapset']['user_id']}";
-                        $allStarNoModDifficulty         = $allStarNoModData['difficulty_rating'];
-                        $allStarNoModLength             = $allStarNoModData['total_length'];
-                        $allStarNoModOverallSpeed       = $allStarNoModData['beatmapset']['bpm'];
-                        $allStarNoModOverallDifficulty  = $allStarNoModData['accuracy'];
-                        $allStarNoModOverallHealth      = $allStarNoModData['drain'];
+                        foreach ($vot5GrandFinalMappoolViewData as $vot5GrandFinalMappoolData) {
+                            $vot5GrandFinalMappoolType                = htmlspecialchars($vot5GrandFinalMappoolData['beatmapType']);
+                            $vot5GrandFinalMappoolImage               = htmlspecialchars($vot5GrandFinalMappoolData['beatmapImage']);
+                            $vot5GrandFinalMappoolUrl                 = htmlspecialchars($vot5GrandFinalMappoolData['beatmapUrl']);
+                            $vot5GrandFinalMappoolName                = htmlspecialchars($vot5GrandFinalMappoolData['beatmapName']);
+                            $vot5GrandFinalMappoolDifficultyName      = htmlspecialchars($vot5GrandFinalMappoolData['beatmapDifficultyName']);
+                            $vot5GrandFinalMappoolFeatureArtist       = htmlspecialchars($vot5GrandFinalMappoolData['beatmapFeatureArtist']);
+                            $vot5GrandFinalMappoolMapper              = htmlspecialchars($vot5GrandFinalMappoolData['beatmapMapper']);
+                            $vot5GrandFinalMappoolMapperUrl           = htmlspecialchars($vot5GrandFinalMappoolData['beatmapMapperUrl']);
+                            $vot5GrandFinalMappoolDifficulty          = htmlspecialchars($vot5GrandFinalMappoolData['beatmapDifficulty']);
+                            $vot5GrandFinalMappoolLength              = timeStampFormat(number: $vot5GrandFinalMappoolData['beatmapLength']);
+                            $vot5GrandFinalMappoolOverallSpeed        = sprintf('%.2f', $vot5GrandFinalMappoolData['beatmapOverallSpeed']);
+                            $vot5GrandFinalMappoolOverallDifficulty   = sprintf('%.2f', $vot5GrandFinalMappoolData['beatmapOverallDifficulty']);
+                            $vot5GrandFinalMappoolOverallHealth       = sprintf('%.2f', $vot5GrandFinalMappoolData['beatmapOverallHealth']);
 
-                        $allMappoolNoModData[] = [
-                            'beatmap_id'                    => $allStarNoModId,
-                            'beatmap_round_id'              => $allStarNoModRoundId,
-                            'beatmap_tournament_id'         => $allStarNoModTournamentId,
-                            'beatmap_type'                  => $allStarNoModType,
-                            'beatmap_image'                 => $allStarNoModImage,
-                            'beatmap_url'                   => $allStarNoModUrl,
-                            'beatmap_name'                  => $allStarNoModName,
-                            'beatmap_difficulty_name'       => $allStarNoModDifficultyName,
-                            'beatmap_feature_artist'        => $allStarNoModFeatureArtist,
-                            'beatmap_mapper'                => $allStarNoModMapper,
-                            'beatmap_mapper_url'            => $allStarNoModMapperUrl,
-                            'beatmap_difficulty'            => $allStarNoModDifficulty,
-                            'beatmap_length'                => $allStarNoModLength,
-                            'beatmap_overall_speed'         => $allStarNoModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $allStarNoModOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarNoModOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5GrandFinalMappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5GrandFinalMappoolUrl">
+                                                <img src="$vot5GrandFinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** ALL STAR HD BEATMAP DATA ***/
-                    $allStarHiddenJsonData = $mappoolReadableJsonData[$name][$allStarEdgeCaseName]['HD'];
-                    foreach ($allStarHiddenJsonData as $allStarHiddenJsonType => $allStarHiddenJsonId) {
-                        $allStarHiddenData = getTournamentMappoolData(
-                            id: $allStarHiddenJsonId,
-                            token: $mappoolAccessToken
+                                        <div class="song-name">
+                                            <h2>$vot5GrandFinalMappoolName [$vot5GrandFinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5GrandFinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5GrandFinalMappoolMapperUrl">$vot5GrandFinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5GrandFinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5GrandFinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5GrandFinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5GrandFinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5GrandFinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot5GrandFinalJsonData = $votMappoolJsonUsableData[$votTournamentName][$vot5AbbreviateRoundName];
+                        foreach ($vot5GrandFinalJsonData as $vot5GrandFinalJsonType => $vot5GrandFinalJsonId) {
+                            $vot5GrandFinalData = getMappoolData(
+                                id: $vot5GrandFinalJsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot5GrandFinalId                = $vot5GrandFinalData['id'];
+                            $vot5GrandFinalRoundId           = $vot5AbbreviateRoundName;
+                            $vot5GrandFinalTournamentId      = $votTournamentName;
+                            $vot5GrandFinalType              = $vot5GrandFinalJsonType;
+                            $vot5GrandFinalImage             = $vot5GrandFinalData['beatmapset']['covers']['cover'];
+                            $vot5GrandFinalUrl               = $vot5GrandFinalData['url'];
+                            $vot5GrandFinalName              = $vot5GrandFinalData['beatmapset']['title'];
+                            $vot5GrandFinalDifficultyName    = $vot5GrandFinalData['version'];
+                            $vot5GrandFinalFeatureArtist     = $vot5GrandFinalData['beatmapset']['artist'];
+                            $vot5GrandFinalMapper            = $vot5GrandFinalData['beatmapset']['creator'];
+                            $vot5GrandFinalMapperUrl         = "https://osu.ppy.sh/users/{$vot5GrandFinalData['beatmapset']['user_id']}";
+                            $vot5GrandFinalDifficulty        = $vot5GrandFinalData['difficulty_rating'];
+                            $vot5GrandFinalLength            = $vot5GrandFinalData['total_length'];
+                            $vot5GrandFinalOverallSpeed      = $vot5GrandFinalData['beatmapset']['bpm'];
+                            $vot5GrandFinalOverallDifficulty = $vot5GrandFinalData['accuracy'];
+                            $vot5GrandFinalOverallHealth     = $vot5GrandFinalData['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot5GrandFinalId,
+                                    round: $vot5GrandFinalRoundId,
+                                    tournament: $vot5GrandFinalTournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot5GrandFinalId,
+                                    round_id: $vot5GrandFinalRoundId,
+                                    tournament_id: $vot5GrandFinalTournamentId,
+                                    type: $vot5GrandFinalType,
+                                    image: $vot5GrandFinalImage,
+                                    url: $vot5GrandFinalUrl,
+                                    name: $vot5GrandFinalName,
+                                    diff_name: $vot5GrandFinalDifficultyName,
+                                    fa: $vot5GrandFinalFeatureArtist,
+                                    mapper: $vot5GrandFinalMapper,
+                                    mapper_url: $vot5GrandFinalMapperUrl,
+                                    diff: $vot5GrandFinalDifficulty,
+                                    length: $vot5GrandFinalLength,
+                                    bpm: $vot5GrandFinalOverallSpeed,
+                                    od: $vot5GrandFinalOverallDifficulty,
+                                    hp: $vot5GrandFinalOverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot5GrandFinalMappoolViewData = readMappoolData(
+                            round: $vot5AbbreviateRoundName,
+                            tournament: $votTournamentName
                         );
 
-                        $allStarHiddenId                 = $allStarHiddenData['id'];
-                        $allStarHiddenRoundId            = $allStarEdgeCaseName;
-                        $allStarHiddenTournamentId       = strtoupper(string: $name);
-                        $allStarHiddenType               = $allStarHiddenJsonType;
-                        $allStarHiddenImage              = $allStarHiddenData['beatmapset']['covers']['cover'];
-                        $allStarHiddenUrl                = $allStarHiddenData['url'];
-                        $allStarHiddenName               = $allStarHiddenData['beatmapset']['title'];
-                        $allStarHiddenDifficultyName     = $allStarHiddenData['version'];
-                        $allStarHiddenFeatureArtist      = $allStarHiddenData['beatmapset']['artist'];
-                        $allStarHiddenMapper             = $allStarHiddenData['beatmapset']['creator'];
-                        $allStarHiddenMapperUrl          = "https://osu.ppy.sh/users/{$allStarHiddenData['beatmapset']['user_id']}";
-                        $allStarHiddenDifficulty         = $allStarHiddenData['difficulty_rating'];
-                        $allStarHiddenLength             = $allStarHiddenData['total_length'];
-                        $allStarHiddenOverallSpeed       = $allStarHiddenData['beatmapset']['bpm'];
-                        $allStarHiddenOverallDifficulty  = $allStarHiddenData['accuracy'];
-                        $allStarHiddenOverallHealth      = $allStarHiddenData['drain'];
+                        foreach ($vot5GrandFinalMappoolViewData as $vot5GrandFinalMappoolData) {
+                            $vot5GrandFinalMappoolType                = htmlspecialchars($vot5GrandFinalMappoolData['beatmapType']);
+                            $vot5GrandFinalMappoolImage               = htmlspecialchars($vot5GrandFinalMappoolData['beatmapImage']);
+                            $vot5GrandFinalMappoolUrl                 = htmlspecialchars($vot5GrandFinalMappoolData['beatmapUrl']);
+                            $vot5GrandFinalMappoolName                = htmlspecialchars($vot5GrandFinalMappoolData['beatmapName']);
+                            $vot5GrandFinalMappoolDifficultyName      = htmlspecialchars($vot5GrandFinalMappoolData['beatmapDifficultyName']);
+                            $vot5GrandFinalMappoolFeatureArtist       = htmlspecialchars($vot5GrandFinalMappoolData['beatmapFeatureArtist']);
+                            $vot5GrandFinalMappoolMapper              = htmlspecialchars($vot5GrandFinalMappoolData['beatmapMapper']);
+                            $vot5GrandFinalMappoolMapperUrl           = htmlspecialchars($vot5GrandFinalMappoolData['beatmapMapperUrl']);
+                            $vot5GrandFinalMappoolDifficulty          = htmlspecialchars($vot5GrandFinalMappoolData['beatmapDifficulty']);
+                            $vot5GrandFinalMappoolLength              = timeStampFormat(number: $vot5GrandFinalMappoolData['beatmapLength']);
+                            $vot5GrandFinalMappoolOverallSpeed        = sprintf('%.2f', $vot5GrandFinalMappoolData['beatmapOverallSpeed']);
+                            $vot5GrandFinalMappoolOverallDifficulty   = sprintf('%.2f', $vot5GrandFinalMappoolData['beatmapOverallDifficulty']);
+                            $vot5GrandFinalMappoolOverallHealth       = sprintf('%.2f', $vot5GrandFinalMappoolData['beatmapOverallHealth']);
 
-                        $allMappoolHiddenData[] = [
-                            'beatmap_id'                    => $allStarHiddenId,
-                            'beatmap_round_id'              => $allStarHiddenRoundId,
-                            'beatmap_tournament_id'         => $allStarHiddenTournamentId,
-                            'beatmap_type'                  => $allStarHiddenType,
-                            'beatmap_image'                 => $allStarHiddenImage,
-                            'beatmap_url'                   => $allStarHiddenUrl,
-                            'beatmap_name'                  => $allStarHiddenName,
-                            'beatmap_difficulty_name'       => $allStarHiddenDifficultyName,
-                            'beatmap_feature_artist'        => $allStarHiddenFeatureArtist,
-                            'beatmap_mapper'                => $allStarHiddenMapper,
-                            'beatmap_mapper_url'            => $allStarHiddenMapperUrl,
-                            'beatmap_difficulty'            => $allStarHiddenDifficulty,
-                            'beatmap_length'                => $allStarHiddenLength,
-                            'beatmap_overall_speed'         => $allStarHiddenOverallSpeed,
-                            'beatmap_overall_difficulty'    => $allStarHiddenOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarHiddenOverallHealth
-                        ];
-                    }
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot5-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot5GrandFinalMappoolType</h1>
+                                        </div>
 
+                                        <div class="song-image">
+                                            <a href="$vot5GrandFinalMappoolUrl">
+                                                <img src="$vot5GrandFinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
 
-                    /*** ALL STAR HR BEATMAP DATA ***/
-                    $allStarHardRockJsonData = $mappoolReadableJsonData[$name][$allStarEdgeCaseName]['HR'];
-                    foreach ($allStarHardRockJsonData as $allStarHardRockJsonType => $allStarHardRockJsonId) {
-                        $allStarHardRockData = getTournamentMappoolData(
-                            id: $allStarHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-name">
+                                            <h2>$vot5GrandFinalMappoolName [$vot5GrandFinalMappoolDifficultyName]</h2>
+                                        </div>
 
-                        $allStarHardRockId                 = $allStarHardRockData['id'];
-                        $allStarHardRockRoundId            = $allStarEdgeCaseName;
-                        $allStarHardRockTournamentId       = strtoupper(string: $name);
-                        $allStarHardRockType               = $allStarHardRockJsonType;
-                        $allStarHardRockImage              = $allStarHardRockData['beatmapset']['covers']['cover'];
-                        $allStarHardRockUrl                = $allStarHardRockData['url'];
-                        $allStarHardRockName               = $allStarHardRockData['beatmapset']['title'];
-                        $allStarHardRockDifficultyName     = $allStarHardRockData['version'];
-                        $allStarHardRockFeatureArtist      = $allStarHardRockData['beatmapset']['artist'];
-                        $allStarHardRockMapper             = $allStarHardRockData['beatmapset']['creator'];
-                        $allStarHardRockMapperUrl          = "https://osu.ppy.sh/users/{$allStarHardRockData['beatmapset']['user_id']}";
-                        $allStarHardRockDifficulty         = $allStarHardRockData['difficulty_rating'];
-                        $allStarHardRockLength             = $allStarHardRockData['total_length'];
-                        $allStarHardRockOverallSpeed       = $allStarHardRockData['beatmapset']['bpm'];
-                        $allStarHardRockOverallDifficulty  = $allStarHardRockData['accuracy'];
-                        $allStarHardRockOverallHealth      = $allStarHardRockData['drain'];
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot5GrandFinalMappoolFeatureArtist</h3>
+                                        </div>
 
-                        $allMappoolHardRockData[] = [
-                            'beatmap_id'                    => $allStarHardRockId,
-                            'beatmap_round_id'              => $allStarHardRockRoundId,
-                            'beatmap_tournament_id'         => $allStarHardRockTournamentId,
-                            'beatmap_type'                  => $allStarHardRockType,
-                            'beatmap_image'                 => $allStarHardRockImage,
-                            'beatmap_url'                   => $allStarHardRockUrl,
-                            'beatmap_name'                  => $allStarHardRockName,
-                            'beatmap_difficulty_name'       => $allStarHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $allStarHardRockFeatureArtist,
-                            'beatmap_mapper'                => $allStarHardRockMapper,
-                            'beatmap_mapper_url'            => $allStarHardRockMapperUrl,
-                            'beatmap_difficulty'            => $allStarHardRockDifficulty,
-                            'beatmap_length'                => $allStarHardRockLength,
-                            'beatmap_overall_speed'         => $allStarHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $allStarHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarHardRockOverallHealth
-                        ];
-                    }
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot5GrandFinalMappoolMapperUrl">$vot5GrandFinalMappoolMapper</a></h4>
+                                        </div>
 
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot5GrandFinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot5GrandFinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot5GrandFinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
 
-                    /*** ALL STAR DT BEATMAP DATA ***/
-                    $allStarDoubleTimeJsonData = $mappoolReadableJsonData[$name][$allStarEdgeCaseName]['DT'];
-                    foreach ($allStarDoubleTimeJsonData as $allStarDoubleTimeJsonType => $allStarDoubleTimeJsonId) {
-                        $allStarDoubleTimeData = getTournamentMappoolData(
-                            id: $allStarDoubleTimeJsonId,
-                            token: $mappoolAccessToken
-                        );
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot5GrandFinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot5GrandFinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
 
-                        $allStarDoubleTimeId                 = $allStarDoubleTimeData['id'];
-                        $allStarDoubleTimeRoundId            = $allStarEdgeCaseName;
-                        $allStarDoubleTimeTournamentId       = strtoupper(string: $name);
-                        $allStarDoubleTimeType               = $allStarDoubleTimeJsonType;
-                        $allStarDoubleTimeImage              = $allStarDoubleTimeData['beatmapset']['covers']['cover'];
-                        $allStarDoubleTimeUrl                = $allStarDoubleTimeData['url'];
-                        $allStarDoubleTimeName               = $allStarDoubleTimeData['beatmapset']['title'];
-                        $allStarDoubleTimeDifficultyName     = $allStarDoubleTimeData['version'];
-                        $allStarDoubleTimeFeatureArtist      = $allStarDoubleTimeData['beatmapset']['artist'];
-                        $allStarDoubleTimeMapper             = $allStarDoubleTimeData['beatmapset']['creator'];
-                        $allStarDoubleTimeMapperUrl          = "https://osu.ppy.sh/users/{$allStarDoubleTimeData['beatmapset']['user_id']}";
-                        $allStarDoubleTimeDifficulty         = $allStarDoubleTimeData['difficulty_rating'];
-                        $allStarDoubleTimeLength             = $allStarDoubleTimeData['total_length'];
-                        $allStarDoubleTimeOverallSpeed       = $allStarDoubleTimeData['beatmapset']['bpm'];
-                        $allStarDoubleTimeOverallDifficulty  = $allStarDoubleTimeData['accuracy'];
-                        $allStarDoubleTimeOverallHealth      = $allStarDoubleTimeData['drain'];
-
-                        $allMappoolDoubleTimeData[] = [
-                            'beatmap_id'                    => $allStarDoubleTimeId,
-                            'beatmap_round_id'              => $allStarDoubleTimeRoundId,
-                            'beatmap_tournament_id'         => $allStarDoubleTimeTournamentId,
-                            'beatmap_type'                  => $allStarDoubleTimeType,
-                            'beatmap_image'                 => $allStarDoubleTimeImage,
-                            'beatmap_url'                   => $allStarDoubleTimeUrl,
-                            'beatmap_name'                  => $allStarDoubleTimeName,
-                            'beatmap_difficulty_name'       => $allStarDoubleTimeDifficultyName,
-                            'beatmap_feature_artist'        => $allStarDoubleTimeFeatureArtist,
-                            'beatmap_mapper'                => $allStarDoubleTimeMapper,
-                            'beatmap_mapper_url'            => $allStarDoubleTimeMapperUrl,
-                            'beatmap_difficulty'            => $allStarDoubleTimeDifficulty,
-                            'beatmap_length'                => $allStarDoubleTimeLength,
-                            'beatmap_overall_speed'         => $allStarDoubleTimeOverallSpeed,
-                            'beatmap_overall_difficulty'    => $allStarDoubleTimeOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarDoubleTimeOverallHealth
-                        ];
-                    }
-
-
-                    /*** ALL STAR FM BEATMAP DATA ***/
-                    $allStarFreeModJsonData = $mappoolReadableJsonData[$name][$allStarEdgeCaseName]['FM'];
-                    foreach ($allStarFreeModJsonData as $allStarFreeModJsonType => $allStarFreeModJsonId) {
-                        $allStarFreeModData = getTournamentMappoolData(
-                            id: $allStarFreeModJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $allStarFreeModId                 = $allStarFreeModData['id'];
-                        $allStarFreeModRoundId            = $allStarEdgeCaseName;
-                        $allStarFreeModTournamentId       = strtoupper(string: $name);
-                        $allStarFreeModType               = $allStarFreeModJsonType;
-                        $allStarFreeModImage              = $allStarFreeModData['beatmapset']['covers']['cover'];
-                        $allStarFreeModUrl                = $allStarFreeModData['url'];
-                        $allStarFreeModName               = $allStarFreeModData['beatmapset']['title'];
-                        $allStarFreeModDifficultyName     = $allStarFreeModData['version'];
-                        $allStarFreeModFeatureArtist      = $allStarFreeModData['beatmapset']['artist'];
-                        $allStarFreeModMapper             = $allStarFreeModData['beatmapset']['creator'];
-                        $allStarFreeModMapperUrl          = "https://osu.ppy.sh/users/{$allStarFreeModData['beatmapset']['user_id']}";
-                        $allStarFreeModDifficulty         = $allStarFreeModData['difficulty_rating'];
-                        $allStarFreeModLength             = $allStarFreeModData['total_length'];
-                        $allStarFreeModOverallSpeed       = $allStarFreeModData['beatmapset']['bpm'];
-                        $allStarFreeModOverallDifficulty  = $allStarFreeModData['accuracy'];
-                        $allStarFreeModOverallHealth      = $allStarFreeModData['drain'];
-
-                        $allMappoolFreeModData[] = [
-                            'beatmap_id'                    => $allStarFreeModId,
-                            'beatmap_round_id'              => $allStarFreeModRoundId,
-                            'beatmap_tournament_id'         => $allStarFreeModTournamentId,
-                            'beatmap_type'                  => $allStarFreeModType,
-                            'beatmap_image'                 => $allStarFreeModImage,
-                            'beatmap_url'                   => $allStarFreeModUrl,
-                            'beatmap_name'                  => $allStarFreeModName,
-                            'beatmap_difficulty_name'       => $allStarFreeModDifficultyName,
-                            'beatmap_feature_artist'        => $allStarFreeModFeatureArtist,
-                            'beatmap_mapper'                => $allStarFreeModMapper,
-                            'beatmap_mapper_url'            => $allStarFreeModMapperUrl,
-                            'beatmap_difficulty'            => $allStarFreeModDifficulty,
-                            'beatmap_length'                => $allStarFreeModLength,
-                            'beatmap_overall_speed'         => $allStarFreeModOverallSpeed,
-                            'beatmap_overall_difficulty'    => $allStarFreeModOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarFreeModOverallHealth
-                        ];
-                    }
-
-
-                    /*** ALL STAR EZ BEATMAP DATA ***/
-                    $allStarEasyJsonData = $mappoolReadableJsonData[$name][$allStarEdgeCaseName]['EZ'];
-                    foreach ($allStarEasyJsonData as $allStarEasyJsonType => $allStarEasyJsonId) {
-                        $allStarEasyData = getTournamentMappoolData(
-                            id: $allStarEasyJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $allStarEasyId                 = $allStarEasyData['id'];
-                        $allStarEasyRoundId            = $allStarEdgeCaseName;
-                        $allStarEasyTournamentId       = strtoupper(string: $name);
-                        $allStarEasyType               = $allStarEasyJsonType;
-                        $allStarEasyImage              = $allStarEasyData['beatmapset']['covers']['cover'];
-                        $allStarEasyUrl                = $allStarEasyData['url'];
-                        $allStarEasyName               = $allStarEasyData['beatmapset']['title'];
-                        $allStarEasyDifficultyName     = $allStarEasyData['version'];
-                        $allStarEasyFeatureArtist      = $allStarEasyData['beatmapset']['artist'];
-                        $allStarEasyMapper             = $allStarEasyData['beatmapset']['creator'];
-                        $allStarEasyMapperUrl          = "https://osu.ppy.sh/users/{$allStarEasyData['beatmapset']['user_id']}";
-                        $allStarEasyDifficulty         = $allStarEasyData['difficulty_rating'];
-                        $allStarEasyLength             = $allStarEasyData['total_length'];
-                        $allStarEasyOverallSpeed       = $allStarEasyData['beatmapset']['bpm'];
-                        $allStarEasyOverallDifficulty  = $allStarEasyData['accuracy'];
-                        $allStarEasyOverallHealth      = $allStarEasyData['drain'];
-
-                        $allMappoolEasyData[] = [
-                            'beatmap_id'                    => $allStarEasyId,
-                            'beatmap_round_id'              => $allStarEasyRoundId,
-                            'beatmap_tournament_id'         => $allStarEasyTournamentId,
-                            'beatmap_type'                  => $allStarEasyType,
-                            'beatmap_image'                 => $allStarEasyImage,
-                            'beatmap_url'                   => $allStarEasyUrl,
-                            'beatmap_name'                  => $allStarEasyName,
-                            'beatmap_difficulty_name'       => $allStarEasyDifficultyName,
-                            'beatmap_feature_artist'        => $allStarEasyFeatureArtist,
-                            'beatmap_mapper'                => $allStarEasyMapper,
-                            'beatmap_mapper_url'            => $allStarEasyMapperUrl,
-                            'beatmap_difficulty'            => $allStarEasyDifficulty,
-                            'beatmap_length'                => $allStarEasyLength,
-                            'beatmap_overall_speed'         => $allStarEasyOverallSpeed,
-                            'beatmap_overall_difficulty'    => $allStarEasyOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarEasyOverallHealth
-                        ];
-                    }
-
-                    /*** ALL STAR HDHR BEATMAP DATA ***/
-                    $allStarHiddenHardRockJsonData = $mappoolReadableJsonData[$name][$allStarEdgeCaseName]['HDHR'];
-                    foreach ($allStarHiddenHardRockJsonData as $allStarHiddenHardRockJsonType => $allStarHiddenHardRockJsonId) {
-                        $allStarHiddenHardRockData = getTournamentMappoolData(
-                            id: $allStarHiddenHardRockJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $allStarHiddenHardRockId                 = $allStarHiddenHardRockData['id'];
-                        $allStarHiddenHardRockRoundId            = $allStarEdgeCaseName;
-                        $allStarHiddenHardRockTournamentId       = strtoupper(string: $name);
-                        $allStarHiddenHardRockType               = $allStarHiddenHardRockJsonType;
-                        $allStarHiddenHardRockImage              = $allStarHiddenHardRockData['beatmapset']['covers']['cover'];
-                        $allStarHiddenHardRockUrl                = $allStarHiddenHardRockData['url'];
-                        $allStarHiddenHardRockName               = $allStarHiddenHardRockData['beatmapset']['title'];
-                        $allStarHiddenHardRockDifficultyName     = $allStarHiddenHardRockData['version'];
-                        $allStarHiddenHardRockFeatureArtist      = $allStarHiddenHardRockData['beatmapset']['artist'];
-                        $allStarHiddenHardRockMapper             = $allStarHiddenHardRockData['beatmapset']['creator'];
-                        $allStarHiddenHardRockMapperUrl          = "https://osu.ppy.sh/users/{$allStarHiddenHardRockData['beatmapset']['user_id']}";
-                        $allStarHiddenHardRockDifficulty         = $allStarHiddenHardRockData['difficulty_rating'];
-                        $allStarHiddenHardRockLength             = $allStarHiddenHardRockData['total_length'];
-                        $allStarHiddenHardRockOverallSpeed       = $allStarHiddenHardRockData['beatmapset']['bpm'];
-                        $allStarHiddenHardRockOverallDifficulty  = $allStarHiddenHardRockData['accuracy'];
-                        $allStarHiddenHardRockOverallHealth      = $allStarHiddenHardRockData['drain'];
-
-                        $allMappoolHiddenHardRockData[] = [
-                            'beatmap_id'                    => $allStarHiddenHardRockId,
-                            'beatmap_round_id'              => $allStarHiddenHardRockRoundId,
-                            'beatmap_tournament_id'         => $allStarHiddenHardRockTournamentId,
-                            'beatmap_type'                  => $allStarHiddenHardRockType,
-                            'beatmap_image'                 => $allStarHiddenHardRockImage,
-                            'beatmap_url'                   => $allStarHiddenHardRockUrl,
-                            'beatmap_name'                  => $allStarHiddenHardRockName,
-                            'beatmap_difficulty_name'       => $allStarHiddenHardRockDifficultyName,
-                            'beatmap_feature_artist'        => $allStarHiddenHardRockFeatureArtist,
-                            'beatmap_mapper'                => $allStarHiddenHardRockMapper,
-                            'beatmap_mapper_url'            => $allStarHiddenHardRockMapperUrl,
-                            'beatmap_difficulty'            => $allStarHiddenHardRockDifficulty,
-                            'beatmap_length'                => $allStarHiddenHardRockLength,
-                            'beatmap_overall_speed'         => $allStarHiddenHardRockOverallSpeed,
-                            'beatmap_overall_difficulty'    => $allStarHiddenHardRockOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarHiddenHardRockOverallHealth
-                        ];
-                    }
-
-
-                    /*** ALL STAR TB BEATMAP DATA ***/
-                    $allStarTieBreakerJsonData = $mappoolReadableJsonData[$name][$allStarEdgeCaseName]['TB'];
-                    foreach ($allStarTieBreakerJsonData as $allStarTieBreakerJsonType => $allStarTieBreakerJsonId) {
-                        $allStarTieBreakerData = getTournamentMappoolData(
-                            id: $allStarTieBreakerJsonId,
-                            token: $mappoolAccessToken
-                        );
-
-                        $allStarTieBreakerId                 = $allStarTieBreakerData['id'];
-                        $allStarTieBreakerRoundId            = $allStarEdgeCaseName;
-                        $allStarTieBreakerTournamentId       = strtoupper(string: $name);
-                        $allStarTieBreakerType               = $allStarTieBreakerJsonType;
-                        $allStarTieBreakerImage              = $allStarTieBreakerData['beatmapset']['covers']['cover'];
-                        $allStarTieBreakerUrl                = $allStarTieBreakerData['url'];
-                        $allStarTieBreakerName               = $allStarTieBreakerData['beatmapset']['title'];
-                        $allStarTieBreakerDifficultyName     = $allStarTieBreakerData['version'];
-                        $allStarTieBreakerFeatureArtist      = $allStarTieBreakerData['beatmapset']['artist'];
-                        $allStarTieBreakerMapper             = $allStarTieBreakerData['beatmapset']['creator'];
-                        $allStarTieBreakerMapperUrl          = "https://osu.ppy.sh/users/{$allStarTieBreakerData['beatmapset']['user_id']}";
-                        $allStarTieBreakerDifficulty         = $allStarTieBreakerData['difficulty_rating'];
-                        $allStarTieBreakerLength             = $allStarTieBreakerData['total_length'];
-                        $allStarTieBreakerOverallSpeed       = $allStarTieBreakerData['beatmapset']['bpm'];
-                        $allStarTieBreakerOverallDifficulty  = $allStarTieBreakerData['accuracy'];
-                        $allStarTieBreakerOverallHealth      = $allStarTieBreakerData['drain'];
-
-                        $allMappoolTieBreakerData[] = [
-                            'beatmap_id'                    => $allStarTieBreakerId,
-                            'beatmap_round_id'              => $allStarTieBreakerRoundId,
-                            'beatmap_tournament_id'         => $allStarTieBreakerTournamentId,
-                            'beatmap_type'                  => $allStarTieBreakerType,
-                            'beatmap_image'                 => $allStarTieBreakerImage,
-                            'beatmap_url'                   => $allStarTieBreakerUrl,
-                            'beatmap_name'                  => $allStarTieBreakerName,
-                            'beatmap_difficulty_name'       => $allStarTieBreakerDifficultyName,
-                            'beatmap_feature_artist'        => $allStarTieBreakerFeatureArtist,
-                            'beatmap_mapper'                => $allStarTieBreakerMapper,
-                            'beatmap_mapper_url'            => $allStarTieBreakerMapperUrl,
-                            'beatmap_difficulty'            => $allStarTieBreakerDifficulty,
-                            'beatmap_length'                => $allStarTieBreakerLength,
-                            'beatmap_overall_speed'         => $allStarTieBreakerOverallSpeed,
-                            'beatmap_overall_difficulty'    => $allStarTieBreakerOverallDifficulty,
-                            'beatmap_overall_health'        => $allStarTieBreakerOverallHealth
-                        ];
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
                     }
                     break;
 
                 default:
-                    # code...
+                    // TODO: proper handling
+                    echo sprintf(
+                        "There is no such round named [%s]. What are u tryin' to do bro...",
+                        $vot4RoundName
+                    );
                     break;
             }
             break;
-
-        // TODO: add mappool data later
-        case 'vot3':
-        case 'vot2':
-        case 'vot1':
-            break;
-
-        default:
-            # code...
-            break;
-    }
-
-    getBeatmapData(data: $allMappoolNoModData);
-    getBeatmapData(data: $allMappoolHiddenData);
-    getBeatmapData(data: $allMappoolHardRockData);
-    getBeatmapData(data: $allMappoolDoubleTimeData);
-    getBeatmapData(data: $allMappoolNightCoreData); // VOT5 using a different pooling format
-    getBeatmapData(data: $allMappoolFreeModData);
-    getBeatmapData(data: $allMappoolEasyData);
-    getBeatmapData(data: $allMappoolHiddenHardRockData);
-    getBeatmapData(data: $allMappoolFlashLightData); // VOT5 using a different pooling format
-    getBeatmapData(data: $allMappoolTieBreakerData);
-
-    return [
-        $allMappoolNoModData,
-        $allMappoolHiddenData,
-        $allMappoolHardRockData,
-        $allMappoolDoubleTimeData,
-        $allMappoolNightCoreData, // VOT5 using a different pooling format
-        $allMappoolFreeModData,
-        $allMappoolEasyData,
-        $allMappoolHiddenHardRockData,
-        $allMappoolFlashLightData, // VOT5 using a different pooling format
-        $allMappoolTieBreakerData
-    ];
-}
-
-
-function getTournamentMappoolData(
-    int $id,
-    string $token
-): array | bool {
-    $httpAuthorisationType  = $token;
-    $httpAcceptType         = 'application/json';
-    $httpContentType        = 'application/json';
-    $beatmapUrl             = "https://osu.ppy.sh/api/v2/beatmaps/{$id}";
-
-    if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-        $httpHeaderRequest = [
-            "Authorization: Bearer {$httpAuthorisationType}",
-            "Accept: {$httpAcceptType}",
-            "Content-Type: {$httpContentType}",
-        ];
-
-        # CURL session will be handled manually through curl_setopt()
-        $mappoolCurlHandle = curl_init(url: null);
-
-        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_URL, value: $beatmapUrl);
-        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
-        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HEADER, value: 0);
-        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
-
-        $mappoolCurlResponse = curl_exec(handle: $mappoolCurlHandle);
-
-        if (curl_errno(handle: $mappoolCurlHandle)) {
-            error_log(curl_error(handle: $mappoolCurlHandle));
-            curl_close(handle: $mappoolCurlHandle);
-            return false; // An error occurred during the API call
-
-        } else {
-            $mappoolReadableData = json_decode(
-                json: $mappoolCurlResponse,
-                associative: true,
-                depth: 512,
-                flags: 0
-            );
-
-            curl_close(handle: $mappoolCurlHandle);
-            return $mappoolReadableData;
         }
-    } else {
-        $httpHeaderRequest = array(
-            "Authorization: Bearer {$httpAuthorisationType}",
-            "Accept: {$httpAcceptType}",
-            "Content-Type: {$httpContentType}",
+
+    case 'VOT4':
+        if (!isset($_GET['round'])) {
+            // Just show the page without any actions
+            require __DIR__ . '/NavigationBarController.php';
+            require __DIR__ . '/../Views/Tournament/MappoolVot4View.php';
+            break;
+        } else {
+            // Show the page again after actions have been done
+            require __DIR__ . '/NavigationBarController.php';
+            require __DIR__ . '/../Views/Tournament/MappoolVot4View.php';
+
+            $vot4RoundName = $_GET['round'];
+
+            // Regex returns a boolean value so this is the way to do it
+            switch (true) {
+                // *** VOT4 QUALIFIER MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(qualifiers|qlf|qlfs)$/i',
+                    subject: $vot4RoundName
+                ):
+                    // Database use the abbreviation of each round's name
+                    $vot4AbbreviateRoundName = 'QLF';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot4QualifierMappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4QualifierMappoolViewData as $vot4QualifierMappoolData) {
+                            $vot4QualifierMappoolType                = htmlspecialchars($vot4QualifierMappoolData['beatmapType']);
+                            $vot4QualifierMappoolImage               = htmlspecialchars($vot4QualifierMappoolData['beatmapImage']);
+                            $vot4QualifierMappoolUrl                 = htmlspecialchars($vot4QualifierMappoolData['beatmapUrl']);
+                            $vot4QualifierMappoolName                = htmlspecialchars($vot4QualifierMappoolData['beatmapName']);
+                            $vot4QualifierMappoolDifficultyName      = htmlspecialchars($vot4QualifierMappoolData['beatmapDifficultyName']);
+                            $vot4QualifierMappoolFeatureArtist       = htmlspecialchars($vot4QualifierMappoolData['beatmapFeatureArtist']);
+                            $vot4QualifierMappoolMapper              = htmlspecialchars($vot4QualifierMappoolData['beatmapMapper']);
+                            $vot4QualifierMappoolMapperUrl           = htmlspecialchars($vot4QualifierMappoolData['beatmapMapperUrl']);
+                            $vot4QualifierMappoolDifficulty          = htmlspecialchars($vot4QualifierMappoolData['beatmapDifficulty']);
+                            $vot4QualifierMappoolLength              = timeStampFormat(number: $vot4QualifierMappoolData['beatmapLength']);
+                            $vot4QualifierMappoolOverallSpeed        = sprintf('%.2f', $vot4QualifierMappoolData['beatmapOverallSpeed']);
+                            $vot4QualifierMappoolOverallDifficulty   = sprintf('%.2f', $vot4QualifierMappoolData['beatmapOverallDifficulty']);
+                            $vot4QualifierMappoolOverallHealth       = sprintf('%.2f', $vot4QualifierMappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4QualifierMappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4QualifierMappoolUrl">
+                                                <img src="$vot4QualifierMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4QualifierMappoolName [$vot4QualifierMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4QualifierMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4QualifierMappoolMapperUrl">$vot4QualifierMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4QualifierMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4QualifierMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4QualifierMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4QualifierMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4QualifierMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot4QualifierJsonData = $votMappoolJsonUsableData[$votTournamentName][$vot4AbbreviateRoundName];
+                        foreach ($vot4QualifierJsonData as $vot4QualifierJsonType => $vot4QualifierJsonId) {
+                            $vot4QualifierData = getMappoolData(
+                                id: $vot4QualifierJsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot4QualifierId                = $vot4QualifierData['id'];
+                            $vot4QualifierRoundId           = $vot4AbbreviateRoundName;
+                            $vot4QualifierTournamentId      = $votTournamentName;
+                            $vot4QualifierType              = $vot4QualifierJsonType;
+                            $vot4QualifierImage             = $vot4QualifierData['beatmapset']['covers']['cover'];
+                            $vot4QualifierUrl               = $vot4QualifierData['url'];
+                            $vot4QualifierName              = $vot4QualifierData['beatmapset']['title'];
+                            $vot4QualifierDifficultyName    = $vot4QualifierData['version'];
+                            $vot4QualifierFeatureArtist     = $vot4QualifierData['beatmapset']['artist'];
+                            $vot4QualifierMapper            = $vot4QualifierData['beatmapset']['creator'];
+                            $vot4QualifierMapperUrl         = "https://osu.ppy.sh/users/{$vot4QualifierData['beatmapset']['user_id']}";
+                            $vot4QualifierDifficulty        = $vot4QualifierData['difficulty_rating'];
+                            $vot4QualifierLength            = $vot4QualifierData['total_length'];
+                            $vot4QualifierOverallSpeed      = $vot4QualifierData['beatmapset']['bpm'];
+                            $vot4QualifierOverallDifficulty = $vot4QualifierData['accuracy'];
+                            $vot4QualifierOverallHealth     = $vot4QualifierData['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot4QualifierId,
+                                    round: $vot4QualifierRoundId,
+                                    tournament: $vot4QualifierTournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot4QualifierId,
+                                    round_id: $vot4QualifierRoundId,
+                                    tournament_id: $vot4QualifierTournamentId,
+                                    type: $vot4QualifierType,
+                                    image: $vot4QualifierImage,
+                                    url: $vot4QualifierUrl,
+                                    name: $vot4QualifierName,
+                                    diff_name: $vot4QualifierDifficultyName,
+                                    fa: $vot4QualifierFeatureArtist,
+                                    mapper: $vot4QualifierMapper,
+                                    mapper_url: $vot4QualifierMapperUrl,
+                                    diff: $vot4QualifierDifficulty,
+                                    length: $vot4QualifierLength,
+                                    bpm: $vot4QualifierOverallSpeed,
+                                    od: $vot4QualifierOverallDifficulty,
+                                    hp: $vot4QualifierOverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot4QualifierMappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4QualifierMappoolViewData as $vot4QualifierMappoolData) {
+                            $vot4QualifierMappoolType                = htmlspecialchars($vot4QualifierMappoolData['beatmapType']);
+                            $vot4QualifierMappoolImage               = htmlspecialchars($vot4QualifierMappoolData['beatmapImage']);
+                            $vot4QualifierMappoolUrl                 = htmlspecialchars($vot4QualifierMappoolData['beatmapUrl']);
+                            $vot4QualifierMappoolName                = htmlspecialchars($vot4QualifierMappoolData['beatmapName']);
+                            $vot4QualifierMappoolDifficultyName      = htmlspecialchars($vot4QualifierMappoolData['beatmapDifficultyName']);
+                            $vot4QualifierMappoolFeatureArtist       = htmlspecialchars($vot4QualifierMappoolData['beatmapFeatureArtist']);
+                            $vot4QualifierMappoolMapper              = htmlspecialchars($vot4QualifierMappoolData['beatmapMapper']);
+                            $vot4QualifierMappoolMapperUrl           = htmlspecialchars($vot4QualifierMappoolData['beatmapMapperUrl']);
+                            $vot4QualifierMappoolDifficulty          = htmlspecialchars($vot4QualifierMappoolData['beatmapDifficulty']);
+                            $vot4QualifierMappoolLength              = timeStampFormat(number: $vot4QualifierMappoolData['beatmapLength']);
+                            $vot4QualifierMappoolOverallSpeed        = sprintf('%.2f', $vot4QualifierMappoolData['beatmapOverallSpeed']);
+                            $vot4QualifierMappoolOverallDifficulty   = sprintf('%.2f', $vot4QualifierMappoolData['beatmapOverallDifficulty']);
+                            $vot4QualifierMappoolOverallHealth       = sprintf('%.2f', $vot4QualifierMappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4QualifierMappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4QualifierMappoolUrl">
+                                                <img src="$vot4QualifierMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4QualifierMappoolName [$vot4QualifierMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4QualifierMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4QualifierMappoolMapperUrl">$vot4QualifierMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4QualifierMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4QualifierMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4QualifierMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4QualifierMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4QualifierMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    }
+                    break;
+
+                // *** VOT4 ROUND OF 16 MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(roundof16|roundof16s|ro16|ro16s)$/i',
+                    subject: $vot4RoundName
+                ):
+                    // Database use the abbreviation of each round's name
+                    $vot4AbbreviateRoundName = 'RO16';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot4RoundOf16MappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4RoundOf16MappoolViewData as $vot4RoundOf16MappoolData) {
+                            $vot4RoundOf16MappoolType                = htmlspecialchars($vot4RoundOf16MappoolData['beatmapType']);
+                            $vot4RoundOf16MappoolImage               = htmlspecialchars($vot4RoundOf16MappoolData['beatmapImage']);
+                            $vot4RoundOf16MappoolUrl                 = htmlspecialchars($vot4RoundOf16MappoolData['beatmapUrl']);
+                            $vot4RoundOf16MappoolName                = htmlspecialchars($vot4RoundOf16MappoolData['beatmapName']);
+                            $vot4RoundOf16MappoolDifficultyName      = htmlspecialchars($vot4RoundOf16MappoolData['beatmapDifficultyName']);
+                            $vot4RoundOf16MappoolFeatureArtist       = htmlspecialchars($vot4RoundOf16MappoolData['beatmapFeatureArtist']);
+                            $vot4RoundOf16MappoolMapper              = htmlspecialchars($vot4RoundOf16MappoolData['beatmapMapper']);
+                            $vot4RoundOf16MappoolMapperUrl           = htmlspecialchars($vot4RoundOf16MappoolData['beatmapMapperUrl']);
+                            $vot4RoundOf16MappoolDifficulty          = htmlspecialchars($vot4RoundOf16MappoolData['beatmapDifficulty']);
+                            $vot4RoundOf16MappoolLength              = timeStampFormat(number: $vot4RoundOf16MappoolData['beatmapLength']);
+                            $vot4RoundOf16MappoolOverallSpeed        = sprintf('%.2f', $vot4RoundOf16MappoolData['beatmapOverallSpeed']);
+                            $vot4RoundOf16MappoolOverallDifficulty   = sprintf('%.2f', $vot4RoundOf16MappoolData['beatmapOverallDifficulty']);
+                            $vot4RoundOf16MappoolOverallHealth       = sprintf('%.2f', $vot4RoundOf16MappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4RoundOf16MappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4RoundOf16MappoolUrl">
+                                                <img src="$vot4RoundOf16MappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4RoundOf16MappoolName [$vot4RoundOf16MappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4RoundOf16MappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4RoundOf16MappoolMapperUrl">$vot4RoundOf16MappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4RoundOf16MappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4RoundOf16MappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4RoundOf16MappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4RoundOf16MappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4RoundOf16MappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot4RoundOf16JsonData = $votMappoolJsonUsableData[$votTournamentName][$vot4AbbreviateRoundName];
+                        foreach ($vot4RoundOf16JsonData as $vot4RoundOf16JsonType => $vot4RoundOf16JsonId) {
+                            $vot4RoundOf16Data = getMappoolData(
+                                id: $vot4RoundOf16JsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot4RoundOf16Id                = $vot4RoundOf16Data['id'];
+                            $vot4RoundOf16RoundId           = $vot4AbbreviateRoundName;
+                            $vot4RoundOf16TournamentId      = $votTournamentName;
+                            $vot4RoundOf16Type              = $vot4RoundOf16JsonType;
+                            $vot4RoundOf16Image             = $vot4RoundOf16Data['beatmapset']['covers']['cover'];
+                            $vot4RoundOf16Url               = $vot4RoundOf16Data['url'];
+                            $vot4RoundOf16Name              = $vot4RoundOf16Data['beatmapset']['title'];
+                            $vot4RoundOf16DifficultyName    = $vot4RoundOf16Data['version'];
+                            $vot4RoundOf16FeatureArtist     = $vot4RoundOf16Data['beatmapset']['artist'];
+                            $vot4RoundOf16Mapper            = $vot4RoundOf16Data['beatmapset']['creator'];
+                            $vot4RoundOf16MapperUrl         = "https://osu.ppy.sh/users/{$vot4RoundOf16Data['beatmapset']['user_id']}";
+                            $vot4RoundOf16Difficulty        = $vot4RoundOf16Data['difficulty_rating'];
+                            $vot4RoundOf16Length            = $vot4RoundOf16Data['total_length'];
+                            $vot4RoundOf16OverallSpeed      = $vot4RoundOf16Data['beatmapset']['bpm'];
+                            $vot4RoundOf16OverallDifficulty = $vot4RoundOf16Data['accuracy'];
+                            $vot4RoundOf16OverallHealth     = $vot4RoundOf16Data['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot4RoundOf16Id,
+                                    round: $vot4RoundOf16RoundId,
+                                    tournament: $vot4RoundOf16TournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot4RoundOf16Id,
+                                    round_id: $vot4RoundOf16RoundId,
+                                    tournament_id: $vot4RoundOf16TournamentId,
+                                    type: $vot4RoundOf16Type,
+                                    image: $vot4RoundOf16Image,
+                                    url: $vot4RoundOf16Url,
+                                    name: $vot4RoundOf16Name,
+                                    diff_name: $vot4RoundOf16DifficultyName,
+                                    fa: $vot4RoundOf16FeatureArtist,
+                                    mapper: $vot4RoundOf16Mapper,
+                                    mapper_url: $vot4RoundOf16MapperUrl,
+                                    diff: $vot4RoundOf16Difficulty,
+                                    length: $vot4RoundOf16Length,
+                                    bpm: $vot4RoundOf16OverallSpeed,
+                                    od: $vot4RoundOf16OverallDifficulty,
+                                    hp: $vot4RoundOf16OverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot4RoundOf16MappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4RoundOf16MappoolViewData as $vot4RoundOf16MappoolData) {
+                            $vot4RoundOf16MappoolType                = htmlspecialchars($vot4RoundOf16MappoolData['beatmapType']);
+                            $vot4RoundOf16MappoolImage               = htmlspecialchars($vot4RoundOf16MappoolData['beatmapImage']);
+                            $vot4RoundOf16MappoolUrl                 = htmlspecialchars($vot4RoundOf16MappoolData['beatmapUrl']);
+                            $vot4RoundOf16MappoolName                = htmlspecialchars($vot4RoundOf16MappoolData['beatmapName']);
+                            $vot4RoundOf16MappoolDifficultyName      = htmlspecialchars($vot4RoundOf16MappoolData['beatmapDifficultyName']);
+                            $vot4RoundOf16MappoolFeatureArtist       = htmlspecialchars($vot4RoundOf16MappoolData['beatmapFeatureArtist']);
+                            $vot4RoundOf16MappoolMapper              = htmlspecialchars($vot4RoundOf16MappoolData['beatmapMapper']);
+                            $vot4RoundOf16MappoolMapperUrl           = htmlspecialchars($vot4RoundOf16MappoolData['beatmapMapperUrl']);
+                            $vot4RoundOf16MappoolDifficulty          = htmlspecialchars($vot4RoundOf16MappoolData['beatmapDifficulty']);
+                            $vot4RoundOf16MappoolLength              = timeStampFormat(number: $vot4RoundOf16MappoolData['beatmapLength']);
+                            $vot4RoundOf16MappoolOverallSpeed        = sprintf('%.2f', $vot4RoundOf16MappoolData['beatmapOverallSpeed']);
+                            $vot4RoundOf16MappoolOverallDifficulty   = sprintf('%.2f', $vot4RoundOf16MappoolData['beatmapOverallDifficulty']);
+                            $vot4RoundOf16MappoolOverallHealth       = sprintf('%.2f', $vot4RoundOf16MappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4RoundOf16MappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4RoundOf16MappoolUrl">
+                                                <img src="$vot4RoundOf16MappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4RoundOf16MappoolName [$vot4RoundOf16MappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4RoundOf16MappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4RoundOf16MappoolMapperUrl">$vot4RoundOf16MappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4RoundOf16MappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4RoundOf16MappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4RoundOf16MappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4RoundOf16MappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4RoundOf16MappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    }
+                    break;
+
+                // *** VOT4 QUARTER FINAL MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(quarterfinals|qf|qfs)$/i',
+                    subject: $vot4RoundName
+                ):
+                    // Database use the abbreviation of each round's name
+                    $vot4AbbreviateRoundName = 'QF';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot4QuarterFinalMappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4QuarterFinalMappoolViewData as $vot4QuarterFinalMappoolData) {
+                            $vot4QuarterFinalMappoolType                = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapType']);
+                            $vot4QuarterFinalMappoolImage               = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapImage']);
+                            $vot4QuarterFinalMappoolUrl                 = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapUrl']);
+                            $vot4QuarterFinalMappoolName                = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapName']);
+                            $vot4QuarterFinalMappoolDifficultyName      = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapDifficultyName']);
+                            $vot4QuarterFinalMappoolFeatureArtist       = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapFeatureArtist']);
+                            $vot4QuarterFinalMappoolMapper              = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapMapper']);
+                            $vot4QuarterFinalMappoolMapperUrl           = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapMapperUrl']);
+                            $vot4QuarterFinalMappoolDifficulty          = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapDifficulty']);
+                            $vot4QuarterFinalMappoolLength              = timeStampFormat(number: $vot4QuarterFinalMappoolData['beatmapLength']);
+                            $vot4QuarterFinalMappoolOverallSpeed        = sprintf('%.2f', $vot4QuarterFinalMappoolData['beatmapOverallSpeed']);
+                            $vot4QuarterFinalMappoolOverallDifficulty   = sprintf('%.2f', $vot4QuarterFinalMappoolData['beatmapOverallDifficulty']);
+                            $vot4QuarterFinalMappoolOverallHealth       = sprintf('%.2f', $vot4QuarterFinalMappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4QuarterFinalMappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4QuarterFinalMappoolUrl">
+                                                <img src="$vot4QuarterFinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4QuarterFinalMappoolName [$vot4QuarterFinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4QuarterFinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4QuarterFinalMappoolMapperUrl">$vot4QuarterFinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4QuarterFinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4QuarterFinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4QuarterFinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4QuarterFinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4QuarterFinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot4QuarterFinalJsonData = $votMappoolJsonUsableData[$votTournamentName][$vot4AbbreviateRoundName];
+                        foreach ($vot4QuarterFinalJsonData as $vot4QuarterFinalJsonType => $vot4QuarterFinalJsonId) {
+                            $vot4QuarterFinalData = getMappoolData(
+                                id: $vot4QuarterFinalJsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot4QuarterFinalId                = $vot4QuarterFinalData['id'];
+                            $vot4QuarterFinalRoundId           = $vot4AbbreviateRoundName;
+                            $vot4QuarterFinalTournamentId      = $votTournamentName;
+                            $vot4QuarterFinalType              = $vot4QuarterFinalJsonType;
+                            $vot4QuarterFinalImage             = $vot4QuarterFinalData['beatmapset']['covers']['cover'];
+                            $vot4QuarterFinalUrl               = $vot4QuarterFinalData['url'];
+                            $vot4QuarterFinalName              = $vot4QuarterFinalData['beatmapset']['title'];
+                            $vot4QuarterFinalDifficultyName    = $vot4QuarterFinalData['version'];
+                            $vot4QuarterFinalFeatureArtist     = $vot4QuarterFinalData['beatmapset']['artist'];
+                            $vot4QuarterFinalMapper            = $vot4QuarterFinalData['beatmapset']['creator'];
+                            $vot4QuarterFinalMapperUrl         = "https://osu.ppy.sh/users/{$vot4QuarterFinalData['beatmapset']['user_id']}";
+                            $vot4QuarterFinalDifficulty        = $vot4QuarterFinalData['difficulty_rating'];
+                            $vot4QuarterFinalLength            = $vot4QuarterFinalData['total_length'];
+                            $vot4QuarterFinalOverallSpeed      = $vot4QuarterFinalData['beatmapset']['bpm'];
+                            $vot4QuarterFinalOverallDifficulty = $vot4QuarterFinalData['accuracy'];
+                            $vot4QuarterFinalOverallHealth     = $vot4QuarterFinalData['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot4QuarterFinalId,
+                                    round: $vot4QuarterFinalRoundId,
+                                    tournament: $vot4QuarterFinalTournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot4QuarterFinalId,
+                                    round_id: $vot4QuarterFinalRoundId,
+                                    tournament_id: $vot4QuarterFinalTournamentId,
+                                    type: $vot4QuarterFinalType,
+                                    image: $vot4QuarterFinalImage,
+                                    url: $vot4QuarterFinalUrl,
+                                    name: $vot4QuarterFinalName,
+                                    diff_name: $vot4QuarterFinalDifficultyName,
+                                    fa: $vot4QuarterFinalFeatureArtist,
+                                    mapper: $vot4QuarterFinalMapper,
+                                    mapper_url: $vot4QuarterFinalMapperUrl,
+                                    diff: $vot4QuarterFinalDifficulty,
+                                    length: $vot4QuarterFinalLength,
+                                    bpm: $vot4QuarterFinalOverallSpeed,
+                                    od: $vot4QuarterFinalOverallDifficulty,
+                                    hp: $vot4QuarterFinalOverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot4QuarterFinalMappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4QuarterFinalMappoolViewData as $vot4QuarterFinalMappoolData) {
+                            $vot4QuarterFinalMappoolType                = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapType']);
+                            $vot4QuarterFinalMappoolImage               = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapImage']);
+                            $vot4QuarterFinalMappoolUrl                 = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapUrl']);
+                            $vot4QuarterFinalMappoolName                = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapName']);
+                            $vot4QuarterFinalMappoolDifficultyName      = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapDifficultyName']);
+                            $vot4QuarterFinalMappoolFeatureArtist       = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapFeatureArtist']);
+                            $vot4QuarterFinalMappoolMapper              = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapMapper']);
+                            $vot4QuarterFinalMappoolMapperUrl           = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapMapperUrl']);
+                            $vot4QuarterFinalMappoolDifficulty          = htmlspecialchars($vot4QuarterFinalMappoolData['beatmapDifficulty']);
+                            $vot4QuarterFinalMappoolLength              = timeStampFormat(number: $vot4QuarterFinalMappoolData['beatmapLength']);
+                            $vot4QuarterFinalMappoolOverallSpeed        = sprintf('%.2f', $vot4QuarterFinalMappoolData['beatmapOverallSpeed']);
+                            $vot4QuarterFinalMappoolOverallDifficulty   = sprintf('%.2f', $vot4QuarterFinalMappoolData['beatmapOverallDifficulty']);
+                            $vot4QuarterFinalMappoolOverallHealth       = sprintf('%.2f', $vot4QuarterFinalMappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4QuarterFinalMappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4QuarterFinalMappoolUrl">
+                                                <img src="$vot4QuarterFinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4QuarterFinalMappoolName [$vot4QuarterFinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4QuarterFinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4QuarterFinalMappoolMapperUrl">$vot4QuarterFinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4QuarterFinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4QuarterFinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4QuarterFinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4QuarterFinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4QuarterFinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    }
+                    break;
+
+                // *** VOT4 SEMI FINAL MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(semifinals|sf|sfs)$/i',
+                    subject: $vot4RoundName
+                ):
+                    // Database use the abbreviation of each round's name
+                    $vot4AbbreviateRoundName = 'SF';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot4SemiFinalMappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4SemiFinalMappoolViewData as $vot4SemiFinalMappoolData) {
+                            $vot4SemiFinalMappoolType                = htmlspecialchars($vot4SemiFinalMappoolData['beatmapType']);
+                            $vot4SemiFinalMappoolImage               = htmlspecialchars($vot4SemiFinalMappoolData['beatmapImage']);
+                            $vot4SemiFinalMappoolUrl                 = htmlspecialchars($vot4SemiFinalMappoolData['beatmapUrl']);
+                            $vot4SemiFinalMappoolName                = htmlspecialchars($vot4SemiFinalMappoolData['beatmapName']);
+                            $vot4SemiFinalMappoolDifficultyName      = htmlspecialchars($vot4SemiFinalMappoolData['beatmapDifficultyName']);
+                            $vot4SemiFinalMappoolFeatureArtist       = htmlspecialchars($vot4SemiFinalMappoolData['beatmapFeatureArtist']);
+                            $vot4SemiFinalMappoolMapper              = htmlspecialchars($vot4SemiFinalMappoolData['beatmapMapper']);
+                            $vot4SemiFinalMappoolMapperUrl           = htmlspecialchars($vot4SemiFinalMappoolData['beatmapMapperUrl']);
+                            $vot4SemiFinalMappoolDifficulty          = htmlspecialchars($vot4SemiFinalMappoolData['beatmapDifficulty']);
+                            $vot4SemiFinalMappoolLength              = timeStampFormat(number: $vot4SemiFinalMappoolData['beatmapLength']);
+                            $vot4SemiFinalMappoolOverallSpeed        = sprintf('%.2f', $vot4SemiFinalMappoolData['beatmapOverallSpeed']);
+                            $vot4SemiFinalMappoolOverallDifficulty   = sprintf('%.2f', $vot4SemiFinalMappoolData['beatmapOverallDifficulty']);
+                            $vot4SemiFinalMappoolOverallHealth       = sprintf('%.2f', $vot4SemiFinalMappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4SemiFinalMappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4SemiFinalMappoolUrl">
+                                                <img src="$vot4SemiFinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4SemiFinalMappoolName [$vot4SemiFinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4SemiFinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4SemiFinalMappoolMapperUrl">$vot4SemiFinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4SemiFinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4SemiFinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4SemiFinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4SemiFinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4SemiFinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot4SemiFinalJsonData = $votMappoolJsonUsableData[$votTournamentName][$vot4AbbreviateRoundName];
+                        foreach ($vot4SemiFinalJsonData as $vot4SemiFinalJsonType => $vot4SemiFinalJsonId) {
+                            $vot4SemiFinalData = getMappoolData(
+                                id: $vot4SemiFinalJsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot4SemiFinalId                = $vot4SemiFinalData['id'];
+                            $vot4SemiFinalRoundId           = $vot4AbbreviateRoundName;
+                            $vot4SemiFinalTournamentId      = $votTournamentName;
+                            $vot4SemiFinalType              = $vot4SemiFinalJsonType;
+                            $vot4SemiFinalImage             = $vot4SemiFinalData['beatmapset']['covers']['cover'];
+                            $vot4SemiFinalUrl               = $vot4SemiFinalData['url'];
+                            $vot4SemiFinalName              = $vot4SemiFinalData['beatmapset']['title'];
+                            $vot4SemiFinalDifficultyName    = $vot4SemiFinalData['version'];
+                            $vot4SemiFinalFeatureArtist     = $vot4SemiFinalData['beatmapset']['artist'];
+                            $vot4SemiFinalMapper            = $vot4SemiFinalData['beatmapset']['creator'];
+                            $vot4SemiFinalMapperUrl         = "https://osu.ppy.sh/users/{$vot4SemiFinalData['beatmapset']['user_id']}";
+                            $vot4SemiFinalDifficulty        = $vot4SemiFinalData['difficulty_rating'];
+                            $vot4SemiFinalLength            = $vot4SemiFinalData['total_length'];
+                            $vot4SemiFinalOverallSpeed      = $vot4SemiFinalData['beatmapset']['bpm'];
+                            $vot4SemiFinalOverallDifficulty = $vot4SemiFinalData['accuracy'];
+                            $vot4SemiFinalOverallHealth     = $vot4SemiFinalData['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot4SemiFinalId,
+                                    round: $vot4SemiFinalRoundId,
+                                    tournament: $vot4SemiFinalTournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot4SemiFinalId,
+                                    round_id: $vot4SemiFinalRoundId,
+                                    tournament_id: $vot4SemiFinalTournamentId,
+                                    type: $vot4SemiFinalType,
+                                    image: $vot4SemiFinalImage,
+                                    url: $vot4SemiFinalUrl,
+                                    name: $vot4SemiFinalName,
+                                    diff_name: $vot4SemiFinalDifficultyName,
+                                    fa: $vot4SemiFinalFeatureArtist,
+                                    mapper: $vot4SemiFinalMapper,
+                                    mapper_url: $vot4SemiFinalMapperUrl,
+                                    diff: $vot4SemiFinalDifficulty,
+                                    length: $vot4SemiFinalLength,
+                                    bpm: $vot4SemiFinalOverallSpeed,
+                                    od: $vot4SemiFinalOverallDifficulty,
+                                    hp: $vot4SemiFinalOverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot4SemiFinalMappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4SemiFinalMappoolViewData as $vot4SemiFinalMappoolData) {
+                            $vot4SemiFinalMappoolType                = htmlspecialchars($vot4SemiFinalMappoolData['beatmapType']);
+                            $vot4SemiFinalMappoolImage               = htmlspecialchars($vot4SemiFinalMappoolData['beatmapImage']);
+                            $vot4SemiFinalMappoolUrl                 = htmlspecialchars($vot4SemiFinalMappoolData['beatmapUrl']);
+                            $vot4SemiFinalMappoolName                = htmlspecialchars($vot4SemiFinalMappoolData['beatmapName']);
+                            $vot4SemiFinalMappoolDifficultyName      = htmlspecialchars($vot4SemiFinalMappoolData['beatmapDifficultyName']);
+                            $vot4SemiFinalMappoolFeatureArtist       = htmlspecialchars($vot4SemiFinalMappoolData['beatmapFeatureArtist']);
+                            $vot4SemiFinalMappoolMapper              = htmlspecialchars($vot4SemiFinalMappoolData['beatmapMapper']);
+                            $vot4SemiFinalMappoolMapperUrl           = htmlspecialchars($vot4SemiFinalMappoolData['beatmapMapperUrl']);
+                            $vot4SemiFinalMappoolDifficulty          = htmlspecialchars($vot4SemiFinalMappoolData['beatmapDifficulty']);
+                            $vot4SemiFinalMappoolLength              = timeStampFormat(number: $vot4SemiFinalMappoolData['beatmapLength']);
+                            $vot4SemiFinalMappoolOverallSpeed        = sprintf('%.2f', $vot4SemiFinalMappoolData['beatmapOverallSpeed']);
+                            $vot4SemiFinalMappoolOverallDifficulty   = sprintf('%.2f', $vot4SemiFinalMappoolData['beatmapOverallDifficulty']);
+                            $vot4SemiFinalMappoolOverallHealth       = sprintf('%.2f', $vot4SemiFinalMappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4SemiFinalMappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4SemiFinalMappoolUrl">
+                                                <img src="$vot4SemiFinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4SemiFinalMappoolName [$vot4SemiFinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4SemiFinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4SemiFinalMappoolMapperUrl">$vot4SemiFinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4SemiFinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4SemiFinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4SemiFinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4SemiFinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4SemiFinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    }
+                    break;
+
+                // *** VOT4 FINAL MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(finals|fnl|fnls)$/i',
+                    subject: $vot4RoundName
+                ):
+                    // Database use the abbreviation of each round's name
+                    $vot4AbbreviateRoundName = 'FNL';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot4FinalMappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4FinalMappoolViewData as $vot4FinalMappoolData) {
+                            $vot4FinalMappoolType                = htmlspecialchars($vot4FinalMappoolData['beatmapType']);
+                            $vot4FinalMappoolImage               = htmlspecialchars($vot4FinalMappoolData['beatmapImage']);
+                            $vot4FinalMappoolUrl                 = htmlspecialchars($vot4FinalMappoolData['beatmapUrl']);
+                            $vot4FinalMappoolName                = htmlspecialchars($vot4FinalMappoolData['beatmapName']);
+                            $vot4FinalMappoolDifficultyName      = htmlspecialchars($vot4FinalMappoolData['beatmapDifficultyName']);
+                            $vot4FinalMappoolFeatureArtist       = htmlspecialchars($vot4FinalMappoolData['beatmapFeatureArtist']);
+                            $vot4FinalMappoolMapper              = htmlspecialchars($vot4FinalMappoolData['beatmapMapper']);
+                            $vot4FinalMappoolMapperUrl           = htmlspecialchars($vot4FinalMappoolData['beatmapMapperUrl']);
+                            $vot4FinalMappoolDifficulty          = htmlspecialchars($vot4FinalMappoolData['beatmapDifficulty']);
+                            $vot4FinalMappoolLength              = timeStampFormat(number: $vot4FinalMappoolData['beatmapLength']);
+                            $vot4FinalMappoolOverallSpeed        = sprintf('%.2f', $vot4FinalMappoolData['beatmapOverallSpeed']);
+                            $vot4FinalMappoolOverallDifficulty   = sprintf('%.2f', $vot4FinalMappoolData['beatmapOverallDifficulty']);
+                            $vot4FinalMappoolOverallHealth       = sprintf('%.2f', $vot4FinalMappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4FinalMappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4FinalMappoolUrl">
+                                                <img src="$vot4FinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4FinalMappoolName [$vot4FinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4FinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4FinalMappoolMapperUrl">$vot4FinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4FinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4FinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4FinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4FinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4FinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot4FinalJsonData = $votMappoolJsonUsableData[$votTournamentName][$vot4AbbreviateRoundName];
+                        foreach ($vot4FinalJsonData as $vot4FinalJsonType => $vot4FinalJsonId) {
+                            $vot4FinalData = getMappoolData(
+                                id: $vot4FinalJsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            $vot4FinalId                = $vot4FinalData['id'];
+                            $vot4FinalRoundId           = $vot4AbbreviateRoundName;
+                            $vot4FinalTournamentId      = $votTournamentName;
+                            $vot4FinalType              = $vot4FinalJsonType;
+                            $vot4FinalImage             = $vot4FinalData['beatmapset']['covers']['cover'];
+                            $vot4FinalUrl               = $vot4FinalData['url'];
+                            $vot4FinalName              = $vot4FinalData['beatmapset']['title'];
+                            $vot4FinalDifficultyName    = $vot4FinalData['version'];
+                            $vot4FinalFeatureArtist     = $vot4FinalData['beatmapset']['artist'];
+                            $vot4FinalMapper            = $vot4FinalData['beatmapset']['creator'];
+                            $vot4FinalMapperUrl         = "https://osu.ppy.sh/users/{$vot4FinalData['beatmapset']['user_id']}";
+                            $vot4FinalDifficulty        = $vot4FinalData['difficulty_rating'];
+                            $vot4FinalLength            = $vot4FinalData['total_length'];
+                            $vot4FinalOverallSpeed      = $vot4FinalData['beatmapset']['bpm'];
+                            $vot4FinalOverallDifficulty = $vot4FinalData['accuracy'];
+                            $vot4FinalOverallHealth     = $vot4FinalData['drain'];
+
+                            if (
+                                !checkMappoolData(
+                                    id: $vot4FinalId,
+                                    round: $vot4FinalRoundId,
+                                    tournament: $vot4FinalTournamentId
+                                )
+                            ) {
+                                createMappoolData(
+                                    beatmap_id: $vot4FinalId,
+                                    round_id: $vot4FinalRoundId,
+                                    tournament_id: $vot4FinalTournamentId,
+                                    type: $vot4FinalType,
+                                    image: $vot4FinalImage,
+                                    url: $vot4FinalUrl,
+                                    name: $vot4FinalName,
+                                    diff_name: $vot4FinalDifficultyName,
+                                    fa: $vot4FinalFeatureArtist,
+                                    mapper: $vot4FinalMapper,
+                                    mapper_url: $vot4FinalMapperUrl,
+                                    diff: $vot4FinalDifficulty,
+                                    length: $vot4FinalLength,
+                                    bpm: $vot4FinalOverallSpeed,
+                                    od: $vot4FinalOverallDifficulty,
+                                    hp: $vot4FinalOverallHealth
+                                );
+                            } else {
+                                // TODO: UPDATE query here (change the 'view'
+                                // table only, not the actual table if all data
+                                // stay the same).
+                                error_log(
+                                    message: 'Mappool data exist, simply ignoring it...',
+                                    message_type: 0
+                                );
+                            }
+                        }
+
+                        $vot4FinalMappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4FinalMappoolViewData as $vot4FinalMappoolData) {
+                            $vot4FinalMappoolType                = htmlspecialchars($vot4FinalMappoolData['beatmapType']);
+                            $vot4FinalMappoolImage               = htmlspecialchars($vot4FinalMappoolData['beatmapImage']);
+                            $vot4FinalMappoolUrl                 = htmlspecialchars($vot4FinalMappoolData['beatmapUrl']);
+                            $vot4FinalMappoolName                = htmlspecialchars($vot4FinalMappoolData['beatmapName']);
+                            $vot4FinalMappoolDifficultyName      = htmlspecialchars($vot4FinalMappoolData['beatmapDifficultyName']);
+                            $vot4FinalMappoolFeatureArtist       = htmlspecialchars($vot4FinalMappoolData['beatmapFeatureArtist']);
+                            $vot4FinalMappoolMapper              = htmlspecialchars($vot4FinalMappoolData['beatmapMapper']);
+                            $vot4FinalMappoolMapperUrl           = htmlspecialchars($vot4FinalMappoolData['beatmapMapperUrl']);
+                            $vot4FinalMappoolDifficulty          = htmlspecialchars($vot4FinalMappoolData['beatmapDifficulty']);
+                            $vot4FinalMappoolLength              = timeStampFormat(number: $vot4FinalMappoolData['beatmapLength']);
+                            $vot4FinalMappoolOverallSpeed        = sprintf('%.2f', $vot4FinalMappoolData['beatmapOverallSpeed']);
+                            $vot4FinalMappoolOverallDifficulty   = sprintf('%.2f', $vot4FinalMappoolData['beatmapOverallDifficulty']);
+                            $vot4FinalMappoolOverallHealth       = sprintf('%.2f', $vot4FinalMappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4FinalMappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4FinalMappoolUrl">
+                                                <img src="$vot4FinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4FinalMappoolName [$vot4FinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4FinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4FinalMappoolMapperUrl">$vot4FinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4FinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4FinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4FinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4FinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4FinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    }
+                    break;
+
+                // *** VOT4 GRAND FINAL & ALL STAR MAPPOOL DATA ***
+                case preg_match(
+                    pattern: '/^(grandfinals|gf|gfs)$/i',
+                    subject: $vot4RoundName
+                ):
+                case preg_match(
+                    pattern: '/^(allstars|astr|astrs|alstr|alstrs)$/i',
+                    subject: $vot4RoundName
+                ):
+                    /*
+                     *==========================================================
+                     * Because [All STAR] mappool is basically the same as
+                     * [GRAND FINAL] mappool, so I'll just being a bit lazy here
+                     * by using the [GRAND FINAL] mappool data directly. This'll
+                     * prevent me from adding the same beatmap ID into the
+                     * database, which violate the uniqueness of primary key
+                     * (beatmap ID) attribute.
+                     *==========================================================
+                     */
+
+
+                    // Database use the abbreviation of each round's name
+                    $vot4AbbreviateRoundName = 'GF';
+
+                    if (!isset($_COOKIE['vot_access_token'])) {
+                        $vot4GrandFinalMappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4GrandFinalMappoolViewData as $vot4GrandFinalMappoolData) {
+                            $vot4GrandFinalMappoolType                = htmlspecialchars($vot4GrandFinalMappoolData['beatmapType']);
+                            $vot4GrandFinalMappoolImage               = htmlspecialchars($vot4GrandFinalMappoolData['beatmapImage']);
+                            $vot4GrandFinalMappoolUrl                 = htmlspecialchars($vot4GrandFinalMappoolData['beatmapUrl']);
+                            $vot4GrandFinalMappoolName                = htmlspecialchars($vot4GrandFinalMappoolData['beatmapName']);
+                            $vot4GrandFinalMappoolDifficultyName      = htmlspecialchars($vot4GrandFinalMappoolData['beatmapDifficultyName']);
+                            $vot4GrandFinalMappoolFeatureArtist       = htmlspecialchars($vot4GrandFinalMappoolData['beatmapFeatureArtist']);
+                            $vot4GrandFinalMappoolMapper              = htmlspecialchars($vot4GrandFinalMappoolData['beatmapMapper']);
+                            $vot4GrandFinalMappoolMapperUrl           = htmlspecialchars($vot4GrandFinalMappoolData['beatmapMapperUrl']);
+                            $vot4GrandFinalMappoolDifficulty          = htmlspecialchars($vot4GrandFinalMappoolData['beatmapDifficulty']);
+                            $vot4GrandFinalMappoolLength              = timeStampFormat(number: $vot4GrandFinalMappoolData['beatmapLength']);
+                            $vot4GrandFinalMappoolOverallSpeed        = sprintf('%.2f', $vot4GrandFinalMappoolData['beatmapOverallSpeed']);
+                            $vot4GrandFinalMappoolOverallDifficulty   = sprintf('%.2f', $vot4GrandFinalMappoolData['beatmapOverallDifficulty']);
+                            $vot4GrandFinalMappoolOverallHealth       = sprintf('%.2f', $vot4GrandFinalMappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4GrandFinalMappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4GrandFinalMappoolUrl">
+                                                <img src="$vot4GrandFinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4GrandFinalMappoolName [$vot4GrandFinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4GrandFinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4GrandFinalMappoolMapperUrl">$vot4GrandFinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4GrandFinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4GrandFinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4GrandFinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4GrandFinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4GrandFinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    } else {
+                        // TODO: storing data should only be done by host or
+                        // higher role level
+                        $votMappoolAccessToken = $_COOKIE['vot_access_token'];
+
+                        $vot4GrandFinalJsonData = $votMappoolJsonUsableData[$votTournamentName][$vot4AbbreviateRoundName];
+                        foreach ($vot4GrandFinalJsonData as $vot4GrandFinalJsonType => $vot4GrandFinalJsonId) {
+                            $vot4GrandFinalData = getMappoolData(
+                                id: $vot4GrandFinalJsonId,
+                                token: $votMappoolAccessToken
+                            );
+
+                            if (isset($vot4GrandFinalData['error'])) {
+                                // NOTE: bypass for now. Generally, only host or
+                                // higher role level can perform this task.
+                                echo 'BEATMAP DELETED!!';
+                            } else {
+                                $vot4GrandFinalId                = $vot4GrandFinalData['id'];
+                                $vot4GrandFinalRoundId           = $vot4AbbreviateRoundName;
+                                $vot4GrandFinalTournamentId      = $votTournamentName;
+                                $vot4GrandFinalType              = $vot4GrandFinalJsonType;
+                                $vot4GrandFinalImage             = $vot4GrandFinalData['beatmapset']['covers']['cover'];
+                                $vot4GrandFinalUrl               = $vot4GrandFinalData['url'];
+                                $vot4GrandFinalName              = $vot4GrandFinalData['beatmapset']['title'];
+                                $vot4GrandFinalDifficultyName    = $vot4GrandFinalData['version'];
+                                $vot4GrandFinalFeatureArtist     = $vot4GrandFinalData['beatmapset']['artist'];
+                                $vot4GrandFinalMapper            = $vot4GrandFinalData['beatmapset']['creator'];
+                                $vot4GrandFinalMapperUrl         = "https://osu.ppy.sh/users/{$vot4GrandFinalData['beatmapset']['user_id']}";
+                                $vot4GrandFinalDifficulty        = $vot4GrandFinalData['difficulty_rating'];
+                                $vot4GrandFinalLength            = $vot4GrandFinalData['total_length'];
+                                $vot4GrandFinalOverallSpeed      = $vot4GrandFinalData['beatmapset']['bpm'];
+                                $vot4GrandFinalOverallDifficulty = $vot4GrandFinalData['accuracy'];
+                                $vot4GrandFinalOverallHealth     = $vot4GrandFinalData['drain'];
+
+                                if (
+                                    !checkMappoolData(
+                                        id: $vot4GrandFinalId,
+                                        round: $vot4GrandFinalRoundId,
+                                        tournament: $vot4GrandFinalTournamentId
+                                    )
+                                ) {
+                                    createMappoolData(
+                                        beatmap_id: $vot4GrandFinalId,
+                                        round_id: $vot4GrandFinalRoundId,
+                                        tournament_id: $vot4GrandFinalTournamentId,
+                                        type: $vot4GrandFinalType,
+                                        image: $vot4GrandFinalImage,
+                                        url: $vot4GrandFinalUrl,
+                                        name: $vot4GrandFinalName,
+                                        diff_name: $vot4GrandFinalDifficultyName,
+                                        fa: $vot4GrandFinalFeatureArtist,
+                                        mapper: $vot4GrandFinalMapper,
+                                        mapper_url: $vot4GrandFinalMapperUrl,
+                                        diff: $vot4GrandFinalDifficulty,
+                                        length: $vot4GrandFinalLength,
+                                        bpm: $vot4GrandFinalOverallSpeed,
+                                        od: $vot4GrandFinalOverallDifficulty,
+                                        hp: $vot4GrandFinalOverallHealth
+                                    );
+                                } else {
+                                    // TODO: UPDATE query here (change the 'view'
+                                    // table only, not the actual table if all data
+                                    // stay the same).
+                                    error_log(
+                                        message: 'Mappool data exist, simply ignoring it...',
+                                        message_type: 0
+                                    );
+                                }
+                            }
+                        }
+
+                        $vot4GrandFinalMappoolViewData = readMappoolData(
+                            round: $vot4AbbreviateRoundName,
+                            tournament: $votTournamentName
+                        );
+
+                        foreach ($vot4GrandFinalMappoolViewData as $vot4GrandFinalMappoolData) {
+                            $vot4GrandFinalMappoolType                = htmlspecialchars($vot4GrandFinalMappoolData['beatmapType']);
+                            $vot4GrandFinalMappoolImage               = htmlspecialchars($vot4GrandFinalMappoolData['beatmapImage']);
+                            $vot4GrandFinalMappoolUrl                 = htmlspecialchars($vot4GrandFinalMappoolData['beatmapUrl']);
+                            $vot4GrandFinalMappoolName                = htmlspecialchars($vot4GrandFinalMappoolData['beatmapName']);
+                            $vot4GrandFinalMappoolDifficultyName      = htmlspecialchars($vot4GrandFinalMappoolData['beatmapDifficultyName']);
+                            $vot4GrandFinalMappoolFeatureArtist       = htmlspecialchars($vot4GrandFinalMappoolData['beatmapFeatureArtist']);
+                            $vot4GrandFinalMappoolMapper              = htmlspecialchars($vot4GrandFinalMappoolData['beatmapMapper']);
+                            $vot4GrandFinalMappoolMapperUrl           = htmlspecialchars($vot4GrandFinalMappoolData['beatmapMapperUrl']);
+                            $vot4GrandFinalMappoolDifficulty          = htmlspecialchars($vot4GrandFinalMappoolData['beatmapDifficulty']);
+                            $vot4GrandFinalMappoolLength              = timeStampFormat(number: $vot4GrandFinalMappoolData['beatmapLength']);
+                            $vot4GrandFinalMappoolOverallSpeed        = sprintf('%.2f', $vot4GrandFinalMappoolData['beatmapOverallSpeed']);
+                            $vot4GrandFinalMappoolOverallDifficulty   = sprintf('%.2f', $vot4GrandFinalMappoolData['beatmapOverallDifficulty']);
+                            $vot4GrandFinalMappoolOverallHealth       = sprintf('%.2f', $vot4GrandFinalMappoolData['beatmapOverallHealth']);
+
+                            $beatmapInformationTemplate =
+                                <<<EOL
+                                <section class="vot4-mappool">
+                                    <div class="box-container">
+                                        <div class="song-type">
+                                            <h1>$vot4GrandFinalMappoolType</h1>
+                                        </div>
+
+                                        <div class="song-image">
+                                            <a href="$vot4GrandFinalMappoolUrl">
+                                                <img src="$vot4GrandFinalMappoolImage" alt="{$votTournamentName} Beatmap Image">
+                                            </a>
+                                        </div>
+
+                                        <div class="song-name">
+                                            <h2>$vot4GrandFinalMappoolName [$vot4GrandFinalMappoolDifficultyName]</h2>
+                                        </div>
+
+                                        <div class="song-feature-artist">
+                                            <h3>Song by $vot4GrandFinalMappoolFeatureArtist</h3>
+                                        </div>
+
+                                        <div class="song-mapper">
+                                            <h4>Created by <a href="$vot4GrandFinalMappoolMapperUrl">$vot4GrandFinalMappoolMapper</a></h4>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-star-rating">
+                                                <p>SR:</p>
+                                                <p>$vot4GrandFinalMappoolDifficulty</p>
+                                            </div>
+                                            <div class="song-length">
+                                                <p>Length:</p>
+                                                <p>$vot4GrandFinalMappoolLength</p>
+                                            </div>
+                                            <div class="song-speed">
+                                                <p>BPM:</p>
+                                                <p>$vot4GrandFinalMappoolOverallSpeed</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="song-attributes">
+                                            <div class="song-od">
+                                                <p>OD:</p>
+                                                <p>$vot4GrandFinalMappoolOverallDifficulty</p>
+                                            </div>
+                                            <div class="song-hp">
+                                                <p>HP:</p>
+                                                <p>$vot4GrandFinalMappoolOverallHealth</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                EOL;
+
+                            // It would be much more nasty if I tried to output
+                            // this using the traditional mixed HTML & PHP codes
+                            echo $beatmapInformationTemplate;
+                        }
+                    }
+                    break;
+
+                default:
+                    // TODO: proper handling
+                    echo sprintf(
+                        "There is no such round named [%s]. What are u tryin' to do bro...",
+                        $vot4RoundName
+                    );
+                    break;
+            }
+            break;
+        }
+
+    default:
+        // TODO: proper handling
+        echo sprintf(
+            "There is no such tournament named [%s]. What are u tryin' to do bro...",
+            $votTournamentName
         );
-
-        # CURL session will be handled manually through curl_setopt()
-        $mappoolCurlHandle = curl_init(url: null);
-
-        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_URL, value: $beatmapUrl);
-        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HTTPHEADER, value: $httpHeaderRequest);
-        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_HEADER, value: 0);
-        curl_setopt(handle: $mappoolCurlHandle, option: CURLOPT_RETURNTRANSFER, value: 1);
-
-        $mappoolCurlResponse = curl_exec(handle: $mappoolCurlHandle);
-
-        if (curl_errno(handle: $mappoolCurlHandle)) {
-            error_log(curl_error(handle: $mappoolCurlHandle));
-            curl_close(handle: $mappoolCurlHandle);
-            return false; // An error occurred during the API call
-
-        } else {
-            $mappoolReadableData = json_decode(
-                json: $mappoolCurlResponse,
-                associative: true,
-                depth: 512,
-                flags: 0
-            );
-
-            curl_close(handle: $mappoolCurlHandle);
-            return $mappoolReadableData;
-        }
-    }
+        break;
 }
