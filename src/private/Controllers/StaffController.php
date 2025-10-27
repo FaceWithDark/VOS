@@ -29,10 +29,13 @@ switch ($votTournamentName) {
             require __DIR__ . '/../Views/Tournament/StaffVot4View.php';
             $vot4RoleName = $_GET['role'];
 
-            switch ($vot4RoleName) {
-                case 'host':
-                case 'Host':
-                case 'HOST':
+            // Regex returns a boolean value so this is the way to do it
+            switch (true) {
+                // *** VOT4 HOST STAFF DATA ***
+                case preg_match(
+                    pattern: '/^(host|hst)$/i',
+                    subject: $vot4RoleName
+                ):
                     // Database use the abbreviation of each role's name
                     $vot4AbbreviateRoleName = 'HST';
 
@@ -90,9 +93,11 @@ switch ($votTournamentName) {
                     }
                     break;
 
-                case 'mappooler':
-                case 'Mappooler':
-                case 'MAPPOOLER':
+                // *** VOT4 MAPPOOLER STAFF DATA ***
+                case preg_match(
+                    pattern: '/^(mappooler|maplr)$/i',
+                    subject: $vot4RoleName
+                ):
                     // Database use the abbreviation of each role's name
                     $vot4AbbreviateRoleName = 'MAPLR';
 
@@ -150,11 +155,11 @@ switch ($votTournamentName) {
                     }
                     break;
 
-                case 'gfx_vfx':
-                case 'Gfx_vfx':
-                case 'gfx_Vfx':
-                case 'Gfx_Vfx':
-                case 'GFX_VFX':
+                // *** VOT4 GFX/VFX STAFF DATA ***
+                case preg_match(
+                    pattern: '/^(gfx_vfx|gnvfx)$/i',
+                    subject: $vot4RoleName
+                ):
                     // Database use the abbreviation of each role's name
                     $vot4AbbreviateRoleName = 'GNVFX';
 
@@ -212,9 +217,11 @@ switch ($votTournamentName) {
                     }
                     break;
 
-                case 'mapper':
-                case 'Mapper':
-                case 'MAPPER':
+                // *** VOT4 MAPPER STAFF DATA ***
+                case preg_match(
+                    pattern: '/^(mapper|mappr)$/i',
+                    subject: $vot4RoleName
+                ):
                     // Database use the abbreviation of each role's name
                     $vot4AbbreviateRoleName = 'MAPPR';
 
@@ -272,10 +279,11 @@ switch ($votTournamentName) {
                     }
                     break;
 
-                case 'play_tester':
-                case 'Play_tester':
-                case 'Play_Tester':
-                case 'PLAY_TESTER':
+                // *** VOT4 PLAY TESTER STAFF DATA ***
+                case preg_match(
+                    pattern: '/^(play_tester|pltst)$/i',
+                    subject: $vot4RoleName
+                ):
                     // Database use the abbreviation of each role's name
                     $vot4AbbreviateRoleName = 'PLTST';
 
@@ -333,9 +341,11 @@ switch ($votTournamentName) {
                     }
                     break;
 
-                case 'referee':
-                case 'Referee':
-                case 'REFEREE':
+                // *** VOT4 REFEREE STAFF DATA ***
+                case preg_match(
+                    pattern: '/^(referee|refre)$/i',
+                    subject: $vot4RoleName
+                ):
                     // Database use the abbreviation of each role's name
                     $vot4AbbreviateRoleName = 'REFRE';
 
@@ -393,9 +403,11 @@ switch ($votTournamentName) {
                     }
                     break;
 
-                case 'streamer':
-                case 'Streamer':
-                case 'STREAMER':
+                // *** VOT4 STREAMER STAFF DATA ***
+                case preg_match(
+                    pattern: '/^(streamer|strmr)$/i',
+                    subject: $vot4RoleName
+                ):
                     // Database use the abbreviation of each role's name
                     $vot4AbbreviateRoleName = 'STRMR';
 
@@ -453,9 +465,11 @@ switch ($votTournamentName) {
                     }
                     break;
 
-                case 'commentator':
-                case 'Commentator':
-                case 'COMMENTATOR':
+                // *** VOT4 COMMENTATOR STAFF DATA ***
+                case preg_match(
+                    pattern: '/^(commentator|cmntr)$/i',
+                    subject: $vot4RoleName
+                ):
                     // Database use the abbreviation of each role's name
                     $vot4AbbreviateRoleName = 'CMNTR';
 
@@ -513,9 +527,11 @@ switch ($votTournamentName) {
                     }
                     break;
 
-                case 'statistician':
-                case 'Statistician':
-                case 'STATISTICIAN':
+                // *** VOT4 STATISTICIAN STAFF DATA ***
+                case preg_match(
+                    pattern: '/^(statistician|stacn)$/i',
+                    subject: $vot4RoleName
+                ):
                     // Database use the abbreviation of each role's name
                     $vot4AbbreviateRoleName = 'STACN';
 
