@@ -7,7 +7,7 @@ if (
     !isset($_COOKIE['vot_access_id']) &&
     !isset($_COOKIE['vot_access_token'])
 ) {
-    $adminSettingPath = explode(
+    $tournamentSettingPath = explode(
         separator: '/',
         string: trim(
             string: $_SERVER['REQUEST_URI'],
@@ -18,7 +18,7 @@ if (
     error_log(
         message: sprintf(
             "Suspicious attempt to access [%s] setting page detected!!",
-            strtoupper(string: $adminSettingPath)
+            strtoupper(string: $tournamentSettingPath)
         ),
         message_type: 0
     );
