@@ -1,21 +1,27 @@
 "use strict"; // Don't ask me why I need to do this, JS sucks in all shapes
 
-const appendLocation    = document.querySelector(".tournament-setting-page");
-const searchParam       = new URLSearchParams(window.location.search);
+const appendLocation = document.querySelector(".tournament-setting-page");
+const appendParam = new URLSearchParams(window.location.search);
 
-if (searchParam.has("tournament") && searchParam.has("round")) {
+if (appendParam.has("tournament") && appendParam.has("round")) {
     // Clear the current HTML block
     appendLocation.innerHTML = "";
 
-    const tournamentValue   = searchParam.get("tournament");
-    const roundValue        = searchParam.get("round");
+    const tournamentValue = searchParam.get("tournament");
+    const roundValue = searchParam.get("round");
+    const currentAppendPath = window.location.pathname;
+    const currentAppendParam = window.location.search;
 
     // Then append a new HTML block
     appendLocation.innerHTML = `
         <div class="tournament-add-mappool-panel">
             <h2>Add mappool data for ${roundValue.toUpperCase()} round in ${tournamentValue.toUpperCase()} tournament</h2>
 
-            <form action="/setting/tournament" target="_self" autocomplete="off" enctype="application/x-www-form-urlencoded" method="post">
+            <form action="${currentAppendPath}${currentAppendParam}" target="_self" autocomplete="off" enctype="application/x-www-form-urlencoded" method="post">
+                <!-- Hidden inputs to keep existing GET params -->
+                <input type="hidden" name="tournament" value="${tournamentValue}">
+                <input type="hidden" name="round" value="${roundValue}">
+
                 <label for="beatmapType">Beatmap Type:</label>
                 <select name="beatmapType" id="beatmapType" size="1" required>
                     <optgroup label="No Mod">

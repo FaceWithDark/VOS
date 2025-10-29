@@ -3,6 +3,17 @@
 declare(strict_types=1);
 
 
+/* Desired format:
+{
+    "VOT5": {
+        "QLF": {
+            "NM1": 12345678,
+        }
+    }
+}
+*/
+$jsonData = [];
+
 if (
     !isset($_COOKIE['vot_access_id']) &&
     !isset($_COOKIE['vot_access_token'])
@@ -35,26 +46,45 @@ if (
     } else {
         require __DIR__ . '/../../Controllers/NavigationBarController.php';
 
-        $beatmapType    = $_POST['beatmapType'];
+        $tournamentId   = strtoupper(string: $_GET['tournament']);
+        $roundId        = strtoupper(string: $_GET['round']);
+        $beatmapType    = strtoupper(string: $_POST['beatmapType']);
         $beatmapId      = (int)$_POST['beatmapId'];
 
-        //TODO: regex case-insensitive for beatmap type.
-        echo sprintf(
-            "Mappool search data: [%s], [%d]",
-            $beatmapType,
-            $beatmapId
-        );
+        //TODO: regex case-insensitive for beatmap type AND round ID.
+        $votMappoolJsonData = __DIR__ . '/../../Datas/Tournament/VotMappoolData.json';
 
-        /* $votMappoolJsonData = __DIR__ . '/../../Datas/Tournament/VotMappoolData.json';
-
-        if (!file_exists(filename: $votMappoolJsonData)) {
-            echo "Sus?";
-        } else {
-            $a = file_get_contents($votMappoolJsonData);
-            $b = json_decode($a, true);
-
+        if (file_exists(filename: $votMappoolJsonData)) {
             require_once __DIR__ . '/../../Configurations/PrettyArray.php';
-            echo array_dump(array: $b);
-        } */
+
+            $votMappoolJsonViewableData = file_get_contents(
+                filename: $votMappoolJsonData,
+                use_include_path: false,
+                context: null,
+                offset: 0,
+                length: null
+            );
+            $votMappoolJsonUsableData = json_decode(
+                json: $votMappoolJsonViewableData,
+                associative: true
+            );
+
+            echo array_dump(array: $votMappoolJsonUsableData);
+        } else {
+            $jsonData[$tournamentId][$roundId][$beatmapType] = $beatmapId;
+
+            $appendJsonData = json_encode(
+                value: $jsonData,
+                flags: 0,
+                depth: 512
+            );
+
+            file_put_contents(
+                filename: $votMappoolJsonData,
+                data: $appendJsonData,
+                flags: 0,
+                context: null
+            );
+        }
     }
 }
