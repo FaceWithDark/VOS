@@ -29,6 +29,32 @@ if (
         response_code: 302
     ));
 } else {
-    require __DIR__ . '/../../Controllers/NavigationBarController.php';
-    require __DIR__ . '/../../Views/Setting/TournamentSettingView.php';
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        require __DIR__ . '/../../Controllers/NavigationBarController.php';
+        require __DIR__ . '/../../Views/Setting/TournamentSettingView.php';
+    } else {
+        require __DIR__ . '/../../Controllers/NavigationBarController.php';
+
+        $beatmapType    = $_POST['beatmapType'];
+        $beatmapId      = (int)$_POST['beatmapId'];
+
+        //TODO: regex case-insensitive for beatmap type.
+        echo sprintf(
+            "Mappool search data: [%s], [%d]",
+            $beatmapType,
+            $beatmapId
+        );
+
+        /* $votMappoolJsonData = __DIR__ . '/../../Datas/Tournament/VotMappoolData.json';
+
+        if (!file_exists(filename: $votMappoolJsonData)) {
+            echo "Sus?";
+        } else {
+            $a = file_get_contents($votMappoolJsonData);
+            $b = json_decode($a, true);
+
+            require_once __DIR__ . '/../../Configurations/PrettyArray.php';
+            echo array_dump(array: $b);
+        } */
+    }
 }
