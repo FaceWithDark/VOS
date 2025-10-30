@@ -1,16 +1,16 @@
 "use strict"; // Don't ask me why I need to do this, JS sucks in all shapes
 
-const appendLocation = document.querySelector(".tournament-setting-page");
-const appendParam = new URLSearchParams(window.location.search);
+const appendLocation    = document.querySelector(".tournament-setting-page");
+const appendParam       = new URLSearchParams(window.location.search);
 
 if (appendParam.has("tournament") && appendParam.has("round")) {
     // Clear the current HTML block
     appendLocation.innerHTML = "";
 
-    const tournamentValue = searchParam.get("tournament");
-    const roundValue = searchParam.get("round");
-    const currentAppendPath = window.location.pathname;
-    const currentAppendParam = window.location.search;
+    const tournamentValue       = appendParam.get("tournament");
+    const roundValue            = appendParam.get("round");
+    const currentAppendPath     = window.location.pathname;
+    const currentAppendParam    = window.location.search;
 
     // Then append a new HTML block
     appendLocation.innerHTML = `
