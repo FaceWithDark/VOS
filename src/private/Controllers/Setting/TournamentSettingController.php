@@ -49,16 +49,15 @@ if (
          *============================================*
          */
 
-        $tournamentMappoolJsonData = [];
-
         $tournamentName  = $_GET['tournament'];
         $roundName       = $_GET['round'];
         $beatmapType     = $_POST['beatmapType'];
         $beatmapId       = (int)$_POST['beatmapId'];
 
-        $tournamentMappoolJsonFile = __DIR__ . '/../../Datas/Tournament/Mappool' . ucfirst(string: $tournamentName) . "Data.json";
+        $mappoolJsonFile = __DIR__ . '/../../Datas/Tournament/Mappool' . ucfirst(string: $tournamentName) . "Data.json";
+        $mappoolJsonData = [];
 
-        if (!file_exists(filename: $tournamentMappoolJsonFile)) {
+        if (!file_exists(filename: $mappoolJsonFile)) {
             switch (true) {
                 // *** TOURNAMENT QUALIFIER MAPPOOL DATA ***
                 case preg_match(
@@ -66,44 +65,41 @@ if (
                     subject: $roundName
                 ):
                     // Database use the abbreviation of each round's name
-                    $abbreviateRoundName = 'QLF';
-
-                    $tournamentMappoolJsonData[strtoupper(string: $tournamentName)][$abbreviateRoundName][strtoupper(string: $beatmapType)] = $beatmapId;
-
-                    $tournamentMappoolJsonNew = json_encode(
-                        value: $tournamentMappoolJsonData,
-                        flags: 0,
-                        depth: 512
-                    );
-
-                    file_put_contents(
-                        filename: $tournamentMappoolJsonFile,
-                        data: $tournamentMappoolJsonNew,
-                        flags: 0,
-                        context: null
-                    );
+                    $mappoolJsonData[strtoupper(string: $tournamentName)]['QLF'][strtoupper(string: $beatmapType)] = $beatmapId;
                     break;
 
                 default:
                     require __DIR__ . '/../../Controllers/NavigationBarController.php';
                     break;
             }
-        } else {
-            require_once __DIR__ . '/../../Configurations/PrettyArray.php';
 
-            $tournamentMappoolJsonViewable = file_get_contents(
-                filename: $tournamentMappoolJsonFile,
+            $mappoolJsonNewable = json_encode(
+                value: $mappoolJsonData,
+                flags: 0,
+                depth: 512
+            );
+            file_put_contents(
+                filename: $mappoolJsonFile,
+                data: $mappoolJsonNewable,
+                flags: 0,
+                context: null
+            );
+        } else {
+            require __DIR__ . '/../../Utilities/PrettyArray.php';
+
+            $mappoolJsonViewable = file_get_contents(
+                filename: $mappoolJsonFile,
                 use_include_path: false,
                 context: null,
                 offset: 0,
                 length: null
             );
-            $tournamentMappoolJsonUsable = json_decode(
-                json: $tournamentMappoolJsonViewable,
+            $mappoolJsonUsable = json_decode(
+                json: $mappoolJsonViewable,
                 associative: true
             );
 
-            echo array_dump(array: $tournamentMappoolJsonUsable);
+            echo array_dump(array: $mappoolJsonUsable);
         }
     }
 }

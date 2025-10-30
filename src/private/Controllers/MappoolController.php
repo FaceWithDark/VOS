@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../Models/Mappool.php';
-require __DIR__ . '/../Configurations/Length.php';
+require __DIR__ . '/../Utilities/Length.php';
 
 
 // Simply: "/<tournament-name>/staff" --> "<TOURNAMENT-NAME>"
