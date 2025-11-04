@@ -56,159 +56,144 @@ if (
         $beatmapId       = (int)$_POST['beatmapId'];
 
         // Trust me, it looks better this way than string concat
-        $mappoolJsonFile =  sprintf(
+        $mappoolJsonFile = sprintf(
             "%s/../../Datas/Tournament/Mappool%sData.json",
             __DIR__,
             ucfirst(string: $tournamentName)
         );
         $mappoolJsonData = [];
 
-        if (!file_exists(filename: $mappoolJsonFile)) {
-            switch (true) {
-                // *** TOURNAMENT QUALIFIER MAPPOOL DATA ***
-                case preg_match(
-                    pattern: '/^(qualifier|qualifiers|qlf|qlfs)$/i',
-                    subject: $roundName
-                ):
-                    appendJsonData(
-                        json_data: $mappoolJsonData,
-                        json_keys: [
-                            strtoupper(string: $tournamentName),
-                            // Database columns use abbrviation names for quick searching
-                            'QLF',
-                            strtoupper(string: $beatmapType)
-                        ],
-                        json_value: $beatmapId,
-                        json_file: $mappoolJsonFile
-                    );
-                    break;
+        switch (true) {
+            // *** TOURNAMENT QUALIFIER MAPPOOL DATA ***
+            case preg_match(
+                pattern: '/^(qualifier|qualifiers|qlf|qlfs)$/i',
+                subject: $roundName
+            ):
+                appendJsonData(
+                    json_data: $mappoolJsonData,
+                    json_keys: [
+                        strtoupper(string: $tournamentName),
+                        // Database columns use abbrviation names for quick searching
+                        'QLF',
+                        strtoupper(string: $beatmapType)
+                    ],
+                    json_value: $beatmapId,
+                    json_file: $mappoolJsonFile
+                );
+                break;
 
-                // *** TOURNAMENT GROUP STAGE (WEEK 1) MAPPOOL DATA ***
-                case preg_match(
-                    pattern: '/^(groupstageweek1|groupstagesweek1|gsw1|gssw1)$/i',
-                    subject: $roundName
-                ):
-                    appendJsonData(
-                        json_data: $mappoolJsonData,
-                        json_keys: [
-                            strtoupper(string: $tournamentName),
-                            // Database columns use abbrviation names for quick searching
-                            'GSW1',
-                            strtoupper(string: $beatmapType)
-                        ],
-                        json_value: $beatmapId,
-                        json_file: $mappoolJsonFile
-                    );
-                    break;
+            // *** TOURNAMENT GROUP STAGE (WEEK 1) MAPPOOL DATA ***
+            case preg_match(
+                pattern: '/^(groupstageweek1|groupstagesweek1|gsw1|gssw1)$/i',
+                subject: $roundName
+            ):
+                appendJsonData(
+                    json_data: $mappoolJsonData,
+                    json_keys: [
+                        strtoupper(string: $tournamentName),
+                        // Database columns use abbrviation names for quick searching
+                        'GSW1',
+                        strtoupper(string: $beatmapType)
+                    ],
+                    json_value: $beatmapId,
+                    json_file: $mappoolJsonFile
+                );
+                break;
 
-                // *** TOURNAMENT GROUP STAGE (WEEK 2) MAPPOOL DATA ***
-                case preg_match(
-                    pattern: '/^(groupstageweek2|groupstagesweek2|gsw2|gssw2)$/i',
-                    subject: $roundName
-                ):
-                    appendJsonData(
-                        json_data: $mappoolJsonData,
-                        json_keys: [
-                            strtoupper(string: $tournamentName),
-                            // Database columns use abbrviation names for quick searching
-                            'GSW2',
-                            strtoupper(string: $beatmapType)
-                        ],
-                        json_value: $beatmapId,
-                        json_file: $mappoolJsonFile
-                    );
-                    break;
+            // *** TOURNAMENT GROUP STAGE (WEEK 2) MAPPOOL DATA ***
+            case preg_match(
+                pattern: '/^(groupstageweek2|groupstagesweek2|gsw2|gssw2)$/i',
+                subject: $roundName
+            ):
+                appendJsonData(
+                    json_data: $mappoolJsonData,
+                    json_keys: [
+                        strtoupper(string: $tournamentName),
+                        // Database columns use abbrviation names for quick searching
+                        'GSW2',
+                        strtoupper(string: $beatmapType)
+                    ],
+                    json_value: $beatmapId,
+                    json_file: $mappoolJsonFile
+                );
+                break;
 
-                // *** TOURNAMENT SEMI FINAL MAPPOOL DATA ***
-                case preg_match(
-                    pattern: '/^(semifinal|semifinals|sf|sfs)$/i',
-                    subject: $roundName
-                ):
-                    appendJsonData(
-                        json_data: $mappoolJsonData,
-                        json_keys: [
-                            strtoupper(string: $tournamentName),
-                            // Database columns use abbrviation names for quick searching
-                            'SF',
-                            strtoupper(string: $beatmapType)
-                        ],
-                        json_value: $beatmapId,
-                        json_file: $mappoolJsonFile
-                    );
-                    break;
+            // *** TOURNAMENT SEMI FINAL MAPPOOL DATA ***
+            case preg_match(
+                pattern: '/^(semifinal|semifinals|sf|sfs)$/i',
+                subject: $roundName
+            ):
+                appendJsonData(
+                    json_data: $mappoolJsonData,
+                    json_keys: [
+                        strtoupper(string: $tournamentName),
+                        // Database columns use abbrviation names for quick searching
+                        'SF',
+                        strtoupper(string: $beatmapType)
+                    ],
+                    json_value: $beatmapId,
+                    json_file: $mappoolJsonFile
+                );
+                break;
 
-                // *** TOURNAMENT FINAL MAPPOOL DATA ***
-                case preg_match(
-                    pattern: '/^(final|finals|fnl|fnls)$/i',
-                    subject: $roundName
-                ):
-                    appendJsonData(
-                        json_data: $mappoolJsonData,
-                        json_keys: [
-                            strtoupper(string: $tournamentName),
-                            // Database columns use abbrviation names for quick searching
-                            'FNL',
-                            strtoupper(string: $beatmapType)
-                        ],
-                        json_value: $beatmapId,
-                        json_file: $mappoolJsonFile
-                    );
-                    break;
+            // *** TOURNAMENT FINAL MAPPOOL DATA ***
+            case preg_match(
+                pattern: '/^(final|finals|fnl|fnls)$/i',
+                subject: $roundName
+            ):
+                appendJsonData(
+                    json_data: $mappoolJsonData,
+                    json_keys: [
+                        strtoupper(string: $tournamentName),
+                        // Database columns use abbrviation names for quick searching
+                        'FNL',
+                        strtoupper(string: $beatmapType)
+                    ],
+                    json_value: $beatmapId,
+                    json_file: $mappoolJsonFile
+                );
+                break;
 
-                // *** TOURNAMENT GRAND FINAL & ALL STAR MAPPOOL DATA ***
-                case preg_match(
-                    pattern: '/^(grandfinal|grandfinals|gf|gfs)$/i',
-                    subject: $roundName
-                ):
-                case preg_match(
-                    pattern: '/^(allstar|allstars|astr|astrs)$/i',
-                    subject: $roundName
-                ):
+            // *** TOURNAMENT GRAND FINAL & ALL STAR MAPPOOL DATA ***
+            case preg_match(
+                pattern: '/^(grandfinal|grandfinals|gf|gfs)$/i',
+                subject: $roundName
+            ):
+            case preg_match(
+                pattern: '/^(allstar|allstars|astr|astrs)$/i',
+                subject: $roundName
+            ):
 
-                    /*
-                     *==========================================================
-                     * Because [All STAR] mappool is basically the same as
-                     * [GRAND FINAL] mappool, so I'll just being a bit lazy here
-                     * by using the [GRAND FINAL] mappool data directly. This'll
-                     * prevent me from adding the same beatmap ID into the JSON
-                     * data.
-                     *==========================================================
-                     */
+                /*
+                *==========================================================
+                * Because [All STAR] mappool is basically the same as
+                * [GRAND FINAL] mappool, so I'll just being a bit lazy here
+                * by using the [GRAND FINAL] mappool data directly. This'll
+                * prevent me from adding the same beatmap ID into the JSON
+                * data.
+                *==========================================================
+                */
 
-                    appendJsonData(
-                        json_data: $mappoolJsonData,
-                        json_keys: [
-                            strtoupper(string: $tournamentName),
-                            // Database columns use abbrviation names for quick searching
-                            'GF',
-                            strtoupper(string: $beatmapType)
-                        ],
-                        json_value: $beatmapId,
-                        json_file: $mappoolJsonFile
-                    );
-                    break;
+                appendJsonData(
+                    json_data: $mappoolJsonData,
+                    json_keys: [
+                        strtoupper(string: $tournamentName),
+                        // Database columns use abbrviation names for quick searching
+                        'GF',
+                        strtoupper(string: $beatmapType)
+                    ],
+                    json_value: $beatmapId,
+                    json_file: $mappoolJsonFile
+                );
+                break;
 
-                default:
-                    require __DIR__ . '/../../Controllers/NavigationBarController.php';
-                    break;
-            }
-        } else {
-            /* require __DIR__ . '/../../Utilities/PrettyArray.php';
-
-            $mappoolJsonViewable = file_get_contents(
-                filename: $mappoolJsonFile,
-                use_include_path: false,
-                context: null,
-                offset: 0,
-                length: null
-            );
-            $mappoolJsonUsable = json_decode(
-                json: $mappoolJsonViewable,
-                associative: true
-            );
-
-            echo array_dump(array: $mappoolJsonUsable); */
-            echo "<a href='/setting/tournament'>Wanna do it again?</a>";
+            default:
+                // TODO: proper handling
+                require __DIR__ . '/../../Controllers/NavigationBarController.php';
+                break;
         }
+
+        // NOTE: maybe find a way the append multiple data in one go?
+        echo "<a href='/setting/tournament'>Wanna do it again?</a>";
     }
 }

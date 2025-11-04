@@ -9,29 +9,46 @@ function appendJsonData(
     mixed $json_value,
     string $json_file
 ): void {
-    // Lock in the initial address of passed JSON data structure before append
-    // or remove its layer
+    if (!file_exists(filename: $json_file)) {
+        // JSON data sent in is emtpy array by default so no need to re-declare
+        $json_data = [];
+    } else {
+        // Use exisitng JSON file to append/remove data
+        $json_data = json_decode(
+            json: file_get_contents(
+                filename: $json_file,
+                use_include_path: false,
+                context: null,
+                offset: 0,
+                length: null
+            ),
+            associative: true,
+            depth: 512,
+            flags: 0
+        );
+    }
+
+    // Directly use the address of chosen JSON data (use case above) for nested
+    // layer handling
     $json_data_address = &$json_data;
 
     foreach ($json_keys as $json_key) {
-        // Make sure the layer exist and it's an array (empty or non-empty are valid)
-        if (!isset($json_data_address[$json_key]) || !is_array(value: $json_data_address[$json_key])) {
+        // Make sure the layer for each key exist
+        if (!array_key_exists(
+            key: $json_key,
+            array: $json_data_address
+        )) {
             // Create each layer with no data (empty array)
             $json_data_address[$json_key] = [];
-            error_log(
-                message: "Created missing [{$json_key}] JSON layer\n.",
-                message_type: 0
-            );
         } else {
-            error_log(
-                message: "JSON layer already exists for [{$json_key}]\n.",
-                message_type: 0
-            );
+            // Skip through that layer until the last data passed in/viewable
+            // depends on the cases
         }
-        // Continue the checking and referencing process until it hit the final layer/key
+        // Overwrite current address value continuously until it reached final
+        // nested layer
         $json_data_address = &$json_data_address[$json_key];
     }
-    // Final JSON data structure
+    // Then append the value to the final key correspondingly
     $json_data_address = $json_value;
 
     // Export it to a dedicated JSON file for future usages
@@ -39,10 +56,21 @@ function appendJsonData(
         filename: $json_file,
         data: json_encode(
             value: $json_data,
-            flags: 0,
+            flags: JSON_PRETTY_PRINT,
             depth: 512
         ),
         flags: 0,
         context: null
+    );
+
+    error_log(
+        message: sprintf(
+            "[%s] JSON file is successfully created/updated!!",
+            basename(
+                path: $json_file,
+                suffix: ''
+            )
+        ),
+        message_type: 0
     );
 }
