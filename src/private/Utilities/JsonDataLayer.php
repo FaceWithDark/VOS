@@ -74,3 +74,25 @@ function appendJsonData(
         message_type: 0
     );
 }
+
+
+function viewJsonData(
+    string $json_file
+): array {
+    if (!file_exists(filename: $json_file)) {
+        echo "<a href='/setting/tournament'>Make sure the file exists first before viewing. Please go back and do again!!</a>";
+        return [];
+    } else {
+        $json_data = json_decode(
+            json: file_get_contents(
+                filename: $json_file,
+                use_include_path: false,
+                context: null,
+                offset: 0,
+                length: null
+            ),
+            associative: true
+        );
+        return $json_data;
+    }
+}
