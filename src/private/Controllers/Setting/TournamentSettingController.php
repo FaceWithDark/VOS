@@ -162,12 +162,14 @@ if (
                         pattern: '/^(groupstageweek1|groupstagesweek1|gsw1|gssw1)$/i',
                         subject: $roundName
                     ):
+                        // Database columns use abbrviation names for quick searching
+                        $abbreviateRoundName = 'GSW1';
+
                         appendJsonData(
                             json_data: $mappoolJsonData,
                             json_keys: [
                                 strtoupper(string: $tournamentName),
-                                // Database columns use abbrviation names for quick searching
-                                'GSW1',
+                                $abbreviateRoundName,
                                 strtoupper(string: $beatmapType)
                             ],
                             json_value: $beatmapId,
@@ -240,12 +242,14 @@ if (
                         pattern: '/^(groupstageweek2|groupstagesweek2|gsw2|gssw2)$/i',
                         subject: $roundName
                     ):
+                        // Database columns use abbrviation names for quick searching
+                        $abbreviateRoundName = 'GSW2';
+
                         appendJsonData(
                             json_data: $mappoolJsonData,
                             json_keys: [
                                 strtoupper(string: $tournamentName),
-                                // Database columns use abbrviation names for quick searching
-                                'GSW2',
+                                $abbreviateRoundName,
                                 strtoupper(string: $beatmapType)
                             ],
                             json_value: $beatmapId,
@@ -318,12 +322,14 @@ if (
                         pattern: '/^(semifinal|semifinals|sf|sfs)$/i',
                         subject: $roundName
                     ):
+                        // Database columns use abbrviation names for quick searching
+                        $abbreviateRoundName = 'SF';
+
                         appendJsonData(
                             json_data: $mappoolJsonData,
                             json_keys: [
                                 strtoupper(string: $tournamentName),
-                                // Database columns use abbrviation names for quick searching
-                                'SF',
+                                $abbreviateRoundName,
                                 strtoupper(string: $beatmapType)
                             ],
                             json_value: $beatmapId,
@@ -396,12 +402,14 @@ if (
                         pattern: '/^(final|finals|fnl|fnls)$/i',
                         subject: $roundName
                     ):
+                        // Database columns use abbrviation names for quick searching
+                        $abbreviateRoundName = 'FNL';
+
                         appendJsonData(
                             json_data: $mappoolJsonData,
                             json_keys: [
                                 strtoupper(string: $tournamentName),
-                                // Database columns use abbrviation names for quick searching
-                                'FNL',
+                                $abbreviateRoundName,
                                 strtoupper(string: $beatmapType)
                             ],
                             json_value: $beatmapId,
@@ -489,12 +497,14 @@ if (
                          *==========================================================
                          */
 
+                        // Database columns use abbrviation names for quick searching
+                        $abbreviateRoundName = 'GF';
+
                         appendJsonData(
                             json_data: $mappoolJsonData,
                             json_keys: [
                                 strtoupper(string: $tournamentName),
-                                // Database columns use abbrviation names for quick searching
-                                'GF',
+                                $abbreviateRoundName,
                                 strtoupper(string: $beatmapType)
                             ],
                             json_value: $beatmapId,
@@ -664,12 +674,15 @@ if (
                         pattern: '/^(roundof16|roundsof16|ro16|rso16)$/i',
                         subject: $roundName
                     ):
+                        // Database columns use abbrviation names for quick searching
+                        $abbreviateRoundName = 'RO16';
+
                         appendJsonData(
                             json_data: $mappoolJsonData,
                             json_keys: [
                                 strtoupper(string: $tournamentName),
                                 // Database columns use abbrviation names for quick searching
-                                'RO16',
+                                $abbreviateRoundName,
                                 strtoupper(string: $beatmapType)
                             ],
                             json_value: $beatmapId,
@@ -742,12 +755,14 @@ if (
                         pattern: '/^(quarterfinal|quarterfinals|qf|qfs)$/i',
                         subject: $roundName
                     ):
+                        // Database columns use abbrviation names for quick searching
+                        $abbreviateRoundName = 'QF';
+
                         appendJsonData(
                             json_data: $mappoolJsonData,
                             json_keys: [
                                 strtoupper(string: $tournamentName),
-                                // Database columns use abbrviation names for quick searching
-                                'QF',
+                                $abbreviateRoundName,
                                 strtoupper(string: $beatmapType)
                             ],
                             json_value: $beatmapId,
@@ -820,12 +835,15 @@ if (
                         pattern: '/^(semifinal|semifinals|sf|sfs)$/i',
                         subject: $roundName
                     ):
+                        // Database columns use abbrviation names for quick searching
+                        $abbreviateRoundName = 'SF';
+
                         appendJsonData(
                             json_data: $mappoolJsonData,
                             json_keys: [
                                 strtoupper(string: $tournamentName),
                                 // Database columns use abbrviation names for quick searching
-                                'SF',
+                                $abbreviateRoundName,
                                 strtoupper(string: $beatmapType)
                             ],
                             json_value: $beatmapId,
@@ -898,12 +916,14 @@ if (
                         pattern: '/^(final|finals|fnl|fnls)$/i',
                         subject: $roundName
                     ):
+                        // Database columns use abbrviation names for quick searching
+                        $abbreviateRoundName = 'FNL';
+
                         appendJsonData(
                             json_data: $mappoolJsonData,
                             json_keys: [
                                 strtoupper(string: $tournamentName),
-                                // Database columns use abbrviation names for quick searching
-                                'FNL',
+                                $abbreviateRoundName,
                                 strtoupper(string: $beatmapType)
                             ],
                             json_value: $beatmapId,
@@ -991,12 +1011,14 @@ if (
                          *==========================================================
                          */
 
+                        // Database columns use abbrviation names for quick searching
+                        $abbreviateRoundName = 'GF';
+
                         appendJsonData(
                             json_data: $mappoolJsonData,
                             json_keys: [
                                 strtoupper(string: $tournamentName),
-                                // Database columns use abbrviation names for quick searching
-                                'GF',
+                                $abbreviateRoundName,
                                 strtoupper(string: $beatmapType)
                             ],
                             json_value: $beatmapId,
