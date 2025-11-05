@@ -255,7 +255,10 @@ if (
 
             default:
                 // TODO: proper handling
-                require __DIR__ . '/../../Controllers/NavigationBarController.php';
+                echo sprintf(
+                    "There is no such round named [%s]. What are u tryin' to do bro...",
+                    $roundName
+                );
                 break;
         }
 
