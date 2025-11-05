@@ -2,7 +2,10 @@
 # Not so much like static types, but at least it does feel better having this here
 declare(strict_types=1);
 
+require __DIR__ . '/../../Models/Mappool.php';
+require __DIR__ . '/../../Utilities/Length.php';
 require __DIR__ . "/../../Utilities/JsonDataLayer.php";
+
 
 if (
     !isset($_COOKIE['vot_access_id']) &&
@@ -62,6 +65,7 @@ if (
             ucfirst(string: $tournamentName)
         );
         $mappoolJsonData = [];
+        $mappoolAccessToken = $_COOKIE['vot_access_token'];
 
         switch (true) {
             // *** TOURNAMENT QUALIFIER MAPPOOL DATA ***
@@ -69,17 +73,79 @@ if (
                 pattern: '/^(qualifier|qualifiers|qlf|qlfs)$/i',
                 subject: $roundName
             ):
+                // Database columns use abbrviation names for quick searching
+                $abbreviateRoundName = 'QLF';
+
                 appendJsonData(
                     json_data: $mappoolJsonData,
                     json_keys: [
                         strtoupper(string: $tournamentName),
-                        // Database columns use abbrviation names for quick searching
-                        'QLF',
+                        $abbreviateRoundName,
                         strtoupper(string: $beatmapType)
                     ],
                     json_value: $beatmapId,
                     json_file: $mappoolJsonFile
                 );
+
+                $mappoolQualiferJsonData = viewJsonData(json_file: $mappoolJsonFile)[strtoupper(string: $tournamentName)][$abbreviateRoundName];
+                foreach ($mappoolQualiferJsonData as $qualifierJsonType => $qualifierJsonId) {
+                    $qualifierData = getMappoolData(
+                        id: $qualifierJsonId,
+                        token: $mappoolAccessToken
+                    );
+
+                    $qualifierId                = $qualifierData['id'];
+                    $qualifierRoundId           = $abbreviateRoundName;
+                    $qualifierTournamentId      = $tournamentName;
+                    $qualifierType              = $qualifierJsonType;
+                    $qualifierImage             = $qualifierData['beatmapset']['covers']['cover'];
+                    $qualifierUrl               = $qualifierData['url'];
+                    $qualifierName              = $qualifierData['beatmapset']['title'];
+                    $qualifierDifficultyName    = $qualifierData['version'];
+                    $qualifierFeatureArtist     = $qualifierData['beatmapset']['artist'];
+                    $qualifierMapper            = $qualifierData['beatmapset']['creator'];
+                    $qualifierMapperUrl         = "https://osu.ppy.sh/users/{$qualifierData['beatmapset']['user_id']}";
+                    $qualifierDifficulty        = $qualifierData['difficulty_rating'];
+                    $qualifierLength            = $qualifierData['total_length'];
+                    $qualifierOverallSpeed      = $qualifierData['beatmapset']['bpm'];
+                    $qualifierOverallDifficulty = $qualifierData['accuracy'];
+                    $qualifierOverallHealth     = $qualifierData['drain'];
+
+                    if (
+                        !checkMappoolData(
+                            id: $qualifierId,
+                            round: $qualifierRoundId,
+                            tournament: strtoupper(string: $qualifierTournamentId)
+                        )
+                    ) {
+                        createMappoolData(
+                            beatmap_id: $qualifierId,
+                            round_id: $qualifierRoundId,
+                            tournament_id: strtoupper(string: $qualifierTournamentId),
+                            type: $qualifierType,
+                            image: $qualifierImage,
+                            url: $qualifierUrl,
+                            name: $qualifierName,
+                            diff_name: $qualifierDifficultyName,
+                            fa: $qualifierFeatureArtist,
+                            mapper: $qualifierMapper,
+                            mapper_url: $qualifierMapperUrl,
+                            diff: $qualifierDifficulty,
+                            length: $qualifierLength,
+                            bpm: $qualifierOverallSpeed,
+                            od: $qualifierOverallDifficulty,
+                            hp: $qualifierOverallHealth
+                        );
+                    } else {
+                        // TODO: UPDATE query here (change the 'view'
+                        // table only, not the actual table if all data
+                        // stay the same).
+                        error_log(
+                            message: 'Mappool data exist, simply ignoring it...',
+                            message_type: 0
+                        );
+                    }
+                }
                 break;
 
             // *** TOURNAMENT GROUP STAGE (WEEK 1) MAPPOOL DATA ***
