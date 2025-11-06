@@ -159,6 +159,7 @@ if (!(appendParam.has("tournament") && appendParam.has("round"))) {
     const roundValue = appendParam.get("round");
     const currentAppendPath = window.location.pathname;
     const currentAppendParam = window.location.search;
+    const currentAppendUrl = new URL(window.location.href);
 
     // Tournament option regex matching handling
     switch (true) {
@@ -545,7 +546,458 @@ if (!(appendParam.has("tournament") && appendParam.has("round"))) {
                                     <optgroup label="Free/Force Mod">
                                         <option value="fm1">FM1</option>
                                         <option value="fm2">FM2</option>
-                                        <option value="fm3">FM3</option>
+                                    </optgroup>
+
+                                    <optgroup label="Tie Breaker">
+                                        <option value="TB">TB</option>
+                                    </optgroup>
+                                </select>
+
+                                <br /><br />
+
+                                <label for="beatmapId">Beatmap ID:</label>
+                                <input type="text" name="beatmapId" id="beatmapId" placeholder="E.G: 2264801" autofocus required />
+
+                                <br /><br />
+
+                                <input type="submit" value="Add Mappool Data">
+                            </form>
+                        </div>
+
+                        <div class="tournament-view-data-panel">
+                            <h2>View Mappool Data</h2>
+                            <p>COMING SOON!!</p>
+                        </div>
+                    `;
+                    break;
+
+                default:
+                    if (!(currentAppendUrl.search)) {
+                        // Quick log for further debugs
+                        console.log("Correct URL found, no redirection needed.");
+                        break;
+                    } else {
+                        // Clear out current query params
+                        currentAppendUrl.search = "";
+
+                        // Then redirect user to original path
+                        window.location.href = currentAppendUrl.toString();
+                        break;
+                    }
+            }
+            break;
+
+        // *** VOT4 TOURNAMENT ROUND OPTIONS ***
+        case (/^(?:vot4|vietnameseosutaikotournament4)$/i).test(tournamentValue):
+            // Round option regex matching handling
+            switch (true) {
+                // *** TOURNAMENT QUALIFIER MAPPOOL FORM ***
+                case (/^(?:qualifier|qualifiers|qlf|qlfs)$/i).test(roundValue):
+                    // Then append a new HTML block
+                    appendLocation.innerHTML = `
+                        <div class="tournament-add-mappool-panel">
+                            <h2>Add mappool data for ${roundValue.toLocaleUpperCase()} round in ${tournamentValue.toLocaleUpperCase()} tournament</h2>
+
+                            <form action="${currentAppendPath}${currentAppendParam}" target="_self" autocomplete="off" enctype="application/x-www-form-urlencoded" method="post">
+                                <!-- Hidden inputs to keep existing GET params -->
+                                <input type="hidden" name="tournament" value="${tournamentValue}">
+                                <input type="hidden" name="round" value="${roundValue}">
+
+                                <label for="beatmapType">Beatmap Type:</label>
+                                <select name="beatmapType" id="beatmapType" size="1" required>
+                                    <optgroup label="No Mod">
+                                        <option value="nm1">NM1</option>
+                                        <option value="nm2">NM2</option>
+                                        <option value="nm3">NM3</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hidden">
+                                        <option value="hd1">HD1</option>
+                                        <option value="hd2">HD2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hard Rock">
+                                        <option value="hr1">HR1</option>
+                                        <option value="hr2">HR2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Double Time">
+                                        <option value="dt1">DT1</option>
+                                    </optgroup>
+
+                                    <optgroup label="Free/Force Mod">
+                                        <option value="fm1">FM1</option>
+                                    </optgroup>
+                                </select>
+
+                                <br /><br />
+
+                                <label for="beatmapId">Beatmap ID:</label>
+                                <input type="text" name="beatmapId" id="beatmapId" placeholder="E.G: 2264801" autofocus required />
+
+                                <br /><br />
+
+                                <input type="submit" value="Add Mappool Data">
+                            </form>
+                        </div>
+
+                        <div class="tournament-view-data-panel">
+                            <h2>View Mappool Data</h2>
+                            <p>COMING SOON!!</p>
+                        </div>
+                    `;
+                    break;
+
+                // *** TOURNAMENT ROUND OF 16 MAPPOOL FORM ***
+                case (/^(?:roundof16|roundsof16|ro16|rso16)$/i).test(roundValue):
+                    // Then append a new HTML block
+                    appendLocation.innerHTML = `
+                        <div class="tournament-add-mappool-panel">
+                            <h2>Add mappool data for ${roundValue.toLocaleUpperCase()} round in ${tournamentValue.toLocaleUpperCase()} tournament</h2>
+
+                            <form action="${currentAppendPath}${currentAppendParam}" target="_self" autocomplete="off" enctype="application/x-www-form-urlencoded" method="post">
+                                <!-- Hidden inputs to keep existing GET params -->
+                                <input type="hidden" name="tournament" value="${tournamentValue}">
+                                <input type="hidden" name="round" value="${roundValue}">
+
+                                <label for="beatmapType">Beatmap Type:</label>
+                                <select name="beatmapType" id="beatmapType" size="1" required>
+                                    <optgroup label="No Mod">
+                                        <option value="nm1">NM1</option>
+                                        <option value="nm2">NM2</option>
+                                        <option value="nm3">NM3</option>
+                                        <option value="nm4">NM4</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hidden">
+                                        <option value="hd1">HD1</option>
+                                        <option value="hd2">HD2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hard Rock">
+                                        <option value="hr1">HR1</option>
+                                        <option value="hr2">HR2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Double Time">
+                                        <option value="dt1">DT1</option>
+                                        <option value="dt2">DT2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Free/Force Mod">
+                                        <option value="fm1">FM1</option>
+                                        <option value="fm2">FM2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Easy">
+                                        <option value="ez">EZ</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hidden + Hard Rock">
+                                        <option value="hdhr">HDHR</option>
+                                    </optgroup>
+
+                                    <optgroup label="Tie Breaker">
+                                        <option value="TB">TB</option>
+                                    </optgroup>
+                                </select>
+
+                                <br /><br />
+
+                                <label for="beatmapId">Beatmap ID:</label>
+                                <input type="text" name="beatmapId" id="beatmapId" placeholder="E.G: 2264801" autofocus required />
+
+                                <br /><br />
+
+                                <input type="submit" value="Add Mappool Data">
+                            </form>
+                        </div>
+
+                        <div class="tournament-view-data-panel">
+                            <h2>View Mappool Data</h2>
+                            <p>COMING SOON!!</p>
+                        </div>
+                    `;
+                    break;
+
+                // *** TOURNAMENT QUARTER FINAL MAPPOOL FORM ***
+                case (/^(?:quarterfinal|quarterfinals|qf|qfs)$/i).test(roundValue):
+                    // Then append a new HTML block
+                    appendLocation.innerHTML = `
+                        <div class="tournament-add-mappool-panel">
+                            <h2>Add mappool data for ${roundValue.toLocaleUpperCase()} round in ${tournamentValue.toLocaleUpperCase()} tournament</h2>
+
+                            <form action="${currentAppendPath}${currentAppendParam}" target="_self" autocomplete="off" enctype="application/x-www-form-urlencoded" method="post">
+                                <!-- Hidden inputs to keep existing GET params -->
+                                <input type="hidden" name="tournament" value="${tournamentValue}">
+                                <input type="hidden" name="round" value="${roundValue}">
+
+                                <label for="beatmapType">Beatmap Type:</label>
+                                <select name="beatmapType" id="beatmapType" size="1" required>
+                                    <optgroup label="No Mod">
+                                        <option value="nm1">NM1</option>
+                                        <option value="nm2">NM2</option>
+                                        <option value="nm3">NM3</option>
+                                        <option value="nm4">NM4</option>
+                                        <option value="nm5">NM5</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hidden">
+                                        <option value="hd1">HD1</option>
+                                        <option value="hd2">HD2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hard Rock">
+                                        <option value="hr1">HR1</option>
+                                        <option value="hr2">HR2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Double Time">
+                                        <option value="dt1">DT1</option>
+                                        <option value="dt2">DT2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Free/Force Mod">
+                                        <option value="fm1">FM1</option>
+                                        <option value="fm2">FM2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Easy">
+                                        <option value="ez">EZ</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hidden + Hard Rock">
+                                        <option value="hdhr">HDHR</option>
+                                    </optgroup>
+
+                                    <optgroup label="Tie Breaker">
+                                        <option value="TB">TB</option>
+                                    </optgroup>
+                                </select>
+
+                                <br /><br />
+
+                                <label for="beatmapId">Beatmap ID:</label>
+                                <input type="text" name="beatmapId" id="beatmapId" placeholder="E.G: 2264801" autofocus required />
+
+                                <br /><br />
+
+                                <input type="submit" value="Add Mappool Data">
+                            </form>
+                        </div>
+
+                        <div class="tournament-view-data-panel">
+                            <h2>View Mappool Data</h2>
+                            <p>COMING SOON!!</p>
+                        </div>
+                    `;
+                    break;
+
+                // *** TOURNAMENT SEMI FINAL MAPPOOL FORM ***
+                case (/^(?:semifinal|semifinals|sf|sfs)$/i).test(roundValue):
+                    // Then append a new HTML block
+                    appendLocation.innerHTML = `
+                        <div class="tournament-add-mappool-panel">
+                            <h2>Add mappool data for ${roundValue.toLocaleUpperCase()} round in ${tournamentValue.toLocaleUpperCase()} tournament</h2>
+
+                            <form action="${currentAppendPath}${currentAppendParam}" target="_self" autocomplete="off" enctype="application/x-www-form-urlencoded" method="post">
+                                <!-- Hidden inputs to keep existing GET params -->
+                                <input type="hidden" name="tournament" value="${tournamentValue}">
+                                <input type="hidden" name="round" value="${roundValue}">
+
+                                <label for="beatmapType">Beatmap Type:</label>
+                                <select name="beatmapType" id="beatmapType" size="1" required>
+                                    <optgroup label="No Mod">
+                                        <option value="nm1">NM1</option>
+                                        <option value="nm2">NM2</option>
+                                        <option value="nm3">NM3</option>
+                                        <option value="nm4">NM4</option>
+                                        <option value="nm5">NM5</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hidden">
+                                        <option value="hd1">HD1</option>
+                                        <option value="hd2">HD2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hard Rock">
+                                        <option value="hr1">HR1</option>
+                                        <option value="hr2">HR2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Double Time">
+                                        <option value="dt1">DT1</option>
+                                        <option value="dt2">DT2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Free/Force Mod">
+                                        <option value="fm1">FM1</option>
+                                        <option value="fm2">FM2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Easy">
+                                        <option value="ez">EZ</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hidden + Hard Rock">
+                                        <option value="hdhr">HDHR</option>
+                                    </optgroup>
+
+                                    <optgroup label="Tie Breaker">
+                                        <option value="TB">TB</option>
+                                    </optgroup>
+                                </select>
+
+                                <br /><br />
+
+                                <label for="beatmapId">Beatmap ID:</label>
+                                <input type="text" name="beatmapId" id="beatmapId" placeholder="E.G: 2264801" autofocus required />
+
+                                <br /><br />
+
+                                <input type="submit" value="Add Mappool Data">
+                            </form>
+                        </div>
+
+                        <div class="tournament-view-data-panel">
+                            <h2>View Mappool Data</h2>
+                            <p>COMING SOON!!</p>
+                        </div>
+                    `;
+                    break;
+
+                // *** TOURNAMENT FINAL MAPPOOL FORM ***
+                case (/^(?:final|finals|fnl|fnls)$/i).test(roundValue):
+                    // Then append a new HTML block
+                    appendLocation.innerHTML = `
+                        <div class="tournament-add-mappool-panel">
+                            <h2>Add mappool data for ${roundValue.toLocaleUpperCase()} round in ${tournamentValue.toLocaleUpperCase()} tournament</h2>
+
+                            <form action="${currentAppendPath}${currentAppendParam}" target="_self" autocomplete="off" enctype="application/x-www-form-urlencoded" method="post">
+                                <!-- Hidden inputs to keep existing GET params -->
+                                <input type="hidden" name="tournament" value="${tournamentValue}">
+                                <input type="hidden" name="round" value="${roundValue}">
+
+                                <label for="beatmapType">Beatmap Type:</label>
+                                <select name="beatmapType" id="beatmapType" size="1" required>
+                                    <optgroup label="No Mod">
+                                        <option value="nm1">NM1</option>
+                                        <option value="nm2">NM2</option>
+                                        <option value="nm3">NM3</option>
+                                        <option value="nm4">NM4</option>
+                                        <option value="nm5">NM5</option>
+                                        <option value="nm6">NM6</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hidden">
+                                        <option value="hd1">HD1</option>
+                                        <option value="hd2">HD2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hard Rock">
+                                        <option value="hr1">HR1</option>
+                                        <option value="hr2">HR2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Night Core">
+                                        <option value="nc1">NC1</option>
+                                        <option value="nc2">NC2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Free/Force Mod">
+                                        <option value="fm1">FM1</option>
+                                        <option value="fm2">FM2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Easy">
+                                        <option value="ez">EZ</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hidden + Hard Rock">
+                                        <option value="hdhr">HDHR</option>
+                                    </optgroup>
+
+                                    <optgroup label="Tie Breaker">
+                                        <option value="TB">TB</option>
+                                    </optgroup>
+                                </select>
+
+                                <br /><br />
+
+                                <label for="beatmapId">Beatmap ID:</label>
+                                <input type="text" name="beatmapId" id="beatmapId" placeholder="E.G: 2264801" autofocus required />
+
+                                <br /><br />
+
+                                <input type="submit" value="Add Mappool Data">
+                            </form>
+                        </div>
+
+                        <div class="tournament-view-data-panel">
+                            <h2>View Mappool Data</h2>
+                            <p>COMING SOON!!</p>
+                        </div>
+                    `;
+                    break;
+
+                // *** TOURNAMENT GRAND FINAL & ALL STAR MAPPOOL DATA ***
+                case (/^(?:grandfinal|grandfinals|gf|gfs)$/i).test(roundValue):
+                case (/^(?:allstar|allstars|astr|astrs)$/i).test(roundValue):
+
+                    /*
+                     *==========================================================
+                     * Because [All STAR] mappool is basically the same as
+                     * [GRAND FINAL] mappool, so I'll just being a bit lazy here
+                     * by using the [GRAND FINAL] mappool data directly. This'll
+                     * prevent me from adding the same beatmap ID into the JSON
+                     * data.
+                     *==========================================================
+                     */
+
+                    // Then append a new HTML block
+                    appendLocation.innerHTML = `
+                        <div class="tournament-add-mappool-panel">
+                            <h2>Add mappool data for ${roundValue.toUpperCase()} round in ${tournamentValue.toUpperCase()} tournament</h2>
+
+                            <form action="${currentAppendPath}${currentAppendParam}" target="_self" autocomplete="off" enctype="application/x-www-form-urlencoded" method="post">
+                                <!-- Hidden inputs to keep existing GET params -->
+                                <input type="hidden" name="tournament" value="${tournamentValue}">
+                                <input type="hidden" name="round" value="${roundValue}">
+
+                                <label for="beatmapType">Beatmap Type:</label>
+                                <select name="beatmapType" id="beatmapType" size="1" required>
+                                    <optgroup label="No Mod">
+                                        <option value="nm1">NM1</option>
+                                        <option value="nm2">NM2</option>
+                                        <option value="nm3">NM3</option>
+                                        <option value="nm4">NM4</option>
+                                        <option value="nm5">NM5</option>
+                                        <option value="nm6">NM6</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hidden">
+                                        <option value="hd1">HD1</option>
+                                        <option value="hd2">HD2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Hard Rock">
+                                        <option value="hr1">HR1</option>
+                                        <option value="hr2">HR2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Double Time">
+                                        <option value="dt1">DT1</option>
+                                        <option value="dt2">DT2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Night Core">
+                                        <option value="nc1">NC1</option>
+                                        <option value="nc2">NC2</option>
+                                    </optgroup>
+
+                                    <optgroup label="Free/Force Mod">
+                                        <option value="fm1">FM1</option>
+                                        <option value="fm2">FM2</option>
                                     </optgroup>
 
                                     <optgroup label="Easy">
@@ -580,15 +1032,33 @@ if (!(appendParam.has("tournament") && appendParam.has("round"))) {
                     break;
 
                 default:
-                    break;
+                    if (!(currentAppendUrl.search)) {
+                        // Quick log for further debugs
+                        console.log("Correct URL found, no redirection needed.");
+                        break;
+                    } else {
+                        // Clear out current query params
+                        currentAppendUrl.search = "";
+
+                        // Then redirect user to original path
+                        window.location.href = currentAppendUrl.toString();
+                        break;
+                    }
             }
             break;
 
-        // *** VOT4 TOURNAMENT ROUND OPTIONS ***
-        case (/^(?:vot4|vietnameseosutaikotournament4)$/i).test(tournamentValue):
-            break;
-
         default:
-            break;
+            if (!(currentAppendUrl.search)) {
+                // Quick log for further debugs
+                console.log("Correct URL found, no redirection needed.");
+                break;
+            } else {
+                // Clear out current query params
+                currentAppendUrl.search = "";
+
+                // Then redirect user to original path
+                window.location.href = currentAppendUrl.toString();
+                break;
+            }
     }
 }
