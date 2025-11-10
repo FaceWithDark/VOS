@@ -3,5 +3,6 @@
 </header>
 
 <section class="tournament-setting-page">
-    <h1>COMING SOON!! (TOURNAMENT)</h1>
+    <!-- JS file -->
+    <script type="text/javascript" src="/assets/js/role/tournamentPanel.js"></script>
 </section>

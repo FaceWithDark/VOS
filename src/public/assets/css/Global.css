@@ -581,7 +581,9 @@ body section.custom-song-vot-page div.box-container div.custom-song-footer div.c
 
 /* PAGES THAT USE CONTROL PANEL STYLE [Global] */
 body section.admin-setting-page div.admin-add-role-panel,
-body section.admin-setting-page div.admin-view-data-panel {
+body section.admin-setting-page div.admin-view-data-panel,
+body section.tournament-setting-page div.tournament-add-mappool-panel,
+body section.tournament-setting-page div.tournament-view-data-panel {
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: column;

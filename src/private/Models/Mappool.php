@@ -359,7 +359,7 @@ function readMappoolData(
 
             switch ($round) {
                 // No need to handle [ASTR] case as mentioned in
-                // <MappoolController.php> file at line 1467.
+                // <MappoolController.php> file at line 491.
                 case 'QLF':
                 case 'RO16':
                 case 'GSW1':
@@ -403,7 +403,7 @@ function readMappoolData(
 
             switch ($round) {
                 // No need to handle [ASTR] case as mentioned in
-                // <MappoolController.php> file at line 1467.
+                // <MappoolController.php> file at line 1067.
                 case 'QLF':
                 case 'RO16':
                 case 'QF':
