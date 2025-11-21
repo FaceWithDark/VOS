@@ -43,27 +43,12 @@ echo "Rebuild docker containers for [$BUILD_STAGE] build stage..."
 echo '==========================================================='
 
 
-# Docker needs privilage access on Linux
-if [ $(uname) == "Linux" ]; then
-    # Stop all running Docker containers first
-    echo "Turn off running docker containers for [$BUILD_STAGE] build stage..."
-    sudo docker compose --file "$YAML_FILE" --env-file "$ENV_FILE" down
+# Stop all running Docker containers first
+echo "Turn off running docker containers for [$BUILD_STAGE] build stage..."
+sudo docker compose --file "$YAML_FILE" --env-file "$ENV_FILE" down
 
-    # Rebuild to apply new changes
-    echo "Rebuild for [$BUILD_STAGE] build stage..."
+# Rebuild to apply new changes
+echo "Rebuild for [$BUILD_STAGE] build stage..."
 
-    sudo docker compose --file "$YAML_FILE" --env-file "$ENV_FILE" up --build -d
-    echo "Finish rebuild docker containers for [$BUILD_STAGE] build stage."
-
-# Docker has privilege access by default on Windows
-else
-    # Stop all running Docker containers first
-    echo "Turn off running docker containers for [$BUILD_STAGE] build stage..."
-    docker compose --file "$YAML_FILE" --env-file "$ENV_FILE" down
-
-    # Rebuild to apply new changes
-    echo "Rebuild for [$BUILD_STAGE] build stage..."
-
-    docker compose --file "$YAML_FILE" --env-file "$ENV_FILE" up --build -d
-    echo "Finish rebuild docker containers for [$BUILD_STAGE] build stage."
-fi
+sudo docker compose --file "$YAML_FILE" --env-file "$ENV_FILE" up --build -d
+echo "Finish rebuild docker containers for [$BUILD_STAGE] build stage."
