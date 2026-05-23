@@ -1,65 +1,82 @@
-# Composer
-**/vendor
-composer.*
+# Credits: [Symfony.gitignore](https://gitignore.org/Synfony)
 
-# Database
-db/
 
-# MacOS-specific CRUD
-.DS_Store
-Thumbs.db
-Icon*
-desktop.ini
+# Cache and logs (Symfony2)
+/app/cache/*
+/app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
 
-# Ignore IDE/editor specific files
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
+# Email spool folder
+/app/spool/*
 
-# Dropbox Linux/MacOS files
-.dropbox*
+# Cache, session files and logs (Symfony3)
+/var/cache/*
+/var/logs/*
+/var/sessions/*
+!var/cache/.gitkeep
+!var/logs/.gitkeep
+!var/sessions/.gitkeep
 
-# Server static web configuration
-*.htaccess
-*.*.htaccess
-*-*.htaccess
-!example.htaccess
+# Logs (Symfony4)
+/var/log/*
+!var/log/.gitkeep
 
-# NGINX
-*.conf
-*.*.conf
-*-*.conf
-!example.conf
+# Parameters
+/app/config/parameters.yml
+/app/config/parameters.ini
 
-# PHP
-*.ini
-*.*ini
-*-*ini
-!example.ini
+# Managed by Composer
+/app/bootstrap.php.cache
+/var/bootstrap.php.cache
+/bin/*
+!bin/console
+!bin/symfony_requirements
+/vendor/
 
-# Sus information except the template one
-*.env
-*.*.env
-*-*.env
-!example.env
+# Assets and user uploads
+/web/bundles/
+/web/uploads/
 
-# Docker building files
-*docker-compose.yaml
-*docker-compose.*.yaml
-*docker-compose-*.yaml
+# Build data
+/build/
 
-*docker-compose.yml
-*docker-compose.*.yml
-*docker-compose-*.yml
+# Composer PHAR
+/composer.phar
 
-!example.yaml
-!example.yml
+# Backup entities generated with doctrine:generate:entities command
+**/Entity/*~
 
-# Ref: https://docs.docker.com/build/concepts/dockerfile/#filename
-*Dockerfile
-*.Dockerfile
+# Embedded web-server pid file
+/.web-server-pid
 
-!example.Dockerfile
+# Generate from 'symfony/framework-bundle' package
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
 
-.dockerignore
+# Generate from 'phpunit/phpunit' package
+/phpunit.xml
+/.phpunit.cache/
+
+# Generate from 'symfony/asset-mapper' package
+/public/assets/
+/assets/vendor/
+
+# Environments
+*.env*
+*.envrc*
+env/
+ENV/
+env.bak/
+
+# Dockers
+docker/secrets/
+docker/configs/
+
+# Whitelists
+!examples/*.env*
