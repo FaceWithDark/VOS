@@ -1,0 +1,30 @@
+name: VOS
+
+services:
+  backend:
+    container_name: vos-symfony
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./docker/dockerfiles/symfony.Dockerfile
+    volumes:
+      # NOTE:
+      # Use on 'dev' for live changes only
+      - type: bind
+        source: ./
+        target: /var/www/html
+    ports:
+      - name: vos-symfony-php # It just PHP CLI command under the hood
+        target: 8000
+        host_ip: 127.0.0.1
+        published: "8001"
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    networks:
+      - vos-backend
+
+networks:
+  vos-backend:
+    name: vososu
+    driver: bridge

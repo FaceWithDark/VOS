@@ -1,26 +1,17 @@
-# VOT
-<p align="center" width="100%">
-    <img src="src/public/assets/img/VOT.png" alt="VOT Image" width="50%" height="auto">
-    <br>
-    Vietnamese <a href="https://osu.ppy.sh/">osu!</a> website dedicated to Taiko mode.
-</p>
+<div align="center" width="100%">
+    <h1>VOS<br />-<br />Vietnamese Osu!taiko Showdown</h1>
+    <img src="assets/imgs/VOT.webp" alt="VOT Image" width="50%" height="auto">
+    <br />
+    <strong>This is the source code for <a href="https://vososu.site">VOS website</a>, built by a <i>mentally unstable uni student</i></strong>
+</div>
 
-## Getting Started
+# Quick Start
 
-Go to this well-written [setup guide](doc/SETUP.md) on how to setup the development environment as quickly as you can.
+```bash
+git clone https://github.com/FaceWithDark/VOS.git   # HTTPS method
+git clone git@github.com:FaceWithDark/VOS.git       # SSH method
 
-## Contributing
+docker compose up --build -d
+```
 
-- TODO: Get other part setup correctly first before writing this one.
-
-## Related Projects
-
-- [VOS-Chatbot](https://github.com/FaceWithDark/VOS-Chatbot) - A dedicated repository for chatbot development within VOS website.
-
-## Credits
-
-- TODO: Manually add in later if there are helps.
-
-## License
-
-[MIT](LICENSE) © [DeepInDark](https://github.com/FaceWithDark).
+Access landing page at [localhost:8001](http://localhost:8001/)
