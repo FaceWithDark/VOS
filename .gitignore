@@ -67,16 +67,6 @@
 /public/assets/
 /assets/vendor/
 
-# Environments
-*.env*
-*.envrc*
-env/
-ENV/
-env.bak/
-
 # Dockers
 docker/secrets/
 docker/configs/
-
-# Whitelists
-!examples/*.env*
