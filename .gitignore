@@ -64,6 +64,7 @@
 # `.env` files are non-sensitive and can be overrided according to Symfony Docs.
 # For reference:
 # https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables
+/.env
 /.env.*
 
 # Generate from 'phpunit/phpunit' package
