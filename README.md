@@ -18,6 +18,9 @@ mkdir -p docker/secrets
 # Copy example files to newly created directory and remove the `.example` suffix
 cp ./examples/postgres_*.example.txt ./docker/secrets/postgres_*.txt
 
+# Copy non-sensitive `.env` files to project root directory and remove the `.example` suffix
+cp ./examples/.env.example.* ./.env.*
+
 # Use the default value or modify it (if needed)
 
 # Then, start building all Docker services
