@@ -58,6 +58,13 @@
 /public/bundles/
 /var/
 /vendor/
+# NOTE:
+# these ignores mainly to follow our repo structure for where to locate example
+# files/directories used for other parts of the project. Values defined in these
+# `.env` files are non-sensitive and can be overrided according to Symfony Docs.
+# For reference:
+# https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables
+/.env.*
 
 # Generate from 'phpunit/phpunit' package
 /phpunit.xml
