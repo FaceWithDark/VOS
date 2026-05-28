@@ -24,7 +24,47 @@ services:
     networks:
       - vos-backend
 
+  database:
+    container_name: vos-postgres
+    restart: unless-stopped
+    # Set shared memory limit when using docker compose
+    shm_size: 128mb
+    secrets:
+      - source: vos-postgres-user
+        target: usr.txt
+      - source: vos-postgres-database
+        target: db.txt
+      - source: vos-postgres-password
+        target: pwd.txt
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/usr.txt
+      POSTGRES_DB_FILE: /run/secrets/db.txt
+      POSTGRES_PASSWORD_FILE: /run/secrets/pwd.txt
+    build:
+      context: ./
+      dockerfile: ./docker/dockerfiles/postgres.Dockerfile
+    volumes:
+      - type: volume
+        source: vos-postgres-data
+        target: /var/lib/postgresql
+    networks:
+      - vos-backend
+
+volumes:
+  # NOTE: data will be stored from the hosting machine rather than inside
+  # container due to disadvantage of Docker Overlay2 (on prod only)
+  vos-postgres-data:
+    name: vos-database-relational
+
 networks:
   vos-backend:
     name: vososu
     driver: bridge
+
+secrets:
+  vos-postgres-user:
+    file: ./docker/secrets/postgres_usr.txt
+  vos-postgres-database:
+    file: ./docker/secrets/postgres_db.txt
+  vos-postgres-password:
+    file: ./docker/secrets/postgres_pwd.txt
