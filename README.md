@@ -5,6 +5,7 @@
     <strong>This is the source code for <a href="https://vososu.site">VOS website</a>, built by a <i>mentally unstable uni student</i></strong>
 </div>
 
+---
 # Quick Start
 
 ```bash
@@ -56,4 +57,15 @@ psql (18.3)
 Type "help" for help.
 
 demo=#
+```
+
+---
+# Testing
+To run test file under `/tests` directory, please follow these steps:
+```bash
+# Get inside `vos-symfony` Docker container
+docker exec -it vos-symfony sh
+
+# Run the `phpunit` binary file to do different kinds of testing techniques
+php bin/phpunit tests/
 ```
