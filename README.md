@@ -69,3 +69,13 @@ docker exec -it vos-symfony sh
 # Run the `phpunit` binary file to do different kinds of testing techniques
 php bin/phpunit tests/
 ```
+
+---
+# Conventions
+
+> [!TIP]
+> You know it's a good and well maintained project if they've a dedicated section these kind of stuffs.
+
+There're many conventions that this project followed to ensure that it's not a big of a burden for someone else (e.g., current devs, maintainers, reviewers, etc) when they've to touch on things that almost no one willing to do it. If you want to be a good contributor/dev, please take a look and follow them accordingly here:
+
+1. [**Git Commit Convention**](./docs/conventions/GIT.md)
