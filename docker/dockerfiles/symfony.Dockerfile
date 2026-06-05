@@ -22,8 +22,10 @@ RUN install-php-extensions \
 
 
 # Typical codebase structure running instructions here
+WORKDIR /var/www/app
+
 COPY --from=base \
-    ./ /var/www/html
+    ./ ./
 
 RUN cp $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 
