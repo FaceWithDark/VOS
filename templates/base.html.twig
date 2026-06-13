@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
         {% endblock %}
@@ -19,6 +19,24 @@
         {% endif %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+            <nav class="flex flex-row justify-between">
+                <div class="flex flex-row" id="nav-left">
+                    <a href="{{ path(name: 'home_index')}}">Home</a>
+                </div>
+
+                <div class="flex flex-col" id="nav-center">
+                    <img src="{{ asset(path: 'imgs/VOT.webp')}}" alt="VOS Logo"></img>
+                </div>
+
+                <div class="flex flex-row" id="nav-right">
+                    <a href="#">Tournament</a>
+                </div>
+            </nav>
+
+            <main>
+                {% block content %}{% endblock %}
+            </main>
+        {% endblock %}
     </body>
 </html>
