@@ -20,16 +20,16 @@
     </head>
     <body>
         {% block body %}
-            <nav class="flex flex-row justify-between">
-                <div class="flex flex-row" id="nav-left">
+            <nav class="flex flex-row justify-around">
+                <div class="flex flex-row items-center-safe" id="nav-left">
                     <a href="{{ path(name: 'home_index')}}">Home</a>
                 </div>
 
-                <div class="flex flex-col" id="nav-center">
-                    <img src="{{ asset(path: 'imgs/VOT.webp')}}" alt="VOS Logo"></img>
+                <div class="flex flex-col w-full max-w-25 h-auto py-[0.5em]" id="nav-center">
+                    <img src="{{ asset(path: 'imgs/VOS.webp')}}" alt="VOS Logo"></img>
                 </div>
 
-                <div class="flex flex-row" id="nav-right">
+                <div class="flex flex-row items-center-safe" id="nav-right">
                     <a href="#">Tournament</a>
                 </div>
             </nav>
