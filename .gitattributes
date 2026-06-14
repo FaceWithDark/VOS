@@ -65,6 +65,7 @@ TODO            text
 .gitconfig      text
 .htaccess       text eol=lf
 *.lock          text -diff
+composer.lock   text -diff
 symfony.lock    text -diff
 *.toml          text
 *.yaml          text
