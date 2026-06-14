@@ -1,5 +1,156 @@
 @import "tailwindcss";
 
+
+:root {
+    /*
+     * ======================================================================= *
+     *                     GLOBAL CONFIGURATION & TYPOGRAPHY                   *
+     * ======================================================================= *
+     */
+
+    /* Critical flag enabling the `light-dark()` engine */
+    color-scheme: light dark;
+
+
+    /* Typography variables (for quick reference: 1rem = 16px) */
+
+    /* 3.75rem = 60px */
+    --title-fs: 3.75rem;
+    --title-fw: 800;
+    --title-lh: 1;
+
+    /* 3rem = 48px */
+    --h1-fs: 3rem;
+    --h1-fw: 700;
+    --h1-lh: 1.1;
+
+    /* 2.25rem = 36px */
+    --h2-fs: 2.25rem;
+    --h2-fw: 700;
+    --h2-lh: 1.2;
+
+    /* 1.5rem = 24px */
+    --h3-fs: 1.5rem;
+    --h3-fw: 600;
+    --h3-lh: 1.3;
+
+    /* 1.125rem = 18px */
+    --body-fs: 1.125rem;
+    --body-fw: 500;
+    --body-lh: 1.6;
+
+    /* 0.9375rem = 15px */
+    --small-fs: 0.9375rem;
+    --small-fw: 400;
+    --small-lh: 1.5;
+
+    /* 1rem = 16px */
+    --mono-fs: 1rem;
+    --mono-fw: 400;
+    --mono-lh: 1.5;
+
+
+    /* ======================================================================= *
+     *                              COLOUR PALETTE
+     *          Syntax format: light-dark( <light-value>, <dark-value> )
+     * ======================================================================= *
+     */
+    --primary: light-dark(#E63939, #FF4D4D);
+    --accent: light-dark(#FFD700, #FFEA80);
+    --background: light-dark(#F8F9FA, #0F172A);
+    --surface: light-dark(#FFFFFF, #1E2937);
+    --text-primary: light-dark(#1E2937, #F1F5F9);
+    --text-secondary: light-dark(#64748B, #94A3B8);
+    --border: light-dark(#E2E8F0, #334155);
+
+    /* Semantic Status Indicators */
+    --success: light-dark(#10B981, #10B981);
+    --warning: light-dark(#F59E0B, #F59E0B);
+    --error: light-dark(#EF4444, #EF4444);
+    --info: light-dark(#38B2F6, #38B2F6);
+}
+
+
+/* Core setup */
 body {
-    background-color: skyblue;
+    font-family: var(--font-serif);
+    font-size: var(--body-fs);
+    font-weight: var(--body-fw);
+    line-height: var(--body-lh);
+    background-color: var(--background);
+    color: var(--text-secondary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+h1 {
+    font-size: var(--h1-fs);
+    font-weight: var(--h1-fw);
+    line-height: var(--h1-lh);
+    color: var(--text-primary);
+}
+
+
+h2 {
+    font-size: var(--h2-fs);
+    font-weight: var(--h2-fw);
+    line-height: var(--h2-lh);
+    color: var(--text-primary);
+}
+
+
+h3 {
+    font-size: var(--h3-fs);
+    font-weight: var(--h3-fw);
+    line-height: var(--h3-lh);
+    color: var(--text-primary);
+}
+
+
+p {
+    font-size: var(--body-fs);
+    font-weight: var(--body-fw);
+    line-height: var(--body-lh);
+    color: var(--text-secondary);
+}
+
+
+small,
+sub,
+sup {
+    font-size: var(--small-fs);
+    font-weight: var(--small-fw);
+    line-height: var(--small-lh);
+}
+
+
+pre,
+code {
+    font-family: var(--font-mono);
+    font-size: var(--mono-fs);
+    font-weight: var(--mono-fw);
+    line-height: var(--mono-lh);
+    background-color: var(--surface);
+}
+
+
+/*
+ * By default, standard browser engines do not inherit these on form inputs,
+ * textareas, selectors, or buttons. Therefore, we've to explicitly set it
+ */
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+}
+
+
+a {
+    color: var(--primary);
 }
