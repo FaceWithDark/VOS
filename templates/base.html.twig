@@ -18,9 +18,9 @@
         <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
         {% endif %}
     </head>
-    <body>
+    <body class="flex flex-col min-h-screen">
         {% block body %}
-            <nav class="flex flex-row justify-around">
+            <nav class="flex flex-row justify-around flex-none">
                 <div class="flex flex-row items-center-safe" id="nav-left">
                     <a href="{{ path(name: 'home_index')}}">Home</a>
                 </div>
@@ -36,7 +36,7 @@
                 </div>
             </nav>
 
-            <main>
+            <main class="flex flex-col flex-auto">
                 {% block content %}{% endblock %}
             </main>
         {% endblock %}
