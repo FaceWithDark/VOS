@@ -1,6 +1,6 @@
 <div align="center" width="100%">
     <h1>VOS<br />-<br />Vietnamese Osu!taiko Showdown</h1>
-    <img src="assets/imgs/VOT.webp" alt="VOT Image" width="50%" height="auto">
+    <img src="assets/imgs/VOS.webp" alt="VOS Logo" width="25%" height="auto">
     <br />
     <strong>This is the source code for <a href="https://vososu.site">VOS website</a>, built by a <i>mentally unstable uni student</i></strong>
 </div>
@@ -74,7 +74,7 @@ php bin/phpunit tests/
 # Conventions
 
 > [!TIP]
-> You know it's a good and well maintained project if they've a dedicated section these kind of stuffs.
+> You know it's a good and well maintained project if they've a dedicated section for these kind of stuffs.
 
 There're many conventions that this project followed to ensure that it's not a big of a burden for someone else (e.g., current devs, maintainers, reviewers, etc) when they've to touch on things that almost no one willing to do it. If you want to be a good contributor/dev, please take a look and follow them accordingly here:
 
