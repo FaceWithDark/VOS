@@ -133,24 +133,3 @@ code {
     line-height: var(--mono-lh);
     background-color: var(--surface);
 }
-
-
-/*
- * By default, standard browser engines do not inherit these on form inputs,
- * textareas, selectors, or buttons. Therefore, we've to explicitly set it
- */
-button,
-input,
-select,
-textarea {
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    color: inherit;
-}
-
-
-a {
-    color: var(--primary);
-}
