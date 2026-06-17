@@ -78,3 +78,6 @@
 # Dockers
 docker/secrets/
 docker/configs/
+
+# Symfony CLI
+.symfony.local.yaml
