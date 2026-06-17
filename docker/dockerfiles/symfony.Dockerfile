@@ -24,10 +24,16 @@ RUN install-php-extensions \
 # Typical codebase structure running instructions here
 WORKDIR /var/www/app
 
-COPY --from=base \
-    ./ ./
+# https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN cp $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
+
+# Prevent the reinstallation of vendors at every changes in the source code
+COPY --from=base ./composer.* ./symfony.* ./
+
+# Then copy the rest of the source code
+COPY --from=base ./ ./
 
 
 EXPOSE 8000/tcp
