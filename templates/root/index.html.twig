@@ -6,12 +6,12 @@
 
 {% block page_contents %}
     <header class="flex flex-col justify-evenly items-center-safe" id="home-page-title">
-        <h1 class="p-12">VOS</h1>
+		<h1 class="p-12">VOS</h1>
         <h2 class="p-12">Manage osu!taiko tournament with ease</h2>
         <h3 class="p-12">A clean website that simplify to your workflow</h3>
     </header>
 
     <aside class="flex flex-row justify-center-safe" id="home-page-info">
-        <a href="#" class="text-(--accent) border-solid rounded-full border-2 border-(--border) p-3">Discover more</a>
+        <a href="{{ path(name: 'tournament_index') }}" class="text-(--accent) border-solid rounded-full border-2 border-(--border) p-3">Discover more</a>
     </aside>
 {% endblock %}
