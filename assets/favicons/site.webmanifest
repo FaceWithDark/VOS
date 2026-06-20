@@ -1,21 +1,21 @@
 {
-  "name": "VOS",
-  "short_name": "VOS",
-  "icons": [
-    {
-      "src": "/assets/icos/web-app-manifest-192x192.png?v=2026",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/assets/icos/web-app-manifest-512x512.png?v=2026",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "theme_color": "#eff1f5",
-  "background_color": "#eff1f5",
-  "display": "standalone"
+    "name": "VOS",
+    "short_name": "VOS",
+    "icons": [
+        {
+            "src": "/assets/favicons/web-app-manifest-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/assets/favicons/web-app-manifest-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "theme_color": "#eff1f5",
+    "background_color": "#eff1f5",
+    "display": "standalone"
 }
