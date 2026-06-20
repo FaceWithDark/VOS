@@ -1,6 +1,12 @@
 <div align="center" width="100%">
     <h1>VOS<br />-<br />Vietnamese Osu!taiko Showdown</h1>
-    <img src="assets/imgs/VOS.webp" alt="VOS Logo" width="25%" height="auto">
+    <img
+        src="assets/trademarks/trademark-fallback.png"
+        alt="VOS Trademark Logo"
+        srcset="assets/trademarks/trademark.svg"
+        width="25%"
+        height="auto"
+    />
     <br />
     <strong>This is the source code for <a href="https://vososu.site">VOS website</a>, built by a <i>mentally unstable uni student</i></strong>
 </div>
