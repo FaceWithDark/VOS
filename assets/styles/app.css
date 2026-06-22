@@ -1,8 +1,11 @@
 @import "tailwindcss";
+source("../../");
 
-@source 'assets/favicons/';
-@source 'assets/styles/';
-@source 'assets/trademarks/';
+
+@source "assets/favicons/";
+@source "assets/styles/";
+@source "assets/trademarks/";
+@source "templates/";
 
 
 :root {
