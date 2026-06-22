@@ -1,5 +1,4 @@
-@import "tailwindcss";
-source("../../");
+@import "tailwindcss" source("../../");
 
 
 @source "assets/favicons/";
