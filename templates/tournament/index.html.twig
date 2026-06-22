@@ -1,0 +1,25 @@
+{% extends 'tournament/layout.html.twig' %}
+
+
+{% block title %}VOS | Tournament{% endblock %}
+
+{% block tourney_header %}
+	<!--
+		TODO:
+		when search filter feature get implemented, this title name will get
+		dynamically appended based on the value provided to the filter
+	-->
+	<header class="text-center p-12">
+		<h1>VOS Tourney</h1>
+	</header>
+{% endblock %}
+
+{% block tourney_body %}
+	<section class="grid grid-cols-3 auto-rows-auto gap-6 px-6">
+		{# TODO:
+		 # based on the amount of registered tourneys received from Tournament
+		 # API, performs a for-loop to dynamically display them to users
+		 #}
+		<twig:Card:TourneyCard></twig:Card:TourneyCard>
+	</section>
+{% endblock %}
