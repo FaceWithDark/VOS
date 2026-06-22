@@ -3,14 +3,18 @@
 
 {% block title %}VOS | Tournament{% endblock %}
 
+{% block tourney_header %}
+	<!--
+		TODO:
+		when search filter feature get implemented, this title name will get
+		dynamically appended based on the value provided to the filter
+	-->
+	<header class="text-center p-12">
+		<h1>VOS Tourney</h1>
+	</header>
+{% endblock %}
 
-{% block page_contents %}
-    <header class="flex flex-row justify-center-safe" id="home-page-title">
-        <!--
-            TODO:
-            when search filter feature get implemented, this title name will get
-            dynamically appended based on the value provided to the filter
-        -->
-        <h1 class="p-12">VOS Tourney</h1>
-    </header>
+{% block tourney_body %}
+	<section class="grid grid-cols-5 auto-rows-auto gap-2">
+	</section>
 {% endblock %}

@@ -2,7 +2,9 @@
 
 
 {% block content %}
-    <div class="flex flex-col flex-auto justify-center-safe" id="home-page">
-        {% block page_contents %}{% endblock %}
-    </div>
+	<main class="flex-1 flex flex-col justify-center-safe items-center-safe">
+		{% block home_header %}{% endblock %}
+		{% block home_body %}{% endblock %}
+		{% block home_footer %}{% endblock %}
+	</main>
 {% endblock %}
