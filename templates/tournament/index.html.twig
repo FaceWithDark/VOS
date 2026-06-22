@@ -15,6 +15,11 @@
 {% endblock %}
 
 {% block tourney_body %}
-	<section class="grid grid-cols-5 auto-rows-auto gap-5 px-5">
+	<section class="grid grid-cols-3 auto-rows-auto gap-6 px-6">
+		{# TODO:
+		 # based on the amount of registered tourneys received from Tournament
+		 # API, performs a for-loop to dynamically display them to users
+		 #}
+		<twig:Card:TourneyCard></twig:Card:TourneyCard>
 	</section>
 {% endblock %}
