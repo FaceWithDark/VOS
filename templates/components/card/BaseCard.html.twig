@@ -1,3 +1,6 @@
-<div class="flex flex-col bg-(--surface) border-solid rounded-3xl border-2 border-(--border)">
-	{% block card_layout %}{% endblock %}
-</div>
+{% block card_layout %}
+	<div class="flex flex-col bg-(--surface) border-solid rounded-3xl border-2 border-(--border)">
+		{% block card_banner %}{% endblock %}
+		{% block card_info %}{% endblock %}
+	</div>
+{% endblock %}

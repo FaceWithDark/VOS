@@ -1,25 +1,30 @@
 {% extends '/components/Card/BaseCard.html.twig' %}
 
 
-{% block card_layout %}
+{% block card_banner %}
 	{#
 	 # TODO:
-	 # pre-filled by data received from Tournament API
+	 # pre-filled banner and `alt` by data received from Tournament API
 	 #}
 	<img
 		src="#"
 		alt="Tourney Banner"
 		class="rounded-3xl opacity-25"
 	/>
-	<div class="flex flex-row justify-between bg-(--surface)">
+{% endblock %}
+
+{% block card_info %}
+	<div class="flex flex-row justify-between items-end-safe bg-(--surface) rounded-t-lg rounded-b-3xl">
 		{#
 		 # TODO:
-		 # pre-filled by data received from Tournament API
+		 # pre-filled info & `href` by data received from Tournament API
 		 #}
-		<p>Dolor ornare vitae fringilla tempor.</p>
-        <a
+		<p class="text-justify text-wrap max-w-[50%]">
+		Est nunc ullamcorper molestie imperdiet convallis, ante nisi ultrices vitae sed lorem. Eu, enim non in bibendum pharetra imperdiet, eleifend.
+		</p>
+		<a
 			href="#"
-			class="text-(--accent) border-solid rounded-full border-2 border-(--border) p-3 mr-5"
+			class="text-center text-(--accent) border-solid rounded-full border-2 border-(--border) p-3 mx-3 mb-3"
 		>Read more...</a>
 	</div>
 {% endblock %}
