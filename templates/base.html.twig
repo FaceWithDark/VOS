@@ -35,27 +35,7 @@
 
 	<body class="flex flex-col min-h-dvh">
 		{% block body %}
-			<nav class="flex-none flex flex-row justify-around bg-(--surface)">
-				<div class="flex flex-row items-center-safe" id="nav-left">
-					<a href="{{ path(name: 'home_index') }}" class="text-(--primary)">Home</a>
-				</div>
-
-				<div class="flex flex-col py-[0.5em]" id="nav-center">
-					<a href="{{ path(name: 'home_index') }}" class="text-(--primary)">
-						<img
-							src="{{ asset(path: 'trademarks/trademark-fallback.png') }}"
-							alt="VOS Trademark Logo"
-							srcset="{{ asset(path: 'trademarks/trademark.svg') }}"
-							class="w-full max-w-25 h-auto"
-						/>
-					</a>
-				</div>
-
-				<div class="flex flex-row items-center-safe" id="nav-right">
-					<a href="{{ path(name: 'tournament_index') }}" class="text-(--primary)">Tournament</a>
-				</div>
-			</nav>
-
+			{% block navigation %}{% endblock %}
 			{% block content %}{% endblock %}
 		{% endblock %}
 	</body>

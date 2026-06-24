@@ -1,0 +1,10 @@
+{% extends 'components/Navigation/BaseBar.html.twig' %}
+
+
+{% block nav_layout %}
+	<nav class="flex-none flex flex-row justify-around bg-(--surface)">
+		{% block left_layout %}{% endblock %}
+		{% block centre_layout %}{% endblock %}
+		{% block right_layout %}{% endblock %}
+	</nav>
+{% endblock %}
