@@ -19,16 +19,25 @@
 git clone https://github.com/FaceWithDark/VOS.git   # HTTPS method
 git clone git@github.com:FaceWithDark/VOS.git       # SSH method
 
-# Create required directory for extra Docker setup
+# Create required directory for extra Docker setup (for db & GUI credentials)
 mkdir -p docker/secrets
 
 # Copy example files to newly created directory and remove the `.example` suffix
 cp ./examples/postgres_*.example.txt ./docker/secrets/postgres_*.txt
+cp ./examples/pgadmin_*.example.txt ./docker/secrets/pgadmin_*.txt
 
 # Copy non-sensitive `.env` files to project root directory and remove the `.example` suffix
 cp ./examples/.env.example.* ./.env.*
 
-# Use the default value or modify it (if needed)
+# Create another required directory for extra Docker setup (for preset db servers connection)
+mkdir -p docker/configs
+
+# Copy preset files to newly created directory and remove the `.example` suffix
+cp ./examples/pgadmin_*.example.json ./docker/configs/pgadmin_*.json
+
+
+## Use the default value or modify it (if needed) ##
+
 
 # Then, start building all Docker services
 docker compose up --build -d
@@ -64,10 +73,13 @@ Type "help" for help.
 
 demo=#
 ```
+3. **pgAdmin**: [localhost:5051](http://localhost:5051/)
 
 ---
 # Testing
+
 To run test file under `/tests` directory, please follow these steps:
+
 ```bash
 # Get inside `vos-symfony` Docker container
 docker exec -it vos-symfony sh
