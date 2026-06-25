@@ -65,7 +65,7 @@ services:
     environment:
       # NOTE:
       # make sure to enable 2FA for this account on prod
-      PGADMIN_DEFAULT_EMAIL: vososu@proton.me
+      PGADMIN_DEFAULT_EMAIL: vososu@proton.me # Change this to your personal/work/org email
       PGADMIN_DEFAULT_PASSWORD_FILE: /run/secrets/pwd.txt
     configs:
       - source: vos-pgadmin-server
@@ -90,8 +90,8 @@ services:
 
 volumes:
   # NOTE:
-	# data will be stored from the hosting machine rather than inside container due
-	# to disadvantage of Docker Overlay2 (on prod only)
+  # data will be stored from the hosting machine rather than inside container due
+  # to disadvantage of Docker Overlay2 (on prod only)
   vos-postgres-data:
     name: vos-database-relational
   vos-pgadmin-data:
