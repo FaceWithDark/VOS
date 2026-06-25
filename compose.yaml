@@ -50,11 +50,52 @@ services:
     networks:
       - vos-backend
 
+  # NOTE:
+  # I'd love to use phpPgAdmin instead of the original one so that if we get into
+  # some niche issues, we can always go inside the container and debug using PHP
+  # rather than Python. However, the project seems to be abandoned (there's an
+  # active fork to make it alive again but it's still relatively new) so we're
+  # sticking to the original for the time being.
+  database-gui:
+    container_name: vos-pgadmin
+    restart: unless-stopped
+    secrets:
+      - source: vos-pgadmin-password
+        target: pwd.txt
+    environment:
+      # NOTE:
+      # make sure to enable 2FA for this account on prod
+      PGADMIN_DEFAULT_EMAIL: vososu@proton.me
+      PGADMIN_DEFAULT_PASSWORD_FILE: /run/secrets/pwd.txt
+    configs:
+      - source: vos-pgadmin-server
+        target: /pgadmin4/servers.json
+    build:
+      context: ./
+      dockerfile: ./docker/dockerfiles/pgadmin.Dockerfile
+    volumes:
+      - type: volume
+        source: vos-pgadmin-data
+        target: /var/lib/pgadmin
+    ports:
+      - name: vos-pgadmin-gunicorn
+        target: 80
+        host_ip: 127.0.0.1
+        published: "5051"
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    networks:
+      - vos-backend
+
 volumes:
-  # NOTE: data will be stored from the hosting machine rather than inside
-  # container due to disadvantage of Docker Overlay2 (on prod only)
+  # NOTE:
+	# data will be stored from the hosting machine rather than inside container due
+	# to disadvantage of Docker Overlay2 (on prod only)
   vos-postgres-data:
     name: vos-database-relational
+  vos-pgadmin-data:
+    name: vos-database-gui
 
 networks:
   vos-backend:
@@ -68,3 +109,9 @@ secrets:
     file: ./docker/secrets/postgres_db.txt
   vos-postgres-password:
     file: ./docker/secrets/postgres_pwd.txt
+  vos-pgadmin-password:
+    file: ./docker/secrets/pgadmin_pwd.txt
+
+configs:
+  vos-pgadmin-server:
+    file: ./docker/configs/pgadmin_svr.json
