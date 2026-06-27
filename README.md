@@ -51,7 +51,7 @@ Once the containers are running, you can verify that all services are working co
 - Direct access is disable by default for security reasons. However, you can still do it by typing:
 
 ```bash
-docker exec -it vos-postgres psql -U demo
+docker exec -it vos-postgres psql -U demo -d postgres
 
 # Please enter the database password (read from `postgres_db.txt` file) here if
 # there is a prompt asking you to do it
@@ -71,7 +71,7 @@ docker exec -it vos-postgres psql -U demo
 psql (18.3)
 Type "help" for help.
 
-demo=#
+postgres=#
 ```
 3. **pgAdmin**: [localhost:5051](http://localhost:5051/)
 
