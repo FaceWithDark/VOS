@@ -3,22 +3,23 @@ FROM php:8-fpm-alpine AS base
 
 FROM base AS setup
 # Install Symfony CLI to match the tooling usages on development
-COPY --link                                         \
-    --from=ghcr.io/symfony-cli/symfony-cli:latest   \
-    /usr/local/bin/symfony /usr/local/bin/symfony
+COPY --link											\
+	--from=ghcr.io/symfony-cli/symfony-cli:latest	\
+	/usr/local/bin/symfony /usr/local/bin/symfony
 
 
 # Enable 'intl' extension for Symfony Validator usages with the help from a GitHub
 # repo that have quick installation scripts to handle any potential missing
 # dependencies when installing this extension ourself
 # (Ref: https://github.com/mlocati/docker-php-extension-installer).
-ADD --chmod=0755                                                                                              \
-    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
-    /usr/local/bin/
+ADD --chmod=0755																							  \
+	https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+	/usr/local/bin/
 
 RUN install-php-extensions \
-    intl                   \
-    xdebug
+	intl				   \
+	xdebug				   \
+	pdo_pgsql
 
 
 # Typical codebase structure running instructions here
