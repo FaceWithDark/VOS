@@ -102,3 +102,8 @@ php bin/phpunit tests/
 There're many conventions that this project followed to ensure that it's not a big of a burden for someone else (e.g., current devs, maintainers, reviewers, etc) when they've to touch on things that almost no one willing to do it. If you want to be a good contributor/dev, please take a look and follow them accordingly here:
 
 1. [**Git Commit Convention**](./docs/conventions/GIT.md)
+
+---
+# Contributing
+
+Got bug fixes, new features, or ideas? We appreciate the help! Before you open an **Issue/PR**, please take a read at our [Contributing Guidelines](CONTRIBUTING.md) to learn how to properly use **GitHub template files** customised for this project.
