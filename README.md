@@ -76,6 +76,11 @@ postgres=#
 3. **pgAdmin**: [localhost:5051](http://localhost:5051/)
 
 ---
+# Interactions with APIs
+
+Please head to [localhost:8001/api](http://localhost:8001/api) to play around with all available APIs in this project.
+
+---
 # Testing
 
 To run test file under `/tests` directory, please follow these steps:
