@@ -1,0 +1,10 @@
+api_platform:
+  # TODO:
+  # API page title name will be populated dynamically based on the subdomain
+  # that users/admins are in at the moment
+  title: VOS API Platform
+  version: 1.0.0
+  defaults:
+    stateless: true
+    cache_headers:
+      vary: ["Content-Type", "Authorization", "Origin"]

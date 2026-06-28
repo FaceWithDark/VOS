@@ -1,0 +1,24 @@
+{% extends '@!ApiPlatform/SwaggerUi/index.html.twig' %}
+
+
+{% block head_metas %}
+	{# Keep what 'ApiPlatformBundle' has defined by default under this block #}
+	{{ parent() }}
+
+	{# Then add our custom ones under it #}
+	<link rel="icon" type="image/png" href="{{ asset(path: 'favicons/favicon-96x96.png') }}" sizes="96x96" />
+	<link rel="icon" type="image/svg+xml" href="{{ asset(path: 'favicons/favicon.svg') }}" />
+	<link rel="shortcut icon" href="{{ asset(path: 'favicons/favicon.ico') }}" />
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset(path: 'favicons/apple-touch-icon.png') }}" />
+	<meta name="apple-mobile-web-app-title" content="VOS" />
+	<link rel="manifest" href="{{ asset(path: 'favicons/site.webmanifest') }}" />
+{% endblock %}
+
+{#
+ # TODO:
+ # API page `<title>` tag will be populated dynamically based on the subdomain
+ # that users/admins are in at the moment
+ #}
+{% block title %}
+	<title>VOS | API Platform</title>
+{% endblock %}
