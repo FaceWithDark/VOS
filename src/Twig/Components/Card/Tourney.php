@@ -11,7 +11,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 
 #[AsLiveComponent]
-final class TourneyCard
+final class Tourney extends Base
 {
 	use DefaultActionTrait;
 }

@@ -10,4 +10,4 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 
 #[AsTwigComponent]
-final class BaseCard {}
+class Base {}
