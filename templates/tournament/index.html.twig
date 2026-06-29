@@ -21,7 +21,7 @@
 		 # VOS website, we can perform a for-loop to dynamically display them
 		 # to users
 		 #}
-		<twig:Card:TourneyCard>
+		<twig:Card:Tourney>
 			{% block card_banner %}
 				<img
 					src="{{ asset(path: 'tournaments/vot5.webp') }}"
@@ -41,9 +41,9 @@
 					>Read more...</a>
 				</div>
 			{% endblock %}
-		</twig:Card:TourneyCard>
+		</twig:Card:Tourney>
 
-		<twig:Card:TourneyCard>
+		<twig:Card:Tourney>
 			{% block card_banner %}
 				<img
 					src="{{ asset(path: 'tournaments/vtc3.webp') }}"
@@ -63,6 +63,6 @@
 					>Read more...</a>
 				</div>
 			{% endblock %}
-		</twig:Card:TourneyCard>
+		</twig:Card:Tourney>
 	</section>
 {% endblock %}
