@@ -11,7 +11,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 
 #[AsLiveComponent]
-final class SideBar
+final class Sidebar extends Base
 {
 	use DefaultActionTrait;
 }

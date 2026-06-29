@@ -2,7 +2,7 @@
 
 
 {% block navigation %}
-	<twig:Navigation:NavBar>
+	<twig:Navigation:Navbar>
 		<twig:block name="left_layout">
 			<div class="flex flex-row items-center-safe">
 				<a href="{{ path(name: 'home_index') }}" class="text-(--primary)">Home</a>
@@ -27,7 +27,7 @@
 				<a href="{{ path(name: 'tournament_index') }}" class="text-(--primary)">Tournament</a>
 			<div>
 		</twig:block>
-	</twig:Navigation:NavBar>
+	</twig:Navigation:Navbar>
 {% endblock %}
 
 {% block content %}

@@ -10,4 +10,4 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 
 #[AsTwigComponent]
-final class BaseBar {}
+class Base {}
