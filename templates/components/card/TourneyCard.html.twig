@@ -2,9 +2,9 @@
 
 
 {% block card_banner %}
-	{#
-	 # TODO:
-	 # pre-filled banner and `alt` by data received from Tournament API
+	{# TODO:
+	 # pre-filled banner and `alt` by 1st path under registered sub-domains for
+	 # tourney hosted on VOS website
 	 #}
 	<img
 		src="#"
@@ -15,9 +15,8 @@
 
 {% block card_info %}
 	<div class="flex flex-row justify-between items-end-safe bg-(--surface) rounded-t-lg rounded-b-3xl p-4">
-		{#
-		 # TODO:
-		 # pre-filled info & `href` by data received from Tournament API
+		{# TODO:
+		 # pre-filled info by `desc` field value from Tournament API response data
 		 #}
 		<p class="text-justify text-wrap max-w-[70%]">
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pariatur laboris
@@ -25,6 +24,10 @@
 			quasi eius similique blanditiis amet praesentium illo magni aut accusamus
 			sequi veniam.
 		</p>
+		{# TODO:
+		 # pre-filled info & `href` by 1st path under registered sub-domains for
+	     # tourney hosted on VOS website
+		 #}
 		<a
 			href="#"
 			class="text-center text-(--accent) border-solid rounded-full border-2 border-(--border) p-3"
