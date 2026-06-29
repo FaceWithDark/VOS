@@ -5,11 +5,10 @@
 
 
 {% block tourney_header %}
-	<!--
-		TODO:
-		when search filter feature get implemented, this title name will get
-		dynamically appended based on the value provided to the filter
-	-->
+	{# TODO:
+	 # when search filter feature get implemented, this title name will get
+	 # dynamically appended based on the value provided to the filter
+	#}
 	<header class="text-center p-12">
 		<h1>VOS Tourney</h1>
 	</header>
@@ -18,9 +17,52 @@
 {% block tourney_body %}
 	<section class="grid grid-cols-3 auto-rows-auto gap-6 px-6">
 		{# TODO:
-		 # based on the amount of registered tourneys received from Tournament
-		 # API, performs a for-loop to dynamically display them to users
+		 # based on the amount of registered sub-domains for tourney hosted on
+		 # VOS website, we can perform a for-loop to dynamically display them
+		 # to users
 		 #}
-		<twig:Card:TourneyCard></twig:Card:TourneyCard>
+		<twig:Card:TourneyCard>
+			{% block card_banner %}
+				<img
+					src="{{ asset(path: 'tournaments/vot5.webp') }}"
+					alt="VOT5 Banner"
+					class="rounded-3xl opacity-25"
+				/>
+			{% endblock %}
+
+			{% block card_info %}
+				<div class="flex flex-row justify-between items-end-safe bg-(--surface) rounded-t-lg rounded-b-3xl p-4">
+					<p class="text-justify text-wrap max-w-[70%]">
+						Welcome to VOT5!
+					</p>
+					<a
+						href="http://vot.localhost/vot5"
+						class="text-center text-(--accent) border-solid rounded-full border-2 border-(--border) p-3"
+					>Read more...</a>
+				</div>
+			{% endblock %}
+		</twig:Card:TourneyCard>
+
+		<twig:Card:TourneyCard>
+			{% block card_banner %}
+				<img
+					src="{{ asset(path: 'tournaments/vtc3.webp') }}"
+					alt="VTC3 Banner"
+					class="rounded-3xl opacity-25"
+				/>
+			{% endblock %}
+
+			{% block card_info %}
+				<div class="flex flex-row justify-between items-end-safe bg-(--surface) rounded-t-lg rounded-b-3xl p-4">
+					<p class="text-justify text-wrap max-w-[70%]">
+						Welcome to VTC3!
+					</p>
+					<a
+						href="http://vtc.localhost/vtc3"
+						class="text-center text-(--accent) border-solid rounded-full border-2 border-(--border) p-3"
+					>Read more...</a>
+				</div>
+			{% endblock %}
+		</twig:Card:TourneyCard>
 	</section>
 {% endblock %}
