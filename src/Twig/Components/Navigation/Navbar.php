@@ -11,7 +11,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 
 #[AsLiveComponent]
-final class NavBar
+final class Navbar extends Base
 {
 	use DefaultActionTrait;
 }
