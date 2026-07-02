@@ -1,0 +1,13 @@
+# Docker-specific configs
+providers:
+  docker:
+    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)"
+
+# API and dashboard configs
+api:
+  insecure: true
+
+# Other configs
+entryPoints:
+  web:
+    address: ":80"
