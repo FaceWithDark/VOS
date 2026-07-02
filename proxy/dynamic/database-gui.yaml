@@ -1,0 +1,18 @@
+http:
+  routers:
+    vos-pgadmin-router:
+      entryPoints:
+        - "web"
+      # NOTE:
+      # We leverages our registered domain to minimal the amount of modify
+      # needed when setting up on the production server.
+      rule: "Host(`db.dev.vososu.site`)"
+      service: vos-pgadmin-service
+
+  services:
+    vos-pgadmin-service:
+      loadBalancer:
+        servers:
+          # Map internal `database-gui` Docker service port to Traefik so it can
+          # resolve automatically
+          - url: "http://vos-pgadmin:80"

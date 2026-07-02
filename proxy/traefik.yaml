@@ -1,13 +1,21 @@
 # Docker-specific configs
 providers:
   docker:
-    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)"
+    exposedByDefault: false
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
 
 # API and dashboard configs
 api:
+  dashboard: true
   insecure: true
 
-# Other configs
+# Entry-point configs
 entryPoints:
   web:
     address: ":80"
+
+# Log configs
+accessLog:
+  format: "common"

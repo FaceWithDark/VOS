@@ -1,0 +1,18 @@
+http:
+  routers:
+    vos-symfony-router:
+      entryPoints:
+        - "web"
+      # NOTE:
+      # We leverages our registered domain to minimal the amount of modify
+      # needed when setting up on the production server.
+      rule: "Host(`dev.vososu.site`) || HostRegexp(`^[a-z]+\\.dev\\.vososu\\.site$`)"
+      service: vos-symfony-service
+
+  services:
+    vos-symfony-service:
+      loadBalancer:
+        servers:
+          # Map internal `app` Docker service port to Traefik so it can
+          # resolve automatically
+          - url: "http://vos-symfony:8000"

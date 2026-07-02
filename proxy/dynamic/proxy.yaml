@@ -1,0 +1,10 @@
+http:
+  routers:
+    vos-proxy-router:
+      entryPoints:
+        - "web"
+      # NOTE:
+      # We leverages our registered domain to minimal the amount of modify
+      # needed when setting up on the production server.
+      rule: "Host(`proxy.dev.vososu.site`)"
+      service: api@internal
