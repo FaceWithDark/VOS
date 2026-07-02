@@ -104,13 +104,16 @@ services:
         source: ./proxy/traefik.yaml
         target: /etc/traefik/traefik.yaml
       - type: bind
+        source: ./proxy/dynamic/
+        target: /etc/traefik/dynamic/
+      - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
     ports:
       - name: vos-traefik-proxy
         target: 80
         host_ip: 127.0.0.1
-        published: "81"
+        published: "80"
         protocol: tcp
         app_protocol: http
         mode: host
