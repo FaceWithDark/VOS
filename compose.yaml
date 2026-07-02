@@ -88,6 +88,44 @@ services:
     networks:
       - vos-backend
 
+  proxy:
+    container_name: vos-traefik
+    depends_on:
+      backend:
+        restart: true
+        condition: service_started
+        required: true
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./docker/dockerfiles/traefik.Dockerfile
+    volumes:
+      - type: bind
+        source: ./proxy/traefik.yaml
+        target: /etc/traefik/traefik.yaml
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+    ports:
+      - name: vos-traefik-proxy
+        target: 80
+        host_ip: 127.0.0.1
+        published: "81"
+        protocol: tcp
+        app_protocol: http
+        mode: host
+      # NOTE:
+      # Use on 'dev' to know which configs applied to each Docker service only
+      - name: vos-traefik-dashboard
+        target: 8080
+        host_ip: 127.0.0.1
+        published: "8081"
+        protocol: tcp
+        app_protocol: http
+        mode: host
+    networks:
+      - vos-backend
+
 volumes:
   # NOTE:
   # data will be stored from the hosting machine rather than inside container due
