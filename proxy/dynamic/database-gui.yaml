@@ -10,7 +10,7 @@ http:
       service: vos-pgadmin-service
       # NOTE:
       # Refer to our Domain Specificity guideline for more details
-      priority: 250
+      priority: 350
 
   services:
     vos-pgadmin-service:
