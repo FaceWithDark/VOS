@@ -1,6 +1,6 @@
 http:
   routers:
-    vos-proxy-router:
+    vos-traefik-router:
       entryPoints:
         - "web"
       # NOTE:
