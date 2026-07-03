@@ -8,6 +8,9 @@ http:
       # needed when setting up on the production server.
       rule: "Host(`dev.vososu.site`) || HostRegexp(`^[a-z]+\\.dev\\.vososu\\.site$`)"
       service: vos-symfony-service
+      # NOTE:
+      # Refer to our Domain Specificity guideline for more details
+      priority: 50
 
   services:
     vos-symfony-service:

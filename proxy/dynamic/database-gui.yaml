@@ -8,6 +8,9 @@ http:
       # needed when setting up on the production server.
       rule: "Host(`db.dev.vososu.site`)"
       service: vos-pgadmin-service
+      # NOTE:
+      # Refer to our Domain Specificity guideline for more details
+      priority: 250
 
   services:
     vos-pgadmin-service:

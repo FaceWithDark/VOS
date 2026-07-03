@@ -9,7 +9,7 @@ providers:
 # API and dashboard configs
 api:
   dashboard: true
-  insecure: true
+  insecure: false
 
 # Entry-point configs
 entryPoints:
