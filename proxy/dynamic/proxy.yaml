@@ -8,3 +8,6 @@ http:
       # needed when setting up on the production server.
       rule: "Host(`proxy.dev.vososu.site`)"
       service: api@internal
+      # NOTE:
+      # Refer to our Domain Specificity guideline for more details
+      priority: 240
