@@ -1,8 +1,13 @@
 name: VOS
 
 services:
-  backend:
+  app:
     container_name: vos-symfony
+    depends_on:
+      database:
+        restart: true
+        condition: service_started
+        required: true
     restart: unless-stopped
     build:
       context: ./
@@ -22,7 +27,7 @@ services:
         app_protocol: http
         mode: host
     networks:
-      - vos-backend
+      - vos-network
 
   database:
     container_name: vos-postgres
@@ -48,7 +53,7 @@ services:
         source: vos-postgres-data
         target: /var/lib/postgresql
     networks:
-      - vos-backend
+      - vos-network
 
   # NOTE:
   # I'd love to use phpPgAdmin instead of the original one so that if we get into
@@ -86,12 +91,12 @@ services:
         app_protocol: http
         mode: host
     networks:
-      - vos-backend
+      - vos-network
 
   proxy:
     container_name: vos-traefik
     depends_on:
-      backend:
+      app:
         restart: true
         condition: service_started
         required: true
@@ -127,7 +132,7 @@ services:
         app_protocol: http
         mode: host
     networks:
-      - vos-backend
+      - vos-network
 
 volumes:
   # NOTE:
@@ -139,7 +144,7 @@ volumes:
     name: vos-database-gui
 
 networks:
-  vos-backend:
+  vos-network:
     name: vososu
     driver: bridge
 
