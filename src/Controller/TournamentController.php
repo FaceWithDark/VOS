@@ -20,7 +20,7 @@ final class TournamentController extends AbstractController
 	public function index(): Response
 	{
 		return $this->render(
-			view: 'tournament/index.html.twig',
+			view: 'mains/Tournament/index.html.twig',
 			parameters: [
 				'controller_name' => 'TournamentController',
 			]

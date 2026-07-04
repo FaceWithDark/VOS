@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'mains/base.html.twig' %}
 
 
 {% block navigation %}
@@ -31,9 +31,9 @@
 {% endblock %}
 
 {% block content %}
-	<main class="flex-1 flex flex-col">
-		{% block tourney_header %}{% endblock %}
-		{% block tourney_body %}{% endblock %}
-		{% block tourney_footer %}{% endblock %}
+	<main class="flex-1 flex flex-col justify-center-safe items-center-safe">
+		{% block root_header %}{% endblock %}
+		{% block root_body %}{% endblock %}
+		{% block root_footer %}{% endblock %}
 	</main>
 {% endblock %}
