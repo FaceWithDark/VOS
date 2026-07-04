@@ -1,0 +1,46 @@
+{# NOTE:
+ # We re-use the base domain's Twig base template for now. Normally, each tenant
+ # would have a fairly different layout and style for the base template/component.
+ #}
+<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html lang="vi-VN">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<title>{% block title %}{% endblock %}</title>
+
+		{% block favicons %}
+			<link rel="icon" type="image/png" href="{{ asset(path: 'favicons/favicon-96x96.png') }}" sizes="96x96" />
+			<link rel="icon" type="image/svg+xml" href="{{ asset(path: 'favicons/favicon.svg') }}" />
+			<link rel="shortcut icon" href="{{ asset(path: 'favicons/favicon.ico') }}" />
+			<link rel="apple-touch-icon" sizes="180x180" href="{{ asset(path: 'favicons/apple-touch-icon.png') }}" />
+			<meta name="apple-mobile-web-app-title" content="VOS" />
+			<link rel="manifest" href="{{ asset(path: 'favicons/site.webmanifest') }}" />
+		{% endblock %}
+
+		{% block stylesheets %}
+		{% endblock %}
+
+		{% block javascripts %}
+			{% block importmap %}{{ importmap('app') }}{% endblock %}
+		{% endblock %}
+
+		{% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
+		{% if frankenphpHotReload %}
+			<meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
+			<script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
+			<script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
+		{% endif %}
+	</head>
+
+	<body class="flex flex-col min-h-dvh">
+		{% block body %}
+			{% block navigation %}{% endblock %}
+			{% block content %}{% endblock %}
+		{% endblock %}
+	</body>
+</html>
