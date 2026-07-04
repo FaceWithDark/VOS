@@ -1,0 +1,39 @@
+{% extends 'tenants/Vot/base.html.twig' %}
+
+
+{% block navigation %}
+	<twig:Navigation:Navbar>
+		<twig:block name="left_layout">
+			<div class="flex flex-row items-center-safe">
+				<a href="#" class="text-(--primary)">Home</a>
+			</div>
+		</twig:block>
+
+		<twig:block name="centre_layout">
+			<div class="flex flex-col py-[0.5em]">
+				<a href="#" class="text-(--primary)">
+					<img
+						src="{{ asset(path: 'trademarks/trademark-fallback.png') }}"
+						alt="VOS Trademark Logo"
+						srcset="{{ asset(path: 'trademarks/trademark.svg') }}"
+						class="w-full max-w-25 h-auto"
+					/>
+				</a>
+			</div>
+		</twig:block>
+
+		<twig:block name="right_layout">
+			<div class="flex flex-row items-center-safe">
+				<a href="#" class="text-(--primary)">Tournament</a>
+			<div>
+		</twig:block>
+	</twig:Navigation:Navbar>
+{% endblock %}
+
+{% block content %}
+	<main class="flex-1 flex flex-col justify-center-safe items-center-safe">
+		{% block home_header %}{% endblock %}
+		{% block home_body %}{% endblock %}
+		{% block home_footer %}{% endblock %}
+	</main>
+{% endblock %}
