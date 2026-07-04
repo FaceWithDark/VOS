@@ -12,18 +12,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class RootController extends AbstractController
 {
-    #[Route(
-        path: '/',
-        name: 'root_index',
-        methods: ['GET']
-    )]
-    public function index(): Response
-    {
-        return $this->render(
-            view: 'root/index.html.twig',
-            parameters: [
-                'controller_name' => 'RootController',
-            ]
-        );
-    }
+	#[Route(
+		path: '/',
+		name: 'root_index',
+		methods: ['GET']
+	)]
+	public function index(): Response
+	{
+		return $this->render(
+			view: 'mains/Root/index.html.twig',
+			parameters: [
+				'controller_name' => 'RootController',
+			]
+		);
+	}
 }
