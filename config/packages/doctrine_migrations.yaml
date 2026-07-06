@@ -1,6 +1,12 @@
 doctrine_migrations:
-    migrations_paths:
-        # namespace is arbitrary but should be different from App\Migrations
-        # as migrations classes should NOT be autoloaded
-        'DoctrineMigrations': '%kernel.project_dir%/migrations'
-    enable_profiler: false
+  migrations_paths:
+    # namespace is arbitrary but should be different from App\Migrations
+    # as migrations classes should NOT be autoloaded
+    'DoctrineMigrations\Tourney': "%kernel.project_dir%/migrations/Tourney"
+
+  all_or_nothing: true
+  transactional: true
+  check_database_platform: true
+  organize_migrations: none
+
+  enable_profiler: false
