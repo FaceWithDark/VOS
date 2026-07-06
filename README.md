@@ -46,12 +46,16 @@ docker compose up --build -d
 
 Once the containers are running, you can verify that all services are working correctly by these way:
 
-1. **Symfony**: [localhost:8001](http://localhost:8001/)
+> [!NOTE]
+> Modify the base domain name if you plan to use your registered one, or
+> `localhost`. Otherwise, feels free to use our domain as it is.
+
+1. **Symfony**: [dev.vososu.site](http://dev.vososu.site)
 2. **Postgres**:
 - Direct access is disable by default for security reasons. However, you can still do it by typing:
 
 ```bash
-docker exec -it vos-postgres psql -U demo -d postgres
+docker exec -it vos-postgres psql -U demo -d demo
 
 # Please enter the database password (read from `postgres_db.txt` file) here if
 # there is a prompt asking you to do it
@@ -71,14 +75,15 @@ docker exec -it vos-postgres psql -U demo -d postgres
 psql (18.3)
 Type "help" for help.
 
-postgres=#
+demo=#
 ```
-3. **pgAdmin**: [localhost:5051](http://localhost:5051/)
+3. **pgAdmin**: [db.dev.vososu.site](http://db.dev.vososu.site)
+4. **Traefik (dev only)**: [proxy.dev.vososu.site](http://proxy.dev.vososu.site)
 
 ---
 # Interactions with APIs
 
-Please head to [localhost:8001/api](http://localhost:8001/api) to play around with all available APIs in this project.
+Please head to [dev.vososu.site/api](http://dev.vososu.site/api) to play around with all available APIs in this project.
 
 ---
 # Testing
