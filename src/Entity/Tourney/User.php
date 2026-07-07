@@ -11,10 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`users`')]
+#[ORM\Table(
+	name: '`users`',
+	options: ['comment' => 'storing info about osu!taiko users that ARE belong to one or more registered tournaments under VOS org.']
+)]
 class User
 {
 	#[ORM\Id]
+	#[ORM\GeneratedValue(strategy: 'NONE')]
 	#[ORM\Column(
 		type: Types::INTEGER,
 		nullable: false
@@ -22,11 +26,17 @@ class User
 	private ?int $id = null;
 
 	#[ORM\ManyToOne(inversedBy: 'users')]
-	#[ORM\JoinColumn(nullable: false)]
+	#[ORM\JoinColumn(
+		name: 'role_id',
+		referencedColumnName: 'id',
+		nullable: false,
+		onDelete: 'NO ACTION'
+	)]
 	private ?Role $roleId = null;
 
 	#[ORM\Column(
-		type: Types::TEXT
+		type: Types::TEXT,
+		nullable: false
 	)]
 	private ?string $name = null;
 
@@ -44,7 +54,8 @@ class User
 
 	#[ORM\Column(
 		type: Types::STRING,
-		length: 2
+		length: 2,
+		nullable: false
 	)]
 	private ?string $countryFlag = null;
 

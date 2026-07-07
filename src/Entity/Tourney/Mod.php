@@ -13,11 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 #[ORM\Entity(repositoryClass: ModRepository::class)]
-#[ORM\Table(name: '`mods`')]
+#[ORM\Table(
+	name: '`mods`',
+	options: ['comment' => 'storing mods definition used in a mappool within any registered tournaments under VOS org.']
+)]
 class Mod
 {
 	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: 'AUTO')]
+	#[ORM\GeneratedValue(strategy: 'IDENTITY')]
 	#[ORM\Column(
 		type: Types::INTEGER,
 		nullable: false
@@ -26,7 +29,8 @@ class Mod
 
 	#[ORM\Column(
 		type: Types::STRING,
-		length: 5
+		length: 5,
+		nullable: false
 	)]
 	private ?string $name = null;
 
@@ -42,16 +46,19 @@ class Mod
 	)]
 	private ?\DateTime $createOn = null;
 
-    /**
-     * @var Collection<int, Beatmap>
-     */
-    #[ORM\OneToMany(targetEntity: Beatmap::class, mappedBy: 'modId')]
-    private Collection $beatmaps;
+	/**
+	 * @var Collection<int, Beatmap>
+	 */
+	#[ORM\OneToMany(
+		targetEntity: Beatmap::class,
+		mappedBy: 'modId'
+	)]
+	private Collection $beatmaps;
 
-    public function __construct()
-    {
-        $this->beatmaps = new ArrayCollection();
-    }
+	public function __construct()
+	{
+		$this->beatmaps = new ArrayCollection();
+	}
 
 	public function getId(): ?int
 	{
@@ -101,33 +108,33 @@ class Mod
 		return $this;
 	}
 
-    /**
-     * @return Collection<int, Beatmap>
-     */
-    public function getBeatmaps(): Collection
-    {
-        return $this->beatmaps;
-    }
+	/**
+	 * @return Collection<int, Beatmap>
+	 */
+	public function getBeatmaps(): Collection
+	{
+		return $this->beatmaps;
+	}
 
-    public function addBeatmap(Beatmap $beatmap): static
-    {
-        if (!$this->beatmaps->contains($beatmap)) {
-            $this->beatmaps->add($beatmap);
-            $beatmap->setModId($this);
-        }
+	public function addBeatmap(Beatmap $beatmap): static
+	{
+		if (!$this->beatmaps->contains($beatmap)) {
+			$this->beatmaps->add($beatmap);
+			$beatmap->setModId($this);
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function removeBeatmap(Beatmap $beatmap): static
-    {
-        if ($this->beatmaps->removeElement($beatmap)) {
-            // set the owning side to null (unless already changed)
-            if ($beatmap->getModId() === $this) {
-                $beatmap->setModId(null);
-            }
-        }
+	public function removeBeatmap(Beatmap $beatmap): static
+	{
+		if ($this->beatmaps->removeElement($beatmap)) {
+			// set the owning side to null (unless already changed)
+			if ($beatmap->getModId() === $this) {
+				$beatmap->setModId(null);
+			}
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 }

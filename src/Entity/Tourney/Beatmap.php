@@ -11,10 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 #[ORM\Entity(repositoryClass: BeatmapRepository::class)]
-#[ORM\Table(name: '`beatmaps`')]
+#[ORM\Table(
+	name: '`beatmaps`',
+	options: ['comment' => 'storing beatmaps information used in a mappool within any registered tournaments under VOS org.']
+)]
 class Beatmap
 {
 	#[ORM\Id]
+	#[ORM\GeneratedValue(strategy: 'NONE')]
 	#[ORM\Column(
 		type: Types::INTEGER,
 		nullable: false
@@ -22,16 +26,43 @@ class Beatmap
 	private ?int $id = null;
 
 	#[ORM\ManyToOne(inversedBy: 'beatmaps')]
-	#[ORM\JoinColumn(nullable: false)]
+	#[ORM\JoinColumn(
+		name: 'mod_id',
+		referencedColumnName: 'id',
+		nullable: false,
+		onDelete: 'NO ACTION'
+	)]
 	private ?Mod $modId = null;
 
 	#[ORM\ManyToOne(inversedBy: 'beatmaps')]
-	#[ORM\JoinColumn(nullable: false)]
+	#[ORM\JoinColumn(
+		name: 'round_id',
+		referencedColumnName: 'id',
+		nullable: false,
+		onDelete: 'NO ACTION'
+	)]
 	private ?Round $roundId = null;
 
 	#[ORM\Column(
 		type: Types::JSONB,
-		nullable: false
+		nullable: false,
+		options: [
+			'comment' =>
+			'Template beatmap data:
+			```yaml
+			name: "string"
+			fa: "string"
+			banner: "string"
+			diff: "string"
+			sr: float
+			bpm: float
+			length: "string"
+			od: float
+			hp: float
+			mapper: "string"
+			selector: "string"
+			```'
+		]
 	)]
 	private mixed $details = null;
 

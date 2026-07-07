@@ -13,11 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 #[ORM\Entity(repositoryClass: RoleRepository::class)]
-#[ORM\Table(name: '`roles`')]
+#[ORM\Table(
+	name: '`roles`',
+	options: ['comment' => 'storing roles definition that ARE belong to one or more registered tournaments under VOS org.']
+)]
 class Role
 {
 	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: 'AUTO')]
+	#[ORM\GeneratedValue(strategy: 'IDENTITY')]
 	#[ORM\Column(
 		type: Types::INTEGER,
 		nullable: false
