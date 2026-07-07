@@ -39,7 +39,4 @@ COPY --from=base ./ ./
 
 EXPOSE 8000/tcp
 
-# NOTE:
-# On production, we don't directly start up the Symfony server like this but wrap
-# behind a Traefik reverse proxy setup
-ENTRYPOINT [ "symfony", "--allow-all-ip", "local:server:start" ]
+ENTRYPOINT [ "sh", "./migrations/Utility/Migration.sh" ]
