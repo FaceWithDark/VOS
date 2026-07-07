@@ -3,45 +3,23 @@
 declare(strict_types=1);
 
 
-namespace DoctrineMigrations\Tourney\Vot;
+namespace DoctrineMigrations\Tourney\Vtc;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260706092929 extends AbstractMigration
+final class Version20260707080446 extends AbstractMigration
 {
-	private string	$name		= 'VOT';
+	private string	$name		= 'VTC';
 	private array	$schemas	= [];
 	private string	$statement	= '';
 
 	public function __construct()
 	{
-		$this->schemas = [
-			/*
-			 * NOTE:
-			 * it's not possible to do a for-loop on float-like tourney
-			 * iteration, hence the hard-coded assoc array here
-			 */
-
-			// Key is for schemas name
-			sprintf(
-				'%s_%s%s',
-				$this->name,
-				$this->name,
-				'5_5'
-			) =>
-			// Value is for table constraints name
-			sprintf(
-				'%s%s',
-				$this->name,
-				'5_5'
-			)
-		];
-
 		for (
 			$iteration = 1;
-			$iteration <= 6;
+			$iteration <= 3;
 			$iteration++
 		) {
 			$schemaName = sprintf(
@@ -73,7 +51,7 @@ final class Version20260706092929 extends AbstractMigration
 	public function getDescription(): string
 	{
 		return sprintf(
-			'Create `users` tables across all iteration schemas for registered %s tournament.',
+			'Create `beatmaps` tables across all iteration schemas for registered %s tournament.',
 			$this->name
 		);
 	}
@@ -84,15 +62,13 @@ final class Version20260706092929 extends AbstractMigration
 		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
 			$this->statement =
 				<<<"SQL"
-				CREATE TABLE IF NOT EXISTS {$tourneySchema}.users (
+				CREATE TABLE IF NOT EXISTS {$tourneySchema}.beatmaps (
 					id INTEGER NOT NULL,
-					role_id INTEGER NOT NULL,
-					name TEXT NOT NULL,
-					avatar TEXT NOT NULL,
-					rank SMALLINT NOT NULL,
-					country_flag VARCHAR(2) NOT NULL,
+					mod_id INTEGER NOT NULL,
+					round_id INTEGER NOT NULL,
+					details JSONB NOT NULL,
 					create_on TIMESTAMP(0) WITH TIME ZONE NOT NULL,
-					CONSTRAINT PK_{$tourneyConstraint}_USER_ID PRIMARY KEY (id)
+					CONSTRAINT PK_{$tourneyConstraint}_BEATMAP_ID PRIMARY KEY (id)
 				)
 				SQL;
 
@@ -106,16 +82,30 @@ final class Version20260706092929 extends AbstractMigration
 			$this->statement =
 				<<<"SQL"
 				CREATE INDEX
-					IDX_{$tourneyConstraint}_ROLE_ID
+					IDX_{$tourneyConstraint}_MOD_ID
 				ON
-					{$tourneySchema}.users (role_id)
+					{$tourneySchema}.beatmaps (mod_id)
 				SQL;
 
 			$this->addSql(sql: $this->statement);
 		}
 
 
-		// Finally we can add comment on the table since they're existed now
+		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
+			$this->statement =
+				<<<"SQL"
+				CREATE INDEX
+					IDX_{$tourneyConstraint}_ROUND_ID
+				ON
+					{$tourneySchema}.beatmaps (round_id)
+				SQL;
+
+			$this->addSql(sql: $this->statement);
+		}
+
+
+		// Finally we can add comment on the table/column since they are
+		// existed now
 		foreach (
 			// We only need the key part of the assoc array here
 			array_keys(array: $this->schemas)
@@ -124,9 +114,40 @@ final class Version20260706092929 extends AbstractMigration
 			$this->statement =
 				<<<"SQL"
 				COMMENT ON TABLE
-					{$tourneySchema}.users
+					{$tourneySchema}.beatmaps
 				IS
-					'storing info about osu!taiko users that ARE belong to one or more registered tournaments under VOS org.'
+					'storing beatmaps information used in a mappool within any registered tournaments under VOS org.'
+				SQL;
+
+			$this->addSql(sql: $this->statement);
+		}
+
+
+
+		foreach (
+			// We only need the key part of the assoc array here
+			array_keys(array: $this->schemas)
+			as $tourneySchema
+		) {
+			$this->statement =
+				<<<"SQL"
+				COMMENT ON COLUMN
+					{$tourneySchema}.beatmaps.details
+				IS
+					'Template beatmap data:
+					```yaml
+					name: string
+					fa: string
+					banner: string
+					diff: string
+					sr: float
+					bpm: float
+					length: string
+					od: float
+					hp: float
+					mapper: string
+					selector: string
+					```'
 				SQL;
 
 			$this->addSql(sql: $this->statement);
@@ -138,12 +159,32 @@ final class Version20260706092929 extends AbstractMigration
 			$this->statement =
 				<<<"SQL"
 				ALTER TABLE IF EXISTS
-					{$tourneySchema}.users
+					{$tourneySchema}.beatmaps
 				ADD
 					CONSTRAINT
-						FK_{$tourneyConstraint}_ROLE_ID FOREIGN KEY (role_id)
+						FK_{$tourneyConstraint}_MOD_ID FOREIGN KEY (mod_id)
 					REFERENCES
-						{$tourneySchema}.roles (id)
+						{$tourneySchema}.mods (id)
+					MATCH FULL
+					ON UPDATE CASCADE
+					ON DELETE NO ACTION
+					NOT DEFERRABLE
+				SQL;
+
+			$this->addSql(sql: $this->statement);
+		}
+
+
+		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
+			$this->statement =
+				<<<"SQL"
+				ALTER TABLE IF EXISTS
+					{$tourneySchema}.beatmaps
+				ADD
+					CONSTRAINT
+						FK_{$tourneyConstraint}_ROUND_ID FOREIGN KEY (round_id)
+					REFERENCES
+						{$tourneySchema}.rounds (id)
 					MATCH FULL
 					ON UPDATE CASCADE
 					ON DELETE NO ACTION
@@ -163,7 +204,7 @@ final class Version20260706092929 extends AbstractMigration
 		) {
 			$this->statement =
 				<<<"SQL"
-				DROP TABLE IF EXISTS {$tourneySchema}.users CASCADE;
+				DROP TABLE IF EXISTS {$tourneySchema}.beatmaps CASCADE;
 				SQL;
 
 			$this->addSql(sql: $this->statement);

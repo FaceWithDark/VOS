@@ -2,7 +2,8 @@ doctrine_migrations:
   migrations_paths:
     # namespace is arbitrary but should be different from App\Migrations
     # as migrations classes should NOT be autoloaded
-    'DoctrineMigrations\Tourney': "%kernel.project_dir%/migrations/Tourney"
+    'DoctrineMigrations\Tourney\Vot': "%kernel.project_dir%/migrations/Tourney/Vot"
+    'DoctrineMigrations\Tourney\Vtc': "%kernel.project_dir%/migrations/Tourney/Vtc"
 
   all_or_nothing: true
   transactional: true

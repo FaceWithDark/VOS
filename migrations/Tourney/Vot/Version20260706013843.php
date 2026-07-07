@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace DoctrineMigrations\Tourney;
+namespace DoctrineMigrations\Tourney\Vot;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
