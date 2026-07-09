@@ -12,8 +12,9 @@ use Doctrine\Migrations\AbstractMigration;
 final class Version20260706013843 extends AbstractMigration
 {
 	private string	$dbUser;
-	private string	$tourneyName	= 'VOT';
-	private array	$tourneySchemas = [];
+	private string	$name		= 'VOT';
+	private array	$schemas	= [];
+	private string	$statement	= '';
 
 	public function __construct()
 	{
@@ -21,98 +22,27 @@ final class Version20260706013843 extends AbstractMigration
 			=  $_ENV['DB_USER']
 			?? getenv('DB_USER')
 			?: 'demo';
-	}
 
-	public function getDescription(): string
-	{
-		return sprintf(
-			'Create iteration schemas for registered %s tournaments.',
-			$this->tourneyName
-		);
-	}
-
-	public function up(Schema $schema): void
-	{
-		$this->tourneySchemas = [
+		$this->schemas = [
 			/*
 			 * NOTE:
 			 * it's not possible to do a for-loop on float-like tourney
 			 * iteration, hence the hard-coded assoc array here
 			 */
+
+			// Key is for schemas name
 			sprintf(
 				'%s_%s%s',
-				$this->tourneyName,
-				$this->tourneyName,
+				$this->name,
+				$this->name,
 				'5_5'
-			) => sprintf(
+			) =>
+			// Value is for schemas comment
+			sprintf(
 				'%s%s iteration schema for registered %s tourney.',
-				$this->tourneyName,
+				$this->name,
 				'5.5',
-				$this->tourneyName
-			)
-		];
-
-		for (
-			$iteration = 1;
-			$iteration <= 6;
-			$iteration++
-		) {
-			$schemaName	= sprintf(
-				'%s_%s%d',
-				$this->tourneyName,
-				$this->tourneyName,
-				$iteration
-			);
-			$schemaComment	= sprintf(
-				'%s%d iteration schema for registered %s tourney.',
-				$this->tourneyName,
-				$iteration,
-				$this->tourneyName
-			);
-
-			$this->tourneySchemas[$schemaName] = $schemaComment;
-		}
-
-		/*
-		 * Give the final assoc array a sort so that the hard-coded value get
-		 * placed in the right order
-		 */
-		ksort(
-			$this->tourneySchemas,
-			SORT_REGULAR
-		);
-
-		foreach ($this->tourneySchemas as $name => $comment) {
-			$this->addSql(
-				sprintf(
-					'CREATE SCHEMA IF NOT EXISTS %s AUTHORIZATION "%s"',
-					$name,
-					$this->dbUser
-				)
-			);
-			$this->addSql(
-				sprintf(
-					"COMMENT ON SCHEMA %s IS '%s'",
-					$name,
-					$comment
-				)
-			);
-		}
-	}
-
-	public function down(Schema $schema): void
-	{
-		$this->tourneySchemas = [
-			/*
-			 * NOTE:
-			 * it's not possible to do a for-loop on float-like tourney
-			 * iteration, hence the hard-coded array here
-			 */
-			sprintf(
-				'%s_%s%s',
-				$this->tourneyName,
-				$this->tourneyName,
-				'5_5'
+				$this->name
 			)
 		];
 
@@ -123,30 +53,82 @@ final class Version20260706013843 extends AbstractMigration
 		) {
 			$schemaName = sprintf(
 				'%s_%s%d',
-				$this->tourneyName,
-				$this->tourneyName,
+				$this->name,
+				$this->name,
 				$iteration
 			);
 
-			$this->tourneySchemas[] = $schemaName;
+			$schemaComment = sprintf(
+				'%s%d iteration schema for registered %s tourney.',
+				$this->name,
+				$iteration,
+				$this->name
+			);
+
+			$this->schemas[$schemaName] = $schemaComment;
 		}
 
 		/*
-		 * Give the final array a sort so that the hard-coded value get placed in
-		 * the right order
+		 * Give the final assoc array a sort so that the hard-coded value get
+		 * placed in the right order
 		 */
-		sort(
-			$this->tourneySchemas,
+		ksort(
+			$this->schemas,
 			SORT_REGULAR
 		);
+	}
 
-		foreach ($this->tourneySchemas as $tourneySchema) {
-			$this->addSql(
-				sprintf(
-					'DROP SCHEMA IF EXISTS %s CASCADE',
-					$tourneySchema
-				)
-			);
+	public function getDescription(): string
+	{
+		return sprintf(
+			'Create iteration schemas for registered %s tournaments.',
+			$this->name
+		);
+	}
+
+	public function up(Schema $schema): void
+	{
+		// This schema need to be created first
+		foreach ($this->schemas as $name => $comment) {
+			$this->statement =
+				<<<"SQL"
+				CREATE SCHEMA IF NOT EXISTS
+					{$name}
+				AUTHORIZATION
+					"{$this->dbUser}"
+				SQL;
+
+			$this->addSql(sql: $this->statement);
+		}
+
+
+		// Then we can add comment on the schema since they're existed now
+		foreach ($this->schemas as $name => $comment) {
+			$this->statement =
+				<<<"SQL"
+				COMMENT ON SCHEMA
+					{$name}
+				IS
+					'{$comment}'
+				SQL;
+
+			$this->addSql(sql: $this->statement);
+		}
+	}
+
+	public function down(Schema $schema): void
+	{
+		foreach (
+			// We only need the key part of the assoc array here
+			array_keys(array: $this->schemas)
+			as $tourneySchema
+		) {
+			$this->statement =
+				<<<"SQL"
+				DROP SCHEMA IF EXISTS {$tourneySchema} CASCADE
+				SQL;
+
+			$this->addSql(sql: $this->statement);
 		}
 	}
 }
