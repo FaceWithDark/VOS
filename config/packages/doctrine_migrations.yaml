@@ -4,6 +4,7 @@ doctrine_migrations:
     # as migrations classes should NOT be autoloaded
     'DoctrineMigrations\Tourney\Vot': "%kernel.project_dir%/migrations/Tourney/Vot"
     'DoctrineMigrations\Tourney\Vtc': "%kernel.project_dir%/migrations/Tourney/Vtc"
+    'DoctrineMigrations\Web': "%kernel.project_dir%/migrations/Web"
 
   all_or_nothing: true
   transactional: true
