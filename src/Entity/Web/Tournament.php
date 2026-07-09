@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Tournament
 {
 	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: 'AUTO')]
+	#[ORM\GeneratedValue(strategy: 'IDENTITY')]
 	#[ORM\Column(
 		type: Types::INTEGER,
 		nullable: false
