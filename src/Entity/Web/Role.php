@@ -11,7 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 #[ORM\Entity(repositoryClass: RoleRepository::class)]
-#[ORM\Table(name: '`roles`')]
+#[ORM\Table(
+	name: '`roles`',
+	options: ['comment' => 'storing roles definition that ARE NOT belong to any registered tournaments under VOS org.']
+)]
 class Role
 {
 	#[ORM\Id]

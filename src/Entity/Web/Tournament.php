@@ -11,7 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 #[ORM\Entity(repositoryClass: TournamentRepository::class)]
-#[ORM\Table(name: '`tournaments`')]
+#[ORM\Table(
+	name: '`tournaments`',
+	options: ['comment' => 'storing any registered tournaments under VOS org.']
+)]
 class Tournament
 {
 	#[ORM\Id]
