@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Role
 {
 	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: 'AUTO')]
+	#[ORM\GeneratedValue(strategy: 'IDENTITY')]
 	#[ORM\Column(
 		type: Types::INTEGER,
 		nullable: false
@@ -41,8 +41,11 @@ class Role
 	)]
 	private ?\DateTime $createOn = null;
 
-    #[ORM\OneToOne(mappedBy: 'roleId', cascade: ['persist', 'remove'])]
-    private ?User $users = null;
+	#[ORM\OneToOne(
+		mappedBy: 'roleId',
+		cascade: ['persist', 'remove']
+	)]
+	private ?User $users = null;
 
 	public function getId(): ?int
 	{
@@ -92,20 +95,20 @@ class Role
 		return $this;
 	}
 
-    public function getUsers(): ?User
-    {
-        return $this->users;
-    }
+	public function getUsers(): ?User
+	{
+		return $this->users;
+	}
 
-    public function setUsers(User $users): static
-    {
-        // set the owning side of the relation if necessary
-        if ($users->getRoleId() !== $this) {
-            $users->setRoleId($this);
-        }
+	public function setUsers(User $users): static
+	{
+		// set the owning side of the relation if necessary
+		if ($users->getRoleId() !== $this) {
+			$users->setRoleId($this);
+		}
 
-        $this->users = $users;
+		$this->users = $users;
 
-        return $this;
-    }
+		return $this;
+	}
 }

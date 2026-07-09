@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
 	#[ORM\Id]
+	#[ORM\GeneratedValue(strategy: 'NONE')]
 	#[ORM\Column(
 		type: Types::INTEGER,
 		nullable: false
@@ -25,7 +26,13 @@ class User
 		inversedBy: 'users',
 		cascade: ['persist', 'remove']
 	)]
-	#[ORM\JoinColumn(nullable: false)]
+	#[ORM\JoinColumn(
+		name: 'role_id',
+		referencedColumnName: 'id',
+		unique: true,
+		nullable: false,
+		onDelete: 'NO ACTION'
+	)]
 	private ?Role $roleId = null;
 
 	#[ORM\Column(
