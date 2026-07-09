@@ -12,8 +12,9 @@ use Doctrine\Migrations\AbstractMigration;
 final class Version20260706053601 extends AbstractMigration
 {
 	private string	$dbUser;
-	private string	$tourneyName	= 'VTC';
-	private array	$tourneySchemas = [];
+	private string	$name		= 'VTC';
+	private array	$schemas	= [];
+	private string	$statement	= '';
 
 	public function __construct()
 	{
@@ -21,37 +22,27 @@ final class Version20260706053601 extends AbstractMigration
 			=  $_ENV['DB_USER']
 			?? getenv('DB_USER')
 			?: 'demo';
-	}
 
-	public function getDescription(): string
-	{
-		return sprintf(
-			'Create iteration schemas for registered %s tournaments.',
-			$this->tourneyName
-		);
-	}
-
-	public function up(Schema $schema): void
-	{
 		for (
 			$iteration = 1;
 			$iteration <= 3;
 			$iteration++
 		) {
-			$schemaName	= sprintf(
+			$schemaName = sprintf(
 				'%s_%s%d',
-				$this->tourneyName,
-				$this->tourneyName,
+				$this->name,
+				$this->name,
 				$iteration
 			);
-			$schemaComment	= sprintf(
+
+			$schemaComment = sprintf(
 				'%s%d iteration schema for registered %s tourney.',
-				$this->tourneyName,
+				$this->name,
 				$iteration,
-				$this->tourneyName
+				$this->name
 			);
 
-			$this->tourneySchemas[$schemaName] = $schemaComment;
+			$this->schemas[$schemaName] = $schemaComment;
 		}
 
 		/*
@@ -60,62 +51,62 @@ final class Version20260706053601 extends AbstractMigration
 		 * the migration script for registered VOT tourneys
 		 */
 		ksort(
-			$this->tourneySchemas,
+			$this->schemas,
 			SORT_REGULAR
 		);
+	}
 
-		foreach ($this->tourneySchemas as $name => $comment) {
-			$this->addSql(
-				sprintf(
-					'CREATE SCHEMA IF NOT EXISTS %s AUTHORIZATION "%s"',
-					$name,
-					$this->dbUser
-				)
-			);
-			$this->addSql(
-				sprintf(
-					"COMMENT ON SCHEMA %s IS '%s'",
-					$name,
-					$comment
-				)
-			);
+	public function getDescription(): string
+	{
+		return sprintf(
+			'Create iteration schemas for registered %s tournaments.',
+			$this->name
+		);
+	}
+
+	public function up(Schema $schema): void
+	{
+		// This schema need to be created first
+		foreach ($this->schemas as $name => $comment) {
+			$this->statement =
+				<<<"SQL"
+				CREATE SCHEMA IF NOT EXISTS
+					{$name}
+				AUTHORIZATION
+					"{$this->dbUser}"
+				SQL;
+
+			$this->addSql(sql: $this->statement);
+		}
+
+
+		// Then we can add comment on the schema since they're existed now
+		foreach ($this->schemas as $name => $comment) {
+			$this->statement =
+				<<<"SQL"
+				COMMENT ON SCHEMA
+					{$name}
+				IS
+					'{$comment}'
+				SQL;
+
+			$this->addSql(sql: $this->statement);
 		}
 	}
 
 	public function down(Schema $schema): void
 	{
-		for (
-			$iteration = 1;
-			$iteration <= 3;
-			$iteration++
+		foreach (
+			// We only need the key part of the assoc array here
+			array_keys(array: $this->schemas)
+			as $tourneySchema
 		) {
-			$schemaName = sprintf(
-				'%s_%s%d',
-				$this->tourneyName,
-				$this->tourneyName,
-				$iteration
-			);
+			$this->statement =
+				<<<"SQL"
+				DROP SCHEMA IF EXISTS {$tourneySchema} CASCADE
+				SQL;
 
-			$this->tourneySchemas[] = $schemaName;
-		}
-
-		/*
-		 * NOTE:
-		 * keeping this since we might have to handle similar case later on like
-		 * the migration script for registered VOT tourneys
-		 */
-		sort(
-			$this->tourneySchemas,
-			SORT_REGULAR
-		);
-
-		foreach ($this->tourneySchemas as $tourneySchema) {
-			$this->addSql(
-				sprintf(
-					'DROP SCHEMA IF EXISTS %s CASCADE',
-					$tourneySchema
-				)
-			);
+			$this->addSql(sql: $this->statement);
 		}
 	}
 }
