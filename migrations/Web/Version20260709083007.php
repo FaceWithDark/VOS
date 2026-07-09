@@ -9,7 +9,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260709093007 extends AbstractMigration
+final class Version20260709083007 extends AbstractMigration
 {
 	private string $name		= 'VOS';
 	private string $schema		= '';
@@ -26,8 +26,7 @@ final class Version20260709093007 extends AbstractMigration
 	public function getDescription(): string
 	{
 		return sprintf(
-			'Create `messenger_messages` table for %s catalog schema under %s org.',
-			$this->schema,
+			'Create `messenger_messages` table for catalog & relational schemas under %s org.',
 			$this->name
 		);
 	}
