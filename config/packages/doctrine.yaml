@@ -20,21 +20,18 @@ doctrine:
       Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
     auto_mapping: true
     mappings:
-      # NOTE:
-      # First 2 mappings/schemas share the same Entity, which also mean same
-      # tables structure
-      Vot:
+      Catalog:
+        type: attribute
+        is_bundle: false
+        dir: "%kernel.project_dir%/src/Entity/Catalog"
+        prefix: 'App\Entity\Catalog'
+        alias: Catalog
+      Tourney:
         type: attribute
         is_bundle: false
         dir: "%kernel.project_dir%/src/Entity/Tourney"
         prefix: 'App\Entity\Tourney'
-        alias: Vot
-      Vtc:
-        type: attribute
-        is_bundle: false
-        dir: "%kernel.project_dir%/src/Entity/Tourney"
-        prefix: 'App\Entity\Tourney'
-        alias: Vtc
+        alias: Tourney
       Web:
         type: attribute
         is_bundle: false

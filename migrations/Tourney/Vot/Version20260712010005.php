@@ -3,23 +3,45 @@
 declare(strict_types=1);
 
 
-namespace DoctrineMigrations\Tourney\Vtc;
+namespace DoctrineMigrations\Tourney\Vot;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260707080427 extends AbstractMigration
+final class Version20260712010005 extends AbstractMigration
 {
-	private string	$name		= 'VTC';
+	private string	$name		= 'VOT';
 	private array	$schemas	= [];
 	private string	$statement	= '';
 
 	public function __construct()
 	{
+		$this->schemas = [
+			/*
+			 * NOTE:
+			 * it's not possible to do a for-loop on float-like tourney
+			 * iteration, hence the hard-coded assoc array here
+			 */
+
+			// Key is for schemas name
+			sprintf(
+				'%s_%s%s',
+				$this->name,
+				$this->name,
+				'5_5'
+			) =>
+			// Value is for table constraints name
+			sprintf(
+				'%s%s',
+				$this->name,
+				'5_5'
+			)
+		];
+
 		for (
 			$iteration = 1;
-			$iteration <= 3;
+			$iteration <= 6;
 			$iteration++
 		) {
 			$schemaName = sprintf(
@@ -51,7 +73,7 @@ final class Version20260707080427 extends AbstractMigration
 	public function getDescription(): string
 	{
 		return sprintf(
-			'Create `rounds` tables across all iteration schemas for registered %s tournament.',
+			'Create `mods` tables across all iteration schemas for registered %s tournament.',
 			$this->name
 		);
 	}
@@ -62,12 +84,12 @@ final class Version20260707080427 extends AbstractMigration
 		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
 			$this->statement =
 				<<<"SQL"
-				CREATE TABLE IF NOT EXISTS {$tourneySchema}.rounds (
+				CREATE TABLE IF NOT EXISTS {$tourneySchema}.mods (
 					id INTEGER GENERATED ALWAYS AS IDENTITY NOT NULL,
-					name VARCHAR(255) NOT NULL,
+					name VARCHAR(5) NOT NULL,
 					description TEXT DEFAULT NULL,
 					create_on TIMESTAMP(0) WITH TIME ZONE NOT NULL,
-					CONSTRAINT PK_{$tourneyConstraint}_ROUND_ID PRIMARY KEY (id)
+					CONSTRAINT PK_{$tourneyConstraint}_MOD_ID PRIMARY KEY (id)
 				)
 				SQL;
 
@@ -84,9 +106,9 @@ final class Version20260707080427 extends AbstractMigration
 			$this->statement =
 				<<<"SQL"
 				COMMENT ON TABLE
-					{$tourneySchema}.rounds
+					{$tourneySchema}.mods
 				IS
-					'storing rounds definition for any registered tournaments under VOS org.'
+					'storing mods definition used in a mappool within any registered tournaments under VOS org.'
 				SQL;
 
 			$this->addSql(sql: $this->statement);
@@ -102,7 +124,7 @@ final class Version20260707080427 extends AbstractMigration
 		) {
 			$this->statement =
 				<<<"SQL"
-				DROP TABLE IF EXISTS {$tourneySchema}.rounds CASCADE;
+				DROP TABLE IF EXISTS {$tourneySchema}.mods CASCADE;
 				SQL;
 
 			$this->addSql(sql: $this->statement);

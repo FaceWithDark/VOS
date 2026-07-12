@@ -3,45 +3,23 @@
 declare(strict_types=1);
 
 
-namespace DoctrineMigrations\Tourney\Vot;
+namespace DoctrineMigrations\Tourney\Vtc;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260706093804 extends AbstractMigration
+final class Version20260712010012 extends AbstractMigration
 {
-	private string	$name		= 'VOT';
+	private string	$name		= 'VTC';
 	private array	$schemas	= [];
 	private string	$statement	= '';
 
 	public function __construct()
 	{
-		$this->schemas = [
-			/*
-			 * NOTE:
-			 * it's not possible to do a for-loop on float-like tourney
-			 * iteration, hence the hard-coded assoc array here
-			 */
-
-			// Key is for schemas name
-			sprintf(
-				'%s_%s%s',
-				$this->name,
-				$this->name,
-				'5_5'
-			) =>
-			// Value is for table constraints name
-			sprintf(
-				'%s%s',
-				$this->name,
-				'5_5'
-			)
-		];
-
 		for (
 			$iteration = 1;
-			$iteration <= 6;
+			$iteration <= 3;
 			$iteration++
 		) {
 			$schemaName = sprintf(

@@ -5,62 +5,38 @@ declare(strict_types=1);
 
 namespace App\Entity\Web;
 
-use App\Repository\Web\RoleRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\Web\RoleRepository;
+use App\Entity\Abstract\AbstractRole;
+use Doctrine\DBAL\Types\Types;
 
 
 #[ORM\Entity(repositoryClass: RoleRepository::class)]
 #[ORM\Table(
 	name: '`roles`',
+	schema: 'vos_catalog',
 	options: ['comment' => 'storing roles definition that ARE NOT belong to any registered tournaments under VOS org.']
 )]
-class Role
+final class Role extends AbstractRole
 {
-	#[ORM\Id]
-	#[ORM\GeneratedValue(strategy: 'IDENTITY')]
-	#[ORM\Column(
-		type: Types::INTEGER,
-		nullable: false
-	)]
-	private ?int $id = null;
-
 	#[ORM\Column(
 		type: Types::STRING,
 		length: 255,
 		nullable: false
 	)]
-	private ?string $name = null;
+	private ?string $name = 'user';
 
 	#[ORM\Column(
 		type: Types::TEXT,
 		nullable: true
 	)]
-	private ?string $description = null;
-
-	#[ORM\Column(
-		type: Types::DATETIMETZ_MUTABLE,
-		nullable: false
-	)]
-	private ?\DateTime $createOn = null;
+	private ?string $description = 'regular permission on VOS webiste';
 
 	#[ORM\OneToOne(
 		mappedBy: 'roleId',
 		cascade: ['persist', 'remove']
 	)]
 	private ?User $users = null;
-
-	public function getId(): ?int
-	{
-		return $this->id;
-	}
-
-	public function setId(int $id): static
-	{
-		$this->id = $id;
-
-		return $this;
-	}
 
 	public function getName(): ?string
 	{
@@ -82,18 +58,6 @@ class Role
 	public function setDescription(?string $description): static
 	{
 		$this->description = $description;
-
-		return $this;
-	}
-
-	public function getCreateOn(): ?\DateTime
-	{
-		return $this->createOn;
-	}
-
-	public function setCreateOn(\DateTime $createOn): static
-	{
-		$this->createOn = $createOn;
 
 		return $this;
 	}

@@ -1,14 +1,13 @@
 doctrine_migrations:
   migrations_paths:
-    # namespace is arbitrary but should be different from App\Migrations
-    # as migrations classes should NOT be autoloaded
-    'DoctrineMigrations\Tourney\Vot': "%kernel.project_dir%/migrations/Tourney/Vot"
-    'DoctrineMigrations\Tourney\Vtc': "%kernel.project_dir%/migrations/Tourney/Vtc"
+    'DoctrineMigrations\Tourney': "%kernel.project_dir%/migrations/Tourney"
     'DoctrineMigrations\Web': "%kernel.project_dir%/migrations/Web"
+    'DoctrineMigrations\Catalog': "%kernel.project_dir%/migrations/Catalog"
+    'DoctrineMigrations\Xternal': "%kernel.project_dir%/migrations/Xternal"
 
+  organize_migrations: "BY_YEAR_AND_MONTH"
   all_or_nothing: true
-  transactional: true
   check_database_platform: true
-  organize_migrations: none
+  transactional: true
 
   enable_profiler: false

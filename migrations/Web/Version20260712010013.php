@@ -9,7 +9,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260709074503 extends AbstractMigration
+final class Version20260712010013 extends AbstractMigration
 {
 	private string $dbUser;
 	private string $name		= 'VOS';
@@ -36,7 +36,7 @@ final class Version20260709074503 extends AbstractMigration
 	public function getDescription(): string
 	{
 		return sprintf(
-			'Create catalog schema to better categorise registered tournaments under %s org.',
+			'Create regular schema for actions that are mainly web-related under %s org.',
 			$this->name
 		);
 	}

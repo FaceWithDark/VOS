@@ -9,7 +9,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260707080328 extends AbstractMigration
+final class Version20260712010011 extends AbstractMigration
 {
 	private string	$name		= 'VTC';
 	private array	$schemas	= [];
@@ -51,7 +51,7 @@ final class Version20260707080328 extends AbstractMigration
 	public function getDescription(): string
 	{
 		return sprintf(
-			'Create `users` tables across all iteration schemas for registered %s tournament.',
+			'Create `mods` tables across all iteration schemas for registered %s tournament.',
 			$this->name
 		);
 	}
@@ -62,15 +62,12 @@ final class Version20260707080328 extends AbstractMigration
 		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
 			$this->statement =
 				<<<"SQL"
-				CREATE TABLE IF NOT EXISTS {$tourneySchema}.users (
-					id INTEGER NOT NULL,
-					role_id INTEGER NOT NULL,
-					name TEXT NOT NULL,
-					avatar TEXT NOT NULL,
-					rank SMALLINT NOT NULL,
-					country_flag VARCHAR(2) NOT NULL,
+				CREATE TABLE IF NOT EXISTS {$tourneySchema}.mods (
+					id INTEGER GENERATED ALWAYS AS IDENTITY NOT NULL,
+					name VARCHAR(5) NOT NULL,
+					description TEXT DEFAULT NULL,
 					create_on TIMESTAMP(0) WITH TIME ZONE NOT NULL,
-					CONSTRAINT PK_{$tourneyConstraint}_USER_ID PRIMARY KEY (id)
+					CONSTRAINT PK_{$tourneyConstraint}_MOD_ID PRIMARY KEY (id)
 				)
 				SQL;
 
@@ -78,22 +75,7 @@ final class Version20260707080328 extends AbstractMigration
 		}
 
 
-		// Then we create the index on FKs for performance purposes:
-		// https://www.beekeeperstudio.io/blog/one-to-many-database-relationships-complete-guide-interactive/
-		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
-			$this->statement =
-				<<<"SQL"
-				CREATE INDEX
-					IDX_{$tourneyConstraint}_ROLE_ID
-				ON
-					{$tourneySchema}.users (role_id)
-				SQL;
-
-			$this->addSql(sql: $this->statement);
-		}
-
-
-		// Finally we can add comment on the table since they're existed now
+		// Then we can add comment on it since they're existed now
 		foreach (
 			// We only need the key part of the assoc array here
 			array_keys(array: $this->schemas)
@@ -102,30 +84,9 @@ final class Version20260707080328 extends AbstractMigration
 			$this->statement =
 				<<<"SQL"
 				COMMENT ON TABLE
-					{$tourneySchema}.users
+					{$tourneySchema}.mods
 				IS
-					'storing info about osu!taiko users that ARE belong to one or more registered tournaments under VOS org.'
-				SQL;
-
-			$this->addSql(sql: $this->statement);
-		}
-
-
-		// Also don't forget to create FKs to bond relationship between tables
-		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
-			$this->statement =
-				<<<"SQL"
-				ALTER TABLE IF EXISTS
-					{$tourneySchema}.users
-				ADD
-					CONSTRAINT
-						FK_{$tourneyConstraint}_ROLE_ID FOREIGN KEY (role_id)
-					REFERENCES
-						{$tourneySchema}.roles (id)
-					MATCH FULL
-					ON UPDATE CASCADE
-					ON DELETE NO ACTION
-					NOT DEFERRABLE
+					'storing mods definition used in a mappool within any registered tournaments under VOS org.'
 				SQL;
 
 			$this->addSql(sql: $this->statement);
@@ -141,7 +102,7 @@ final class Version20260707080328 extends AbstractMigration
 		) {
 			$this->statement =
 				<<<"SQL"
-				DROP TABLE IF EXISTS {$tourneySchema}.users CASCADE;
+				DROP TABLE IF EXISTS {$tourneySchema}.mods CASCADE;
 				SQL;
 
 			$this->addSql(sql: $this->statement);
