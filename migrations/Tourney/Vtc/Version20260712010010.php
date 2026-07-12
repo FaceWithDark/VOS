@@ -9,7 +9,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260707075901 extends AbstractMigration
+final class Version20260712010010 extends AbstractMigration
 {
 	private string	$name		= 'VTC';
 	private array	$schemas	= [];
@@ -39,8 +39,8 @@ final class Version20260707075901 extends AbstractMigration
 		}
 
 		/*
-		 * Give the final assoc array a sort so that the hard-coded value get
-		 * placed in the right order
+		 * Give the final array a sort so that the hard-coded value get placed in
+		 * the right order
 		 */
 		ksort(
 			$this->schemas,
@@ -51,7 +51,7 @@ final class Version20260707075901 extends AbstractMigration
 	public function getDescription(): string
 	{
 		return sprintf(
-			'Create `messenger_messages` tables across all iteration schemas for registered %s tournament.',
+			'Create `rounds` tables across all iteration schemas for registered %s tournament.',
 			$this->name
 		);
 	}
@@ -62,15 +62,12 @@ final class Version20260707075901 extends AbstractMigration
 		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
 			$this->statement =
 				<<<"SQL"
-				CREATE TABLE IF NOT EXISTS {$tourneySchema}.messenger_messages (
-					id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
-					body TEXT NOT NULL,
-					headers TEXT NOT NULL,
-					queue_name VARCHAR(190) NOT NULL,
-					created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
-					available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
-					delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL,
-					CONSTRAINT PK_{$tourneyConstraint}_MESSENGER_MESSAGE_ID PRIMARY KEY (id)
+				CREATE TABLE IF NOT EXISTS {$tourneySchema}.rounds (
+					id INTEGER GENERATED ALWAYS AS IDENTITY NOT NULL,
+					name VARCHAR(255) NOT NULL,
+					description TEXT DEFAULT NULL,
+					create_on TIMESTAMP(0) WITH TIME ZONE NOT NULL,
+					CONSTRAINT PK_{$tourneyConstraint}_ROUND_ID PRIMARY KEY (id)
 				)
 				SQL;
 
@@ -78,20 +75,18 @@ final class Version20260707075901 extends AbstractMigration
 		}
 
 
-		// Not too sure why Doctrine Migration commands generate this, but
-		// we'll just be safe and keep it as it is
-		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
+		// Then we can add comment on it since they're existed now
+		foreach (
+			// We only need the key part of the assoc array here
+			array_keys(array: $this->schemas)
+			as $tourneySchema
+		) {
 			$this->statement =
 				<<<"SQL"
-				CREATE INDEX
-					IDX_{$tourneyConstraint}_MESSENGER_MESSAGE_ID
-				ON
-					{$tourneySchema}.messenger_messages (
-						queue_name,
-						available_at,
-						delivered_at,
-						id
-					)
+				COMMENT ON TABLE
+					{$tourneySchema}.rounds
+				IS
+					'storing rounds definition for any registered tournaments under VOS org.'
 				SQL;
 
 			$this->addSql(sql: $this->statement);
@@ -107,7 +102,7 @@ final class Version20260707075901 extends AbstractMigration
 		) {
 			$this->statement =
 				<<<"SQL"
-				DROP TABLE IF EXISTS {$tourneySchema}.messenger_messages CASCADE;
+				DROP TABLE IF EXISTS {$tourneySchema}.rounds CASCADE;
 				SQL;
 
 			$this->addSql(sql: $this->statement);

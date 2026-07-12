@@ -9,7 +9,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260709083206 extends AbstractMigration
+final class Version20260712010015 extends AbstractMigration
 {
 	private string $name		= 'VOS';
 	private string $schema		= '';

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+
 namespace App\Repository\Tourney;
 
 use App\Entity\Tourney\Role;

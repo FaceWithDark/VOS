@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 
-namespace DoctrineMigrations\Tourney\Vot;
+namespace DoctrineMigrations\Tourney\Vtc;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260706013843 extends AbstractMigration
+final class Version20260712010007 extends AbstractMigration
 {
 	private string	$dbUser;
-	private string	$name		= 'VOT';
+	private string	$name		= 'VTC';
 	private array	$schemas	= [];
 	private string	$statement	= '';
 
@@ -23,32 +23,9 @@ final class Version20260706013843 extends AbstractMigration
 			?? getenv('DB_USER')
 			?: 'demo';
 
-		$this->schemas = [
-			/*
-			 * NOTE:
-			 * it's not possible to do a for-loop on float-like tourney
-			 * iteration, hence the hard-coded assoc array here
-			 */
-
-			// Key is for schemas name
-			sprintf(
-				'%s_%s%s',
-				$this->name,
-				$this->name,
-				'5_5'
-			) =>
-			// Value is for schemas comment
-			sprintf(
-				'%s%s iteration schema for registered %s tourney.',
-				$this->name,
-				'5.5',
-				$this->name
-			)
-		];
-
 		for (
 			$iteration = 1;
-			$iteration <= 6;
+			$iteration <= 3;
 			$iteration++
 		) {
 			$schemaName = sprintf(
@@ -69,8 +46,9 @@ final class Version20260706013843 extends AbstractMigration
 		}
 
 		/*
-		 * Give the final assoc array a sort so that the hard-coded value get
-		 * placed in the right order
+		 * NOTE:
+		 * keeping this since we might have to handle similar case later on like
+		 * the migration script for registered VOT tourneys
 		 */
 		ksort(
 			$this->schemas,

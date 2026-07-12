@@ -9,14 +9,20 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260706092901 extends AbstractMigration
+final class Version20260712010001 extends AbstractMigration
 {
+	private string	$dbUser;
 	private string	$name		= 'VOT';
 	private array	$schemas	= [];
 	private string	$statement	= '';
 
 	public function __construct()
 	{
+		$this->dbUser
+			=  $_ENV['DB_USER']
+			?? getenv('DB_USER')
+			?: 'demo';
+
 		$this->schemas = [
 			/*
 			 * NOTE:
@@ -31,11 +37,12 @@ final class Version20260706092901 extends AbstractMigration
 				$this->name,
 				'5_5'
 			) =>
-			// Value is for table constraints name
+			// Value is for schemas comment
 			sprintf(
-				'%s%s',
+				'%s%s iteration schema for registered %s tourney.',
 				$this->name,
-				'5_5'
+				'5.5',
+				$this->name
 			)
 		];
 
@@ -51,13 +58,14 @@ final class Version20260706092901 extends AbstractMigration
 				$iteration
 			);
 
-			$constraintName = sprintf(
-				'%s%d',
+			$schemaComment = sprintf(
+				'%s%d iteration schema for registered %s tourney.',
 				$this->name,
-				$iteration
+				$iteration,
+				$this->name
 			);
 
-			$this->schemas[$schemaName] = $constraintName;
+			$this->schemas[$schemaName] = $schemaComment;
 		}
 
 		/*
@@ -73,47 +81,35 @@ final class Version20260706092901 extends AbstractMigration
 	public function getDescription(): string
 	{
 		return sprintf(
-			'Create `messenger_messages` tables across all iteration schemas for registered %s tournament.',
+			'Create iteration schemas for registered %s tournaments.',
 			$this->name
 		);
 	}
 
 	public function up(Schema $schema): void
 	{
-		// This table need to be created in each iteration schema first
-		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
+		// This schema need to be created first
+		foreach ($this->schemas as $name => $comment) {
 			$this->statement =
 				<<<"SQL"
-				CREATE TABLE IF NOT EXISTS {$tourneySchema}.messenger_messages (
-					id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
-					body TEXT NOT NULL,
-					headers TEXT NOT NULL,
-					queue_name VARCHAR(190) NOT NULL,
-					created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
-					available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
-					delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL,
-					CONSTRAINT PK_{$tourneyConstraint}_MESSENGER_MESSAGE_ID PRIMARY KEY (id)
-				)
+				CREATE SCHEMA IF NOT EXISTS
+					{$name}
+				AUTHORIZATION
+					"{$this->dbUser}"
 				SQL;
 
 			$this->addSql(sql: $this->statement);
 		}
 
 
-		// Not too sure why Doctrine Migration commands generate this, but
-		// we'll just be safe and keep it as it is
-		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
+		// Then we can add comment on the schema since they're existed now
+		foreach ($this->schemas as $name => $comment) {
 			$this->statement =
 				<<<"SQL"
-				CREATE INDEX
-					IDX_{$tourneyConstraint}_MESSENGER_MESSAGE_ID
-				ON
-					{$tourneySchema}.messenger_messages (
-						queue_name,
-						available_at,
-						delivered_at,
-						id
-					)
+				COMMENT ON SCHEMA
+					{$name}
+				IS
+					'{$comment}'
 				SQL;
 
 			$this->addSql(sql: $this->statement);
@@ -129,7 +125,7 @@ final class Version20260706092901 extends AbstractMigration
 		) {
 			$this->statement =
 				<<<"SQL"
-				DROP TABLE IF EXISTS {$tourneySchema}.messenger_messages CASCADE;
+				DROP SCHEMA IF EXISTS {$tourneySchema} CASCADE
 				SQL;
 
 			$this->addSql(sql: $this->statement);

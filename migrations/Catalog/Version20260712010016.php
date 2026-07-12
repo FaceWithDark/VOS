@@ -3,14 +3,15 @@
 declare(strict_types=1);
 
 
-namespace DoctrineMigrations\Web;
+namespace DoctrineMigrations\Catalog;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260709085551 extends AbstractMigration
+final class Version20260712010016 extends AbstractMigration
 {
+	private string $dbUser;
 	private string $name		= 'VOS';
 	private string $schema		= '';
 	private string $comment		= '';
@@ -18,12 +19,16 @@ final class Version20260709085551 extends AbstractMigration
 
 	public function __construct()
 	{
+		$this->dbUser
+			=  $_ENV['DB_USER']
+			?? getenv('DB_USER')
+			?: 'demo';
 		$this->schema	= sprintf(
 			'%s_CATALOG',
 			$this->name
 		);
 		$this->comment	= sprintf(
-			'storing any registered tournaments under %s org.',
+			'%s base domain schema.',
 			$this->name
 		);
 	}
@@ -31,33 +36,30 @@ final class Version20260709085551 extends AbstractMigration
 	public function getDescription(): string
 	{
 		return sprintf(
-			'Create `tournaments` table to record metadata about registered tournaments under %s org.',
+			'Create catalog schema to better categorise registered tournaments under %s org.',
 			$this->name
 		);
 	}
 
 	public function up(Schema $schema): void
 	{
-		// This table need to be created first
+		// This schema need to be created first
 		$this->statement =
 			<<<"SQL"
-			CREATE TABLE IF NOT EXISTS {$this->schema}.tournaments (
-				id INTEGER GENERATED ALWAYS AS IDENTITY NOT NULL,
-				name TEXT NOT NULL,
-				description TEXT DEFAULT NULL,
-				create_on TIMESTAMP(0) WITH TIME ZONE NOT NULL,
-				CONSTRAINT PK_TOURNAMENT_ID PRIMARY KEY (id)
-			);
+			CREATE SCHEMA IF NOT EXISTS
+				{$this->schema}
+			AUTHORIZATION
+				"{$this->dbUser}"
 			SQL;
 
 		$this->addSql(sql: $this->statement);
 
 
-		// Then we can add comment on it since it's existed now
+		// Then we can add comment on the schema since it's existed now
 		$this->statement =
 			<<<"SQL"
-			COMMENT ON TABLE
-				{$this->schema}.tournaments
+			COMMENT ON SCHEMA
+				{$this->schema}
 			IS
 				'{$this->comment}'
 			SQL;
@@ -69,7 +71,7 @@ final class Version20260709085551 extends AbstractMigration
 	{
 		$this->statement =
 			<<<"SQL"
-			DROP TABLE IF EXISTS {$this->schema}.tournaments CASCADE;
+			DROP SCHEMA IF EXISTS {$this->schema} CASCADE
 			SQL;
 
 		$this->addSql(sql: $this->statement);

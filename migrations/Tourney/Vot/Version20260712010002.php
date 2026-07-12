@@ -9,7 +9,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
-final class Version20260706092941 extends AbstractMigration
+final class Version20260712010002 extends AbstractMigration
 {
 	private string	$name		= 'VOT';
 	private array	$schemas	= [];
@@ -73,7 +73,7 @@ final class Version20260706092941 extends AbstractMigration
 	public function getDescription(): string
 	{
 		return sprintf(
-			'Create `mods` tables across all iteration schemas for registered %s tournament.',
+			'Create `roles` tables across all iteration schemas for registered %s tournament.',
 			$this->name
 		);
 	}
@@ -84,13 +84,13 @@ final class Version20260706092941 extends AbstractMigration
 		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
 			$this->statement =
 				<<<"SQL"
-				CREATE TABLE IF NOT EXISTS {$tourneySchema}.mods (
+				CREATE TABLE IF NOT EXISTS {$tourneySchema}.roles (
 					id INTEGER GENERATED ALWAYS AS IDENTITY NOT NULL,
-					name VARCHAR(5) NOT NULL,
+					name VARCHAR(255) NOT NULL,
 					description TEXT DEFAULT NULL,
 					create_on TIMESTAMP(0) WITH TIME ZONE NOT NULL,
-					CONSTRAINT PK_{$tourneyConstraint}_MOD_ID PRIMARY KEY (id)
-				)
+					CONSTRAINT PK_{$tourneyConstraint}_ROLE_ID PRIMARY KEY (id)
+				);
 				SQL;
 
 			$this->addSql(sql: $this->statement);
@@ -106,9 +106,9 @@ final class Version20260706092941 extends AbstractMigration
 			$this->statement =
 				<<<"SQL"
 				COMMENT ON TABLE
-					{$tourneySchema}.mods
+					{$tourneySchema}.roles
 				IS
-					'storing mods definition used in a mappool within any registered tournaments under VOS org.'
+					'storing roles definition that ARE belong to one or more registered tournaments under VOS org.';
 				SQL;
 
 			$this->addSql(sql: $this->statement);
@@ -124,7 +124,7 @@ final class Version20260706092941 extends AbstractMigration
 		) {
 			$this->statement =
 				<<<"SQL"
-				DROP TABLE IF EXISTS {$tourneySchema}.mods CASCADE;
+				DROP TABLE IF EXISTS {$tourneySchema}.roles CASCADE;
 				SQL;
 
 			$this->addSql(sql: $this->statement);
