@@ -20,9 +20,14 @@ class RoleFixtures extends Fixture {
 	];
     private array $schemas = [];
 	private array $roles = [
-		'Organiser', 'Mappooler', 'Customiser',
-		'Playtester', 'Referee', 'Streamer',
-		'Commentator', 'Player'
+		'Organiser'		=> 'can manage their tournament page after register with the org.',
+		'Mappooler'		=> 'can add/delete beatmaps from a mappool within assigned tournaments.',
+	   	'Customiser'	=> 'can add/delete their custom beatmaps in any mappool within assigned tournaments.',
+		'Playtester'	=> 'can perform the same level of permission as the regular user role. This role created mainly for viewing on staff page.',
+		'Referee'		=> 'can use our tournament management tools to take control of picked match within assigned tournaments.',
+	   	'Streamer'		=> 'can perform the same level of permission as the regular user role. This role created mainly for viewing on staff page.',
+		'Commentator'	=> 'can perform the same level of permission as the regular user role. This role created mainly for viewing on staff page.',
+	   	'Player'		=> 'can enrol to any registered tournaments and use tools that are within the level of permission for this role.'
 	];
 
     public function __construct()
@@ -103,11 +108,11 @@ class RoleFixtures extends Fixture {
 				SQL
 			);
 
-			foreach($this->roles as $tourneyRole) {
+			foreach($this->roles as $tourneyRole => $tourneyDescription) {
 				$role = new Role();
 
 				$role->setName(name: $tourneyRole);
-				$role->setDescription(description: null);
+				$role->setDescription(description: $tourneyDescription);
 				$role->setCreateOn(
 					createOn: new DateTimeImmutable(
 						datetime: 'now',
