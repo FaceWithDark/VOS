@@ -6,4 +6,5 @@
 # 2. Generate SQL files and execute manually to ensure attackers not assuming we
 #    run migration scripts by default
 symfony console doctrine:migrations:migrate --no-interaction
+symfony console doctrine:fixtures:load --no-interaction --append
 symfony --allow-all-ip local:server:start
