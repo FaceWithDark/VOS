@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace App\Entity\Abstract;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 
@@ -20,29 +22,37 @@ abstract class AbstractRole {
 	protected ?int $id = null;
 
 	#[ORM\Column(
-		type: Types::DATETIMETZ_MUTABLE,
+		type: Types::DATETIMETZ_IMMUTABLE,
 		nullable: false
 	)]
-	protected ?\DateTime $createOn = null;
+	protected ?\DateTimeImmutable $createOn = null;
 
-	protected function getId(): ?int
+	public function __construct()
+	{
+		$this->createOn = new DateTimeImmutable(
+			datetime: 'now',
+			timezone: new DateTimeZone(timezone: 'UTC')
+		);
+	}
+
+	public function getId(): ?int
 	{
 		return $this->id;
 	}
 
-	protected function setId(int $id): static
+	public function setId(int $id): static
 	{
 		$this->id = $id;
 
 		return $this;
 	}
 
-	protected function getCreateOn(): ?\DateTime
+	public function getCreateOn(): ?\DateTimeImmutable
 	{
 		return $this->createOn;
 	}
 
-	protected function setCreateOn(\DateTime $createOn): static
+	public function setCreateOn(\DateTimeImmutable $createOn): static
 	{
 		$this->createOn = $createOn;
 
