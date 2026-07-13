@@ -24,13 +24,13 @@ final class Role extends AbstractRole
 		length: 255,
 		nullable: false
 	)]
-	private ?string $name = 'user';
+	private ?string $name = 'User';
 
 	#[ORM\Column(
 		type: Types::TEXT,
 		nullable: true
 	)]
-	private ?string $description = 'regular permission on VOS webiste';
+	private ?string $description = 'can only interact with what exposed to the website.';
 
 	#[ORM\OneToOne(
 		mappedBy: 'roleId',
