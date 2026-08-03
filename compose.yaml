@@ -18,6 +18,12 @@ services:
       - type: bind
         source: ./
         target: /var/www/app
+      # NOTE:
+			# Mostly beneficial when running this container from a Windows machine. Cannot
+			# use the long syntax style since it requires to provide value for `source`
+			# field, but these're anonymous volumes so that get generated randomly
+      - /var/www/app/vendor
+      - /var/www/app/var
     ports:
       - name: vos-symfony-php # It just PHP CLI command under the hood
         target: 8000

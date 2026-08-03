@@ -5,8 +5,13 @@ FROM base AS setup
 # Install Symfony CLI to match the tooling usages on development
 COPY --link											\
 	--from=ghcr.io/symfony-cli/symfony-cli:latest	\
-	/usr/local/bin/symfony /usr/local/bin/symfony
+	/usr/local/bin/symfony							\
+	/usr/local/bin/symfony
 
+# Install Composer so that we can install those Symfony dependencies
+COPY --from=composer/composer:latest-bin	\
+	/composer								\
+	/usr/bin/composer
 
 # Enable 'intl' extension for Symfony Validator usages with the help from a GitHub
 # repo that have quick installation scripts to handle any potential missing
@@ -30,12 +35,9 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN cp $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 
-# Prevent the reinstallation of vendors at every changes in the source code
-COPY --from=base ./composer.* ./symfony.* ./
+COPY ./ ./
 
-# Then copy the rest of the source code
-COPY --from=base ./ ./
-
+RUN symfony composer install
 
 EXPOSE 8000/tcp
 
