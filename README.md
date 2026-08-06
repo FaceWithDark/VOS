@@ -14,6 +14,9 @@
 ---
 # Quick Start
 
+
+## 1. Linux
+
 ```bash
 # Clone this repo
 git clone https://github.com/FaceWithDark/VOS.git   # HTTPS method
@@ -23,21 +26,108 @@ git clone git@github.com:FaceWithDark/VOS.git       # SSH method
 mkdir -p docker/secrets
 
 # Copy example files to newly created directory and remove the `.example` suffix
-cp ./examples/postgres_*.example.txt ./docker/secrets/postgres_*.txt
-cp ./examples/pgadmin_*.example.txt ./docker/secrets/pgadmin_*.txt
+cp ./examples/postgres_*.example.txt ./docker/secrets/
+cp ./examples/pgadmin_*.example.txt ./docker/secrets/
+
+for file in ./docker/secrets/postgres_*.example.txt; do
+    mv "$file" "${file/.example.txt/.txt}"
+done
+for file in ./docker/secrets/pgadmin_*.example.txt; do
+    mv "$file" "${file/.example.txt/.txt}"
+done
 
 # Copy non-sensitive `.env` files to project root directory and remove the `.example` suffix
-cp ./examples/.env.example.* ./.env.*
+cp ./examples/.env.example.* ./
+
+for file in ./.env.example.*; do
+    mv "$file" "${file/.example./.}"
+done
 
 # Create another required directory for extra Docker setup (for preset db servers connection)
 mkdir -p docker/configs
 
 # Copy preset files to newly created directory and remove the `.example` suffix
-cp ./examples/pgadmin_*.example.json ./docker/configs/pgadmin_*.json
+cp ./examples/pgadmin_*.example.json ./docker/configs/
+
+for file in ./docker/configs/pgadmin_*.example.json; do
+    mv "$file" "${file/.example.json/.json}"
+done
 
 
 ## Use the default value or modify it (if needed) ##
 
+
+# Then, start building all Docker services
+docker compose up --build -d
+```
+
+
+Once the containers are running, you can verify that all services are working correctly by these way:
+
+> [!NOTE]
+> Modify the base domain name if you plan to use your registered one, or
+> `localhost`. Otherwise, feels free to use our domain as it is.
+
+1. **Symfony**: [dev.vososu.site](http://dev.vososu.site)
+2. **Postgres**:
+- Direct access is disable by default for security reasons. However, you can still do it by typing:
+
+```bash
+docker exec -it vos-postgres psql -U demo -d demo
+
+# Please enter the database password (read from `postgres_db.txt` file) here if
+# there is a prompt asking you to do it
+```
+
+> [!TIP]
+> You can also go to **Docker Desktop**, search for `vos-postgres` container
+> (under `vos` project), click on it and then click on **Terminal** icon near
+> top right corner.
+
+- A successful **PostgreSQL connection** would look like below:
+
+> [!NOTE]
+> `psql` version number and text format may vary depending on the system you are running on.
+
+```txt
+psql (18.3)
+Type "help" for help.
+
+demo=#
+```
+3. **pgAdmin**: [db.dev.vososu.site](http://db.dev.vososu.site)
+4. **Traefik (dev only)**: [proxy.dev.vososu.site](http://proxy.dev.vososu.site)
+
+
+## 2. Windows
+
+```ps1
+# Clone this repo
+git clone https://github.com/FaceWithDark/VOS.git   # HTTPS method
+git clone git@github.com:FaceWithDark/VOS.git       # SSH method
+
+# Create required directory for extra Docker setup (for db & GUI credentials)
+New-Item -ItemType Directory -Force -Path "docker/secrets"
+
+# Copy example files to newly created directory and remove the `.example` suffix
+Copy-Item "./examples/postgres_*.example.txt" -Destination "./docker/secrets/" -Force
+Get-ChildItem "./docker/secrets/postgres_*.example.txt" | Rename-Item -NewName { $_.Name -replace '\.example\.txt$', '.txt' }
+
+Copy-Item "./examples/pgadmin_*.example.txt" -Destination "./docker/secrets/" -Force
+Get-ChildItem "./docker/secrets/pgadmin_*.example.txt" | Rename-Item -NewName { $_.Name -replace '\.example\.txt$', '.txt' }
+
+# Copy non-sensitive `.env` files to project root directory and remove the `.example` suffix
+Copy-Item "./examples/.env.example.*" -Destination "./" -Force
+Get-ChildItem "./.env.example.*" | Rename-Item -NewName { $_.Name -replace '\.example\.', '.' }
+
+# Create another required directory for extra Docker setup (for preset db servers connection)
+New-Item -ItemType Directory -Force -Path "docker/configs"
+
+# Copy preset files to newly created directory and remove the `.example` suffix
+Copy-Item "./examples/pgadmin_*.example.json" -Destination "./docker/configs/" -Force
+Get-ChildItem "./docker/configs/pgadmin_*.example.json" | Rename-Item -NewName { $_.Name -replace '\.example\.json$', '.json' }
+
+## Use the default value or modify it (if needed) ##
 
 # Then, start building all Docker services
 docker compose up --build -d
