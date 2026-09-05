@@ -1,0 +1,79 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Resource\Catalog;
+
+
+/// --- Main namespaces --- ///
+use ApiPlatform\Doctrine\Orm\State\Options;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use Symfony\Component\ObjectMapper\Attribute\Map;
+
+
+/// --- Type hint namespaces --- ///
+use DateTimeImmutable;
+
+
+/// --- Internal namespaces --- ///
+use App\Dto\Catalog\TournamentCreate;
+use App\Dto\Catalog\TournamentUpdate;
+use App\Entity\Catalog\Tournament as TournamentEntity;
+use Symfony\Component\HttpFoundation\Response;
+
+#[ApiResource(
+	shortName: 'Tournament API Endpoints',
+	description: 'Tournament API resource opearations.',
+	routePrefix: '/v1',
+	operations: [
+		new GetCollection(
+			uriTemplate: '/tournaments',
+			description: 'Retrieves the collection of Tournament API resources.',
+			status: Response::HTTP_OK,
+		),
+		new Post(
+			uriTemplate: '/tournaments',
+			description: 'Creates a Tournament API resource.',
+			input: TournamentCreate::class,
+			status: Response::HTTP_CREATED,
+		),
+		new Get(
+			uriTemplate: '/tournaments/{id}',
+			requirements: ['id' => '\d+'],
+			description: 'Retrieves a Tournament API resource.',
+			status: Response::HTTP_OK,
+		),
+		new Patch(
+			uriTemplate: '/tournaments/{id}',
+			requirements: ['id' => '\d+'],
+			description: 'Updates a Tournament API resource',
+			input: TournamentUpdate::class,
+			status: Response::HTTP_OK,
+		),
+		new Delete(
+			uriTemplate: '/tournaments/{id}',
+			requirements: ['id' => '\d+'],
+			description: 'Removes a Tournament API resource',
+			status: Response::HTTP_NO_CONTENT,
+		),
+	],
+	stateOptions: new Options(entityClass: TournamentEntity::class),
+)]
+#[Map(source: TournamentEntity::class)]
+final class Tournament
+{
+	public int $id;
+
+	public string $name;
+
+	#[Map(source: 'description')]
+	public string $desc;
+
+	#[Map(source: 'createOn')]
+	public DateTimeImmutable $timestamp;
+}
