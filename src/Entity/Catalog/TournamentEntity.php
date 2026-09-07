@@ -4,10 +4,18 @@ declare(strict_types=1);
 
 namespace App\Entity\Catalog;
 
-use App\Entity\Abstract\AbstractTournament;
-use App\Repository\Catalog\TournamentRepository;
+
+/// --- Main namespaces --- ///
 use Doctrine\ORM\Mapping as ORM;
+
+
+/// --- Type hint namespaces --- ///
 use Doctrine\DBAL\Types\Types;
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Abstract\TournamentAbstract;
+use App\Repository\Catalog\TournamentRepository;
 
 
 #[ORM\Entity(repositoryClass: TournamentRepository::class)]
@@ -16,7 +24,7 @@ use Doctrine\DBAL\Types\Types;
 	schema: 'vos_catalog',
 	options: ['comment' => 'storing any registered tournaments under VOS org.']
 )]
-final class Tournament extends AbstractTournament
+final class TournamentEntity extends TournamentAbstract
 {
 	#[ORM\Column(
 		type: Types::TEXT,

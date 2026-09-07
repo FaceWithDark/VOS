@@ -4,16 +4,24 @@ declare(strict_types=1);
 
 namespace App\DataFixtures\Catalog;
 
-use App\Entity\Catalog\Tournament;
-use DateTimeImmutable;
-use DateTimeZone;
+
+/// --- Main namespaces --- ///
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Override;
 
 
-class TournamentFixtures extends Fixture {
+/// --- Type hint namespaces --- ///
+use DateTimeImmutable;
+use DateTimeZone;
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Catalog\TournamentEntity;
+
+
+class TournamentFixture extends Fixture {
 	private array $prefixes = [
 		'VOS',
 		'VOT',
@@ -120,7 +128,7 @@ class TournamentFixtures extends Fixture {
 		);
 
 		foreach($this->metadatas as $tourneyIteration => $tourneyDescription) {
-			$tournament = new Tournament();
+			$tournament = new TournamentEntity();
 
 			$tournament->setName(name: $tourneyIteration);
 			$tournament->setDescription(description: $tourneyDescription);

@@ -2,26 +2,33 @@
 
 declare(strict_types=1);
 
-
 namespace App\Repository\Catalog;
 
-use App\Entity\Catalog\Tournament;
+
+/// --- Main namespaces --- ///
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 
+/// --- Type hint namespaces --- ///
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Catalog\TournamentEntity;
+
+
 /**
- * @extends ServiceEntityRepository<Tournament>
+ * @extends ServiceEntityRepository<TournamentEntity>
  */
 class TournamentRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Tournament::class);
+        parent::__construct($registry, TournamentEntity::class);
     }
 
 //    /**
-//     * @return Tournament[] Returns an array of Tournament objects
+//     * @return TournamentEntity[] Returns an array of TournamentEntity objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -35,7 +42,7 @@ class TournamentRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Tournament
+//    public function findOneBySomeField($value): ?TournamentEntity
 //    {
 //        return $this->createQueryBuilder('t')
 //            ->andWhere('t.exampleField = :val')

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Resource\Catalog;
+namespace App\Dto\Main\Catalog;
 
 
 /// --- Main namespaces --- ///
@@ -21,10 +21,10 @@ use DateTimeImmutable;
 
 
 /// --- Internal namespaces --- ///
-use App\Dto\Catalog\TournamentCreate;
-use App\Dto\Catalog\TournamentUpdate;
-use App\Entity\Catalog\Tournament as TournamentEntity;
+use App\Entity\Catalog\TournamentEntity;
+use App\State\Provider\Catalog\TournamentProvider;
 use Symfony\Component\HttpFoundation\Response;
+
 
 #[ApiResource(
 	shortName: 'Tournament API Endpoints',
@@ -34,29 +34,32 @@ use Symfony\Component\HttpFoundation\Response;
 		new GetCollection(
 			uriTemplate: '/tournaments',
 			description: 'Retrieves the collection of Tournament API resources.',
+			provider: TournamentProvider::class,
 			status: Response::HTTP_OK,
 		),
 		new Post(
 			uriTemplate: '/tournaments',
 			description: 'Creates a Tournament API resource.',
-			input: TournamentCreate::class,
 			status: Response::HTTP_CREATED,
 		),
 		new Get(
 			uriTemplate: '/tournaments/{id}',
+			uriVariables: ['id'],
 			requirements: ['id' => '\d+'],
 			description: 'Retrieves a Tournament API resource.',
+			provider: TournamentProvider::class,
 			status: Response::HTTP_OK,
 		),
 		new Patch(
 			uriTemplate: '/tournaments/{id}',
+			uriVariables: ['id'],
 			requirements: ['id' => '\d+'],
 			description: 'Updates a Tournament API resource',
-			input: TournamentUpdate::class,
 			status: Response::HTTP_OK,
 		),
 		new Delete(
 			uriTemplate: '/tournaments/{id}',
+			uriVariables: ['id'],
 			requirements: ['id' => '\d+'],
 			description: 'Removes a Tournament API resource',
 			status: Response::HTTP_NO_CONTENT,
@@ -65,7 +68,7 @@ use Symfony\Component\HttpFoundation\Response;
 	stateOptions: new Options(entityClass: TournamentEntity::class),
 )]
 #[Map(source: TournamentEntity::class)]
-final class Tournament
+final class TournamentResourceDto
 {
 	public int $id;
 
