@@ -20,5 +20,6 @@ final class TournamentCreateDto
 	#[Assert\NotBlank]
 	public string $name;
 
+	#[Assert\Type(['string', 'null'])]
 	public ?string $description = null;
 }

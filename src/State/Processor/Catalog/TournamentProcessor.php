@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Override;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 
@@ -25,7 +27,6 @@ use App\Dto\Input\Catalog\TournamentUpdateDto;
 use App\Dto\Main\Catalog\TournamentResourceDto;
 use App\Entity\Catalog\TournamentEntity;
 use App\Repository\Catalog\TournamentRepository;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 /**
@@ -34,8 +35,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final readonly class TournamentProcessor implements ProcessorInterface
 {
 	public function __construct(
-		private TournamentRepository $repository,
-		private ObjectMapperInterface $mapper,
+		private TournamentRepository	$repository,
+		private ObjectMapperInterface	$mapper,
+		private RequestStack			$requestStack,
 	) {}
 
 	#[Override]
@@ -96,11 +98,39 @@ final readonly class TournamentProcessor implements ProcessorInterface
 			);
 		}
 
-		if ($dto->name !== null) {
+
+		// Fetch raw payload to reliably distinguish between omitted fields and explicit nulls
+		$request = $this->requestStack->getCurrentRequest();
+		$decodedPayload
+			= $request
+			? json_decode(
+				json: $request->getContent(),
+				associative: true,
+			)
+			: [];
+		$payload
+			= is_array(value: $decodedPayload)
+			? $decodedPayload
+			: [];
+
+		if (
+			array_key_exists(
+				key: 'name',
+				array: $payload
+			)
+		) {
 			$entity->setName(name: $dto->name);
 		}
 
-		// NOTE: 'description' can be NULL, hence no validation checks here
+		// Update the entity's description value regardless of its field value in the payload (a.k.a 'null' allowed)
+		if (
+			array_key_exists(
+				key: 'description',
+				array: $payload
+			)
+		) {
+			$entity->setDescription(description: $dto->description);
+		}
 
 		$this->repository->save(
 			entity: $entity,
