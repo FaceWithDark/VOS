@@ -23,6 +23,7 @@ use DateTimeImmutable;
 /// --- Internal namespaces --- ///
 use App\Entity\Catalog\TournamentEntity;
 use App\Dto\Input\Catalog\TournamentCreateDto;
+use App\Dto\Input\Catalog\TournamentUpdateDto;
 use App\State\Processor\Catalog\TournamentProcessor;
 use App\State\Provider\Catalog\TournamentProvider;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,6 +60,8 @@ use Symfony\Component\HttpFoundation\Response;
 			uriVariables: ['id'],
 			requirements: ['id' => '\d+'],
 			description: 'Updates a Tournament API resource',
+			input: TournamentUpdateDto::class,
+			processor: TournamentProcessor::class,
 			status: Response::HTTP_OK,
 		),
 		new Delete(
