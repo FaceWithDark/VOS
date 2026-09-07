@@ -27,28 +27,15 @@ class TournamentRepository extends ServiceEntityRepository
         parent::__construct($registry, TournamentEntity::class);
     }
 
-//    /**
-//     * @return TournamentEntity[] Returns an array of TournamentEntity objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+	public function save(
+		TournamentEntity	$entity,
+		bool				$flush = true,
+	): void
+	{
+		$this->getEntityManager()->persist(object: $entity);
 
-//    public function findOneBySomeField($value): ?TournamentEntity
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+		if ($flush) {
+			$this->getEntityManager()->flush();
+		}
+	}
 }

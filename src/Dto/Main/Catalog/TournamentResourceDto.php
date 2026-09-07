@@ -22,6 +22,8 @@ use DateTimeImmutable;
 
 /// --- Internal namespaces --- ///
 use App\Entity\Catalog\TournamentEntity;
+use App\Dto\Input\Catalog\TournamentCreateDto;
+use App\State\Processor\Catalog\TournamentProcessor;
 use App\State\Provider\Catalog\TournamentProvider;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,6 +42,8 @@ use Symfony\Component\HttpFoundation\Response;
 		new Post(
 			uriTemplate: '/tournaments',
 			description: 'Creates a Tournament API resource.',
+			input: TournamentCreateDto::class,
+			processor: TournamentProcessor::class,
 			status: Response::HTTP_CREATED,
 		),
 		new Get(
@@ -74,8 +78,7 @@ final class TournamentResourceDto
 
 	public string $name;
 
-	#[Map(source: 'description')]
-	public string $desc;
+	public ?string $description = null;
 
 	#[Map(source: 'createOn')]
 	public DateTimeImmutable $timestamp;
