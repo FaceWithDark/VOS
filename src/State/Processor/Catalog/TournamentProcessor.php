@@ -6,6 +6,7 @@ namespace App\State\Processor\Catalog;
 
 
 /// --- Main namespaces --- ///
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Override;
@@ -26,8 +27,9 @@ use App\Entity\Catalog\TournamentEntity;
 use App\Repository\Catalog\TournamentRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+
 /**
- * @implements ProcessorInterface<TournamentCreateDto, TournamentResourceDto>
+ * @implements ProcessorInterface<TournamentCreateDto|TournamentUpdateDto|mixed, TournamentResourceDto|null>
  */
 final readonly class TournamentProcessor implements ProcessorInterface
 {
@@ -42,51 +44,94 @@ final readonly class TournamentProcessor implements ProcessorInterface
 		Operation	$operation,
 		array		$uriVariables	= [],
 		array		$context		= [],
-	): TournamentResourceDto
+	): ?TournamentResourceDto
 	{
-		if ($data instanceof TournamentCreateDto) {
-			$entity = new TournamentEntity();
+		return match (true) {
+			$data instanceof TournamentCreateDto	=> $this->handleCreatePayload(dto: $data),
+			$data instanceof TournamentUpdateDto	=> $this->handleUpdatePayload(dto: $data, payload: $uriVariables),
+			$operation instanceof Delete			=> $this->handleDeletePayload(payload: $uriVariables),
+			default									=> throw new InvalidArgumentException('Unsupported opearation or input DTO type.'),
+		};
+	}
 
-			$entity->setName(name: $data->name);
-			$entity->setDescription(description: $data->description);
-			$entity->setCreateOn(
-				createOn: new DateTimeImmutable(
-					datetime: 'now',
-					timezone: new DateTimeZone(timezone: 'UTC'),
-				)
-			);
-		} elseif ($data instanceof TournamentUpdateDto) {
-			$tournamentId = $uriVariables['id'] ?? null;
-			$entity = $this->repository->find(id: $tournamentId);
 
-			if (!$entity) {
-				throw new NotFoundHttpException(
-					sprintf(
-						'Tournament with ID [%d] not found',
-						(int) $tournamentId,
-					)
-				);
-			}
+	private function handleCreatePayload(TournamentCreateDto $dto): TournamentResourceDto
+	{
+		$entity = new TournamentEntity();
 
-			if ($data->name !== null) {
-				$entity->setName(name: $data->name);
-			}
-
-			if ($data->description !== null) {
-				$entity->setDescription(description: $data->description);
-			}
-		} else {
-			throw new InvalidArgumentException('Unexpected input DTO type.');
-		}
+		$entity->setName(name: $dto->name);
+		$entity->setDescription(description: $dto->description);
+		$entity->setCreateOn(
+			createOn: new DateTimeImmutable(
+				datetime: 'now',
+				timezone: new DateTimeZone(timezone: 'UTC'),
+			)
+		);
 
 		$this->repository->save(
 			entity: $entity,
-			flush: true
+			flush: true,
 		);
 
 		return $this->mapper->map(
 			source: $entity,
 			target: TournamentResourceDto::class,
 		);
+	}
+
+	private function handleUpdatePayload(
+		TournamentUpdateDto $dto,
+		array $payload,
+	): TournamentResourceDto
+	{
+		$tournamentId = ((int) $payload['id']) ?? null;
+		$entity = $this->repository->find(id: $tournamentId);
+
+		if (!$entity) {
+			throw new NotFoundHttpException(
+				sprintf(
+					'Tournament with ID [%d] not found',
+					(int) $tournamentId,
+				)
+			);
+		}
+
+		if ($dto->name !== null) {
+			$entity->setName(name: $dto->name);
+		}
+
+		// NOTE: 'description' can be NULL, hence no validation checks here
+
+		$this->repository->save(
+			entity: $entity,
+			flush: true,
+		);
+
+		return $this->mapper->map(
+			source: $entity,
+			target: TournamentResourceDto::class,
+		);
+	}
+
+	private function handleDeletePayload(array $payload): null
+	{
+		$tournamentId = ((int) $payload['id']) ?? null;
+		$entity = $this->repository->find(id: $tournamentId);
+
+		if (!$entity) {
+			throw new NotFoundHttpException(
+				sprintf(
+					'Tournament with ID [%d] not found',
+					(int) $tournamentId,
+				)
+			);
+		}
+
+		$this->repository->remove(
+			entity: $entity,
+			flush: true,
+		);
+
+		return null;
 	}
 }

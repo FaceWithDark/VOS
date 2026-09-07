@@ -38,4 +38,16 @@ class TournamentRepository extends ServiceEntityRepository
 			$this->getEntityManager()->flush();
 		}
 	}
+
+	public function remove(
+		TournamentEntity	$entity,
+		bool				$flush = true,
+	): void
+	{
+		$this->getEntityManager()->remove(object: $entity);
+
+		if ($flush) {
+			$this->getEntityManager()->flush();
+		}
+	}
 }

@@ -69,6 +69,7 @@ use Symfony\Component\HttpFoundation\Response;
 			uriVariables: ['id'],
 			requirements: ['id' => '\d+'],
 			description: 'Removes a Tournament API resource',
+			processor: TournamentProcessor::class,
 			status: Response::HTTP_NO_CONTENT,
 		),
 	],
