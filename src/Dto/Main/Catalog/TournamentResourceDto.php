@@ -14,6 +14,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use Symfony\Component\ObjectMapper\Attribute\Map;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 
 /// --- Type hint namespaces --- ///
@@ -63,6 +65,16 @@ use Symfony\Component\HttpFoundation\Response;
 			input: TournamentUpdateDto::class,
 			processor: TournamentProcessor::class,
 			status: Response::HTTP_OK,
+			/*
+			 * NOTE:
+			 * PATCH request behaves a little different than POST so we've to explicitly
+			 * set these options along with global one to ensure that the validation
+			 * working as intended.
+			 */
+			denormalizationContext: [
+				AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES				=> false,
+				DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS	=> true,
+			]
 		),
 		new Delete(
 			uriTemplate: '/tournaments/{id}',
