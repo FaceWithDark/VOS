@@ -6,7 +6,7 @@ namespace App\Service\Catalog;
 
 
 /// --- Main namespaces --- ///
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 
@@ -36,12 +36,7 @@ final readonly class TournamentDuplicateValidator implements TournamentDuplicate
 		$tournamentCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $tournamentName]);
 
 		if ($tournamentCurrentNameValue !== null) {
-			throw new ConflictHttpException(
-				message: sprintf(
-					'A tournament with the name [%s] already exists.',
-					$tournamentName,
-				),
-			);
+			throw new ConflictHttpException(message: "A tournament with the name [{$tournamentName}] already exists.");
 		}
 	}
 
@@ -56,7 +51,7 @@ final readonly class TournamentDuplicateValidator implements TournamentDuplicate
 			return;
 		}
 
-		$tournamentCurrentData = $this->repository->findOneBy(criteria: [['name'] => $payload['name']]);
+		$tournamentCurrentData = $this->repository->findOneBy(criteria: ['name' => $payload['name']]);
 
 		// Detect duplicate data if any field within the incoming payload
 		// matched current one
@@ -64,11 +59,6 @@ final readonly class TournamentDuplicateValidator implements TournamentDuplicate
 			return;
 		}
 
-		throw new BadRequestException(
-			message: sprintf(
-				'Another tournament with the name [%s] already exists.',
-				$payload['name'],
-			),
-		);
+		throw new BadRequestHttpException(message: "Another tournament with the name [{$payload['name']}] already exists.");
 	}
 }
