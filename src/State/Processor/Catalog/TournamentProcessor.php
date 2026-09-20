@@ -26,6 +26,7 @@ use App\Dto\Input\Catalog\TournamentCreateDto;
 use App\Dto\Input\Catalog\TournamentUpdateDto;
 use App\Dto\Main\Catalog\TournamentResourceDto;
 use App\Entity\Catalog\TournamentEntity;
+use App\Interface\Catalog\TournamentDuplicateValidatorInterface;
 use App\Repository\Catalog\TournamentRepository;
 
 
@@ -35,35 +36,52 @@ use App\Repository\Catalog\TournamentRepository;
 final readonly class TournamentProcessor implements ProcessorInterface
 {
 	public function __construct(
-		private TournamentRepository	$repository,
-		private ObjectMapperInterface	$mapper,
-		private RequestStack			$requestStack,
+		private TournamentRepository					$repository,
+		private ObjectMapperInterface					$mapper,
+		private RequestStack							$requestStack,
+		private TournamentDuplicateValidatorInterface	$duplicateValidator,
 	) {}
+
+	private function getDecodedPayload(): array
+	{
+		$request = $this->requestStack->getCurrentRequest();
+		$decoded
+			= $request
+			? json_decode(
+				json: $request->getContent(),
+				associative: true,
+			)
+			: null;
+
+		return is_array(value: $decoded) ? $decoded : [];
+	}
 
 	#[Override]
 	public function process(
 		mixed		$data,
 		Operation	$operation,
-		array		$uriVariables	= [],
-		array		$context		= [],
+		array		$payload	= [],
+		array		$context	= [],
 	): ?TournamentResourceDto
 	{
 		return match (true) {
-			$data instanceof TournamentCreateDto	=> $this->handleCreatePayload(dto: $data),
-			$data instanceof TournamentUpdateDto	=> $this->handleUpdatePayload(dto: $data, payload: $uriVariables),
-			$operation instanceof Delete			=> $this->handleDeletePayload(payload: $uriVariables),
+			$data instanceof TournamentCreateDto	=> $this->handlePost(dto: $data),
+			$data instanceof TournamentUpdateDto	=> $this->handlePatch(dto: $data, payload: $payload),
+			$operation instanceof Delete			=> $this->handleDelete(payload: $payload),
 			default									=> throw new InvalidArgumentException('Unsupported opearation or input DTO type.'),
 		};
 	}
 
 
-	private function handleCreatePayload(TournamentCreateDto $dto): TournamentResourceDto
+	private function handlePost(TournamentCreateDto $dto): TournamentResourceDto
 	{
-		$entity = new TournamentEntity();
+		$this->duplicateValidator->validatePost(payload: $this->getDecodedPayload());
 
-		$entity->setName(name: $dto->name);
-		$entity->setDescription(description: $dto->description);
-		$entity->setCreateOn(
+		$tournamentEntity = new TournamentEntity();
+
+		$tournamentEntity->setName(name: $dto->name);
+		$tournamentEntity->setDescription(description: $dto->description);
+		$tournamentEntity->setCreateOn(
 			createOn: new DateTimeImmutable(
 				datetime: 'now',
 				timezone: new DateTimeZone(timezone: 'UTC'),
@@ -71,94 +89,83 @@ final readonly class TournamentProcessor implements ProcessorInterface
 		);
 
 		$this->repository->save(
-			entity: $entity,
-			flush: true,
+			entity: $tournamentEntity,
+			flush: true
 		);
 
 		return $this->mapper->map(
-			source: $entity,
+			source: $tournamentEntity,
 			target: TournamentResourceDto::class,
 		);
 	}
 
-	private function handleUpdatePayload(
+	private function handlePatch(
 		TournamentUpdateDto $dto,
 		array $payload,
 	): TournamentResourceDto
 	{
-		$tournamentId = ((int) $payload['id']) ?? null;
-		$entity = $this->repository->find(id: $tournamentId);
+		$tournamentId = (int) ($payload['id' ?? 0]);
+		$tournamentEntity = $this->repository->find(id: $tournamentId);
 
-		if (!$entity) {
+		if (!$tournamentEntity) {
 			throw new NotFoundHttpException(
-				sprintf(
-					'Tournament with ID [%d] not found',
-					(int) $tournamentId,
-				)
+				message: sprintf(
+					'Tournament with ID [%d] not found.',
+					$tournamentId,
+				),
 			);
 		}
 
+		$tournamentDecodedPayload = $this->getDecodedPayload();
 
-		// Fetch raw payload to reliably distinguish between omitted fields and explicit nulls
-		$request = $this->requestStack->getCurrentRequest();
-		$decodedPayload
-			= $request
-			? json_decode(
-				json: $request->getContent(),
-				associative: true,
-			)
-			: [];
-		$payload
-			= is_array(value: $decodedPayload)
-			? $decodedPayload
-			: [];
+		// 400 if another entity already uses the same 'name' value
+		$this->duplicateValidator->validatePatch(
+			payload: $tournamentDecodedPayload,
+			id: $tournamentId
+		);
 
-		if (
-			array_key_exists(
-				key: 'name',
-				array: $payload
-			)
-		) {
-			$entity->setName(name: $dto->name);
+		// Apply the PATCH request since we allowed 'description' field value to be NULL
+		if (array_key_exists(
+			key: 'name',
+			array: $tournamentDecodedPayload,
+		)) {
+			$tournamentEntity->setName(name: $dto->name);
 		}
 
-		// Update the entity's description value regardless of its field value in the payload (a.k.a 'null' allowed)
-		if (
-			array_key_exists(
-				key: 'description',
-				array: $payload
-			)
-		) {
-			$entity->setDescription(description: $dto->description);
+		if (array_key_exists(
+			key: 'description',
+			array: $tournamentDecodedPayload,
+		)) {
+			$tournamentEntity->setDescription(description: $dto->description);
 		}
 
 		$this->repository->save(
-			entity: $entity,
+			entity: $tournamentEntity,
 			flush: true,
 		);
 
 		return $this->mapper->map(
-			source: $entity,
+			source: $tournamentEntity,
 			target: TournamentResourceDto::class,
 		);
 	}
 
-	private function handleDeletePayload(array $payload): null
+	private function handleDelete(array $payload): null
 	{
 		$tournamentId = ((int) $payload['id']) ?? null;
-		$entity = $this->repository->find(id: $tournamentId);
+		$tournamentEntity = $this->repository->find(id: $tournamentId);
 
-		if (!$entity) {
+		if (!$tournamentEntity) {
 			throw new NotFoundHttpException(
 				sprintf(
-					'Tournament with ID [%d] not found',
+					'Tournament with ID [%d] not found.',
 					(int) $tournamentId,
 				)
 			);
 		}
 
 		$this->repository->remove(
-			entity: $entity,
+			entity: $tournamentEntity,
 			flush: true,
 		);
 
