@@ -1,0 +1,5 @@
+framework:
+  serializer:
+    default_context:
+      allow_extra_attributes: false
+      collect_denormalization_errors: true
