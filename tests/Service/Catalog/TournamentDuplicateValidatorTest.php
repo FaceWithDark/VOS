@@ -56,7 +56,9 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->expects(self::never())
 			->method('findOneBy');
 
-		$this->duplcateValidator->validatePost(payload: $testPayload);
+		$this
+			->duplcateValidator
+			->validatePost(payload: $testPayload);
 
 		// No exception found means a valid pass
         $this->addToAssertionCount(count: 1);
@@ -72,7 +74,9 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->expects(self::never())
 			->method('findOneBy');
 
-		$this->duplcateValidator->validatePost(payload: $testPayload);
+		$this
+			->duplcateValidator
+			->validatePost(payload: $testPayload);
 
         // No exception found means a valid pass
         $this->addToAssertionCount(count: 1);
@@ -90,7 +94,9 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->with($testPayload)
 			->willReturn(null);
 
-		$this->duplcateValidator->validatePost(payload: $testPayload);
+		$this
+			->duplcateValidator
+			->validatePost(payload: $testPayload);
 
 		// No exception found means a valid pass
         $this->addToAssertionCount(count: 1);
@@ -113,7 +119,9 @@ class TournamentDuplicateValidatorTest extends TestCase
 		$this->expectException(exception: ConflictHttpException::class);
 		$this->expectExceptionMessage(message: "A tournament with the name [{$testPayload['name']}] already exists.");
 
-		$this->duplcateValidator->validatePost(payload: $testPayload);
+		$this
+			->duplcateValidator
+			->validatePost(payload: $testPayload);
 	}
 
 	#[Test]
@@ -128,12 +136,14 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->with($testPayload)
 			->willReturn(null);
 
-		$this->duplcateValidator->validatePost(
-			payload: array_merge(
-				$testPayload,
-				['description' => 'Vietnamese Osu!taiko Tournament 88 (special edition).'],
-			),
-		);
+		$this
+			->duplcateValidator
+			->validatePost(
+				payload: array_merge(
+					$testPayload,
+					['description' => 'Vietnamese Osu!taiko Tournament 88 (special edition).'],
+				),
+			);
 
 		// No exception found means a valid pass
 		$this->addToAssertionCount(count: 1);
@@ -155,10 +165,12 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->expects(self::never())
 			->method('findOneBy');
 
-		$this->duplcateValidator->validatePatch(
-			payload: $testPayload,
-			id: 7,
-		);
+		$this
+			->duplcateValidator
+			->validatePatch(
+				payload: $testPayload,
+				id: 7,
+			);
 
 		// No exception found means a valid pass
 		$this->addToAssertionCount(count: 1);
@@ -176,10 +188,12 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->with($testPayload)
 			->willReturn(null);
 
-		$this->duplcateValidator->validatePatch(
-			payload: $testPayload,
-			id: 7,
-		);
+		$this
+			->duplcateValidator
+			->validatePatch(
+				payload: $testPayload,
+				id: 7,
+			);
 
 		// No exception found means a valid pass
 		$this->addToAssertionCount(count: 1);
@@ -197,10 +211,12 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->with($testPayload)
 			->willReturn(null);
 
-		$this->duplcateValidator->validatePatch(
-			payload: $testPayload,
-			id: 7,
-		);
+		$this
+			->duplcateValidator
+			->validatePatch(
+				payload: $testPayload,
+				id: 7,
+			);
 
 		// No exception found means a valid pass
 		$this->addToAssertionCount(count: 1);
@@ -220,10 +236,12 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->with($testPayload)
 			->willReturn($tournamentCurrentData);
 
-		$this->duplcateValidator->validatePatch(
-			payload: $testPayload,
-			id: 7,
-		);
+		$this
+			->duplcateValidator
+			->validatePatch(
+				payload: $testPayload,
+				id: 7,
+			);
 
 		$this->addToAssertionCount(count: 1);
 	}
@@ -248,10 +266,12 @@ class TournamentDuplicateValidatorTest extends TestCase
 		$this->expectException(exception: BadRequestHttpException::class);
 		$this->expectExceptionMessage(message: "Another tournament with the name [{$testPayload['name']}] already exists.");
 
-		$this->duplcateValidator->validatePatch(
-			payload: $testPayload,
-			id: 7,
-		);
+		$this
+			->duplcateValidator
+			->validatePatch(
+				payload: $testPayload,
+				id: 7,
+			);
 	}
 
 	#[Test]
@@ -266,13 +286,15 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->with($testPayload)
 			->willReturn(null);
 
-		$this->duplcateValidator->validatePatch(
-			payload: array_merge(
-				$testPayload,
-				['description' => 'Vietnamese Osu!taiko Tournament 88 (special edition).'],
-			),
-			id: 7,
-		);
+		$this
+			->duplcateValidator
+			->validatePatch(
+				payload: array_merge(
+					$testPayload,
+					['description' => 'Vietnamese Osu!taiko Tournament 88 (special edition).'],
+				),
+				id: 7,
+			);
 
 		// No exception found means a valid pass
 		$this->addToAssertionCount(count: 1);
