@@ -67,8 +67,8 @@ final readonly class RoleProcessor implements ProcessorInterface
 		return match (true) {
 			$data instanceof RoleCreateDto	=> $this->handlePost(dto: $data),
 			$data instanceof RoleUpdateDto	=> $this->handlePatch(dto: $data, payload: $payload),
-			$operation instanceof Delete			=> $this->handleDelete(payload: $payload),
-			default									=> throw new InvalidArgumentException('Unsupported opearation or input DTO type.'),
+			$operation instanceof Delete	=> $this->handleDelete(payload: $payload),
+			default							=> throw new InvalidArgumentException('Unsupported opearation or input DTO type.'),
 		};
 	}
 
