@@ -2,17 +2,24 @@
 
 declare(strict_types=1);
 
-
 namespace App\Entity\Abstract;
 
+
+/// --- Main namespaces --- ///
+use Doctrine\ORM\Mapping as ORM;
+
+
+/// --- Type hint namespaces --- ///
 use DateTimeImmutable;
 use DateTimeZone;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 
 
+/// --- Internal namespaces --- ///
+
+
 #[ORM\MappedSuperclass]
-abstract class AbstractRole {
+abstract class RoleAbstract {
 	#[ORM\Id]
 	#[ORM\GeneratedValue(strategy: 'IDENTITY')]
 	#[ORM\Column(

@@ -30,7 +30,7 @@ final class User extends AbstractUser
 		nullable: false,
 		onDelete: 'NO ACTION'
 	)]
-	private ?Role $roleId = null;
+	private ?RoleEntity $roleId = null;
 
 	#[ORM\Column(
 		type: Types::TEXT,
@@ -57,12 +57,12 @@ final class User extends AbstractUser
 	)]
 	private ?string $countryFlag = null;
 
-	public function getRoleId(): ?Role
+	public function getRoleId(): ?RoleEntity
 	{
 		return $this->roleId;
 	}
 
-	public function setRoleId(Role $roleId): static
+	public function setRoleId(RoleEntity $roleId): static
 	{
 		$this->roleId = $roleId;
 
