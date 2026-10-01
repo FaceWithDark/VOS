@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace App\DataFixtures\Web;
 
-use App\Entity\Web\Role;
-use DateTimeImmutable;
-use DateTimeZone;
+
+/// --- Main namespaces --- ///
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Override;
+
+
+/// --- Type hint namespaces --- ///
+use DateTimeImmutable;
+use DateTimeZone;
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Web\RoleEntity;
 
 
 class RoleFixtures extends Fixture {
@@ -58,7 +66,7 @@ class RoleFixtures extends Fixture {
 		);
 
 		foreach($this->roles as $tourneyRole => $tourneyDescription) {
-			$role = new Role();
+			$role = new RoleEntity();
 
 			$role->setName(name: $tourneyRole);
 			$role->setDescription(description: $tourneyDescription);

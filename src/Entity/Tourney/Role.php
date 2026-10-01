@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Tourney;
 
-use App\Entity\Abstract\AbstractRole;
+use App\Entity\Abstract\RoleAbstract;
 use App\Repository\Tourney\RoleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,7 +18,7 @@ use Doctrine\DBAL\Types\Types;
 	name: '`roles`',
 	options: ['comment' => 'storing roles definition that ARE belong to one or more registered tournaments under VOS org.']
 )]
-final class Role extends AbstractRole
+final class Role extends RoleAbstract
 {
 	#[ORM\Column(
 		type: Types::STRING,
