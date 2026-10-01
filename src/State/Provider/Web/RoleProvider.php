@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\State\Provider\Catalog;
+namespace App\State\Provider\Web;
 
 
 /// --- Main namespaces --- ///
@@ -16,19 +16,19 @@ use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 
 /// --- Internal namespaces --- ///
-use App\Entity\Catalog\TournamentEntity;
-use App\Repository\Catalog\TournamentRepository;
-use App\Dto\Main\Catalog\TournamentResourceDto;
+use App\Entity\Web\RoleEntity;
+use App\Repository\Web\RoleRepository;
+use App\Dto\Main\Web\RoleResourceDto;
 
 
 /**
- * @implements ProviderInterface<TournamentResourceDto>
+ * @implements ProviderInterface<RoleResourceDto>
  */
-final readonly class TournamentProvider implements ProviderInterface
+final readonly class RoleProvider implements ProviderInterface
 {
 	public function __construct(
-		private TournamentRepository $repository,
-		private ObjectMapperInterface $mapper,
+		private RoleRepository			$repository,
+		private ObjectMapperInterface	$mapper,
 	) {}
 
 	#[Override]
@@ -38,7 +38,7 @@ final readonly class TournamentProvider implements ProviderInterface
 		array		$context = [],
 	): object|array|null
 	{
-		// Individual GET: /v1/tournaments/{id}
+		// Individual GET: /v1/roles/{id}
 		if(isset($uriVariables['id'])) {
 			$entity = $this->repository->find(id: $uriVariables['id']);
 
@@ -49,17 +49,17 @@ final readonly class TournamentProvider implements ProviderInterface
 
 			return $this->mapper->map(
 				source: $entity,
-				target: TournamentResourceDto::class,
+				target: RoleResourceDto::class,
 			);
 		}
 
-		// Collection GET: /v1/tournaments
+		// Collection GET: /v1/roles
 		$entities = $this->repository->findAll();
 
 		return array_map(
-			callback: fn(TournamentEntity $entity) => $this->mapper->map(
+			callback: fn(RoleEntity $entity) => $this->mapper->map(
 				source: $entity,
-				target: TournamentResourceDto::class,
+				target: RoleResourceDto::class,
 			),
 			array: $entities,
 		);

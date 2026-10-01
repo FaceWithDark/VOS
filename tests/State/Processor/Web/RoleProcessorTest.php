@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\State\Processor\Catalog;
+namespace App\Tests\State\Processor\Web;
 
 
 /// --- Main namespaces --- ///
@@ -27,13 +27,13 @@ use Override;
 
 
 /// --- Internal namespaces --- ///
-use App\Dto\Input\Catalog\TournamentCreateDto;
-use App\Dto\Input\Catalog\TournamentUpdateDto;
-use App\Dto\Main\Catalog\TournamentResourceDto;
-use App\Entity\Catalog\TournamentEntity;
-use App\Interface\Catalog\TournamentDuplicateValidatorInterface;
-use App\Repository\Catalog\TournamentRepository;
-use App\State\Processor\Catalog\TournamentProcessor;
+use App\Dto\Input\Web\RoleCreateDto;
+use App\Dto\Input\Web\RoleUpdateDto;
+use App\Dto\Main\Web\RoleResourceDto;
+use App\Entity\Web\RoleEntity;
+use App\Interface\Web\RoleDuplicateValidatorInterface;
+use App\Repository\Web\RoleRepository;
+use App\State\Processor\Web\RoleProcessor;
 
 
 /**
@@ -65,14 +65,14 @@ use App\State\Processor\Catalog\TournamentProcessor;
 
 
 #[AllowMockObjectsWithoutExpectations]
-#[CoversClass(className: TournamentProcessor::class)]
-class TournamentProcessorTest extends TestCase
+#[CoversClass(className: RoleProcessor::class)]
+class RoleProcessorTest extends TestCase
 {
-	private TournamentRepository&MockObject						$repository;
-	private ObjectMapperInterface&MockObject					$mapper;
-	private RequestStack&MockObject								$requestStack;
-	private TournamentDuplicateValidatorInterface&MockObject	$duplicateValidator;
-	private TournamentProcessor									$processor;
+	private RoleRepository&MockObject					$repository;
+	private ObjectMapperInterface&MockObject			$mapper;
+	private RequestStack&MockObject						$requestStack;
+	private RoleDuplicateValidatorInterface&MockObject	$duplicateValidator;
+	private RoleProcessor								$processor;
 
 	#[Override]
 	protected function setUp(): void
@@ -80,12 +80,12 @@ class TournamentProcessorTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository			= $this->createMock(type: TournamentRepository::class);
+		$this->repository			= $this->createMock(type: RoleRepository::class);
 		$this->mapper				= $this->createMock(type: ObjectMapperInterface::class);
 		$this->requestStack			= $this->createMock(type: RequestStack::class);
-		$this->duplicateValidator	= $this->createMock(type: TournamentDuplicateValidatorInterface::class);
+		$this->duplicateValidator	= $this->createMock(type: RoleDuplicateValidatorInterface::class);
 
-		$this->processor = new TournamentProcessor(
+		$this->processor = new RoleProcessor(
 			repository:			$this->repository,
 			mapper:				$this->mapper,
 			requestStack:		$this->requestStack,
@@ -112,10 +112,10 @@ class TournamentProcessorTest extends TestCase
 	#[Test]
     public function testValidatePostWhenPersistData(): void
     {
-		$dto = new TournamentCreateDto();
+		$dto = new RoleCreateDto();
 
-		$dto->name			= 'VOT88';
-		$dto->description	= 'Vietnamese Osu!taiko Tournament 88 (special edition).';
+		$dto->name			= 'Gambler';
+		$dto->description	= 'double the pay, double the deal baby. That is what high risk high reward about.';
 
 		$testPayload = [
 			'name'			=> $dto->name,
@@ -136,7 +136,7 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::once())
 			->method('save')
 			->with(
-				self::isInstanceOf(className: TournamentEntity::class),
+				self::isInstanceOf(className: RoleEntity::class),
 				true
 			);
 
@@ -144,7 +144,7 @@ class TournamentProcessorTest extends TestCase
 			->mapper
 			->expects(self::once())
 			->method('map')
-			->willReturn(new TournamentResourceDto());
+			->willReturn(new RoleResourceDto());
 
 		$resource
 			= $this
@@ -155,7 +155,7 @@ class TournamentProcessorTest extends TestCase
 			);
 
 		self::assertInstanceOf(
-			expected: TournamentResourceDto::class,
+			expected: RoleResourceDto::class,
 			actual: $resource,
 		);
     }
@@ -163,9 +163,9 @@ class TournamentProcessorTest extends TestCase
 	#[Test]
 	public function testValidatePostWhenNotPersistData(): void
 	{
-		$dto = new TournamentCreateDto();
+		$dto = new RoleCreateDto();
 
-		$dto->name = 'VOT6';
+		$dto->name = 'Admin';
 
 		$testPayload = ['name' => $dto->name];
 
@@ -174,7 +174,7 @@ class TournamentProcessorTest extends TestCase
 		$this
 			->duplicateValidator
 			->method('validatePost')
-			->willThrowException(new ConflictHttpException(message: 'duplicate tournament name.'));
+			->willThrowException(new ConflictHttpException(message: 'duplicate role name.'));
 
 		// `repository->save` must NEVER be called since this's an invalid request
 		$this
@@ -201,11 +201,11 @@ class TournamentProcessorTest extends TestCase
 	#[Test]
 	public function testValidatePatchWhenMissingEntity(): void
 	{
-		$dto = new TournamentUpdateDto();
+		$dto = new RoleUpdateDto();
 
-		$dto->name = 'VOT88';
+		$dto->name = 'Gambler';
 
-		$testPayload = ['id' => 88];
+		$testPayload = ['id' => 3];
 
 		$this
 			->repository
@@ -221,7 +221,7 @@ class TournamentProcessorTest extends TestCase
 			->method('validatePatch');
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: "Tournament with ID [{$testPayload['id']}] not found.");
+		$this->expectExceptionMessage(message: "Role with ID [{$testPayload['id']}] not found.");
 
 		$this
 			->processor
@@ -235,20 +235,20 @@ class TournamentProcessorTest extends TestCase
 	#[Test]
 	public function testValidatePatchWhenPassedData(): void
 	{
-		$testPayload = ['name' => 'VOT88'];
-		$tournamentEntity = new TournamentEntity();
-		$tournamentCurrentData
-			= $tournamentEntity
-			->setId(id: 7)
-			->setName(name: 'VOT6')
-			->setDescription(description: 'Vietnamese Osu!taiko Tournament 6');
+		$testPayload = ['name' => 'Gambler'];
+		$roleEntity = new RoleEntity();
+		$roleCurrentData
+			= $roleEntity
+			->setId(id: 2)
+			->setName(name: 'Admin')
+			->setDescription(description: 'can take control of the whole website both internally and externally.');
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
-			->with(7)
-			->willReturn($tournamentCurrentData);
+			->with(2)
+			->willReturn($roleCurrentData);
 
 		$this->stubRawPayload(json: json_encode(value: $testPayload));
 
@@ -259,7 +259,7 @@ class TournamentProcessorTest extends TestCase
 			->method('validatePatch')
 			->with(
 				$testPayload,
-				7
+				2
 			);
 
 		$this
@@ -271,9 +271,9 @@ class TournamentProcessorTest extends TestCase
 			->mapper
 			->expects(self::once())
 			->method('map')
-			->willReturn(new TournamentResourceDto());
+			->willReturn(new RoleResourceDto());
 
-		$dto = new TournamentUpdateDto();
+		$dto = new RoleUpdateDto();
 
 		$dto->name = $testPayload['name'];
 
@@ -282,32 +282,32 @@ class TournamentProcessorTest extends TestCase
 			->process(
 				data: $dto,
 				operation: new Patch(),
-				payload: ['id' => 7],
+				payload: ['id' => 2],
 			);
 
 		self::assertSame(
 			expected: $testPayload['name'],
-			actual: $tournamentEntity->getName(),
+			actual: $roleEntity->getName(),
 		);
 	}
 
 	#[Test]
 	public function testValidatePatchWhenOnlyDescriptionData(): void
 	{
-		$testPayload = ['description' => 'Vietnamese Osu!taiko Tournament 88 (special edition).'];
-		$tournamentEntity = new TournamentEntity();
-		$tournamentCurrentData
-			= $tournamentEntity
-			->setId(id: 7)
-			->setName(name: 'VOT6')
-			->setDescription(description: 'Vietnamese Osu!taiko Tournament 6');
+		$testPayload = ['description' => 'double the pay, double the deal baby. That is what high risk high reward about.'];
+		$roleEntity = new RoleEntity();
+		$roleCurrentData
+			= $roleEntity
+			->setId(id: 2)
+			->setName(name: 'Admin')
+			->setDescription(description: 'can take control of the whole website both internally and externally.');
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
-			->with(7)
-			->willReturn($tournamentCurrentData);
+			->with(2)
+			->willReturn($roleCurrentData);
 
 		// Only provide the optional 'description' field
 		$this->stubRawPayload(json: json_encode(value: $testPayload));
@@ -318,7 +318,7 @@ class TournamentProcessorTest extends TestCase
 			->method('validatePatch')
 			->with(
 				$testPayload,
-				7
+				2
 			);
 
 		$this
@@ -330,9 +330,9 @@ class TournamentProcessorTest extends TestCase
 			->mapper
 			->expects(self::once())
 			->method('map')
-			->willReturn(new TournamentResourceDto());
+			->willReturn(new RoleResourceDto());
 
-		$dto = new TournamentUpdateDto();
+		$dto = new RoleUpdateDto();
 
 		$dto->description = $testPayload['description'];
 
@@ -341,17 +341,17 @@ class TournamentProcessorTest extends TestCase
 			->process(
 				data: $dto,
 				operation: new Patch(),
-				payload: ['id' => 7],
+				payload: ['id' => 2],
 			);
 
 		self::assertSame(
-			expected: 'VOT6',
-			actual: $tournamentEntity->getName(),
-			message: 'Tournament name must NOT change.',
+			expected: 'Admin',
+			actual: $roleEntity->getName(),
+			message: 'Role name must NOT change.',
 		);
 		self::assertSame(
 			expected: $testPayload['description'],
-			actual: $tournamentEntity->getDescription(),
+			actual: $roleEntity->getDescription(),
 		);
 	}
 
@@ -359,19 +359,19 @@ class TournamentProcessorTest extends TestCase
 	public function testValidatePatchWhenNullDescriptionData(): void
 	{
 		$testPayload = ['description' => null];
-		$tournamentEntity = new TournamentEntity();
-		$tournamentCurrentData
-			= $tournamentEntity
-			->setId(id: 7)
-			->setName(name: 'VOT6')
-			->setDescription(description: 'Vietnamese Osu!taiko Tournament 6');
+		$roleEntity = new RoleEntity();
+		$roleCurrentData
+			= $roleEntity
+			->setId(id: 2)
+			->setName(name: 'Admin')
+			->setDescription(description: 'can take control of the whole website both internally and externally.');
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
-			->with(7)
-			->willReturn($tournamentCurrentData);
+			->with(2)
+			->willReturn($roleCurrentData);
 
 		// Optional 'description' field provided but NULL value
 		$this->stubRawPayload(json: json_encode(value: $testPayload));
@@ -382,7 +382,7 @@ class TournamentProcessorTest extends TestCase
 			->method('validatePatch')
 			->with(
 				$testPayload,
-				7,
+				2,
 			);
 
 		$this
@@ -394,9 +394,9 @@ class TournamentProcessorTest extends TestCase
 			->mapper
 			->expects(self::once())
 			->method('map')
-			->willReturn(new TournamentResourceDto);
+			->willReturn(new RoleResourceDto);
 
-		$dto = new TournamentUpdateDto();
+		$dto = new RoleUpdateDto();
 
 		$dto->description = $testPayload['description'];
 
@@ -405,36 +405,36 @@ class TournamentProcessorTest extends TestCase
 			->process(
 				data: $dto,
 				operation: new Patch(),
-				payload: ['id' => 7],
+				payload: ['id' => 2],
 			);
 
-		self::assertNull(actual: $tournamentCurrentData->getDescription());
+		self::assertNull(actual: $roleCurrentData->getDescription());
 	}
 
 	#[Test]
 	public function testValidatePatchWhenSameData(): void
 	{
-		$testPayload = ['name' => 'VTC3'];
-		$tournamentEntity = new TournamentEntity();
-		$tournamentCurrentData
-			= $tournamentEntity
-			->setId(id: 7)
-			->setName(name: 'VOT6')
-			->setDescription(description: 'Vietnamese Osu!taiko Tournament 6');
+		$testPayload = ['name' => 'User'];
+		$roleEntity = new RoleEntity();
+		$roleCurrentData
+			= $roleEntity
+			->setId(id: 2)
+			->setName(name: 'Admin')
+			->setDescription(description: 'can take control of the whole website both internally and externally.');
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
-			->with(7)
-			->willReturn($tournamentCurrentData);
+			->with(2)
+			->willReturn($roleCurrentData);
 
 		$this->stubRawPayload(json: json_encode(value: $testPayload));
 
 		$this
 			->duplicateValidator
 			->method('validatePatch')
-			->willThrowException(new BadRequestHttpException(message: 'duplicate tournament name.'));
+			->willThrowException(new BadRequestHttpException(message: 'duplicate role name.'));
 
 		$this
 			->repository
@@ -443,7 +443,7 @@ class TournamentProcessorTest extends TestCase
 
 		$this->expectException(exception: BadRequestHttpException::class);
 
-		$dto = new TournamentUpdateDto();
+		$dto = new RoleUpdateDto();
 
 		$dto->name = $testPayload['name'];
 
@@ -452,7 +452,7 @@ class TournamentProcessorTest extends TestCase
 			->process(
 				data: $dto,
 				operation: new Patch(),
-				payload: ['id' => 7],
+				payload: ['id' => 2],
 			);
 	}
 
@@ -465,10 +465,10 @@ class TournamentProcessorTest extends TestCase
     #[Test]
     public function testValidateDeleteWhenRemoveEntity(): void
     {
-		$testPayload = ['id' => 7];
-		$tournamentEntity = new TournamentEntity();
-		$tournamentCurrentData
-			= $tournamentEntity
+		$testPayload = ['id' => 2];
+		$roleEntity = new RoleEntity();
+		$roleCurrentData
+			= $roleEntity
 			->setId(id: $testPayload['id']);
 
 		$this
@@ -476,14 +476,14 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::once())
 			->method('find')
 			->with($testPayload['id'])
-			->willReturn($tournamentCurrentData);
+			->willReturn($roleCurrentData);
 
 		$this
 			->repository
             ->expects(self::once())
             ->method('remove')
 			->with(
-				$tournamentCurrentData,
+				$roleCurrentData,
 				true
 			);
 
@@ -502,7 +502,7 @@ class TournamentProcessorTest extends TestCase
     #[Test]
     public function testValidateDeleteWhenMissingEntity(): void
     {
-		$testPayload = ['id' => 88];
+		$testPayload = ['id' => 3];
 
 		$this
 			->repository

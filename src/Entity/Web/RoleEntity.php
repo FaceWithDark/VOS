@@ -2,13 +2,20 @@
 
 declare(strict_types=1);
 
-
 namespace App\Entity\Web;
 
+
+/// --- Main namespaces --- ///
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\Web\RoleRepository;
-use App\Entity\Abstract\AbstractRole;
+
+
+/// --- Type hint namespaces --- ///
 use Doctrine\DBAL\Types\Types;
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Abstract\RoleAbstract;
+use App\Repository\Web\RoleRepository;
 
 
 #[ORM\Entity(repositoryClass: RoleRepository::class)]
@@ -17,7 +24,7 @@ use Doctrine\DBAL\Types\Types;
 	schema: 'vos_catalog',
 	options: ['comment' => 'storing roles definition that ARE NOT belong to any registered tournaments under VOS org.']
 )]
-final class Role extends AbstractRole
+final class RoleEntity extends RoleAbstract
 {
 	#[ORM\Column(
 		type: Types::STRING,
