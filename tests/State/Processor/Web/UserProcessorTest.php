@@ -33,6 +33,7 @@ use App\Dto\Main\Web\UserResourceDto;
 use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
 use App\Interface\Web\UserDuplicateValidatorInterface;
+use App\Interface\Web\UserForeignKeyValidatorInterface;
 use App\Repository\Web\RoleRepository;
 use App\Repository\Web\UserRepository;
 use App\State\Processor\Web\UserProcessor;
@@ -45,7 +46,8 @@ use App\State\Processor\Web\UserProcessor;
  * All processor collaborators are declared once in `setUp()` as mocks so that
  * individual test methods stay short. However, not every test verifies every
  * collaborator. For example, the DELETE tests don't touch `$mapper`,
- * `$requestStack`, `$roleRepository`, or `$duplicateValidator` at all.
+ * `$requestStack`, `$roleRepository`, `$duplicateValidator`, or
+ * `$foreignKeyValidator` at all.
  * PHPUnit 12.5+ emits a notice for each such "mock without expectations" to
  * nudge towards `createStub()`.
  *
@@ -75,6 +77,7 @@ class UserProcessorTest extends TestCase
 	private ObjectMapperInterface&MockObject			$mapper;
 	private RequestStack&MockObject						$requestStack;
 	private UserDuplicateValidatorInterface&MockObject	$duplicateValidator;
+	private UserForeignKeyValidatorInterface&MockObject	$foreignKeyValidator;
 	private UserProcessor								$processor;
 
 	#[Override]
@@ -88,6 +91,7 @@ class UserProcessorTest extends TestCase
 		$this->mapper				= $this->createMock(type: ObjectMapperInterface::class);
 		$this->requestStack			= $this->createMock(type: RequestStack::class);
 		$this->duplicateValidator	= $this->createMock(type: UserDuplicateValidatorInterface::class);
+		$this->foreignKeyValidator	= $this->createMock(type: UserForeignKeyValidatorInterface::class);
 
 		$this->processor = new UserProcessor(
 			repository:			$this->repository,
@@ -95,6 +99,7 @@ class UserProcessorTest extends TestCase
 			mapper:				$this->mapper,
 			requestStack:		$this->requestStack,
 			duplicateValidator: $this->duplicateValidator,
+			foreignKeyValidator: $this->foreignKeyValidator,
 		);
 	}
 
@@ -157,7 +162,7 @@ class UserProcessorTest extends TestCase
 	#[Test]
 	public function testValidatePostWhenPersistData(): void
 	{
-		$roleEntity = $this->mockUserEntity();
+		$roleEntity = $this->mockRoleEntity();
 
 		$dto = new UserCreateDto();
 
@@ -182,6 +187,13 @@ class UserProcessorTest extends TestCase
 		// The validator MUST be consulted exactly once with the raw payload
 		$this
 			->duplicateValidator
+			->expects(self::once())
+			->method('validatePost')
+			->with($testPayload);
+
+		// The 1:1 FK validator MUST be consulted exactly once with the raw payload
+		$this
+			->foreignKeyValidator
 			->expects(self::once())
 			->method('validatePost')
 			->with($testPayload);
@@ -237,6 +249,7 @@ class UserProcessorTest extends TestCase
 		$dto = new UserCreateDto();
 
 		$dto->id			= 88888;
+		$dto->roleId		= 999;
 		$dto->name			= 'Gambler';
 		$dto->avatar		= 'https://a.ppy.sh/88?88.png';
 		$dto->rank			= 88;
@@ -408,7 +421,7 @@ class UserProcessorTest extends TestCase
 	public function testValidatePatchWhenOnlyAvatarData(): void
 	{
 		$testPayload = ['avatar' => 'https://a.ppy.sh/88?88.png'];
-		$userCurrentData = $this->mockUserEntity();
+		$userCurrentData = $this->mockUserEntity(name: 'Admin');
 
 		$this
 			->repository
@@ -486,6 +499,16 @@ class UserProcessorTest extends TestCase
 			->method('find')
 			->with($testPayload['roleId'])
 			->willReturn($roleEntity);
+
+		// The 1:1 FK validator MUST be consulted exactly once with (payload, URL ID)
+		$this
+			->foreignKeyValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with(
+				$testPayload,
+				1,
+			);
 
 		$this
 			->repository
