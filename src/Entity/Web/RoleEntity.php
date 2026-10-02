@@ -43,7 +43,7 @@ final class RoleEntity extends RoleAbstract
 		mappedBy: 'roleId',
 		cascade: ['persist', 'remove']
 	)]
-	private ?User $users = null;
+	private ?UserEntity $users = null;
 
 	public function getName(): ?string
 	{
@@ -69,12 +69,12 @@ final class RoleEntity extends RoleAbstract
 		return $this;
 	}
 
-	public function getUsers(): ?User
+	public function getUsers(): ?UserEntity
 	{
 		return $this->users;
 	}
 
-	public function setUsers(User $users): static
+	public function setUsers(UserEntity $users): static
 	{
 		// set the owning side of the relation if necessary
 		if ($users->getRoleId() !== $this) {
