@@ -20,15 +20,16 @@ use Override;
 
 /// --- Internal namespaces --- ///
 use App\Entity\Web\RoleEntity;
-use App\Repository\Web\RoleRepository;
-use App\Service\Web\RoleDuplicateValidator;
+use App\Entity\Web\UserEntity;
+use App\Repository\Web\UserRepository;
+use App\Service\Web\UserDuplicateValidator;
 
 
-#[CoversClass(className: RoleDuplicateValidator::class)]
-class RoleDuplicateValidatorTest extends TestCase
+#[CoversClass(className: UserDuplicateValidator::class)]
+class UserDuplicateValidatorTest extends TestCase
 {
-	private RoleRepository&MockObject	$repository;
-	private RoleDuplicateValidator		$duplcateValidator;
+	private UserRepository&MockObject	$repository;
+	private UserDuplicateValidator		$duplcateValidator;
 
 	#[Override]
 	protected function setUp(): void
@@ -36,8 +37,36 @@ class RoleDuplicateValidatorTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository			= $this->createMock(type: RoleRepository::class);
-		$this->duplcateValidator	= new RoleDuplicateValidator(repository: $this->repository);
+		$this->repository			= $this->createMock(type: UserRepository::class);
+		$this->duplcateValidator	= new UserDuplicateValidator(repository: $this->repository);
+	}
+
+	/**
+	 * NOTE:
+	 *
+	 * Unlike {@see RoleEntity}, {@see UserEntity} ships with no default data
+	 * fixtures. Therefore, we must be create a valid mock user so that it can be
+	 * adjusted to the specific scenario under each test.
+	 */
+	private function mockUserEntity(
+		?int	$id				= 88888,
+		?string	$name			= 'Gambler',
+		?string	$avatar			= 'https://a.ppy.sh/88?88.png',
+		?int	$rank			= 88,
+		?string $countryFlag	= 'ZW',
+	): UserEntity
+	{
+		return (new UserEntity())
+			->setId(id: $id)
+			->setRoleId(
+				roleId: (new RoleEntity())
+					->setId(id: 1)
+					->setName(name: 'User')
+			)
+			->setName(name: $name)
+			->setAvatar(avatar: $avatar)
+			->setRank(rank: $rank)
+			->setCountryFlag(countryFlag: $countryFlag);
 	}
 
 
@@ -47,9 +76,9 @@ class RoleDuplicateValidatorTest extends TestCase
 
 
 	#[Test]
-    public function testMissingNameFieldOnPost(): void
-    {
-		$testPayload = ['description' => 'double the pay, double the deal baby. That is what high risk high reward about.'];
+	public function testMissingNameFieldOnPost(): void
+	{
+		$testPayload = ['avatar' => 'https://a.ppy.sh/88?88.png'];
 
 		$this
 			->repository
@@ -61,8 +90,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->validatePost(payload: $testPayload);
 
 		// No exception found means a valid pass
-        $this->addToAssertionCount(count: 1);
-    }
+		$this->addToAssertionCount(count: 1);
+	}
 
 	#[Test]
 	public function testNullNameFieldOnPost(): void
@@ -78,8 +107,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->duplcateValidator
 			->validatePost(payload: $testPayload);
 
-        // No exception found means a valid pass
-        $this->addToAssertionCount(count: 1);
+		// No exception found means a valid pass
+		$this->addToAssertionCount(count: 1);
 	}
 
 	#[Test]
@@ -99,25 +128,24 @@ class RoleDuplicateValidatorTest extends TestCase
 			->validatePost(payload: $testPayload);
 
 		// No exception found means a valid pass
-        $this->addToAssertionCount(count: 1);
+		$this->addToAssertionCount(count: 1);
 	}
 
 	#[Test]
 	public function testMatchingNameFieldOnPost(): void
 	{
-		$testPayload		= ['name' => 'Admin'];
-		$roleEntity			= new RoleEntity();
-		$roleCurrentData	= $roleEntity->setName(name: $testPayload['name']);
+		$testPayload		= ['name' => 'Gambler'];
+		$userCurrentData	= $this->mockUserEntity();
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
 			->with($testPayload)
-			->willReturn($roleCurrentData);
+			->willReturn($userCurrentData);
 
 		$this->expectException(exception: ConflictHttpException::class);
-		$this->expectExceptionMessage(message: "A role with the name [{$testPayload['name']}] already exists.");
+		$this->expectExceptionMessage(message: "A user with the name [{$testPayload['name']}] already exists.");
 
 		$this
 			->duplcateValidator
@@ -125,7 +153,7 @@ class RoleDuplicateValidatorTest extends TestCase
 	}
 
 	#[Test]
-	public function testOptionalDescriptionFieldOnPost(): void
+	public function testOptionalAvatarFieldOnPost(): void
 	{
 		$testPayload = ['name' => 'Gambler'];
 
@@ -141,7 +169,7 @@ class RoleDuplicateValidatorTest extends TestCase
 			->validatePost(
 				payload: array_merge(
 					$testPayload,
-					['description' => 'double the pay, double the deal baby. That is what high risk high reward about.'],
+					['avatar' => 'https://a.ppy.sh/88?88.png'],
 				),
 			);
 
@@ -158,7 +186,7 @@ class RoleDuplicateValidatorTest extends TestCase
 	#[Test]
 	public function testMissingNameFieldOnPatch(): void
 	{
-		$testPayload = ['description' => 'double the pay, double the deal baby. That is what high risk high reward about.'];
+		$testPayload = ['avatar' => 'https://a.ppy.sh/88?88.png'];
 
 		$this
 			->repository
@@ -169,7 +197,7 @@ class RoleDuplicateValidatorTest extends TestCase
 			->duplcateValidator
 			->validatePatch(
 				payload: $testPayload,
-				id: 2,
+				id: 88888,
 			);
 
 		// No exception found means a valid pass
@@ -192,7 +220,7 @@ class RoleDuplicateValidatorTest extends TestCase
 			->duplcateValidator
 			->validatePatch(
 				payload: $testPayload,
-				id: 2,
+				id: 88888,
 			);
 
 		// No exception found means a valid pass
@@ -215,7 +243,7 @@ class RoleDuplicateValidatorTest extends TestCase
 			->duplcateValidator
 			->validatePatch(
 				payload: $testPayload,
-				id: 2,
+				id: 88888,
 			);
 
 		// No exception found means a valid pass
@@ -225,22 +253,21 @@ class RoleDuplicateValidatorTest extends TestCase
 	#[Test]
 	public function testSameEntityMatchingNameFieldOnPatch(): void
 	{
-		$testPayload		= ['name' => 'Admin'];
-		$roleEntity			= new RoleEntity();
-		$roleCurrentData	= $roleEntity->setName(name: $testPayload['name'])->setId(id: 2);
+		$testPayload		= ['name' => 'Gambler'];
+		$userCurrentData	= $this->mockUserEntity();
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
 			->with($testPayload)
-			->willReturn($roleCurrentData);
+			->willReturn($userCurrentData);
 
 		$this
 			->duplcateValidator
 			->validatePatch(
 				payload: $testPayload,
-				id: 2,
+				id: 88888,
 			);
 
 		$this->addToAssertionCount(count: 1);
@@ -249,33 +276,36 @@ class RoleDuplicateValidatorTest extends TestCase
 	#[Test]
 	public function testDifferentEntityMatchingNameFieldOnPatch(): void
 	{
-		$testPayload = ['name' => 'Admin'];
-		$roleEntity = new RoleEntity();
-		$roleCurrentData
-			= $roleEntity
-			->setName(name: $testPayload['name'])
-			->setId(id: 1);
+		$testPayload = ['name' => 'Gambler'];
+		$userCurrentData
+			= $this->mockUserEntity(
+				id:				19817503,
+				name:			'DeepInDark',
+				avatar:			'https://a.ppy.sh/19817503?1752731877.png',
+				rank:			5103,
+				countryFlag:	'VN',
+			);
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
 			->with($testPayload)
-			->willReturn($roleCurrentData);
+			->willReturn($userCurrentData);
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: "Another role with the name [{$testPayload['name']}] already exists.");
+		$this->expectExceptionMessage(message: "Another user with the name [{$testPayload['name']}] already exists.");
 
 		$this
 			->duplcateValidator
 			->validatePatch(
 				payload: $testPayload,
-				id: 2,
+				id: 19817503,
 			);
 	}
 
 	#[Test]
-	public function testOptionalDescriptionFieldOnPatch(): void
+	public function testOptionalAvatarFieldOnPatch(): void
 	{
 		$testPayload = ['name' => 'Gambler'];
 
@@ -291,9 +321,9 @@ class RoleDuplicateValidatorTest extends TestCase
 			->validatePatch(
 				payload: array_merge(
 					$testPayload,
-					['description' => 'double the pay, double the deal baby. That is what high risk high reward about.'],
+					['avatar' => 'https://a.ppy.sh/88?88.png'],
 				),
-				id: 2,
+				id: 88888,
 			);
 
 		// No exception found means a valid pass
