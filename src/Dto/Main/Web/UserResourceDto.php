@@ -83,6 +83,15 @@ use Symfony\Component\HttpFoundation\Response;
 			description: 'Removes a User API resource',
 			processor: UserProcessor::class,
 			status: Response::HTTP_NO_CONTENT,
+			/*
+			 * NOTE:
+			 * The User resource exposes `roleId` as a scalar FK while the entity
+			 * holds a {@see \App\Entity\Web\RoleEntity}. API Platform's ObjectMapper
+			 * can map that forward (entity -> DTO) but not backwards (DTO -> entity),
+			 * and it would otherwise attempt the reverse for DELETE. The processor
+			 * only needs the route ID, hence this operation opts out of mapping.
+			 */
+			map: false,
 		),
 	],
 	stateOptions: new Options(entityClass: UserEntity::class),

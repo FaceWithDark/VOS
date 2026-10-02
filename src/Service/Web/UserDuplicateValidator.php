@@ -38,7 +38,7 @@ final readonly class UserDuplicateValidator implements UserDuplicateValidatorInt
 		if ($userCurrentNameValue !== null) {
 			throw new ConflictHttpException(
 				message: sprintf(
-					'A user with the name [] already exists.',
+					'A user with the name [%s] already exists.',
 					$userName,
 				),
 			);
