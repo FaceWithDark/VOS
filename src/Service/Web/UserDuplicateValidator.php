@@ -36,7 +36,12 @@ final readonly class UserDuplicateValidator implements UserDuplicateValidatorInt
 		$userCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $userName]);
 
 		if ($userCurrentNameValue !== null) {
-			throw new ConflictHttpException(message: "A user with the name [{$userName}] already exists.");
+			throw new ConflictHttpException(
+				message: sprintf(
+					'A user with the name [] already exists.',
+					$userName,
+				),
+			);
 		}
 	}
 
@@ -59,6 +64,11 @@ final readonly class UserDuplicateValidator implements UserDuplicateValidatorInt
 			return;
 		}
 
-		throw new BadRequestHttpException(message: "Another user with the name [{$payload['name']}] already exists.");
+		throw new BadRequestHttpException(
+			message: sprintf(
+				'Another user with the name [%s] already exists.',
+				$payload['name'],
+			),
+		);
 	}
 }

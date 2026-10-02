@@ -47,7 +47,10 @@ final readonly class UserForeignKeyValidator implements UserForeignKeyValidatorI
 		// 1:1 relationship - a role can only ever belong to a single user
 		if ($this->userRepository->findOneBy(criteria: ['roleId' => $roleEntity]) !== null) {
 			throw new ConflictHttpException(
-				message: "Role with ID [{$roleId}] is already assigned to another user."
+				message: sprintf(
+					'Role with ID [%d] is already assigned to another user.',
+					$roleId,
+				),
 			);
 		}
 	}
@@ -85,7 +88,10 @@ final readonly class UserForeignKeyValidator implements UserForeignKeyValidatorI
 		}
 
 		throw new BadRequestHttpException(
-			message: "Another user with role ID [{$roleId}] already exists."
+			message: sprintf(
+				'Another user with role ID [%d] already exists.',
+				$roleId
+			),
 		);
 	}
 }

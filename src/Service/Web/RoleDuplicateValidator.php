@@ -36,7 +36,12 @@ final readonly class RoleDuplicateValidator implements RoleDuplicateValidatorInt
 		$roleCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $roleName]);
 
 		if ($roleCurrentNameValue !== null) {
-			throw new ConflictHttpException(message: "A role with the name [{$roleName}] already exists.");
+			throw new ConflictHttpException(
+				message: sprintf(
+					'A role with the name [%s] already exists.',
+					$roleName,
+				),
+			);
 		}
 	}
 
@@ -59,6 +64,11 @@ final readonly class RoleDuplicateValidator implements RoleDuplicateValidatorInt
 			return;
 		}
 
-		throw new BadRequestHttpException(message: "Another role with the name [{$payload['name']}] already exists.");
+		throw new BadRequestHttpException(
+			message: sprintf(
+				'Another role with the name [%s] already exists.',
+				$payload['name'],
+			)
+		);
 	}
 }
