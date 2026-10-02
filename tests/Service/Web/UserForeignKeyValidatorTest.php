@@ -35,6 +35,20 @@ use App\Service\Web\UserForeignKeyValidator;
  * individual test methods stay short. A handful of tests only exercise one of
  * them (e.g. missing/NULL `roleId` short-circuits before any lookup), which
  * would otherwise trip PHPUnit 12.5+'s "mock without expectations" notice.
+ *
+ * Suppressing the notice is a deliberate trade-off:
+ *   - Keeps the "declare once, use everywhere" style across ~10 test methods.
+ *   - Disables PHPUnit's built-in signal that a mock might be an over-mock.
+ *
+ * When to remove this attribute (and refactor towards a per-test factory):
+ *   - When adding a new collaborator whose behaviour varies per test in ways
+ *     that would benefit from explicit per-test `createMock()` / `createStub()`
+ *     discrimination.
+ *   - When upgrading to PHPUnit 14+, where "mock without expectations" becomes
+ *     a hard error. At that point, migrate to a private processor building
+ *     factory pattern.
+ *   - When a test failure points to a collaborator that was silently stubbed
+ *     rather than verified — a symptom of over-broad suppression.
  * ---------------------------------------------------------------------------
  */
 
