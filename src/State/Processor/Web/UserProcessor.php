@@ -29,6 +29,7 @@ use App\Dto\Main\Web\UserResourceDto;
 use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
 use App\Interface\Web\UserDuplicateValidatorInterface;
+use App\Interface\Web\UserForeignKeyValidatorInterface;
 use App\Repository\Web\RoleRepository;
 use App\Repository\Web\UserRepository;
 
@@ -44,6 +45,7 @@ final readonly class UserProcessor implements ProcessorInterface
 		private ObjectMapperInterface			$mapper,
 		private RequestStack					$requestStack,
 		private UserDuplicateValidatorInterface	$duplicateValidator,
+		private UserForeignKeyValidatorInterface	$foreignKeyValidator,
 	) {}
 
 	private function getDecodedPayload(): array
@@ -64,8 +66,8 @@ final readonly class UserProcessor implements ProcessorInterface
 	 * Resolves the incoming foreign key into an existing Role entity.
 	 *
 	 * NOTE:
-	 * This is a minimal lookup only. The dedicated FK/one-to-one validator will
-	 * replace this once the Role relationship gets its own validation layer.
+	 * Existence is guaranteed by {@see UserForeignKeyValidatorInterface}; this
+	 * lookup owns the 400 surfaced when the FK itself is unknown.
 	 */
 	private function resolveRole(int $roleId): RoleEntity
 	{
@@ -102,7 +104,10 @@ final readonly class UserProcessor implements ProcessorInterface
 
 	private function handlePost(UserCreateDto $dto): UserResourceDto
 	{
-		$this->duplicateValidator->validatePost(payload: $this->getDecodedPayload());
+		$userDecodedPayload = $this->getDecodedPayload();
+
+		$this->duplicateValidator->validatePost(payload: $userDecodedPayload);
+		$this->foreignKeyValidator->validatePost(payload: $userDecodedPayload);
 
 		$userEntity = new UserEntity();
 
@@ -153,6 +158,12 @@ final readonly class UserProcessor implements ProcessorInterface
 		$this->duplicateValidator->validatePatch(
 			payload: $userDecodedPayload,
 			id: $userId
+		);
+
+		// 409/400 if the referenced role is already bound to another user (1:1)
+		$this->foreignKeyValidator->validatePatch(
+			payload: $userDecodedPayload,
+			id: $userId,
 		);
 
 		// Apply only the fields that the client actually sent (partial update)
