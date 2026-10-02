@@ -15,31 +15,31 @@ use Override;
 
 
 /// --- Internal namespaces --- ///
-use App\Interface\Web\RoleDuplicateValidatorInterface;
-use App\Repository\Web\RoleRepository;
+use App\Interface\Web\UserDuplicateValidatorInterface;
+use App\Repository\Web\UserRepository;
 
 
-final readonly class RoleDuplicateValidator implements RoleDuplicateValidatorInterface
+final readonly class UserDuplicateValidator implements UserDuplicateValidatorInterface
 {
-	public function __construct(private RoleRepository $repository) {}
+	public function __construct(private UserRepository $repository) {}
 
 	#[Override]
 	public function validatePost(array $payload): void
 	{
-		$roleName = $payload['name'] ?? null;
+		$userName = $payload['name'] ?? null;
 
 		// Let DTO validation surface the error when 'name' field is missing
-		if ($roleName === null) {
+		if ($userName === null) {
 			return;
 		}
 
-		$roleCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $roleName]);
+		$userCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $userName]);
 
-		if ($roleCurrentNameValue !== null) {
+		if ($userCurrentNameValue !== null) {
 			throw new ConflictHttpException(
 				message: sprintf(
-					'A role with the name [%s] already exists.',
-					$roleName,
+					'A user with the name [%s] already exists.',
+					$userName,
 				),
 			);
 		}
@@ -56,19 +56,19 @@ final readonly class RoleDuplicateValidator implements RoleDuplicateValidatorInt
 			return;
 		}
 
-		$roleCurrentData = $this->repository->findOneBy(criteria: ['name' => $payload['name']]);
+		$userCurrentData = $this->repository->findOneBy(criteria: ['name' => $payload['name']]);
 
 		// Detect duplicate data if any field within the incoming payload
 		// matched current one
-		if ($roleCurrentData === null || (int) $roleCurrentData->getId() === $id) {
+		if ($userCurrentData === null || (int) $userCurrentData->getId() === $id) {
 			return;
 		}
 
 		throw new BadRequestHttpException(
 			message: sprintf(
-				'Another role with the name [%s] already exists.',
+				'Another user with the name [%s] already exists.',
 				$payload['name'],
-			)
+			),
 		);
 	}
 }

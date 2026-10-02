@@ -36,7 +36,12 @@ final readonly class TournamentDuplicateValidator implements TournamentDuplicate
 		$tournamentCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $tournamentName]);
 
 		if ($tournamentCurrentNameValue !== null) {
-			throw new ConflictHttpException(message: "A tournament with the name [{$tournamentName}] already exists.");
+			throw new ConflictHttpException(
+				message: sprintf(
+					'A tournament with the name [%s] already exists.',
+					$tournamentName,
+				),
+			);
 		}
 	}
 
@@ -59,6 +64,11 @@ final readonly class TournamentDuplicateValidator implements TournamentDuplicate
 			return;
 		}
 
-		throw new BadRequestHttpException(message: "Another tournament with the name [{$payload['name']}] already exists.");
+		throw new BadRequestHttpException(
+			message: sprintf(
+				'Another tournament with the name [%s] already exists.',
+				$payload['name'],
+			),
+		);
 	}
 }

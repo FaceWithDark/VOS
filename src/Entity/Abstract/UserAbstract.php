@@ -2,17 +2,24 @@
 
 declare(strict_types=1);
 
-
 namespace App\Entity\Abstract;
 
+
+/// --- Main namespaces --- ///
+use Doctrine\ORM\Mapping as ORM;
+
+
+/// --- Type hint namespaces --- ///
 use DateTimeImmutable;
 use DateTimeZone;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 
 
+/// --- Internal namespaces --- ///
+
+
 #[ORM\MappedSuperclass]
-abstract class AbstractUser {
+abstract class UserAbstract {
 	#[ORM\Id]
 	#[ORM\Column(
 		type: Types::INTEGER,
@@ -34,24 +41,24 @@ abstract class AbstractUser {
 		);
 	}
 
-	protected function getId(): ?int
+	public function getId(): ?int
 	{
 		return $this->id;
 	}
 
-	protected function setId(int $id): static
+	public function setId(int $id): static
 	{
 		$this->id = $id;
 
 		return $this;
 	}
 
-	protected function getCreateOn(): ?\DateTimeImmutable
+	public function getCreateOn(): ?\DateTimeImmutable
 	{
 		return $this->createOn;
 	}
 
-	protected function setCreateOn(\DateTimeImmutable $createOn): static
+	public function setCreateOn(\DateTimeImmutable $createOn): static
 	{
 		$this->createOn = $createOn;
 

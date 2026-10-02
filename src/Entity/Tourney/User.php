@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Tourney;
 
-use App\Entity\Abstract\AbstractUser;
+use App\Entity\Abstract\UserAbstract;
 use App\Repository\Tourney\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 	name: '`users`',
 	options: ['comment' => 'storing info about osu!taiko users that ARE belong to one or more registered tournaments under VOS org.']
 )]
-final class User extends AbstractUser
+final class User extends UserAbstract
 {
 	#[ORM\ManyToOne(inversedBy: 'users')]
 	#[ORM\JoinColumn(

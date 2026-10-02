@@ -2,13 +2,20 @@
 
 declare(strict_types=1);
 
-
 namespace App\Entity\Web;
 
-use App\Entity\Abstract\AbstractUser;
-use App\Repository\Web\UserRepository;
+
+/// --- Main namespaces --- ///
 use Doctrine\ORM\Mapping as ORM;
+
+
+/// --- Type hint namespaces --- ///
 use Doctrine\DBAL\Types\Types;
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Abstract\UserAbstract;
+use App\Repository\Web\UserRepository;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -17,11 +24,11 @@ use Doctrine\DBAL\Types\Types;
 	schema: 'vos_catalog',
 	options: ['comment' => 'storing info about osu!taiko users that ARE NOT belong to any registered tournaments under VOS org.']
 )]
-final class User extends AbstractUser
+final class UserEntity extends UserAbstract
 {
 	#[ORM\OneToOne(
 		inversedBy: 'users',
-		cascade: ['persist', 'remove']
+		cascade: ['persist']
 	)]
 	#[ORM\JoinColumn(
 		name: 'role_id',
