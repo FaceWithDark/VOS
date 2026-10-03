@@ -206,6 +206,39 @@ class TournamentProcessorTest extends TestCase
 	}
 
 	#[Test]
+	public function testPostWithoutCurrentRequestForwardsEmptyPayload(): void
+	{
+		$dto = new TournamentCreateDto();
+
+		$dto->name = 'VOT88';
+
+		// No stubbed request at all: getDecodedPayload() must fall back to []
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePost')
+			->with([]);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save');
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn(new TournamentResourceDto());
+
+		$this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Post(),
+			);
+	}
+
+	#[Test]
 	public function testPostWithDuplicateNameDoesNotPersist(): void
 	{
 		$dto = new TournamentCreateDto();

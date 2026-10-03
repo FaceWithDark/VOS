@@ -206,6 +206,39 @@ class RoleProcessorTest extends TestCase
 	}
 
 	#[Test]
+	public function testPostWithoutCurrentRequestForwardsEmptyPayload(): void
+	{
+		$dto = new RoleCreateDto();
+
+		$dto->name = 'Gambler';
+
+		// No stubbed request at all: getDecodedPayload() must fall back to []
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePost')
+			->with([]);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save');
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn(new RoleResourceDto());
+
+		$this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Post(),
+			);
+	}
+
+	#[Test]
 	public function testPostWithDuplicateNameDoesNotPersist(): void
 	{
 		$dto = new RoleCreateDto();
