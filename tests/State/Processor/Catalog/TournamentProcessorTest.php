@@ -34,6 +34,7 @@ use App\Dto\Input\Catalog\TournamentUpdateDto;
 use App\Dto\Main\Catalog\TournamentResourceDto;
 use App\Entity\Catalog\TournamentEntity;
 use App\Interface\Catalog\TournamentDuplicateValidatorInterface;
+use App\Interface\Catalog\TournamentEmptyPayloadValidatorInterface;
 use App\Repository\Catalog\TournamentRepository;
 use App\State\Processor\Catalog\TournamentProcessor;
 
@@ -71,6 +72,7 @@ class TournamentProcessorTest extends TestCase
 	private ObjectMapperInterface&MockObject					$mapper;
 	private RequestStack&MockObject								$requestStack;
 	private TournamentDuplicateValidatorInterface&MockObject	$duplicateValidator;
+	private TournamentEmptyPayloadValidatorInterface&MockObject	$emptyPayloadValidator;
 	private TournamentProcessor									$processor;
 
 	#[Override]
@@ -83,12 +85,14 @@ class TournamentProcessorTest extends TestCase
 		$this->mapper				= $this->createMock(type: ObjectMapperInterface::class);
 		$this->requestStack			= $this->createMock(type: RequestStack::class);
 		$this->duplicateValidator	= $this->createMock(type: TournamentDuplicateValidatorInterface::class);
+		$this->emptyPayloadValidator	= $this->createMock(type: TournamentEmptyPayloadValidatorInterface::class);
 
 		$this->processor = new TournamentProcessor(
 			repository:			$this->repository,
 			mapper:				$this->mapper,
 			requestStack:		$this->requestStack,
 			duplicateValidator:	$this->duplicateValidator,
+			emptyPayloadValidator: $this->emptyPayloadValidator,
 		);
 	}
 
@@ -183,7 +187,9 @@ class TournamentProcessorTest extends TestCase
 
 		$dto->name = 'VOT88';
 
-		// An empty request body decodes to [], not to a decode error
+		// An empty request body decodes to [], not to a decode error. POST is
+		// handled by API Platform's deserialize/validate stage, so the
+		// processor simply forwards it.
 		$this->stubRawPayload(json: '');
 
 		$this
@@ -354,6 +360,49 @@ class TournamentProcessorTest extends TestCase
 	}
 
 	#[Test]
+	public function testPatchWithEmptyPayloadThrowsBadRequest(): void
+	{
+		$current = $this->mockTournamentEntity();
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(7)
+			->willReturn($current);
+
+		// An empty request body decodes to []
+		$this->stubRawPayload(json: '');
+
+		$this
+			->emptyPayloadValidator
+			->method('validatePatch')
+			->willThrowException(new BadRequestHttpException(message: 'Request payload must not be empty.'));
+
+		// The entity exists, so the empty payload is what fails the request
+		$this
+			->duplicateValidator
+			->expects(self::never())
+			->method('validatePatch');
+
+		$this
+			->repository
+			->expects(self::never())
+			->method('save');
+
+		$this->expectException(exception: BadRequestHttpException::class);
+		$this->expectExceptionMessage(message: 'Request payload must not be empty.');
+
+		$this
+			->processor
+			->process(
+				data: new TournamentUpdateDto(),
+				operation: new Patch(),
+				payload: ['id' => 7],
+			);
+	}
+
+	#[Test]
 	public function testPatchWithNameUpdatesOnlyThatField(): void
 	{
 		$dto = new TournamentUpdateDto();
@@ -372,6 +421,13 @@ class TournamentProcessorTest extends TestCase
 			->willReturn($current);
 
 		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		// The empty-payload guard is consulted before the duplicate lookup
+		$this
+			->emptyPayloadValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload);
 
 		// The validator gets (decoded payload, URL ID)
 		$this

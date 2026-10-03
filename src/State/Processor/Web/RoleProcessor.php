@@ -27,6 +27,7 @@ use App\Dto\Input\Web\RoleUpdateDto;
 use App\Dto\Main\Web\RoleResourceDto;
 use App\Entity\Web\RoleEntity;
 use App\Interface\Web\RoleDuplicateValidatorInterface;
+use App\Interface\Web\RoleEmptyPayloadValidatorInterface;
 use App\Repository\Web\RoleRepository;
 
 
@@ -40,6 +41,7 @@ final readonly class RoleProcessor implements ProcessorInterface
 		private ObjectMapperInterface			$mapper,
 		private RequestStack					$requestStack,
 		private RoleDuplicateValidatorInterface	$duplicateValidator,
+		private RoleEmptyPayloadValidatorInterface	$emptyPayloadValidator,
 	) {}
 
 	private function getDecodedPayload(): array
@@ -117,6 +119,9 @@ final readonly class RoleProcessor implements ProcessorInterface
 		}
 
 		$roleDecodedPayload = $this->getDecodedPayload();
+
+		// 400 for an empty request body (entity existence is already checked)
+		$this->emptyPayloadValidator->validatePatch(payload: $roleDecodedPayload);
 
 		// 400 if another entity already uses the same 'name' value
 		$this->duplicateValidator->validatePatch(

@@ -29,6 +29,7 @@ use App\Dto\Main\Web\UserResourceDto;
 use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
 use App\Interface\Web\UserDuplicateValidatorInterface;
+use App\Interface\Web\UserEmptyPayloadValidatorInterface;
 use App\Interface\Web\UserForeignKeyValidatorInterface;
 use App\Repository\Web\RoleRepository;
 use App\Repository\Web\UserRepository;
@@ -46,6 +47,7 @@ final readonly class UserProcessor implements ProcessorInterface
 		private RequestStack					$requestStack,
 		private UserDuplicateValidatorInterface	$duplicateValidator,
 		private UserForeignKeyValidatorInterface	$foreignKeyValidator,
+		private UserEmptyPayloadValidatorInterface	$emptyPayloadValidator,
 	) {}
 
 	private function getDecodedPayload(): array
@@ -158,6 +160,9 @@ final readonly class UserProcessor implements ProcessorInterface
 		}
 
 		$userDecodedPayload = $this->getDecodedPayload();
+
+		// 400 for an empty request body (entity existence is already checked)
+		$this->emptyPayloadValidator->validatePatch(payload: $userDecodedPayload);
 
 		// 400 if another entity already uses the same 'name' value
 		$this->duplicateValidator->validatePatch(

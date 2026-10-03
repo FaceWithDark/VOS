@@ -27,6 +27,7 @@ use App\Dto\Input\Catalog\TournamentUpdateDto;
 use App\Dto\Main\Catalog\TournamentResourceDto;
 use App\Entity\Catalog\TournamentEntity;
 use App\Interface\Catalog\TournamentDuplicateValidatorInterface;
+use App\Interface\Catalog\TournamentEmptyPayloadValidatorInterface;
 use App\Repository\Catalog\TournamentRepository;
 
 
@@ -40,6 +41,7 @@ final readonly class TournamentProcessor implements ProcessorInterface
 		private ObjectMapperInterface					$mapper,
 		private RequestStack							$requestStack,
 		private TournamentDuplicateValidatorInterface	$duplicateValidator,
+		private TournamentEmptyPayloadValidatorInterface	$emptyPayloadValidator,
 	) {}
 
 	private function getDecodedPayload(): array
@@ -117,6 +119,9 @@ final readonly class TournamentProcessor implements ProcessorInterface
 		}
 
 		$tournamentDecodedPayload = $this->getDecodedPayload();
+
+		// 400 for an empty request body (entity existence is already checked)
+		$this->emptyPayloadValidator->validatePatch(payload: $tournamentDecodedPayload);
 
 		// 400 if another entity already uses the same 'name' value
 		$this->duplicateValidator->validatePatch(

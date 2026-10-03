@@ -34,6 +34,7 @@ use App\Dto\Input\Web\RoleUpdateDto;
 use App\Dto\Main\Web\RoleResourceDto;
 use App\Entity\Web\RoleEntity;
 use App\Interface\Web\RoleDuplicateValidatorInterface;
+use App\Interface\Web\RoleEmptyPayloadValidatorInterface;
 use App\Repository\Web\RoleRepository;
 use App\State\Processor\Web\RoleProcessor;
 
@@ -71,6 +72,7 @@ class RoleProcessorTest extends TestCase
 	private ObjectMapperInterface&MockObject			$mapper;
 	private RequestStack&MockObject						$requestStack;
 	private RoleDuplicateValidatorInterface&MockObject	$duplicateValidator;
+	private RoleEmptyPayloadValidatorInterface&MockObject	$emptyPayloadValidator;
 	private RoleProcessor								$processor;
 
 	#[Override]
@@ -83,12 +85,14 @@ class RoleProcessorTest extends TestCase
 		$this->mapper				= $this->createMock(type: ObjectMapperInterface::class);
 		$this->requestStack			= $this->createMock(type: RequestStack::class);
 		$this->duplicateValidator	= $this->createMock(type: RoleDuplicateValidatorInterface::class);
+		$this->emptyPayloadValidator	= $this->createMock(type: RoleEmptyPayloadValidatorInterface::class);
 
 		$this->processor = new RoleProcessor(
 			repository:			$this->repository,
 			mapper:				$this->mapper,
 			requestStack:		$this->requestStack,
 			duplicateValidator:	$this->duplicateValidator,
+			emptyPayloadValidator: $this->emptyPayloadValidator,
 		);
 	}
 
@@ -183,7 +187,9 @@ class RoleProcessorTest extends TestCase
 
 		$dto->name = 'Gambler';
 
-		// An empty request body decodes to [], not to a decode error
+		// An empty request body decodes to [], not to a decode error. POST is
+		// handled by API Platform's deserialize/validate stage, so the
+		// processor simply forwards it.
 		$this->stubRawPayload(json: '');
 
 		$this
@@ -350,6 +356,49 @@ class RoleProcessorTest extends TestCase
 	}
 
 	#[Test]
+	public function testPatchWithEmptyPayloadThrowsBadRequest(): void
+	{
+		$current = $this->mockRoleEntity();
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(2)
+			->willReturn($current);
+
+		// An empty request body decodes to []
+		$this->stubRawPayload(json: '');
+
+		$this
+			->emptyPayloadValidator
+			->method('validatePatch')
+			->willThrowException(new BadRequestHttpException(message: 'Request payload must not be empty.'));
+
+		// The entity exists, so the empty payload is what fails the request
+		$this
+			->duplicateValidator
+			->expects(self::never())
+			->method('validatePatch');
+
+		$this
+			->repository
+			->expects(self::never())
+			->method('save');
+
+		$this->expectException(exception: BadRequestHttpException::class);
+		$this->expectExceptionMessage(message: 'Request payload must not be empty.');
+
+		$this
+			->processor
+			->process(
+				data: new RoleUpdateDto(),
+				operation: new Patch(),
+				payload: ['id' => 2],
+			);
+	}
+
+	#[Test]
 	public function testPatchWithNameUpdatesOnlyThatField(): void
 	{
 		$dto = new RoleUpdateDto();
@@ -368,6 +417,13 @@ class RoleProcessorTest extends TestCase
 			->willReturn($current);
 
 		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		// The empty-payload guard is consulted before the duplicate lookup
+		$this
+			->emptyPayloadValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload);
 
 		// The validator gets (decoded payload, URL ID)
 		$this

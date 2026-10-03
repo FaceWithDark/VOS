@@ -35,6 +35,7 @@ use App\Dto\Main\Web\UserResourceDto;
 use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
 use App\Interface\Web\UserDuplicateValidatorInterface;
+use App\Interface\Web\UserEmptyPayloadValidatorInterface;
 use App\Interface\Web\UserForeignKeyValidatorInterface;
 use App\Repository\Web\RoleRepository;
 use App\Repository\Web\UserRepository;
@@ -78,6 +79,7 @@ class UserProcessorTest extends TestCase
 	private RequestStack&MockObject						$requestStack;
 	private UserDuplicateValidatorInterface&MockObject	$duplicateValidator;
 	private UserForeignKeyValidatorInterface&MockObject	$foreignKeyValidator;
+	private UserEmptyPayloadValidatorInterface&MockObject	$emptyPayloadValidator;
 	private UserProcessor								$processor;
 
 	#[Override]
@@ -92,6 +94,7 @@ class UserProcessorTest extends TestCase
 		$this->requestStack			= $this->createMock(type: RequestStack::class);
 		$this->duplicateValidator	= $this->createMock(type: UserDuplicateValidatorInterface::class);
 		$this->foreignKeyValidator	= $this->createMock(type: UserForeignKeyValidatorInterface::class);
+		$this->emptyPayloadValidator	= $this->createMock(type: UserEmptyPayloadValidatorInterface::class);
 
 		$this->processor = new UserProcessor(
 			repository:			$this->repository,
@@ -100,6 +103,7 @@ class UserProcessorTest extends TestCase
 			requestStack:		$this->requestStack,
 			duplicateValidator:	$this->duplicateValidator,
 			foreignKeyValidator: $this->foreignKeyValidator,
+			emptyPayloadValidator: $this->emptyPayloadValidator,
 		);
 	}
 
@@ -259,7 +263,9 @@ class UserProcessorTest extends TestCase
 		$dto->rank			= 88;
 		$dto->countryFlag	= 'ZW';
 
-		// An empty request body decodes to [], not to a decode error
+		// An empty request body decodes to [], not to a decode error. POST is
+		// handled by API Platform's deserialize/validate stage, so the
+		// processor simply forwards it.
 		$this->stubRawPayload(json: '');
 
 		$this
@@ -520,6 +526,54 @@ class UserProcessorTest extends TestCase
 	}
 
 	#[Test]
+	public function testPatchWithEmptyPayloadThrowsBadRequest(): void
+	{
+		$current = $this->mockUserEntity();
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(88888)
+			->willReturn($current);
+
+		// An empty request body decodes to []
+		$this->stubRawPayload(json: '');
+
+		$this
+			->emptyPayloadValidator
+			->method('validatePatch')
+			->willThrowException(new BadRequestHttpException(message: 'Request payload must not be empty.'));
+
+		// The entity exists, so the empty payload is what fails the request
+		$this
+			->duplicateValidator
+			->expects(self::never())
+			->method('validatePatch');
+
+		$this
+			->foreignKeyValidator
+			->expects(self::never())
+			->method('validatePatch');
+
+		$this
+			->repository
+			->expects(self::never())
+			->method('save');
+
+		$this->expectException(exception: BadRequestHttpException::class);
+		$this->expectExceptionMessage(message: 'Request payload must not be empty.');
+
+		$this
+			->processor
+			->process(
+				data: new UserUpdateDto(),
+				operation: new Patch(),
+				payload: ['id' => 88888],
+			);
+	}
+
+	#[Test]
 	public function testPatchWithNameUpdatesOnlyThatField(): void
 	{
 		$dto = new UserUpdateDto();
@@ -539,6 +593,13 @@ class UserProcessorTest extends TestCase
 			->willReturn($current);
 
 		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		// The empty-payload guard is consulted before the duplicate lookup
+		$this
+			->emptyPayloadValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload);
 
 		// The validators get (decoded payload, URL ID)
 		$this
