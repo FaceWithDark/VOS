@@ -140,7 +140,10 @@ class UserProcessorTest extends TestCase
 		return (new UserEntity())
 			->setId(id: $id)
 			->setRoleId(
-				roleId: $roleId ?? $this->mockRoleEntity(id: 1, name: 'User')
+				roleId: $roleId ?? $this->mockRoleEntity(
+					id: 1,
+					name: 'User',
+				)
 			)
 			->setName(name: $name)
 			->setAvatar(avatar: $avatar)
@@ -210,12 +213,12 @@ class UserProcessorTest extends TestCase
 			->with(
 				self::callback(
 					callback: static fn (UserEntity $entity): bool
-						=> $entity->getId()				=== $dto->id
-						&& $entity->getName()			=== $dto->name
-						&& $entity->getAvatar()			=== $dto->avatar
-						&& $entity->getRank()			=== $dto->rank
-						&& $entity->getCountryFlag()	=== $dto->countryFlag
-						&& $entity->getRoleId()			=== $roleEntity
+						=> $entity->getId() === $dto->id
+						&& $entity->getName() === $dto->name
+						&& $entity->getAvatar() === $dto->avatar
+						&& $entity->getRank() === $dto->rank
+						&& $entity->getCountryFlag() === $dto->countryFlag
+						&& $entity->getRoleId() === $roleEntity
 						&& $entity->getCreateOn()?->getTimezone()->getName() === 'UTC'
 				),
 				true,
@@ -225,7 +228,10 @@ class UserProcessorTest extends TestCase
 			->mapper
 			->expects(self::once())
 			->method('map')
-			->with(self::isInstanceOf(className: UserEntity::class), UserResourceDto::class)
+			->with(
+				self::isInstanceOf(className: UserEntity::class),
+				UserResourceDto::class,
+			)
 			->willReturn($resource);
 
 		$result = $this
@@ -235,7 +241,10 @@ class UserProcessorTest extends TestCase
 				operation: new Post(),
 			);
 
-		self::assertSame(expected: $resource, actual: $result);
+		self::assertSame(
+			expected: $resource,
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -357,7 +366,11 @@ class UserProcessorTest extends TestCase
 		$this
 			->duplicateValidator
 			->method('validatePost')
-			->willThrowException(new ConflictHttpException(message: 'duplicate user name.'));
+			->willThrowException(
+				new ConflictHttpException(
+					message: 'duplicate user name.',
+				)
+			);
 
 		// An invalid request must never reach the database or the mapper
 		$this
@@ -513,10 +526,10 @@ class UserProcessorTest extends TestCase
 
 		$dto->name = 'DeepInDark';
 
-		$current			= $this->mockUserEntity();
-		$previousRole		= $current->getRoleId();
-		$resource			= new UserResourceDto();
-		$payload			= ['name' => $dto->name];
+		$current		= $this->mockUserEntity();
+		$previousRole	= $current->getRoleId();
+		$resource		= new UserResourceDto();
+		$payload		= ['name' => $dto->name];
 
 		$this
 			->repository
@@ -532,19 +545,28 @@ class UserProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->foreignKeyValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('save')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$this
 			->mapper
@@ -560,8 +582,14 @@ class UserProcessorTest extends TestCase
 				payload: ['id' => 88888],
 			);
 
-		self::assertSame(expected: $resource, actual: $result);
-		self::assertSame(expected: 'DeepInDark', actual: $current->getName());
+		self::assertSame(
+			expected: $resource,
+			actual: $result,
+		);
+		self::assertSame(
+			expected: 'DeepInDark',
+			actual: $current->getName(),
+		);
 		self::assertSame(
 			expected: $previousRole,
 			actual: $current->getRoleId(),
@@ -576,8 +604,12 @@ class UserProcessorTest extends TestCase
 
 		$dto->avatar = 'https://a.ppy.sh/19817503?1752731877.png';
 
-		$current	= $this->mockUserEntity(name: 'DeepInDark', rank: 5103, countryFlag: 'VN');
-		$payload	= ['avatar' => $dto->avatar];
+		$current = $this->mockUserEntity(
+			name: 'DeepInDark',
+			rank: 5103,
+			countryFlag: 'VN'
+		);
+		$payload = ['avatar' => $dto->avatar];
 
 		$this
 			->repository
@@ -592,19 +624,28 @@ class UserProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->foreignKeyValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('save')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$this
 			->mapper
@@ -620,10 +661,22 @@ class UserProcessorTest extends TestCase
 				payload: ['id' => 88888],
 			);
 
-		self::assertSame(expected: $dto->avatar, actual: $current->getAvatar());
-		self::assertSame(expected: 'DeepInDark', actual: $current->getName());
-		self::assertSame(expected: 5103, actual: $current->getRank());
-		self::assertSame(expected: 'VN', actual: $current->getCountryFlag());
+		self::assertSame(
+			expected: $dto->avatar,
+			actual: $current->getAvatar(),
+		);
+		self::assertSame(
+			expected: 'DeepInDark',
+			actual: $current->getName(),
+		);
+		self::assertSame(
+			expected: 5103,
+		   	actual: $current->getRank(),
+		);
+		self::assertSame(
+			expected: 'VN',
+			actual: $current->getCountryFlag(),
+		);
 	}
 
 	#[Test]
@@ -633,9 +686,12 @@ class UserProcessorTest extends TestCase
 
 		$dto->roleId = 3;
 
-		$current		= $this->mockUserEntity();
-		$newRole		= $this->mockRoleEntity(id: 3, name: 'Gambler');
-		$payload		= ['roleId' => $dto->roleId];
+		$current = $this->mockUserEntity();
+		$newRole = $this->mockRoleEntity(
+			id: 3,
+			name: 'Gambler',
+		);
+		$payload = ['roleId' => $dto->roleId];
 
 		$this
 			->repository
@@ -650,13 +706,19 @@ class UserProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->foreignKeyValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->roleRepository
@@ -669,7 +731,10 @@ class UserProcessorTest extends TestCase
 			->repository
 			->expects(self::once())
 			->method('save')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$this
 			->mapper
@@ -685,7 +750,10 @@ class UserProcessorTest extends TestCase
 				payload: ['id' => 88888],
 			);
 
-		self::assertSame(expected: $newRole, actual: $current->getRoleId());
+		self::assertSame(
+			expected: $newRole,
+			actual: $current->getRoleId(),
+		);
 	}
 
 	#[Test]
@@ -711,13 +779,19 @@ class UserProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->foreignKeyValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		// An explicit NULL cannot be resolved, so no Role lookup happens
 		$this
@@ -765,13 +839,19 @@ class UserProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->foreignKeyValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->roleRepository
@@ -824,19 +904,28 @@ class UserProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->foreignKeyValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 88888);
+			->with(
+				$payload,
+				88888,
+			);
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('save')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$this
 			->mapper
@@ -852,9 +941,17 @@ class UserProcessorTest extends TestCase
 				payload: ['id' => 88888],
 			);
 
-		self::assertSame(expected: 5103, actual: $current->getRank());
-		self::assertSame(expected: 'VN', actual: $current->getCountryFlag());
-		self::assertSame(expected: 'DeepInDark', actual: $current->getName());
+		self::assertSame(
+			expected: 5103,
+		   	actual: $current->getRank(),);
+		self::assertSame(
+			expected: 'VN',
+			actual: $current->getCountryFlag(),
+		);
+		self::assertSame(
+			expected: 'DeepInDark',
+			actual: $current->getName(),
+		);
 	}
 
 	#[Test]
@@ -879,7 +976,11 @@ class UserProcessorTest extends TestCase
 		$this
 			->duplicateValidator
 			->method('validatePatch')
-			->willThrowException(new BadRequestHttpException(message: 'duplicate user name.'));
+			->willThrowException(
+				new BadRequestHttpException(
+					message: 'duplicate user name.',
+				),
+			);
 
 		$this
 			->repository
@@ -924,7 +1025,10 @@ class UserProcessorTest extends TestCase
 			->repository
 			->expects(self::once())
 			->method('remove')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$result = $this
 			->processor

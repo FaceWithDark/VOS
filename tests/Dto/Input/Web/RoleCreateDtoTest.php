@@ -39,7 +39,8 @@ class RoleCreateDtoTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->validator = Validation
+		$this->validator
+		   	= Validation
 			::createValidatorBuilder()
 			->enableAttributeMapping()
 			->getValidator();
@@ -70,7 +71,10 @@ class RoleCreateDtoTest extends TestCase
 		$dto->name			= 'Gambler';
 		$dto->description	= 'double the pay, double the deal baby. That is what high risk high reward about.';
 
-		self::assertSame(expected: 'Gambler', actual: $dto->name);
+		self::assertSame(
+			expected: 'Gambler',
+			actual: $dto->name,
+		);
 		self::assertSame(
 			expected: 'double the pay, double the deal baby. That is what high risk high reward about.',
 			actual: $dto->description,
@@ -87,7 +91,10 @@ class RoleCreateDtoTest extends TestCase
 	public function testUninitializedNameViolatesNotBlank(): void
 	{
 		// A POST payload that omits 'name' leaves the typed property uninitialized
-		$violations = $this->validator->validate(value: new RoleCreateDto());
+		$violations
+			= $this
+				->validator
+				->validate(value: new RoleCreateDto());
 
 		self::assertViolatesNotBlankOnName(violations: $violations);
 	}
@@ -99,7 +106,10 @@ class RoleCreateDtoTest extends TestCase
 
 		$dto->name = '';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		self::assertViolatesNotBlankOnName(violations: $violations);
 	}
@@ -111,7 +121,10 @@ class RoleCreateDtoTest extends TestCase
 
 		$dto->name = 'Gambler';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		self::assertCount(
 			expectedCount: 0,
@@ -128,9 +141,15 @@ class RoleCreateDtoTest extends TestCase
 		$dto->name			= 'Gambler';
 		$dto->description	= 'double the pay, double the deal baby. That is what high risk high reward about.';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 
@@ -143,16 +162,23 @@ class RoleCreateDtoTest extends TestCase
 		ConstraintViolationListInterface $violations,
 	): void
 	{
-		self::assertCount(expectedCount: 1, haystack: $violations);
+		self::assertCount(
+			expectedCount: 1,
+			haystack: $violations,
+		);
 
 		self::assertSame(
 			expected: 'name',
-			actual: $violations->get(0)->getPropertyPath(),
+			actual: $violations
+				->get(0)
+				->getPropertyPath(),
 		);
 
 		self::assertSame(
 			expected: 'This value should not be blank.',
-			actual: $violations->get(0)->getMessage(),
+			actual: $violations
+				->get(0)
+				->getMessage(),
 		);
 	}
 }

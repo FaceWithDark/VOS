@@ -53,13 +53,22 @@ class RoleResourceDtoTest extends TestCase
 		$dto->description	= 'double the pay, double the deal baby. That is what high risk high reward about.';
 		$dto->timestamp		= $timestamp;
 
-		self::assertSame(expected: 3, actual: $dto->id);
-		self::assertSame(expected: 'Gambler', actual: $dto->name);
+		self::assertSame(
+			expected: 3,
+			actual: $dto->id,
+		);
+		self::assertSame(
+			expected: 'Gambler',
+			actual: $dto->name,
+		);
 		self::assertSame(
 			expected: 'double the pay, double the deal baby. That is what high risk high reward about.',
 			actual: $dto->description,
 		);
-		self::assertSame(expected: $timestamp, actual: $dto->timestamp);
+		self::assertSame(
+			expected: $timestamp,
+			actual: $dto->timestamp,
+		);
 	}
 
 	#[Test]
@@ -67,7 +76,10 @@ class RoleResourceDtoTest extends TestCase
 	{
 		$attribute = self::classMapAttribute(className: RoleResourceDto::class);
 
-		self::assertSame(expected: RoleEntity::class, actual: $attribute->source);
+		self::assertSame(
+			expected: RoleEntity::class,
+			actual: $attribute->source,
+		);
 	}
 
 	#[Test]
@@ -78,7 +90,10 @@ class RoleResourceDtoTest extends TestCase
 			propertyName: 'timestamp',
 		);
 
-		self::assertSame(expected: 'createOn', actual: $attribute->source);
+		self::assertSame(
+			expected: 'createOn',
+			actual: $attribute->source,
+		);
 	}
 
 
@@ -95,7 +110,10 @@ class RoleResourceDtoTest extends TestCase
 		self::assertCount(
 			expectedCount: 1,
 			haystack: $attributes,
-			message: sprintf('%s must declare exactly one #[Map] on the class.', $className),
+			message: sprintf(
+				'%s must declare exactly one #[Map] on the class.',
+				$className,
+			),
 		);
 
 		return $attributes[0]->newInstance();
@@ -114,7 +132,11 @@ class RoleResourceDtoTest extends TestCase
 		self::assertCount(
 			expectedCount: 1,
 			haystack: $attributes,
-			message: sprintf('%s::$%s must declare exactly one #[Map].', $className, $propertyName),
+			message: sprintf(
+				'%s::$%s must declare exactly one #[Map].',
+				$className,
+				$propertyName,
+			),
 		);
 
 		return $attributes[0]->newInstance();

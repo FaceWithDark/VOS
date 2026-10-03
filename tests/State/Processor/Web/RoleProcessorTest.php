@@ -146,8 +146,8 @@ class RoleProcessorTest extends TestCase
 			->with(
 				self::callback(
 					callback: static fn (RoleEntity $entity): bool
-						=> $entity->getName()			=== $dto->name
-						&& $entity->getDescription()	=== $dto->description
+						=> $entity->getName() === $dto->name
+						&& $entity->getDescription() === $dto->description
 						&& $entity->getCreateOn()?->getTimezone()->getName() === 'UTC'
 				),
 				true,
@@ -157,7 +157,10 @@ class RoleProcessorTest extends TestCase
 			->mapper
 			->expects(self::once())
 			->method('map')
-			->with(self::isInstanceOf(className: RoleEntity::class), RoleResourceDto::class)
+			->with(
+				self::isInstanceOf(className: RoleEntity::class),
+				RoleResourceDto::class,
+			)
 			->willReturn($resource);
 
 		$result = $this
@@ -167,7 +170,10 @@ class RoleProcessorTest extends TestCase
 				operation: new Post(),
 			);
 
-		self::assertSame(expected: $resource, actual: $result);
+		self::assertSame(
+			expected: $resource,
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -250,7 +256,11 @@ class RoleProcessorTest extends TestCase
 		$this
 			->duplicateValidator
 			->method('validatePost')
-			->willThrowException(new ConflictHttpException(message: 'duplicate role name.'));
+			->willThrowException(
+				new ConflictHttpException(
+					message: 'duplicate role name.',
+				),
+			);
 
 		// An invalid request must never reach the database or the mapper
 		$this
@@ -364,13 +374,19 @@ class RoleProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 2);
+			->with(
+				$payload,
+				2,
+			);
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('save')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$this
 			->mapper
@@ -386,8 +402,14 @@ class RoleProcessorTest extends TestCase
 				payload: ['id' => 2],
 			);
 
-		self::assertSame(expected: $resource, actual: $result);
-		self::assertSame(expected: 'Gambler', actual: $current->getName());
+		self::assertSame(
+			expected: $resource,
+			actual: $result,
+		);
+		self::assertSame(
+			expected: 'Gambler',
+			actual: $current->getName(),
+		);
 		self::assertSame(
 			expected: 'can take control of the whole website both internally and externally.',
 			actual: $current->getDescription(),
@@ -418,13 +440,19 @@ class RoleProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 2);
+			->with(
+				$payload,
+				2,
+			);
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('save')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$this
 			->mapper
@@ -440,8 +468,14 @@ class RoleProcessorTest extends TestCase
 				payload: ['id' => 2],
 			);
 
-		self::assertSame(expected: 'Admin', actual: $current->getName());
-		self::assertSame(expected: $dto->description, actual: $current->getDescription());
+		self::assertSame(
+			expected: 'Admin',
+			actual: $current->getName(),
+		);
+		self::assertSame(
+			expected: $dto->description,
+			actual: $current->getDescription(),
+		);
 	}
 
 	#[Test]
@@ -467,13 +501,19 @@ class RoleProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 2);
+			->with(
+				$payload,
+				2,
+			);
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('save')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$this
 			->mapper
@@ -514,7 +554,11 @@ class RoleProcessorTest extends TestCase
 		$this
 			->duplicateValidator
 			->method('validatePatch')
-			->willThrowException(new BadRequestHttpException(message: 'duplicate role name.'));
+			->willThrowException(
+				new BadRequestHttpException(
+					message: 'duplicate role name.',
+				),
+			);
 
 		$this
 			->repository
@@ -559,7 +603,10 @@ class RoleProcessorTest extends TestCase
 			->repository
 			->expects(self::once())
 			->method('remove')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$result = $this
 			->processor

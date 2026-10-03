@@ -39,7 +39,8 @@ class UserUpdateDtoTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->validator = Validation
+		$this->validator
+		   	= Validation
 			::createValidatorBuilder()
 			->enableAttributeMapping()
 			->getValidator();
@@ -74,11 +75,26 @@ class UserUpdateDtoTest extends TestCase
 		$dto->rank			= 88;
 		$dto->countryFlag	= 'ZW';
 
-		self::assertSame(expected: 'Gambler', actual: $dto->name);
-		self::assertSame(expected: 1, actual: $dto->roleId);
-		self::assertSame(expected: 'https://a.ppy.sh/88?88.png', actual: $dto->avatar);
-		self::assertSame(expected: 88, actual: $dto->rank);
-		self::assertSame(expected: 'ZW', actual: $dto->countryFlag);
+		self::assertSame(
+			expected: 'Gambler',
+			actual: $dto->name,
+		);
+		self::assertSame(
+			expected: 1,
+			actual: $dto->roleId,
+		);
+		self::assertSame(
+			expected: 'https://a.ppy.sh/88?88.png',
+			actual: $dto->avatar,
+		);
+		self::assertSame(
+			expected: 88,
+			actual: $dto->rank,
+		);
+		self::assertSame(
+			expected: 'ZW',
+			actual: $dto->countryFlag,
+		);
 	}
 
 
@@ -91,9 +107,15 @@ class UserUpdateDtoTest extends TestCase
 	public function testEmptyPayloadHasNoViolations(): void
 	{
 		// An empty PATCH body is rejected earlier (400) by the API, not here
-		$violations = $this->validator->validate(value: new UserUpdateDto());
+		$violations
+			= $this
+				->validator
+				->validate(value: new UserUpdateDto());
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 	#[Test]
@@ -107,9 +129,15 @@ class UserUpdateDtoTest extends TestCase
 		$dto->rank			= 88;
 		$dto->countryFlag	= 'ZW';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 	#[Test]
@@ -119,9 +147,15 @@ class UserUpdateDtoTest extends TestCase
 
 		$dto->rank = 0;
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 	#[Test]
@@ -131,7 +165,10 @@ class UserUpdateDtoTest extends TestCase
 
 		$dto->rank = -1;
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		self::assertSingleViolation(
 			violations:		$violations,
@@ -147,7 +184,10 @@ class UserUpdateDtoTest extends TestCase
 
 		$dto->countryFlag = 'VNM';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		self::assertSingleViolation(
 			violations:		$violations,
@@ -168,16 +208,23 @@ class UserUpdateDtoTest extends TestCase
 		string								$message,
 	): void
 	{
-		self::assertCount(expectedCount: 1, haystack: $violations);
+		self::assertCount(
+			expectedCount: 1,
+			haystack: $violations,
+		);
 
 		self::assertSame(
 			expected: $propertyPath,
-			actual: $violations->get(0)->getPropertyPath(),
+			actual: $violations
+				->get(0)
+				->getPropertyPath(),
 		);
 
 		self::assertSame(
 			expected: $message,
-			actual: $violations->get(0)->getMessage(),
+			actual: $violations
+				->get(0)
+				->getMessage(),
 		);
 	}
 }

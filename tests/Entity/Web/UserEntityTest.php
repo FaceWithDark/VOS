@@ -43,8 +43,14 @@ class UserEntityTest extends TestCase
 		$entity	= new UserEntity();
 		$role	= new RoleEntity();
 
-		self::assertSame(expected: $entity, actual: $entity->setRoleId(roleId: $role));
-		self::assertSame(expected: $role, actual: $entity->getRoleId());
+		self::assertSame(
+			expected: $entity,
+			actual: $entity->setRoleId(roleId: $role),
+		);
+		self::assertSame(
+			expected: $role,
+			actual: $entity->getRoleId(),
+		);
 	}
 
 	#[Test]
@@ -52,8 +58,14 @@ class UserEntityTest extends TestCase
 	{
 		$entity = new UserEntity();
 
-		self::assertSame(expected: $entity, actual: $entity->setName(name: 'Gambler'));
-		self::assertSame(expected: 'Gambler', actual: $entity->getName());
+		self::assertSame(
+			expected: $entity,
+			actual: $entity->setName(name: 'Gambler'),
+		);
+		self::assertSame(
+			expected: 'Gambler',
+			actual: $entity->getName(),
+		);
 	}
 
 	#[Test]
@@ -65,7 +77,10 @@ class UserEntityTest extends TestCase
 			expected: $entity,
 			actual: $entity->setAvatar(avatar: 'https://a.ppy.sh/88?88.png'),
 		);
-		self::assertSame(expected: 'https://a.ppy.sh/88?88.png', actual: $entity->getAvatar());
+		self::assertSame(
+			expected: 'https://a.ppy.sh/88?88.png',
+			actual: $entity->getAvatar(),
+		);
 	}
 
 	#[Test]
@@ -73,8 +88,14 @@ class UserEntityTest extends TestCase
 	{
 		$entity = new UserEntity();
 
-		self::assertSame(expected: $entity, actual: $entity->setRank(rank: 88));
-		self::assertSame(expected: 88, actual: $entity->getRank());
+		self::assertSame(
+			expected: $entity,
+			actual: $entity->setRank(rank: 88),
+		);
+		self::assertSame(
+			expected: 88,
+			actual: $entity->getRank(),
+		);
 	}
 
 	#[Test]
@@ -82,8 +103,14 @@ class UserEntityTest extends TestCase
 	{
 		$entity = new UserEntity();
 
-		self::assertSame(expected: $entity, actual: $entity->setCountryFlag(countryFlag: 'ZW'));
-		self::assertSame(expected: 'ZW', actual: $entity->getCountryFlag());
+		self::assertSame(
+			expected: $entity,
+			actual: $entity->setCountryFlag(countryFlag: 'ZW'),
+		);
+		self::assertSame(
+			expected: 'ZW',
+			actual: $entity->getCountryFlag(),
+		);
 	}
 
 	#[Test]
@@ -93,11 +120,17 @@ class UserEntityTest extends TestCase
 
 		$entity->setId(id: 88888);
 
-		self::assertSame(expected: 88888, actual: $entity->getId());
+		self::assertSame(
+			expected: 88888,
+			actual: $entity->getId(),
+		);
 		self::assertNotNull(actual: $entity->getCreateOn());
 		self::assertSame(
 			expected: 'UTC',
-			actual: $entity->getCreateOn()->getTimezone()->getName(),
+			actual: $entity
+				->getCreateOn()
+				->getTimezone()
+				->getName(),
 		);
 	}
 
@@ -110,8 +143,11 @@ class UserEntityTest extends TestCase
 	#[Test]
 	public function testRoleAssociationIsManyToOne(): void
 	{
-		$property	= new ReflectionProperty(class: UserEntity::class, property: 'roleId');
-		$attributes	= $property->getAttributes(name: ManyToOne::class);
+		$property = new ReflectionProperty(
+			class: UserEntity::class,
+			property: 'roleId',
+		);
+		$attributes = $property->getAttributes(name: ManyToOne::class);
 
 		self::assertCount(
 			expectedCount: 1,
@@ -121,7 +157,10 @@ class UserEntityTest extends TestCase
 
 		$association = $attributes[0]->newInstance();
 
-		self::assertSame(expected: 'users', actual: $association->inversedBy);
+		self::assertSame(
+			expected: 'users',
+			actual: $association->inversedBy,
+		);
 	}
 
 	#[Test]
@@ -132,11 +171,17 @@ class UserEntityTest extends TestCase
 			property: 'roleId',
 		))->getAttributes(name: JoinColumn::class);
 
-		self::assertCount(expectedCount: 1, haystack: $attributes);
+		self::assertCount(
+			expectedCount: 1,
+			haystack: $attributes,
+		);
 
 		$joinColumn = $attributes[0]->newInstance();
 
-		self::assertSame(expected: 'role_id', actual: $joinColumn->name);
+		self::assertSame(
+			expected: 'role_id',
+			actual: $joinColumn->name,
+		);
 		self::assertFalse(condition: $joinColumn->nullable);
 		self::assertFalse(
 			condition: $joinColumn->unique,

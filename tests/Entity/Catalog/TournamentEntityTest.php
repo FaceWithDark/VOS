@@ -35,8 +35,14 @@ class TournamentEntityTest extends TestCase
 	{
 		$entity = new TournamentEntity();
 
-		self::assertSame(expected: $entity, actual: $entity->setName(name: 'VOT88'));
-		self::assertSame(expected: 'VOT88', actual: $entity->getName());
+		self::assertSame(
+			expected: $entity,
+			actual: $entity->setName(name: 'VOT88'),
+		);
+		self::assertSame(
+			expected: 'VOT88',
+			actual: $entity->getName(),
+		);
 	}
 
 	#[Test]
@@ -77,11 +83,17 @@ class TournamentEntityTest extends TestCase
 
 		$entity->setId(id: 7);
 
-		self::assertSame(expected: 7, actual: $entity->getId());
+		self::assertSame(
+			expected: 7,
+			actual: $entity->getId(),
+		);
 		self::assertNotNull(actual: $entity->getCreateOn());
 		self::assertSame(
 			expected: 'UTC',
-			actual: $entity->getCreateOn()->getTimezone()->getName(),
+			actual: $entity
+				->getCreateOn()
+				->getTimezone()
+				->getName(),
 		);
 	}
 }

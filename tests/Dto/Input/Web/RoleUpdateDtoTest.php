@@ -38,7 +38,8 @@ class RoleUpdateDtoTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->validator = Validation
+		$this->validator
+		   	= Validation
 			::createValidatorBuilder()
 			->enableAttributeMapping()
 			->getValidator();
@@ -67,7 +68,10 @@ class RoleUpdateDtoTest extends TestCase
 		$dto->name			= 'Gambler';
 		$dto->description	= 'double the pay, double the deal baby. That is what high risk high reward about.';
 
-		self::assertSame(expected: 'Gambler', actual: $dto->name);
+		self::assertSame(
+			expected: 'Gambler',
+			actual: $dto->name,
+		);
 		self::assertSame(
 			expected: 'double the pay, double the deal baby. That is what high risk high reward about.',
 			actual: $dto->description,
@@ -94,9 +98,15 @@ class RoleUpdateDtoTest extends TestCase
 	public function testEmptyPayloadHasNoViolations(): void
 	{
 		// An empty PATCH body is rejected earlier (400) by the API, not here
-		$violations = $this->validator->validate(value: new RoleUpdateDto());
+		$violations
+			= $this
+				->validator
+				->validate(value: new RoleUpdateDto());
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 	#[Test]
@@ -106,9 +116,15 @@ class RoleUpdateDtoTest extends TestCase
 
 		$dto->name = 'Gambler';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 	#[Test]
@@ -118,7 +134,10 @@ class RoleUpdateDtoTest extends TestCase
 
 		$dto->description = null;
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		self::assertCount(
 			expectedCount: 0,

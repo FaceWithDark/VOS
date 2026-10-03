@@ -146,8 +146,8 @@ class TournamentProcessorTest extends TestCase
 			->with(
 				self::callback(
 					callback: static fn (TournamentEntity $entity): bool
-						=> $entity->getName()			=== $dto->name
-						&& $entity->getDescription()	=== $dto->description
+						=> $entity->getName() === $dto->name
+						&& $entity->getDescription() === $dto->description
 						&& $entity->getCreateOn()?->getTimezone()->getName() === 'UTC'
 				),
 				true,
@@ -157,7 +157,10 @@ class TournamentProcessorTest extends TestCase
 			->mapper
 			->expects(self::once())
 			->method('map')
-			->with(self::isInstanceOf(className: TournamentEntity::class), TournamentResourceDto::class)
+			->with(
+				self::isInstanceOf(className: TournamentEntity::class),
+				TournamentResourceDto::class,
+			)
 			->willReturn($resource);
 
 		$result = $this
@@ -167,7 +170,10 @@ class TournamentProcessorTest extends TestCase
 				operation: new Post(),
 			);
 
-		self::assertSame(expected: $resource, actual: $result);
+		self::assertSame(
+			expected: $resource,
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -245,12 +251,20 @@ class TournamentProcessorTest extends TestCase
 
 		$dto->name = 'VOT6';
 
-		$this->stubRawPayload(json: json_encode(value: ['name' => $dto->name]));
+		$this->stubRawPayload(
+			json: json_encode(
+				value: ['name' => $dto->name],
+			),
+		);
 
 		$this
 			->duplicateValidator
 			->method('validatePost')
-			->willThrowException(new ConflictHttpException(message: 'duplicate tournament name.'));
+			->willThrowException(
+				new ConflictHttpException(
+					message: 'duplicate tournament name.',
+				),
+			);
 
 		// An invalid request must never reach the database or the mapper
 		$this
@@ -364,13 +378,19 @@ class TournamentProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 7);
+			->with(
+				$payload,
+				7,
+			);
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('save')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$this
 			->mapper
@@ -386,8 +406,14 @@ class TournamentProcessorTest extends TestCase
 				payload: ['id' => 7],
 			);
 
-		self::assertSame(expected: $resource, actual: $result);
-		self::assertSame(expected: 'VOT88', actual: $current->getName());
+		self::assertSame(
+			expected: $resource,
+			actual: $result,
+		);
+		self::assertSame(
+			expected: 'VOT88',
+			actual: $current->getName(),
+		);
 		self::assertSame(
 			expected: 'Vietnamese Osu!taiko Tournament 6',
 			actual: $current->getDescription(),
@@ -418,13 +444,19 @@ class TournamentProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 7);
+			->with(
+				$payload,
+				7,
+			);
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('save')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$this
 			->mapper
@@ -440,8 +472,14 @@ class TournamentProcessorTest extends TestCase
 				payload: ['id' => 7],
 			);
 
-		self::assertSame(expected: 'VOT6', actual: $current->getName());
-		self::assertSame(expected: $dto->description, actual: $current->getDescription());
+		self::assertSame(
+			expected: 'VOT6',
+			actual: $current->getName()
+		);
+		self::assertSame(
+			expected: $dto->description,
+			actual: $current->getDescription()
+		);
 	}
 
 	#[Test]
@@ -467,7 +505,10 @@ class TournamentProcessorTest extends TestCase
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with($payload, 7);
+			->with(
+				$payload,
+				7,
+			);
 
 		$this
 			->repository
@@ -514,7 +555,11 @@ class TournamentProcessorTest extends TestCase
 		$this
 			->duplicateValidator
 			->method('validatePatch')
-			->willThrowException(new BadRequestHttpException(message: 'duplicate tournament name.'));
+			->willThrowException(
+				new BadRequestHttpException(
+					message: 'duplicate tournament name.',
+				),
+			);
 
 		$this
 			->repository
@@ -559,7 +604,10 @@ class TournamentProcessorTest extends TestCase
 			->repository
 			->expects(self::once())
 			->method('remove')
-			->with($current, true);
+			->with(
+				$current,
+				true,
+			);
 
 		$result = $this
 			->processor

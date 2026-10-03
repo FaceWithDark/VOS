@@ -27,9 +27,8 @@ use App\Service\Web\UserForeignKeyValidator;
 /**
  * NOTE:
  *
- * Since `users`.`role_id` is 1:N, a role may be shared by many users and the
- * old "already assigned" conflict is gone. The validator now only owns the
- * existence check for the referenced foreign key.
+ * Since `users`.`role_id` is 1:N, the validator now only owns the existence check
+ * for the referenced foreign key.
  */
 #[CoversClass(className: UserForeignKeyValidator::class)]
 class UserForeignKeyValidatorTest extends TestCase

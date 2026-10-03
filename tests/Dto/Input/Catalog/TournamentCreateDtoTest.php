@@ -41,7 +41,8 @@ class TournamentCreateDtoTest extends TestCase
 
 		// Standalone validator (no kernel) so the constraint metadata is read
 		// straight from the DTO attributes.
-		$this->validator = Validation
+		$this->validator
+			= Validation
 			::createValidatorBuilder()
 			->enableAttributeMapping()
 			->getValidator();
@@ -72,7 +73,10 @@ class TournamentCreateDtoTest extends TestCase
 		$dto->name			= 'VOT88';
 		$dto->description	= 'Vietnamese Osu!taiko Tournament 88 (special edition).';
 
-		self::assertSame(expected: 'VOT88', actual: $dto->name);
+		self::assertSame(
+			expected: 'VOT88',
+			actual: $dto->name,
+		);
 		self::assertSame(
 			expected: 'Vietnamese Osu!taiko Tournament 88 (special edition).',
 			actual: $dto->description,
@@ -89,7 +93,10 @@ class TournamentCreateDtoTest extends TestCase
 	public function testUninitializedNameViolatesNotBlank(): void
 	{
 		// A POST payload that omits 'name' leaves the typed property uninitialized
-		$violations = $this->validator->validate(value: new TournamentCreateDto());
+		$violations
+			= $this
+				->validator
+				->validate(value: new TournamentCreateDto());
 
 		self::assertViolatesNotBlankOnName(violations: $violations);
 	}
@@ -101,7 +108,10 @@ class TournamentCreateDtoTest extends TestCase
 
 		$dto->name = '';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		self::assertViolatesNotBlankOnName(violations: $violations);
 	}
@@ -113,7 +123,10 @@ class TournamentCreateDtoTest extends TestCase
 
 		$dto->name = 'VOT88';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		self::assertCount(
 			expectedCount: 0,
@@ -130,9 +143,15 @@ class TournamentCreateDtoTest extends TestCase
 		$dto->name			= 'VOT88';
 		$dto->description	= 'Vietnamese Osu!taiko Tournament 88 (special edition).';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 
@@ -145,16 +164,23 @@ class TournamentCreateDtoTest extends TestCase
 		ConstraintViolationListInterface $violations,
 	): void
 	{
-		self::assertCount(expectedCount: 1, haystack: $violations);
+		self::assertCount(
+			expectedCount: 1,
+			haystack: $violations,
+		);
 
 		self::assertSame(
 			expected: 'name',
-			actual: $violations->get(0)->getPropertyPath(),
+			actual: $violations
+				->get(0)
+				->getPropertyPath(),
 		);
 
 		self::assertSame(
 			expected: 'This value should not be blank.',
-			actual: $violations->get(0)->getMessage(),
+			actual: $violations
+				->get(0)
+				->getMessage(),
 		);
 	}
 }

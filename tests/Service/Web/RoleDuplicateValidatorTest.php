@@ -211,7 +211,10 @@ class RoleDuplicateValidatorTest extends TestCase
 	#[Test]
 	public function testPatchWithOwnNamePasses(): void
 	{
-		$current = $this->mockRoleEntity(id: 2, name: 'Admin');
+		$current = $this->mockRoleEntity(
+			id: 2,
+			name: 'Admin',
+		);
 
 		$this
 			->repository
@@ -232,7 +235,10 @@ class RoleDuplicateValidatorTest extends TestCase
 	#[Test]
 	public function testPatchWithAnotherEntityNameThrowsBadRequest(): void
 	{
-		$current = $this->mockRoleEntity(id: 1, name: 'Admin');
+		$current = $this->mockRoleEntity(
+			id: 1,
+			name: 'Admin',
+		);
 
 		$this
 			->repository

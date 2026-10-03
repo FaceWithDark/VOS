@@ -53,13 +53,22 @@ class TournamentResourceDtoTest extends TestCase
 		$dto->description	= 'Vietnamese Osu!taiko Tournament 88 (special edition).';
 		$dto->timestamp		= $timestamp;
 
-		self::assertSame(expected: 7, actual: $dto->id);
-		self::assertSame(expected: 'VOT88', actual: $dto->name);
+		self::assertSame(
+			expected: 7,
+			actual: $dto->id,
+		);
+		self::assertSame(
+			expected: 'VOT88',
+			actual: $dto->name,
+		);
 		self::assertSame(
 			expected: 'Vietnamese Osu!taiko Tournament 88 (special edition).',
 			actual: $dto->description,
 		);
-		self::assertSame(expected: $timestamp, actual: $dto->timestamp);
+		self::assertSame(
+			expected: $timestamp,
+			actual: $dto->timestamp,
+		);
 	}
 
 	#[Test]
@@ -81,7 +90,10 @@ class TournamentResourceDtoTest extends TestCase
 			propertyName: 'timestamp',
 		);
 
-		self::assertSame(expected: 'createOn', actual: $attribute->source);
+		self::assertSame(
+			expected: 'createOn',
+			actual: $attribute->source,
+		);
 	}
 
 
@@ -98,7 +110,10 @@ class TournamentResourceDtoTest extends TestCase
 		self::assertCount(
 			expectedCount: 1,
 			haystack: $attributes,
-			message: sprintf('%s must declare exactly one #[Map] on the class.', $className),
+			message: sprintf(
+				'%s must declare exactly one #[Map] on the class.',
+				$className,
+			),
 		);
 
 		return $attributes[0]->newInstance();
@@ -117,7 +132,11 @@ class TournamentResourceDtoTest extends TestCase
 		self::assertCount(
 			expectedCount: 1,
 			haystack: $attributes,
-			message: sprintf('%s::$%s must declare exactly one #[Map].', $className, $propertyName),
+			message: sprintf(
+				'%s::$%s must declare exactly one #[Map].',
+				$className,
+				$propertyName,
+			),
 		);
 
 		return $attributes[0]->newInstance();

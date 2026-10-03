@@ -42,7 +42,8 @@ class UserCreateDtoTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->validator = Validation
+		$this->validator
+			= Validation
 			::createValidatorBuilder()
 			->enableAttributeMapping()
 			->getValidator();
@@ -73,12 +74,30 @@ class UserCreateDtoTest extends TestCase
 	{
 		$dto = $this->createValidDto();
 
-		self::assertSame(expected: 88888, actual: $dto->id);
-		self::assertSame(expected: 1, actual: $dto->roleId);
-		self::assertSame(expected: 'Gambler', actual: $dto->name);
-		self::assertSame(expected: 'https://a.ppy.sh/88?88.png', actual: $dto->avatar);
-		self::assertSame(expected: 88, actual: $dto->rank);
-		self::assertSame(expected: 'ZW', actual: $dto->countryFlag);
+		self::assertSame(
+			expected: 88888,
+			actual: $dto->id,
+		);
+		self::assertSame(
+			expected: 1,
+			actual: $dto->roleId,
+		);
+		self::assertSame(
+			expected: 'Gambler',
+			actual: $dto->name,
+		);
+		self::assertSame(
+			expected: 'https://a.ppy.sh/88?88.png',
+			actual: $dto->avatar,
+		);
+		self::assertSame(
+			expected: 88,
+			actual: $dto->rank,
+		);
+		self::assertSame(
+			expected: 'ZW',
+			actual: $dto->countryFlag,
+		);
 	}
 
 
@@ -91,10 +110,20 @@ class UserCreateDtoTest extends TestCase
 	public function testUninitializedFieldsViolateEveryConstraint(): void
 	{
 		// A POST payload that omits fields leaves the typed properties uninitialized
-		$violations = $this->validator->validate(value: new UserCreateDto());
+		$violations
+			= $this
+				->validator
+				->validate(value: new UserCreateDto());
 
 		self::assertSame(
-			expected: ['id', 'roleId', 'name', 'avatar', 'rank', 'countryFlag'],
+			expected: [
+				'id',
+				'roleId',
+				'name',
+				'avatar',
+				'rank',
+				'countryFlag',
+			],
 			actual: self::propertyPaths(violations: $violations),
 		);
 	}
@@ -102,9 +131,15 @@ class UserCreateDtoTest extends TestCase
 	#[Test]
 	public function testFullyPopulatedPayloadHasNoViolations(): void
 	{
-		$violations = $this->validator->validate(value: $this->createValidDto());
+		$violations
+			= $this
+				->validator
+				->validate(value: $this->createValidDto());
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 	#[Test]
@@ -115,9 +150,15 @@ class UserCreateDtoTest extends TestCase
 
 		$dto->rank = 0;
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 	#[Test]
@@ -127,7 +168,10 @@ class UserCreateDtoTest extends TestCase
 
 		$dto->rank = -1;
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		self::assertSingleViolation(
 			violations:		$violations,
@@ -143,7 +187,10 @@ class UserCreateDtoTest extends TestCase
 
 		$dto->countryFlag = 'VNM';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		self::assertSingleViolation(
 			violations:		$violations,
@@ -161,11 +208,19 @@ class UserCreateDtoTest extends TestCase
 		$dto->avatar		= '';
 		$dto->countryFlag	= '';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		// '' is blank AND the wrong length, hence two violations for the flag
 		self::assertSame(
-			expected: ['name', 'avatar', 'countryFlag', 'countryFlag'],
+			expected: [
+				'name',
+				'avatar',
+				'countryFlag',
+				'countryFlag'
+			],
 			actual: self::propertyPaths(violations: $violations),
 		);
 	}
@@ -197,16 +252,23 @@ class UserCreateDtoTest extends TestCase
 		string								$message,
 	): void
 	{
-		self::assertCount(expectedCount: 1, haystack: $violations);
+		self::assertCount(
+			expectedCount: 1,
+			haystack: $violations,
+		);
 
 		self::assertSame(
 			expected: $propertyPath,
-			actual: $violations->get(0)->getPropertyPath(),
+			actual: $violations
+				->get(0)
+				->getPropertyPath(),
 		);
 
 		self::assertSame(
 			expected: $message,
-			actual: $violations->get(0)->getMessage(),
+			actual: $violations
+				->get(0)
+				->getMessage(),
 		);
 	}
 }

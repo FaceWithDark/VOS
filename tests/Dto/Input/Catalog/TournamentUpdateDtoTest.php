@@ -38,7 +38,8 @@ class TournamentUpdateDtoTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->validator = Validation
+		$this->validator
+			= Validation
 			::createValidatorBuilder()
 			->enableAttributeMapping()
 			->getValidator();
@@ -67,7 +68,10 @@ class TournamentUpdateDtoTest extends TestCase
 		$dto->name			= 'VOT88';
 		$dto->description	= 'Vietnamese Osu!taiko Tournament 88 (special edition).';
 
-		self::assertSame(expected: 'VOT88', actual: $dto->name);
+		self::assertSame(
+			expected: 'VOT88',
+			actual: $dto->name,
+		);
 		self::assertSame(
 			expected: 'Vietnamese Osu!taiko Tournament 88 (special edition).',
 			actual: $dto->description,
@@ -94,9 +98,15 @@ class TournamentUpdateDtoTest extends TestCase
 	public function testEmptyPayloadHasNoViolations(): void
 	{
 		// An empty PATCH body is rejected earlier (400) by the API, not here
-		$violations = $this->validator->validate(value: new TournamentUpdateDto());
+		$violations
+			= $this
+				->validator
+				->validate(value: new TournamentUpdateDto());
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 	#[Test]
@@ -106,9 +116,15 @@ class TournamentUpdateDtoTest extends TestCase
 
 		$dto->name = 'VOT88';
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
-		self::assertCount(expectedCount: 0, haystack: $violations);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $violations,
+		);
 	}
 
 	#[Test]
@@ -118,7 +134,10 @@ class TournamentUpdateDtoTest extends TestCase
 
 		$dto->description = null;
 
-		$violations = $this->validator->validate(value: $dto);
+		$violations
+			= $this
+				->validator
+				->validate(value: $dto);
 
 		self::assertCount(
 			expectedCount: 0,

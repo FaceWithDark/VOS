@@ -225,7 +225,10 @@ class UserDuplicateValidatorTest extends TestCase
 	#[Test]
 	public function testPatchWithOwnNamePasses(): void
 	{
-		$current = $this->mockUserEntity(id: 88888, name: 'Gambler');
+		$current = $this->mockUserEntity(
+			id: 88888,
+			name: 'Gambler',
+		);
 
 		$this
 			->repository
@@ -246,7 +249,10 @@ class UserDuplicateValidatorTest extends TestCase
 	#[Test]
 	public function testPatchWithAnotherEntityNameThrowsBadRequest(): void
 	{
-		$current = $this->mockUserEntity(id: 19817503, name: 'Gambler');
+		$current = $this->mockUserEntity(
+			id: 19817503,
+			name: 'Gambler',
+		);
 
 		$this
 			->repository

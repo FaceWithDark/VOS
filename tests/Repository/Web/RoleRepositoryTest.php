@@ -97,7 +97,10 @@ class RoleRepositoryTest extends TestCase
 			->expects(self::never())
 			->method('flush');
 
-		$this->repository->save(entity: $entity, flush: false);
+		$this->repository->save(
+			entity: $entity,
+			flush: false,
+		);
 	}
 
 
@@ -141,6 +144,9 @@ class RoleRepositoryTest extends TestCase
 			->expects(self::never())
 			->method('flush');
 
-		$this->repository->remove(entity: $entity, flush: false);
+		$this->repository->remove(
+			entity: $entity,
+			flush: false,
+		);
 	}
 }

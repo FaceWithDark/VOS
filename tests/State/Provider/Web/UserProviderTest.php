@@ -29,9 +29,9 @@ use App\State\Provider\Web\UserProvider;
 #[CoversClass(className: UserProvider::class)]
 class UserProviderTest extends TestCase
 {
-	private UserRepository&MockObject		$repository;
+	private UserRepository&MockObject			$repository;
 	private ObjectMapperInterface&MockObject	$mapper;
-	private UserProvider					$provider;
+	private UserProvider						$provider;
 
 	#[Override]
 	protected function setUp(): void
@@ -50,9 +50,12 @@ class UserProviderTest extends TestCase
 	#[Test]
 	public function testProvideCollectionMapsEveryEntity(): void
 	{
-		$entities	= [new UserEntity(), new UserEntity()];
-		$first		= new UserResourceDto();
-		$second		= new UserResourceDto();
+		$entities = [
+			new UserEntity(),
+			new UserEntity(),
+		];
+		$first = new UserResourceDto();
+		$second = new UserResourceDto();
 
 		$this
 			->repository
@@ -64,11 +67,23 @@ class UserProviderTest extends TestCase
 			->mapper
 			->expects(self::exactly(2))
 			->method('map')
-			->willReturnOnConsecutiveCalls($first, $second);
+			->willReturnOnConsecutiveCalls(
+				$first,
+				$second,
+			);
 
-		$result = $this->provider->provide(operation: new GetCollection());
+		$result
+			= $this
+				->provider
+				->provide(operation: new GetCollection());
 
-		self::assertSame(expected: [$first, $second], actual: $result);
+		self::assertSame(
+			expected: [
+				$first,
+				$second,
+			],
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -85,9 +100,15 @@ class UserProviderTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$result = $this->provider->provide(operation: new GetCollection());
+		$result
+			= $this
+				->provider
+				->provide(operation: new GetCollection());
 
-		self::assertSame(expected: [], actual: $result);
+		self::assertSame(
+			expected: [],
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -107,17 +128,24 @@ class UserProviderTest extends TestCase
 			->mapper
 			->expects(self::once())
 			->method('map')
-			->with($entity, UserResourceDto::class)
+			->with(
+				$entity,
+				UserResourceDto::class,
+			)
 			->willReturn($resource);
 
-		$result = $this
-			->provider
-			->provide(
-				operation:		new Get(),
-				uriVariables:	['id' => 88888],
-			);
+		$result
+		   	= $this
+				->provider
+				->provide(
+					operation:		new Get(),
+					uriVariables:	['id' => 88888],
+				);
 
-		self::assertSame(expected: $resource, actual: $result);
+		self::assertSame(
+			expected: $resource,
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -136,12 +164,13 @@ class UserProviderTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$result = $this
-			->provider
-			->provide(
-				operation:		new Get(),
-				uriVariables:	['id' => 404],
-			);
+		$result
+		   	= $this
+				->provider
+				->provide(
+					operation:		new Get(),
+					uriVariables:	['id' => 404],
+				);
 
 		self::assertNull(actual: $result);
 	}

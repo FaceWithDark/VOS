@@ -29,9 +29,9 @@ use App\State\Provider\Web\RoleProvider;
 #[CoversClass(className: RoleProvider::class)]
 class RoleProviderTest extends TestCase
 {
-	private RoleRepository&MockObject		$repository;
+	private RoleRepository&MockObject			$repository;
 	private ObjectMapperInterface&MockObject	$mapper;
-	private RoleProvider					$provider;
+	private RoleProvider						$provider;
 
 	#[Override]
 	protected function setUp(): void
@@ -50,9 +50,12 @@ class RoleProviderTest extends TestCase
 	#[Test]
 	public function testProvideCollectionMapsEveryEntity(): void
 	{
-		$entities	= [new RoleEntity(), new RoleEntity()];
-		$first		= new RoleResourceDto();
-		$second		= new RoleResourceDto();
+		$entities = [
+			new RoleEntity(),
+			new RoleEntity()
+		];
+		$first = new RoleResourceDto();
+		$second = new RoleResourceDto();
 
 		$this
 			->repository
@@ -64,11 +67,23 @@ class RoleProviderTest extends TestCase
 			->mapper
 			->expects(self::exactly(2))
 			->method('map')
-			->willReturnOnConsecutiveCalls($first, $second);
+			->willReturnOnConsecutiveCalls(
+				$first,
+				$second,
+			);
 
-		$result = $this->provider->provide(operation: new GetCollection());
+		$result
+			= $this
+				->provider
+				->provide(operation: new GetCollection());
 
-		self::assertSame(expected: [$first, $second], actual: $result);
+		self::assertSame(
+			expected: [
+				$first,
+				$second,
+			],
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -85,9 +100,15 @@ class RoleProviderTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$result = $this->provider->provide(operation: new GetCollection());
+		$result
+			= $this
+				->provider
+				->provide(operation: new GetCollection());
 
-		self::assertSame(expected: [], actual: $result);
+		self::assertSame(
+			expected: [],
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -107,17 +128,24 @@ class RoleProviderTest extends TestCase
 			->mapper
 			->expects(self::once())
 			->method('map')
-			->with($entity, RoleResourceDto::class)
+			->with(
+				$entity,
+				RoleResourceDto::class,
+			)
 			->willReturn($resource);
 
-		$result = $this
-			->provider
-			->provide(
-				operation:		new Get(),
-				uriVariables:	['id' => 3],
-			);
+		$result
+		   	= $this
+				->provider
+				->provide(
+					operation:		new Get(),
+					uriVariables:	['id' => 3],
+				);
 
-		self::assertSame(expected: $resource, actual: $result);
+		self::assertSame(
+			expected: $resource,
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -136,12 +164,13 @@ class RoleProviderTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$result = $this
-			->provider
-			->provide(
-				operation:		new Get(),
-				uriVariables:	['id' => 404],
-			);
+		$result
+		   	= $this
+				->provider
+				->provide(
+					operation:		new Get(),
+					uriVariables:	['id' => 404],
+				);
 
 		self::assertNull(actual: $result);
 	}

@@ -30,7 +30,10 @@ class RoleEntityTest extends TestCase
 	{
 		$entity = new RoleEntity();
 
-		self::assertSame(expected: 'User', actual: $entity->getName());
+		self::assertSame(
+			expected: 'User',
+			actual: $entity->getName(),
+		);
 		self::assertSame(
 			expected: 'can only interact with what exposed to the website.',
 			actual: $entity->getDescription(),
@@ -42,8 +45,14 @@ class RoleEntityTest extends TestCase
 	{
 		$entity = new RoleEntity();
 
-		self::assertSame(expected: $entity, actual: $entity->setName(name: 'Gambler'));
-		self::assertSame(expected: 'Gambler', actual: $entity->getName());
+		self::assertSame(
+			expected: $entity,
+			actual: $entity->setName(name: 'Gambler'),
+		);
+		self::assertSame(
+			expected: 'Gambler',
+			actual: $entity->getName(),
+		);
 	}
 
 	#[Test]
@@ -84,11 +93,17 @@ class RoleEntityTest extends TestCase
 
 		$entity->setId(id: 3);
 
-		self::assertSame(expected: 3, actual: $entity->getId());
+		self::assertSame(
+			expected: 3,
+			actual: $entity->getId(),
+		);
 		self::assertNotNull(actual: $entity->getCreateOn());
 		self::assertSame(
 			expected: 'UTC',
-			actual: $entity->getCreateOn()->getTimezone()->getName(),
+			actual: $entity
+				->getCreateOn()
+				->getTimezone()
+				->getName(),
 		);
 	}
 
@@ -114,8 +129,14 @@ class RoleEntityTest extends TestCase
 
 		$association = $attributes[0]->newInstance();
 
-		self::assertSame(expected: UserEntity::class, actual: $association->targetEntity);
-		self::assertSame(expected: 'roleId', actual: $association->mappedBy);
+		self::assertSame(
+			expected: UserEntity::class,
+			actual: $association->targetEntity,
+		);
+		self::assertSame(
+			expected: 'roleId',
+			actual: $association->mappedBy,
+		);
 	}
 
 	#[Test]
@@ -123,8 +144,14 @@ class RoleEntityTest extends TestCase
 	{
 		$entity = new RoleEntity();
 
-		self::assertInstanceOf(expected: Collection::class, actual: $entity->getUsers());
-		self::assertCount(expectedCount: 0, haystack: $entity->getUsers());
+		self::assertInstanceOf(
+			expected: Collection::class,
+			actual: $entity->getUsers(),
+		);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $entity->getUsers(),
+		);
 	}
 
 	#[Test]
@@ -133,10 +160,20 @@ class RoleEntityTest extends TestCase
 		$role	= new RoleEntity();
 		$user	= new UserEntity();
 
-		self::assertSame(expected: $role, actual: $role->addUser(user: $user));
+		self::assertSame(
+			expected: $role,
+			actual: $role->addUser(user: $user),
+		);
 
-		self::assertCount(expectedCount: 1, haystack: $role->getUsers());
-		self::assertTrue(condition: $role->getUsers()->contains($user));
+		self::assertCount(
+			expectedCount: 1,
+			haystack: $role->getUsers(),
+		);
+		self::assertTrue(
+			condition: $role
+				->getUsers()
+				->contains($user),
+		);
 		self::assertSame(
 			expected: $role,
 			actual: $user->getRoleId(),
@@ -168,8 +205,18 @@ class RoleEntityTest extends TestCase
 
 		$role->addUser(user: $user);
 
-		self::assertSame(expected: $role, actual: $role->removeUser(user: $user));
-		self::assertCount(expectedCount: 0, haystack: $role->getUsers());
-		self::assertFalse(condition: $role->getUsers()->contains($user));
+		self::assertSame(
+			expected: $role,
+			actual: $role->removeUser(user: $user),
+		);
+		self::assertCount(
+			expectedCount: 0,
+			haystack: $role->getUsers(),
+		);
+		self::assertFalse(
+			condition: $role
+				->getUsers()
+				->contains($user),
+		);
 	}
 }

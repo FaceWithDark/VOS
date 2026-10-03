@@ -51,13 +51,34 @@ class UserResourceDtoTest extends TestCase
 		$dto->countryFlag	= 'ZW';
 		$dto->timestamp		= $timestamp;
 
-		self::assertSame(expected: 88888, actual: $dto->id);
-		self::assertSame(expected: 1, actual: $dto->roleId);
-		self::assertSame(expected: 'Gambler', actual: $dto->name);
-		self::assertSame(expected: 'https://a.ppy.sh/88?88.png', actual: $dto->avatar);
-		self::assertSame(expected: 88, actual: $dto->rank);
-		self::assertSame(expected: 'ZW', actual: $dto->countryFlag);
-		self::assertSame(expected: $timestamp, actual: $dto->timestamp);
+		self::assertSame(
+			expected: 88888,
+			actual: $dto->id,
+		);
+		self::assertSame(
+			expected: 1,
+			actual: $dto->roleId,
+		);
+		self::assertSame(
+			expected: 'Gambler',
+			actual: $dto->name,
+		);
+		self::assertSame(
+			expected: 'https://a.ppy.sh/88?88.png',
+			actual: $dto->avatar,
+		);
+		self::assertSame(
+			expected: 88,
+			actual: $dto->rank,
+		);
+		self::assertSame(
+			expected: 'ZW',
+			actual: $dto->countryFlag,
+		);
+		self::assertSame(
+			expected: $timestamp,
+			actual: $dto->timestamp,
+		);
 	}
 
 	#[Test]
@@ -65,7 +86,10 @@ class UserResourceDtoTest extends TestCase
 	{
 		$attribute = self::classMapAttribute(className: UserResourceDto::class);
 
-		self::assertSame(expected: UserEntity::class, actual: $attribute->source);
+		self::assertSame(
+			expected: UserEntity::class,
+			actual: $attribute->source,
+		);
 	}
 
 	#[Test]
@@ -76,7 +100,10 @@ class UserResourceDtoTest extends TestCase
 			propertyName: 'roleId',
 		);
 
-		self::assertSame(expected: 'roleId.id', actual: $attribute->source);
+		self::assertSame(
+			expected: 'roleId.id',
+			actual: $attribute->source,
+		);
 	}
 
 	#[Test]
@@ -87,7 +114,10 @@ class UserResourceDtoTest extends TestCase
 			propertyName: 'timestamp',
 		);
 
-		self::assertSame(expected: 'createOn', actual: $attribute->source);
+		self::assertSame(
+			expected: 'createOn',
+			actual: $attribute->source,
+		);
 	}
 
 
@@ -104,7 +134,10 @@ class UserResourceDtoTest extends TestCase
 		self::assertCount(
 			expectedCount: 1,
 			haystack: $attributes,
-			message: sprintf('%s must declare exactly one #[Map] on the class.', $className),
+			message: sprintf(
+				'%s must declare exactly one #[Map] on the class.',
+				$className,
+			),
 		);
 
 		return $attributes[0]->newInstance();
@@ -123,7 +156,11 @@ class UserResourceDtoTest extends TestCase
 		self::assertCount(
 			expectedCount: 1,
 			haystack: $attributes,
-			message: sprintf('%s::$%s must declare exactly one #[Map].', $className, $propertyName),
+			message: sprintf(
+				'%s::$%s must declare exactly one #[Map].',
+				$className,
+				$propertyName,
+			),
 		);
 
 		return $attributes[0]->newInstance();

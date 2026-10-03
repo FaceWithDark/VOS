@@ -35,7 +35,7 @@ use App\Service\Catalog\TournamentDuplicateValidator;
 class TournamentDuplicateValidatorTest extends TestCase
 {
 	private TournamentRepository&MockObject	$repository;
-	private TournamentDuplicateValidator		$duplicateValidator;
+	private TournamentDuplicateValidator	$duplicateValidator;
 
 	#[Override]
 	protected function setUp(): void
@@ -211,7 +211,10 @@ class TournamentDuplicateValidatorTest extends TestCase
 	#[Test]
 	public function testPatchWithOwnNamePasses(): void
 	{
-		$current = $this->mockTournamentEntity(id: 7, name: 'VOT6');
+		$current = $this->mockTournamentEntity(
+			id: 7,
+			name: 'VOT6',
+		);
 
 		$this
 			->repository
@@ -232,7 +235,10 @@ class TournamentDuplicateValidatorTest extends TestCase
 	#[Test]
 	public function testPatchWithAnotherEntityNameThrowsBadRequest(): void
 	{
-		$current = $this->mockTournamentEntity(id: 8, name: 'VOT6');
+		$current = $this->mockTournamentEntity(
+			id: 8,
+			name: 'VOT6',
+		);
 
 		$this
 			->repository

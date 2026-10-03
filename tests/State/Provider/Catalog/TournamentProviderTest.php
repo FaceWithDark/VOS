@@ -29,7 +29,7 @@ use App\State\Provider\Catalog\TournamentProvider;
 #[CoversClass(className: TournamentProvider::class)]
 class TournamentProviderTest extends TestCase
 {
-	private TournamentRepository&MockObject	$repository;
+	private TournamentRepository&MockObject		$repository;
 	private ObjectMapperInterface&MockObject	$mapper;
 	private TournamentProvider					$provider;
 
@@ -50,9 +50,12 @@ class TournamentProviderTest extends TestCase
 	#[Test]
 	public function testProvideCollectionMapsEveryEntity(): void
 	{
-		$entities	= [new TournamentEntity(), new TournamentEntity()];
-		$first		= new TournamentResourceDto();
-		$second		= new TournamentResourceDto();
+		$entities = [
+			new TournamentEntity(),
+			new TournamentEntity()
+		];
+		$first = new TournamentResourceDto();
+		$second = new TournamentResourceDto();
 
 		$this
 			->repository
@@ -64,11 +67,23 @@ class TournamentProviderTest extends TestCase
 			->mapper
 			->expects(self::exactly(2))
 			->method('map')
-			->willReturnOnConsecutiveCalls($first, $second);
+			->willReturnOnConsecutiveCalls(
+				$first,
+				$second,
+			);
 
-		$result = $this->provider->provide(operation: new GetCollection());
+		$result
+		   	= $this
+				->provider
+				->provide(operation: new GetCollection());
 
-		self::assertSame(expected: [$first, $second], actual: $result);
+		self::assertSame(
+			expected: [
+				$first,
+				$second,
+			],
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -85,9 +100,15 @@ class TournamentProviderTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$result = $this->provider->provide(operation: new GetCollection());
+		$result
+			= $this
+				->provider
+				->provide(operation: new GetCollection());
 
-		self::assertSame(expected: [], actual: $result);
+		self::assertSame(
+			expected: [],
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -107,17 +128,24 @@ class TournamentProviderTest extends TestCase
 			->mapper
 			->expects(self::once())
 			->method('map')
-			->with($entity, TournamentResourceDto::class)
+			->with(
+				$entity,
+				TournamentResourceDto::class,
+			)
 			->willReturn($resource);
 
-		$result = $this
-			->provider
-			->provide(
-				operation:		new Get(),
-				uriVariables:	['id' => 7],
-			);
+		$result
+		   	= $this
+				->provider
+				->provide(
+					operation:		new Get(),
+					uriVariables:	['id' => 7],
+				);
 
-		self::assertSame(expected: $resource, actual: $result);
+		self::assertSame(
+			expected: $resource,
+			actual: $result,
+		);
 	}
 
 	#[Test]
@@ -137,11 +165,11 @@ class TournamentProviderTest extends TestCase
 			->method('map');
 
 		$result = $this
-			->provider
-			->provide(
-				operation:		new Get(),
-				uriVariables:	['id' => 404],
-			);
+				->provider
+				->provide(
+					operation:		new Get(),
+					uriVariables:	['id' => 404],
+				);
 
 		self::assertNull(actual: $result);
 	}
