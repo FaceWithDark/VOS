@@ -9,6 +9,7 @@ namespace App\Tests\State\Processor\Catalog;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -24,6 +25,7 @@ use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 /// --- Type hint namespaces --- ///
 use Override;
+use stdClass;
 
 
 /// --- Internal namespaces --- ///
@@ -42,13 +44,12 @@ use App\State\Processor\Catalog\TournamentProcessor;
  * ---------------------------------------------------------------------------
  * All processor collaborators are declared once in `setUp()` as mocks so that
  * individual test methods stay short. However, not every test verifies every
- * collaborator. For example, the DELETE tests don't touch `$mapper`,
- * `$requestStack`, or `$duplicateValidator` at all. PHPUnit 12.5+ emits a
- * notice for each such "mock without expectations" to nudge towards
- * `createStub()`.
+ * collaborator. For example, the DELETE tests don't touch `$mapper` or
+ * `$duplicateValidator` at all. PHPUnit 12.5+ emits a notice for each such
+ * "mock without expectations" to nudge towards `createStub()`.
  *
  * Suppressing the notice is a deliberate trade-off:
- *   - Keeps the "declare once, use everywhere" style across ~10 test methods.
+ *   - Keeps the "declare once, use everywhere" style across the test methods.
  *   - Disables PHPUnit's built-in signal that a mock might be an over-mock.
  *
  * When to remove this attribute (and refactor towards a per-test factory):
@@ -62,8 +63,6 @@ use App\State\Processor\Catalog\TournamentProcessor;
  *     rather than verified — a symptom of over-broad suppression.
  * ---------------------------------------------------------------------------
  */
-
-
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(className: TournamentProcessor::class)]
 class TournamentProcessorTest extends TestCase
@@ -89,18 +88,24 @@ class TournamentProcessorTest extends TestCase
 			repository:			$this->repository,
 			mapper:				$this->mapper,
 			requestStack:		$this->requestStack,
-			duplicateValidator: $this->duplicateValidator,
+			duplicateValidator:	$this->duplicateValidator,
 		);
 	}
 
 	private function stubRawPayload(string $json): void
 	{
-		$request = new Request(content: $json);
-
 		$this
 			->requestStack
 			->method('getCurrentRequest')
-			->willReturn($request);
+			->willReturn(new Request(content: $json));
+	}
+
+	private function mockTournamentEntity(): TournamentEntity
+	{
+		return (new TournamentEntity())
+			->setId(id: 7)
+			->setName(name: 'VOT6')
+			->setDescription(description: 'Vietnamese Osu!taiko Tournament 6');
 	}
 
 
@@ -110,35 +115,81 @@ class TournamentProcessorTest extends TestCase
 
 
 	#[Test]
-    public function testValidatePostWhenPersistData(): void
-    {
+	public function testPostPersistsMappedEntity(): void
+	{
 		$dto = new TournamentCreateDto();
 
 		$dto->name			= 'VOT88';
 		$dto->description	= 'Vietnamese Osu!taiko Tournament 88 (special edition).';
 
-		$testPayload = [
+		$dtoPayload = [
 			'name'			=> $dto->name,
 			'description'	=> $dto->description,
 		];
 
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
+		$resource = new TournamentResourceDto();
+
+		$this->stubRawPayload(json: json_encode(value: $dtoPayload));
 
 		// The validator MUST be consulted exactly once with the raw payload
 		$this
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePost')
-			->with($testPayload);
+			->with($dtoPayload);
 
+		// Every DTO field must land on the entity before it is stored
 		$this
 			->repository
 			->expects(self::once())
 			->method('save')
 			->with(
-				self::isInstanceOf(className: TournamentEntity::class),
-				true
+				self::callback(
+					callback: static fn (TournamentEntity $entity): bool
+						=> $entity->getName()			=== $dto->name
+						&& $entity->getDescription()	=== $dto->description
+						&& $entity->getCreateOn()?->getTimezone()->getName() === 'UTC'
+				),
+				true,
 			);
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->with(self::isInstanceOf(className: TournamentEntity::class), TournamentResourceDto::class)
+			->willReturn($resource);
+
+		$result = $this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Post(),
+			);
+
+		self::assertSame(expected: $resource, actual: $result);
+	}
+
+	#[Test]
+	public function testPostForwardsEmptyPayloadToValidator(): void
+	{
+		$dto = new TournamentCreateDto();
+
+		$dto->name = 'VOT88';
+
+		// An empty request body decodes to [], not to a decode error
+		$this->stubRawPayload(json: '');
+
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePost')
+			->with([]);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save');
 
 		$this
 			->mapper
@@ -146,41 +197,38 @@ class TournamentProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new TournamentResourceDto());
 
-		$resource
-			= $this
+		$this
 			->processor
 			->process(
 				data: $dto,
 				operation: new Post(),
 			);
-
-		self::assertInstanceOf(
-			expected: TournamentResourceDto::class,
-			actual: $resource,
-		);
-    }
+	}
 
 	#[Test]
-	public function testValidatePostWhenNotPersistData(): void
+	public function testPostWithDuplicateNameDoesNotPersist(): void
 	{
 		$dto = new TournamentCreateDto();
 
 		$dto->name = 'VOT6';
 
-		$testPayload = ['name' => $dto->name];
-
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
+		$this->stubRawPayload(json: json_encode(value: ['name' => $dto->name]));
 
 		$this
 			->duplicateValidator
 			->method('validatePost')
 			->willThrowException(new ConflictHttpException(message: 'duplicate tournament name.'));
 
-		// `repository->save` must NEVER be called since this's an invalid request
+		// An invalid request must never reach the database or the mapper
 		$this
 			->repository
 			->expects(self::never())
 			->method('save');
+
+		$this
+			->mapper
+			->expects(self::never())
+			->method('map');
 
 		$this->expectException(exception: ConflictHttpException::class);
 
@@ -199,19 +247,17 @@ class TournamentProcessorTest extends TestCase
 
 
 	#[Test]
-	public function testValidatePatchWhenMissingEntity(): void
+	public function testPatchWithMissingEntityThrowsNotFound(): void
 	{
 		$dto = new TournamentUpdateDto();
 
 		$dto->name = 'VOT88';
 
-		$testPayload = ['id' => 88];
-
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
-			->with($testPayload['id'])
+			->with(88)
 			->willReturn(null);
 
 		// Neither the validator nor the mapper should be touched
@@ -220,52 +266,132 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::never())
 			->method('validatePatch');
 
+		$this
+			->mapper
+			->expects(self::never())
+			->method('map');
+
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: "Tournament with ID [{$testPayload['id']}] not found.");
+		$this->expectExceptionMessage(message: 'Tournament with ID [88] not found.');
 
 		$this
 			->processor
 			->process(
 				data: $dto,
 				operation: new Patch(),
-				payload: $testPayload,
+				payload: ['id' => 88],
 			);
 	}
 
 	#[Test]
-	public function testValidatePatchWhenPassedData(): void
+	public function testPatchWithoutPayloadIdFallsBackToZero(): void
 	{
-		$testPayload = ['name' => 'VOT88'];
-		$tournamentEntity = new TournamentEntity();
-		$tournamentCurrentData
-			= $tournamentEntity
-			->setId(id: 7)
-			->setName(name: 'VOT6')
-			->setDescription(description: 'Vietnamese Osu!taiko Tournament 6');
+		// Locks the `$payload['id'] ?? 0` guard against undefined-key warnings
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(0)
+			->willReturn(null);
+
+		$this->expectException(exception: NotFoundHttpException::class);
+		$this->expectExceptionMessage(message: 'Tournament with ID [0] not found.');
+
+		$this
+			->processor
+			->process(
+				data: new TournamentUpdateDto(),
+				operation: new Patch(),
+				payload: [],
+			);
+	}
+
+	#[Test]
+	public function testPatchWithNameUpdatesOnlyThatField(): void
+	{
+		$dto = new TournamentUpdateDto();
+
+		$dto->name = 'VOT88';
+
+		$current	= $this->mockTournamentEntity();
+		$resource	= new TournamentResourceDto();
+		$payload	= ['name' => $dto->name];
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
 			->with(7)
-			->willReturn($tournamentCurrentData);
+			->willReturn($current);
 
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
+		$this->stubRawPayload(json: json_encode(value: $payload));
 
-		// The validator gets (payload, id) with 'id' being the URL ID
+		// The validator gets (decoded payload, URL ID)
 		$this
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with(
-				$testPayload,
-				7
-			);
+			->with($payload, 7);
 
 		$this
 			->repository
 			->expects(self::once())
-			->method('save');
+			->method('save')
+			->with($current, true);
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn($resource);
+
+		$result = $this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Patch(),
+				payload: ['id' => 7],
+			);
+
+		self::assertSame(expected: $resource, actual: $result);
+		self::assertSame(expected: 'VOT88', actual: $current->getName());
+		self::assertSame(
+			expected: 'Vietnamese Osu!taiko Tournament 6',
+			actual: $current->getDescription(),
+			message: 'An omitted description must survive a name-only PATCH.',
+		);
+	}
+
+	#[Test]
+	public function testPatchWithDescriptionOnlyKeepsName(): void
+	{
+		$dto = new TournamentUpdateDto();
+
+		$dto->description = 'Vietnamese Osu!taiko Tournament 88 (special edition).';
+
+		$current	= $this->mockTournamentEntity();
+		$payload	= ['description' => $dto->description];
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(7)
+			->willReturn($current);
+
+		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload, 7);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save')
+			->with($current, true);
 
 		$this
 			->mapper
@@ -273,10 +399,6 @@ class TournamentProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new TournamentResourceDto());
 
-		$dto = new TournamentUpdateDto();
-
-		$dto->name = $testPayload['name'];
-
 		$this
 			->processor
 			->process(
@@ -285,46 +407,40 @@ class TournamentProcessorTest extends TestCase
 				payload: ['id' => 7],
 			);
 
-		self::assertSame(
-			expected: $testPayload['name'],
-			actual: $tournamentEntity->getName(),
-		);
+		self::assertSame(expected: 'VOT6', actual: $current->getName());
+		self::assertSame(expected: $dto->description, actual: $current->getDescription());
 	}
 
 	#[Test]
-	public function testValidatePatchWhenOnlyDescriptionData(): void
+	public function testPatchWithNullDescriptionClearsIt(): void
 	{
-		$testPayload = ['description' => 'Vietnamese Osu!taiko Tournament 88 (special edition).'];
-		$tournamentEntity = new TournamentEntity();
-		$tournamentCurrentData
-			= $tournamentEntity
-			->setId(id: 7)
-			->setName(name: 'VOT6')
-			->setDescription(description: 'Vietnamese Osu!taiko Tournament 6');
+		$dto = new TournamentUpdateDto();
+
+		$dto->description = null;
+
+		$current	= $this->mockTournamentEntity();
+		$payload	= ['description' => null];
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
 			->with(7)
-			->willReturn($tournamentCurrentData);
+			->willReturn($current);
 
-		// Only provide the optional 'description' field
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
+		$this->stubRawPayload(json: json_encode(value: $payload));
 
 		$this
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with(
-				$testPayload,
-				7
-			);
+			->with($payload, 7);
 
 		$this
 			->repository
 			->expects(self::once())
-			->method('save');
+			->method('save')
+			->with($current, true);
 
 		$this
 			->mapper
@@ -332,10 +448,6 @@ class TournamentProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new TournamentResourceDto());
 
-		$dto = new TournamentUpdateDto();
-
-		$dto->description = $testPayload['description'];
-
 		$this
 			->processor
 			->process(
@@ -344,92 +456,27 @@ class TournamentProcessorTest extends TestCase
 				payload: ['id' => 7],
 			);
 
-		self::assertSame(
-			expected: 'VOT6',
-			actual: $tournamentEntity->getName(),
-			message: 'Tournament name must NOT change.',
-		);
-		self::assertSame(
-			expected: $testPayload['description'],
-			actual: $tournamentEntity->getDescription(),
-		);
+		self::assertNull(actual: $current->getDescription());
 	}
 
 	#[Test]
-	public function testValidatePatchWhenNullDescriptionData(): void
+	public function testPatchWithDuplicateNameDoesNotPersist(): void
 	{
-		$testPayload = ['description' => null];
-		$tournamentEntity = new TournamentEntity();
-		$tournamentCurrentData
-			= $tournamentEntity
-			->setId(id: 7)
-			->setName(name: 'VOT6')
-			->setDescription(description: 'Vietnamese Osu!taiko Tournament 6');
-
-		$this
-			->repository
-			->expects(self::once())
-			->method('find')
-			->with(7)
-			->willReturn($tournamentCurrentData);
-
-		// Optional 'description' field provided but NULL value
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
-
-		$this
-			->duplicateValidator
-			->expects(self::once())
-			->method('validatePatch')
-			->with(
-				$testPayload,
-				7,
-			);
-
-		$this
-			->repository
-			->expects(self::once())
-			->method('save');
-
-		$this
-			->mapper
-			->expects(self::once())
-			->method('map')
-			->willReturn(new TournamentResourceDto);
-
 		$dto = new TournamentUpdateDto();
 
-		$dto->description = $testPayload['description'];
+		$dto->name = 'VTC3';
 
-		$this
-			->processor
-			->process(
-				data: $dto,
-				operation: new Patch(),
-				payload: ['id' => 7],
-			);
-
-		self::assertNull(actual: $tournamentCurrentData->getDescription());
-	}
-
-	#[Test]
-	public function testValidatePatchWhenSameData(): void
-	{
-		$testPayload = ['name' => 'VTC3'];
-		$tournamentEntity = new TournamentEntity();
-		$tournamentCurrentData
-			= $tournamentEntity
-			->setId(id: 7)
-			->setName(name: 'VOT6')
-			->setDescription(description: 'Vietnamese Osu!taiko Tournament 6');
+		$current	= $this->mockTournamentEntity();
+		$payload	= ['name' => $dto->name];
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
 			->with(7)
-			->willReturn($tournamentCurrentData);
+			->willReturn($current);
 
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
+		$this->stubRawPayload(json: json_encode(value: $payload));
 
 		$this
 			->duplicateValidator
@@ -441,11 +488,12 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::never())
 			->method('save');
 
+		$this
+			->mapper
+			->expects(self::never())
+			->method('map');
+
 		$this->expectException(exception: BadRequestHttpException::class);
-
-		$dto = new TournamentUpdateDto();
-
-		$dto->name = $testPayload['name'];
 
 		$this
 			->processor
@@ -457,58 +505,48 @@ class TournamentProcessorTest extends TestCase
 	}
 
 
-    /**
-     * DELETE requests
-     */
+	/**
+	 * DELETE requests
+	 */
 
 
-    #[Test]
-    public function testValidateDeleteWhenRemoveEntity(): void
-    {
-		$testPayload = ['id' => 7];
-		$tournamentEntity = new TournamentEntity();
-		$tournamentCurrentData
-			= $tournamentEntity
-			->setId(id: $testPayload['id']);
+	#[Test]
+	public function testDeleteRemovesEntityAndReturnsNull(): void
+	{
+		$current = $this->mockTournamentEntity();
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
-			->with($testPayload['id'])
-			->willReturn($tournamentCurrentData);
+			->with(7)
+			->willReturn($current);
 
 		$this
 			->repository
-            ->expects(self::once())
-            ->method('remove')
-			->with(
-				$tournamentCurrentData,
-				true
-			);
+			->expects(self::once())
+			->method('remove')
+			->with($current, true);
 
-		$result
-			= $this
+		$result = $this
 			->processor
 			->process(
 				data: null,
 				operation: new Delete(),
-				payload: $testPayload,
+				payload: ['id' => 7],
 			);
 
-        self::assertNull(actual: $result);
-    }
+		self::assertNull(actual: $result);
+	}
 
-    #[Test]
-    public function testValidateDeleteWhenMissingEntity(): void
-    {
-		$testPayload = ['id' => 88];
-
+	#[Test]
+	public function testDeleteWithMissingEntityThrowsNotFound(): void
+	{
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
-			->with($testPayload['id'])
+			->with(88)
 			->willReturn(null);
 
 		$this
@@ -516,14 +554,57 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::never())
 			->method('remove');
 
-        $this->expectException(exception: NotFoundHttpException::class);
+		$this->expectException(exception: NotFoundHttpException::class);
+		$this->expectExceptionMessage(message: 'Tournament with ID [88] not found.');
 
 		$this
 			->processor
 			->process(
 				data: null,
 				operation: new Delete(),
-				payload: $testPayload,
+				payload: ['id' => 88],
 			);
-    }
+	}
+
+	#[Test]
+	public function testDeleteWithoutPayloadIdFallsBackToZero(): void
+	{
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(0)
+			->willReturn(null);
+
+		$this->expectException(exception: NotFoundHttpException::class);
+		$this->expectExceptionMessage(message: 'Tournament with ID [0] not found.');
+
+		$this
+			->processor
+			->process(
+				data: null,
+				operation: new Delete(),
+				payload: [],
+			);
+	}
+
+
+	/**
+	 * Unsupported input
+	 */
+
+
+	#[Test]
+	public function testProcessRejectsUnsupportedInput(): void
+	{
+		$this->expectException(exception: InvalidArgumentException::class);
+		$this->expectExceptionMessage(message: 'Unsupported opearation or input DTO type.');
+
+		$this
+			->processor
+			->process(
+				data: new stdClass(),
+				operation: new Post(),
+			);
+	}
 }

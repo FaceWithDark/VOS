@@ -104,7 +104,7 @@ final readonly class TournamentProcessor implements ProcessorInterface
 		array $payload,
 	): TournamentResourceDto
 	{
-		$tournamentId = (int) ($payload['id' ?? 0]);
+		$tournamentId = (int) ($payload['id'] ?? 0);
 		$tournamentEntity = $this->repository->find(id: $tournamentId);
 
 		if (!$tournamentEntity) {
@@ -152,7 +152,7 @@ final readonly class TournamentProcessor implements ProcessorInterface
 
 	private function handleDelete(array $payload): null
 	{
-		$tournamentId = ((int) $payload['id']) ?? null;
+		$tournamentId = (int) ($payload['id'] ?? 0);
 		$tournamentEntity = $this->repository->find(id: $tournamentId);
 
 		if (!$tournamentEntity) {
