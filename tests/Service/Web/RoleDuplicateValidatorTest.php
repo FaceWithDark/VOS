@@ -24,11 +24,18 @@ use App\Repository\Web\RoleRepository;
 use App\Service\Web\RoleDuplicateValidator;
 
 
+/**
+ * NOTE:
+ *
+ * The validator is a thin policy layer around {@see RoleRepository}: it decides
+ * which HTTP error a repeated role name maps to. The repository is mocked so
+ * each test pins exactly one policy branch.
+ */
 #[CoversClass(className: RoleDuplicateValidator::class)]
 class RoleDuplicateValidatorTest extends TestCase
 {
 	private RoleRepository&MockObject	$repository;
-	private RoleDuplicateValidator		$duplcateValidator;
+	private RoleDuplicateValidator		$duplicateValidator;
 
 	#[Override]
 	protected function setUp(): void
@@ -37,116 +44,107 @@ class RoleDuplicateValidatorTest extends TestCase
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
 		$this->repository			= $this->createMock(type: RoleRepository::class);
-		$this->duplcateValidator	= new RoleDuplicateValidator(repository: $this->repository);
+		$this->duplicateValidator	= new RoleDuplicateValidator(repository: $this->repository);
+	}
+
+	private function mockRoleEntity(
+		?int	$id		= 2,
+		?string	$name	= 'Admin',
+	): RoleEntity
+	{
+		return (new RoleEntity())
+			->setId(id: $id)
+			->setName(name: $name);
 	}
 
 
 	/**
-	 * validatePost() - 409 Conflicts
+	 * validatePost() - 409 Conflict
 	 */
 
 
 	#[Test]
-    public function testMissingNameFieldOnPost(): void
-    {
-		$testPayload = ['description' => 'double the pay, double the deal baby. That is what high risk high reward about.'];
-
-		$this
-			->repository
-			->expects(self::never())
-			->method('findOneBy');
-
-		$this
-			->duplcateValidator
-			->validatePost(payload: $testPayload);
-
-		// No exception found means a valid pass
-        $this->addToAssertionCount(count: 1);
-    }
-
-	#[Test]
-	public function testNullNameFieldOnPost(): void
+	public function testPostWithMissingNameSkipsLookup(): void
 	{
-		$testPayload = ['name' => null];
-
+		// 'name' absent: let the DTO NotBlank constraint surface the error
 		$this
 			->repository
 			->expects(self::never())
 			->method('findOneBy');
 
 		$this
-			->duplcateValidator
-			->validatePost(payload: $testPayload);
-
-        // No exception found means a valid pass
-        $this->addToAssertionCount(count: 1);
+			->duplicateValidator
+			->validatePost(payload: [
+				'description' => 'double the pay, double the deal baby.',
+			]);
 	}
 
 	#[Test]
-	public function testPassedNameFieldOnPost(): void
+	public function testPostWithNullNameSkipsLookup(): void
 	{
-		$testPayload = ['name' => 'Gambler'];
+		// `?? null` treats an explicit NULL the same as a missing field
+		$this
+			->repository
+			->expects(self::never())
+			->method('findOneBy');
 
+		$this
+			->duplicateValidator
+			->validatePost(payload: ['name' => null]);
+	}
+
+	#[Test]
+	public function testPostWithUniqueNamePasses(): void
+	{
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
+			->with(['name' => 'Gambler'])
 			->willReturn(null);
 
 		$this
-			->duplcateValidator
-			->validatePost(payload: $testPayload);
-
-		// No exception found means a valid pass
-        $this->addToAssertionCount(count: 1);
+			->duplicateValidator
+			->validatePost(payload: ['name' => 'Gambler']);
 	}
 
 	#[Test]
-	public function testMatchingNameFieldOnPost(): void
+	public function testPostWithDuplicateNameThrowsConflict(): void
 	{
-		$testPayload		= ['name' => 'Admin'];
-		$roleEntity			= new RoleEntity();
-		$roleCurrentData	= $roleEntity->setName(name: $testPayload['name']);
+		$current = $this->mockRoleEntity(name: 'Admin');
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
-			->willReturn($roleCurrentData);
+			->with(['name' => 'Admin'])
+			->willReturn($current);
 
 		$this->expectException(exception: ConflictHttpException::class);
-		$this->expectExceptionMessage(message: "A role with the name [{$testPayload['name']}] already exists.");
+		$this->expectExceptionMessage(message: 'A role with the name [Admin] already exists.');
 
 		$this
-			->duplcateValidator
-			->validatePost(payload: $testPayload);
+			->duplicateValidator
+			->validatePost(payload: ['name' => 'Admin']);
 	}
 
 	#[Test]
-	public function testOptionalDescriptionFieldOnPost(): void
+	public function testPostChecksDuplicateByNameOnly(): void
 	{
-		$testPayload = ['name' => 'Gambler'];
-
+		// The sibling 'description' field must never leak into the criteria
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
+			->with(['name' => 'Gambler'])
 			->willReturn(null);
 
 		$this
-			->duplcateValidator
-			->validatePost(
-				payload: array_merge(
-					$testPayload,
-					['description' => 'double the pay, double the deal baby. That is what high risk high reward about.'],
-				),
-			);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
+			->duplicateValidator
+			->validatePost(payload: [
+				'name'			=> 'Gambler',
+				'description'	=> 'double the pay, double the deal baby.',
+			]);
 	}
 
 
@@ -156,147 +154,122 @@ class RoleDuplicateValidatorTest extends TestCase
 
 
 	#[Test]
-	public function testMissingNameFieldOnPatch(): void
+	public function testPatchWithoutNameSkipsLookup(): void
 	{
-		$testPayload = ['description' => 'double the pay, double the deal baby. That is what high risk high reward about.'];
-
+		// A partial update that does not touch 'name' must not query at all
 		$this
 			->repository
 			->expects(self::never())
 			->method('findOneBy');
 
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: $testPayload,
+				payload: ['description' => 'double the pay, double the deal baby.'],
 				id: 2,
 			);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
 	}
 
 	#[Test]
-	public function testNullNameFieldOnPatch(): void
+	public function testPatchWithNullNameLooksUpNullAndPasses(): void
 	{
-		$testPayload = ['name' => null];
-
+		// `array_key_exists` treats an explicit NULL as a real update, so the
+		// NULL is looked up and simply not found.
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
+			->with(['name' => null])
 			->willReturn(null);
 
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: $testPayload,
+				payload: ['name' => null],
 				id: 2,
 			);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
 	}
 
 	#[Test]
-	public function testPassedNameFieldOnPatch(): void
+	public function testPatchWithUniqueNamePasses(): void
 	{
-		$testPayload = ['name' => 'Gambler'];
-
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
+			->with(['name' => 'Gambler'])
 			->willReturn(null);
 
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: $testPayload,
+				payload: ['name' => 'Gambler'],
 				id: 2,
 			);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
 	}
 
 	#[Test]
-	public function testSameEntityMatchingNameFieldOnPatch(): void
+	public function testPatchWithOwnNamePasses(): void
 	{
-		$testPayload		= ['name' => 'Admin'];
-		$roleEntity			= new RoleEntity();
-		$roleCurrentData	= $roleEntity->setName(name: $testPayload['name'])->setId(id: 2);
+		$current = $this->mockRoleEntity(id: 2, name: 'Admin');
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
-			->willReturn($roleCurrentData);
+			->with(['name' => 'Admin'])
+			->willReturn($current);
 
+		// Re-sending the current value must NOT be treated as a duplicate
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: $testPayload,
+				payload: ['name' => 'Admin'],
 				id: 2,
 			);
-
-		$this->addToAssertionCount(count: 1);
 	}
 
 	#[Test]
-	public function testDifferentEntityMatchingNameFieldOnPatch(): void
+	public function testPatchWithAnotherEntityNameThrowsBadRequest(): void
 	{
-		$testPayload = ['name' => 'Admin'];
-		$roleEntity = new RoleEntity();
-		$roleCurrentData
-			= $roleEntity
-			->setName(name: $testPayload['name'])
-			->setId(id: 1);
+		$current = $this->mockRoleEntity(id: 1, name: 'Admin');
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
-			->willReturn($roleCurrentData);
+			->with(['name' => 'Admin'])
+			->willReturn($current);
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: "Another role with the name [{$testPayload['name']}] already exists.");
+		$this->expectExceptionMessage(message: 'Another role with the name [Admin] already exists.');
 
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: $testPayload,
+				payload: ['name' => 'Admin'],
 				id: 2,
 			);
 	}
 
 	#[Test]
-	public function testOptionalDescriptionFieldOnPatch(): void
+	public function testPatchChecksDuplicateByNameOnly(): void
 	{
-		$testPayload = ['name' => 'Gambler'];
-
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
+			->with(['name' => 'Gambler'])
 			->willReturn(null);
 
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: array_merge(
-					$testPayload,
-					['description' => 'double the pay, double the deal baby. That is what high risk high reward about.'],
-				),
+				payload: [
+					'name'			=> 'Gambler',
+					'description'	=> 'double the pay, double the deal baby.',
+				],
 				id: 2,
 			);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
 	}
 }

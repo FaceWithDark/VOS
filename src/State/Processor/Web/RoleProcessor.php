@@ -104,7 +104,7 @@ final readonly class RoleProcessor implements ProcessorInterface
 		array $payload,
 	): RoleResourceDto
 	{
-		$roleId = (int) ($payload['id' ?? 0]);
+		$roleId = (int) ($payload['id'] ?? 0);
 		$roleEntity = $this->repository->find(id: $roleId);
 
 		if (!$roleEntity) {
@@ -152,7 +152,7 @@ final readonly class RoleProcessor implements ProcessorInterface
 
 	private function handleDelete(array $payload): null
 	{
-		$roleId = ((int) $payload['id']) ?? null;
+		$roleId = (int) ($payload['id'] ?? 0);
 		$roleEntity = $this->repository->find(id: $roleId);
 
 		if (!$roleEntity) {

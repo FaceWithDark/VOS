@@ -9,6 +9,7 @@ namespace App\Tests\State\Processor\Web;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -24,6 +25,7 @@ use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 /// --- Type hint namespaces --- ///
 use Override;
+use stdClass;
 
 
 /// --- Internal namespaces --- ///
@@ -42,13 +44,12 @@ use App\State\Processor\Web\RoleProcessor;
  * ---------------------------------------------------------------------------
  * All processor collaborators are declared once in `setUp()` as mocks so that
  * individual test methods stay short. However, not every test verifies every
- * collaborator. For example, the DELETE tests don't touch `$mapper`,
- * `$requestStack`, or `$duplicateValidator` at all. PHPUnit 12.5+ emits a
- * notice for each such "mock without expectations" to nudge towards
- * `createStub()`.
+ * collaborator. For example, the DELETE tests don't touch `$mapper` or
+ * `$duplicateValidator` at all. PHPUnit 12.5+ emits a notice for each such
+ * "mock without expectations" to nudge towards `createStub()`.
  *
  * Suppressing the notice is a deliberate trade-off:
- *   - Keeps the "declare once, use everywhere" style across ~10 test methods.
+ *   - Keeps the "declare once, use everywhere" style across the test methods.
  *   - Disables PHPUnit's built-in signal that a mock might be an over-mock.
  *
  * When to remove this attribute (and refactor towards a per-test factory):
@@ -62,8 +63,6 @@ use App\State\Processor\Web\RoleProcessor;
  *     rather than verified — a symptom of over-broad suppression.
  * ---------------------------------------------------------------------------
  */
-
-
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(className: RoleProcessor::class)]
 class RoleProcessorTest extends TestCase
@@ -89,18 +88,24 @@ class RoleProcessorTest extends TestCase
 			repository:			$this->repository,
 			mapper:				$this->mapper,
 			requestStack:		$this->requestStack,
-			duplicateValidator: $this->duplicateValidator,
+			duplicateValidator:	$this->duplicateValidator,
 		);
 	}
 
 	private function stubRawPayload(string $json): void
 	{
-		$request = new Request(content: $json);
-
 		$this
 			->requestStack
 			->method('getCurrentRequest')
-			->willReturn($request);
+			->willReturn(new Request(content: $json));
+	}
+
+	private function mockRoleEntity(): RoleEntity
+	{
+		return (new RoleEntity())
+			->setId(id: 2)
+			->setName(name: 'Admin')
+			->setDescription(description: 'can take control of the whole website both internally and externally.');
 	}
 
 
@@ -110,35 +115,81 @@ class RoleProcessorTest extends TestCase
 
 
 	#[Test]
-    public function testValidatePostWhenPersistData(): void
-    {
+	public function testPostPersistsMappedEntity(): void
+	{
 		$dto = new RoleCreateDto();
 
 		$dto->name			= 'Gambler';
-		$dto->description	= 'double the pay, double the deal baby. That is what high risk high reward about.';
+		$dto->description	= 'double the pay, double the deal baby.';
 
-		$testPayload = [
+		$dtoPayload = [
 			'name'			=> $dto->name,
 			'description'	=> $dto->description,
 		];
 
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
+		$resource = new RoleResourceDto();
+
+		$this->stubRawPayload(json: json_encode(value: $dtoPayload));
 
 		// The validator MUST be consulted exactly once with the raw payload
 		$this
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePost')
-			->with($testPayload);
+			->with($dtoPayload);
 
+		// Every DTO field must land on the entity before it is stored
 		$this
 			->repository
 			->expects(self::once())
 			->method('save')
 			->with(
-				self::isInstanceOf(className: RoleEntity::class),
-				true
+				self::callback(
+					callback: static fn (RoleEntity $entity): bool
+						=> $entity->getName()			=== $dto->name
+						&& $entity->getDescription()	=== $dto->description
+						&& $entity->getCreateOn()?->getTimezone()->getName() === 'UTC'
+				),
+				true,
 			);
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->with(self::isInstanceOf(className: RoleEntity::class), RoleResourceDto::class)
+			->willReturn($resource);
+
+		$result = $this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Post(),
+			);
+
+		self::assertSame(expected: $resource, actual: $result);
+	}
+
+	#[Test]
+	public function testPostForwardsEmptyPayloadToValidator(): void
+	{
+		$dto = new RoleCreateDto();
+
+		$dto->name = 'Gambler';
+
+		// An empty request body decodes to [], not to a decode error
+		$this->stubRawPayload(json: '');
+
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePost')
+			->with([]);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save');
 
 		$this
 			->mapper
@@ -146,41 +197,38 @@ class RoleProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new RoleResourceDto());
 
-		$resource
-			= $this
+		$this
 			->processor
 			->process(
 				data: $dto,
 				operation: new Post(),
 			);
-
-		self::assertInstanceOf(
-			expected: RoleResourceDto::class,
-			actual: $resource,
-		);
-    }
+	}
 
 	#[Test]
-	public function testValidatePostWhenNotPersistData(): void
+	public function testPostWithDuplicateNameDoesNotPersist(): void
 	{
 		$dto = new RoleCreateDto();
 
 		$dto->name = 'Admin';
 
-		$testPayload = ['name' => $dto->name];
-
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
+		$this->stubRawPayload(json: json_encode(value: ['name' => $dto->name]));
 
 		$this
 			->duplicateValidator
 			->method('validatePost')
 			->willThrowException(new ConflictHttpException(message: 'duplicate role name.'));
 
-		// `repository->save` must NEVER be called since this's an invalid request
+		// An invalid request must never reach the database or the mapper
 		$this
 			->repository
 			->expects(self::never())
 			->method('save');
+
+		$this
+			->mapper
+			->expects(self::never())
+			->method('map');
 
 		$this->expectException(exception: ConflictHttpException::class);
 
@@ -199,19 +247,17 @@ class RoleProcessorTest extends TestCase
 
 
 	#[Test]
-	public function testValidatePatchWhenMissingEntity(): void
+	public function testPatchWithMissingEntityThrowsNotFound(): void
 	{
 		$dto = new RoleUpdateDto();
 
 		$dto->name = 'Gambler';
 
-		$testPayload = ['id' => 3];
-
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
-			->with($testPayload['id'])
+			->with(3)
 			->willReturn(null);
 
 		// Neither the validator nor the mapper should be touched
@@ -220,52 +266,132 @@ class RoleProcessorTest extends TestCase
 			->expects(self::never())
 			->method('validatePatch');
 
+		$this
+			->mapper
+			->expects(self::never())
+			->method('map');
+
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: "Role with ID [{$testPayload['id']}] not found.");
+		$this->expectExceptionMessage(message: 'Role with ID [3] not found.');
 
 		$this
 			->processor
 			->process(
 				data: $dto,
 				operation: new Patch(),
-				payload: $testPayload,
+				payload: ['id' => 3],
 			);
 	}
 
 	#[Test]
-	public function testValidatePatchWhenPassedData(): void
+	public function testPatchWithoutPayloadIdFallsBackToZero(): void
 	{
-		$testPayload = ['name' => 'Gambler'];
-		$roleEntity = new RoleEntity();
-		$roleCurrentData
-			= $roleEntity
-			->setId(id: 2)
-			->setName(name: 'Admin')
-			->setDescription(description: 'can take control of the whole website both internally and externally.');
+		// Locks the `$payload['id'] ?? 0` guard against undefined-key warnings
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(0)
+			->willReturn(null);
+
+		$this->expectException(exception: NotFoundHttpException::class);
+		$this->expectExceptionMessage(message: 'Role with ID [0] not found.');
+
+		$this
+			->processor
+			->process(
+				data: new RoleUpdateDto(),
+				operation: new Patch(),
+				payload: [],
+			);
+	}
+
+	#[Test]
+	public function testPatchWithNameUpdatesOnlyThatField(): void
+	{
+		$dto = new RoleUpdateDto();
+
+		$dto->name = 'Gambler';
+
+		$current	= $this->mockRoleEntity();
+		$resource	= new RoleResourceDto();
+		$payload	= ['name' => $dto->name];
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
 			->with(2)
-			->willReturn($roleCurrentData);
+			->willReturn($current);
 
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
+		$this->stubRawPayload(json: json_encode(value: $payload));
 
-		// The validator gets (payload, id) with 'id' being the URL ID
+		// The validator gets (decoded payload, URL ID)
 		$this
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with(
-				$testPayload,
-				2
-			);
+			->with($payload, 2);
 
 		$this
 			->repository
 			->expects(self::once())
-			->method('save');
+			->method('save')
+			->with($current, true);
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn($resource);
+
+		$result = $this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Patch(),
+				payload: ['id' => 2],
+			);
+
+		self::assertSame(expected: $resource, actual: $result);
+		self::assertSame(expected: 'Gambler', actual: $current->getName());
+		self::assertSame(
+			expected: 'can take control of the whole website both internally and externally.',
+			actual: $current->getDescription(),
+			message: 'An omitted description must survive a name-only PATCH.',
+		);
+	}
+
+	#[Test]
+	public function testPatchWithDescriptionOnlyKeepsName(): void
+	{
+		$dto = new RoleUpdateDto();
+
+		$dto->description = 'double the pay, double the deal baby.';
+
+		$current	= $this->mockRoleEntity();
+		$payload	= ['description' => $dto->description];
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(2)
+			->willReturn($current);
+
+		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload, 2);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save')
+			->with($current, true);
 
 		$this
 			->mapper
@@ -273,10 +399,6 @@ class RoleProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new RoleResourceDto());
 
-		$dto = new RoleUpdateDto();
-
-		$dto->name = $testPayload['name'];
-
 		$this
 			->processor
 			->process(
@@ -285,46 +407,40 @@ class RoleProcessorTest extends TestCase
 				payload: ['id' => 2],
 			);
 
-		self::assertSame(
-			expected: $testPayload['name'],
-			actual: $roleEntity->getName(),
-		);
+		self::assertSame(expected: 'Admin', actual: $current->getName());
+		self::assertSame(expected: $dto->description, actual: $current->getDescription());
 	}
 
 	#[Test]
-	public function testValidatePatchWhenOnlyDescriptionData(): void
+	public function testPatchWithNullDescriptionClearsIt(): void
 	{
-		$testPayload = ['description' => 'double the pay, double the deal baby. That is what high risk high reward about.'];
-		$roleEntity = new RoleEntity();
-		$roleCurrentData
-			= $roleEntity
-			->setId(id: 2)
-			->setName(name: 'Admin')
-			->setDescription(description: 'can take control of the whole website both internally and externally.');
+		$dto = new RoleUpdateDto();
+
+		$dto->description = null;
+
+		$current	= $this->mockRoleEntity();
+		$payload	= ['description' => null];
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
 			->with(2)
-			->willReturn($roleCurrentData);
+			->willReturn($current);
 
-		// Only provide the optional 'description' field
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
+		$this->stubRawPayload(json: json_encode(value: $payload));
 
 		$this
 			->duplicateValidator
 			->expects(self::once())
 			->method('validatePatch')
-			->with(
-				$testPayload,
-				2
-			);
+			->with($payload, 2);
 
 		$this
 			->repository
 			->expects(self::once())
-			->method('save');
+			->method('save')
+			->with($current, true);
 
 		$this
 			->mapper
@@ -332,10 +448,6 @@ class RoleProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new RoleResourceDto());
 
-		$dto = new RoleUpdateDto();
-
-		$dto->description = $testPayload['description'];
-
 		$this
 			->processor
 			->process(
@@ -344,92 +456,27 @@ class RoleProcessorTest extends TestCase
 				payload: ['id' => 2],
 			);
 
-		self::assertSame(
-			expected: 'Admin',
-			actual: $roleEntity->getName(),
-			message: 'Role name must NOT change.',
-		);
-		self::assertSame(
-			expected: $testPayload['description'],
-			actual: $roleEntity->getDescription(),
-		);
+		self::assertNull(actual: $current->getDescription());
 	}
 
 	#[Test]
-	public function testValidatePatchWhenNullDescriptionData(): void
+	public function testPatchWithDuplicateNameDoesNotPersist(): void
 	{
-		$testPayload = ['description' => null];
-		$roleEntity = new RoleEntity();
-		$roleCurrentData
-			= $roleEntity
-			->setId(id: 2)
-			->setName(name: 'Admin')
-			->setDescription(description: 'can take control of the whole website both internally and externally.');
-
-		$this
-			->repository
-			->expects(self::once())
-			->method('find')
-			->with(2)
-			->willReturn($roleCurrentData);
-
-		// Optional 'description' field provided but NULL value
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
-
-		$this
-			->duplicateValidator
-			->expects(self::once())
-			->method('validatePatch')
-			->with(
-				$testPayload,
-				2,
-			);
-
-		$this
-			->repository
-			->expects(self::once())
-			->method('save');
-
-		$this
-			->mapper
-			->expects(self::once())
-			->method('map')
-			->willReturn(new RoleResourceDto);
-
 		$dto = new RoleUpdateDto();
 
-		$dto->description = $testPayload['description'];
+		$dto->name = 'User';
 
-		$this
-			->processor
-			->process(
-				data: $dto,
-				operation: new Patch(),
-				payload: ['id' => 2],
-			);
-
-		self::assertNull(actual: $roleCurrentData->getDescription());
-	}
-
-	#[Test]
-	public function testValidatePatchWhenSameData(): void
-	{
-		$testPayload = ['name' => 'User'];
-		$roleEntity = new RoleEntity();
-		$roleCurrentData
-			= $roleEntity
-			->setId(id: 2)
-			->setName(name: 'Admin')
-			->setDescription(description: 'can take control of the whole website both internally and externally.');
+		$current	= $this->mockRoleEntity();
+		$payload	= ['name' => $dto->name];
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
 			->with(2)
-			->willReturn($roleCurrentData);
+			->willReturn($current);
 
-		$this->stubRawPayload(json: json_encode(value: $testPayload));
+		$this->stubRawPayload(json: json_encode(value: $payload));
 
 		$this
 			->duplicateValidator
@@ -441,11 +488,12 @@ class RoleProcessorTest extends TestCase
 			->expects(self::never())
 			->method('save');
 
+		$this
+			->mapper
+			->expects(self::never())
+			->method('map');
+
 		$this->expectException(exception: BadRequestHttpException::class);
-
-		$dto = new RoleUpdateDto();
-
-		$dto->name = $testPayload['name'];
 
 		$this
 			->processor
@@ -457,58 +505,48 @@ class RoleProcessorTest extends TestCase
 	}
 
 
-    /**
-     * DELETE requests
-     */
+	/**
+	 * DELETE requests
+	 */
 
 
-    #[Test]
-    public function testValidateDeleteWhenRemoveEntity(): void
-    {
-		$testPayload = ['id' => 2];
-		$roleEntity = new RoleEntity();
-		$roleCurrentData
-			= $roleEntity
-			->setId(id: $testPayload['id']);
+	#[Test]
+	public function testDeleteRemovesEntityAndReturnsNull(): void
+	{
+		$current = $this->mockRoleEntity();
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
-			->with($testPayload['id'])
-			->willReturn($roleCurrentData);
+			->with(2)
+			->willReturn($current);
 
 		$this
 			->repository
-            ->expects(self::once())
-            ->method('remove')
-			->with(
-				$roleCurrentData,
-				true
-			);
+			->expects(self::once())
+			->method('remove')
+			->with($current, true);
 
-		$result
-			= $this
+		$result = $this
 			->processor
 			->process(
 				data: null,
 				operation: new Delete(),
-				payload: $testPayload,
+				payload: ['id' => 2],
 			);
 
-        self::assertNull(actual: $result);
-    }
+		self::assertNull(actual: $result);
+	}
 
-    #[Test]
-    public function testValidateDeleteWhenMissingEntity(): void
-    {
-		$testPayload = ['id' => 3];
-
+	#[Test]
+	public function testDeleteWithMissingEntityThrowsNotFound(): void
+	{
 		$this
 			->repository
 			->expects(self::once())
 			->method('find')
-			->with($testPayload['id'])
+			->with(3)
 			->willReturn(null);
 
 		$this
@@ -516,14 +554,57 @@ class RoleProcessorTest extends TestCase
 			->expects(self::never())
 			->method('remove');
 
-        $this->expectException(exception: NotFoundHttpException::class);
+		$this->expectException(exception: NotFoundHttpException::class);
+		$this->expectExceptionMessage(message: 'Role with ID [3] not found.');
 
 		$this
 			->processor
 			->process(
 				data: null,
 				operation: new Delete(),
-				payload: $testPayload,
+				payload: ['id' => 3],
 			);
-    }
+	}
+
+	#[Test]
+	public function testDeleteWithoutPayloadIdFallsBackToZero(): void
+	{
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(0)
+			->willReturn(null);
+
+		$this->expectException(exception: NotFoundHttpException::class);
+		$this->expectExceptionMessage(message: 'Role with ID [0] not found.');
+
+		$this
+			->processor
+			->process(
+				data: null,
+				operation: new Delete(),
+				payload: [],
+			);
+	}
+
+
+	/**
+	 * Unsupported input
+	 */
+
+
+	#[Test]
+	public function testProcessRejectsUnsupportedInput(): void
+	{
+		$this->expectException(exception: InvalidArgumentException::class);
+		$this->expectExceptionMessage(message: 'Unsupported opearation or input DTO type.');
+
+		$this
+			->processor
+			->process(
+				data: new stdClass(),
+				operation: new Post(),
+			);
+	}
 }
