@@ -81,18 +81,18 @@ class RoleProcessorTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository			= $this->createMock(type: RoleRepository::class);
-		$this->mapper				= $this->createMock(type: ObjectMapperInterface::class);
-		$this->requestStack			= $this->createMock(type: RequestStack::class);
-		$this->duplicateValidator	= $this->createMock(type: RoleDuplicateValidatorInterface::class);
+		$this->repository				= $this->createMock(type: RoleRepository::class);
+		$this->mapper					= $this->createMock(type: ObjectMapperInterface::class);
+		$this->requestStack				= $this->createMock(type: RequestStack::class);
+		$this->duplicateValidator		= $this->createMock(type: RoleDuplicateValidatorInterface::class);
 		$this->emptyPayloadValidator	= $this->createMock(type: RoleEmptyPayloadValidatorInterface::class);
 
 		$this->processor = new RoleProcessor(
-			repository:			$this->repository,
-			mapper:				$this->mapper,
-			requestStack:		$this->requestStack,
-			duplicateValidator:	$this->duplicateValidator,
-			emptyPayloadValidator: $this->emptyPayloadValidator,
+			repository:				$this->repository,
+			mapper:					$this->mapper,
+			requestStack:			$this->requestStack,
+			duplicateValidator:		$this->duplicateValidator,
+			emptyPayloadValidator:	$this->emptyPayloadValidator,
 		);
 	}
 

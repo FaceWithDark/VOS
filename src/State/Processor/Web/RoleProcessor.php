@@ -37,10 +37,10 @@ use App\Repository\Web\RoleRepository;
 final readonly class RoleProcessor implements ProcessorInterface
 {
 	public function __construct(
-		private RoleRepository					$repository,
-		private ObjectMapperInterface			$mapper,
-		private RequestStack					$requestStack,
-		private RoleDuplicateValidatorInterface	$duplicateValidator,
+		private RoleRepository						$repository,
+		private ObjectMapperInterface				$mapper,
+		private RequestStack						$requestStack,
+		private RoleDuplicateValidatorInterface		$duplicateValidator,
 		private RoleEmptyPayloadValidatorInterface	$emptyPayloadValidator,
 	) {}
 

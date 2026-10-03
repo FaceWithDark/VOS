@@ -41,11 +41,11 @@ use App\Repository\Web\UserRepository;
 final readonly class UserProcessor implements ProcessorInterface
 {
 	public function __construct(
-		private UserRepository					$repository,
-		private RoleRepository					$roleRepository,
-		private ObjectMapperInterface			$mapper,
-		private RequestStack					$requestStack,
-		private UserDuplicateValidatorInterface	$duplicateValidator,
+		private UserRepository						$repository,
+		private RoleRepository						$roleRepository,
+		private ObjectMapperInterface				$mapper,
+		private RequestStack						$requestStack,
+		private UserDuplicateValidatorInterface		$duplicateValidator,
 		private UserForeignKeyValidatorInterface	$foreignKeyValidator,
 		private UserEmptyPayloadValidatorInterface	$emptyPayloadValidator,
 	) {}

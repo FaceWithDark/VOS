@@ -37,10 +37,10 @@ use App\Repository\Catalog\TournamentRepository;
 final readonly class TournamentProcessor implements ProcessorInterface
 {
 	public function __construct(
-		private TournamentRepository					$repository,
-		private ObjectMapperInterface					$mapper,
-		private RequestStack							$requestStack,
-		private TournamentDuplicateValidatorInterface	$duplicateValidator,
+		private TournamentRepository						$repository,
+		private ObjectMapperInterface						$mapper,
+		private RequestStack								$requestStack,
+		private TournamentDuplicateValidatorInterface		$duplicateValidator,
 		private TournamentEmptyPayloadValidatorInterface	$emptyPayloadValidator,
 	) {}
 

@@ -73,14 +73,14 @@ use App\State\Processor\Web\UserProcessor;
 #[CoversClass(className: UserProcessor::class)]
 class UserProcessorTest extends TestCase
 {
-	private UserRepository&MockObject					$repository;
-	private RoleRepository&MockObject					$roleRepository;
-	private ObjectMapperInterface&MockObject			$mapper;
-	private RequestStack&MockObject						$requestStack;
-	private UserDuplicateValidatorInterface&MockObject	$duplicateValidator;
-	private UserForeignKeyValidatorInterface&MockObject	$foreignKeyValidator;
+	private UserRepository&MockObject						$repository;
+	private RoleRepository&MockObject						$roleRepository;
+	private ObjectMapperInterface&MockObject				$mapper;
+	private RequestStack&MockObject							$requestStack;
+	private UserDuplicateValidatorInterface&MockObject		$duplicateValidator;
+	private UserForeignKeyValidatorInterface&MockObject		$foreignKeyValidator;
 	private UserEmptyPayloadValidatorInterface&MockObject	$emptyPayloadValidator;
-	private UserProcessor								$processor;
+	private UserProcessor									$processor;
 
 	#[Override]
 	protected function setUp(): void
@@ -88,22 +88,22 @@ class UserProcessorTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository			= $this->createMock(type: UserRepository::class);
-		$this->roleRepository		= $this->createMock(type: RoleRepository::class);
-		$this->mapper				= $this->createMock(type: ObjectMapperInterface::class);
-		$this->requestStack			= $this->createMock(type: RequestStack::class);
-		$this->duplicateValidator	= $this->createMock(type: UserDuplicateValidatorInterface::class);
-		$this->foreignKeyValidator	= $this->createMock(type: UserForeignKeyValidatorInterface::class);
+		$this->repository				= $this->createMock(type: UserRepository::class);
+		$this->roleRepository			= $this->createMock(type: RoleRepository::class);
+		$this->mapper					= $this->createMock(type: ObjectMapperInterface::class);
+		$this->requestStack				= $this->createMock(type: RequestStack::class);
+		$this->duplicateValidator		= $this->createMock(type: UserDuplicateValidatorInterface::class);
+		$this->foreignKeyValidator		= $this->createMock(type: UserForeignKeyValidatorInterface::class);
 		$this->emptyPayloadValidator	= $this->createMock(type: UserEmptyPayloadValidatorInterface::class);
 
 		$this->processor = new UserProcessor(
-			repository:			$this->repository,
-			roleRepository:		$this->roleRepository,
-			mapper:				$this->mapper,
-			requestStack:		$this->requestStack,
-			duplicateValidator:	$this->duplicateValidator,
-			foreignKeyValidator: $this->foreignKeyValidator,
-			emptyPayloadValidator: $this->emptyPayloadValidator,
+			repository:				$this->repository,
+			roleRepository:			$this->roleRepository,
+			mapper:					$this->mapper,
+			requestStack:			$this->requestStack,
+			duplicateValidator:		$this->duplicateValidator,
+			foreignKeyValidator:	$this->foreignKeyValidator,
+			emptyPayloadValidator:	$this->emptyPayloadValidator,
 		);
 	}
 
