@@ -25,11 +25,18 @@ use App\Repository\Web\UserRepository;
 use App\Service\Web\UserDuplicateValidator;
 
 
+/**
+ * NOTE:
+ *
+ * The validator is a thin policy layer around {@see UserRepository}: it decides
+ * which HTTP error a repeated user name maps to. The repository is mocked so
+ * each test pins exactly one policy branch.
+ */
 #[CoversClass(className: UserDuplicateValidator::class)]
 class UserDuplicateValidatorTest extends TestCase
 {
 	private UserRepository&MockObject	$repository;
-	private UserDuplicateValidator		$duplcateValidator;
+	private UserDuplicateValidator		$duplicateValidator;
 
 	#[Override]
 	protected function setUp(): void
@@ -38,22 +45,19 @@ class UserDuplicateValidatorTest extends TestCase
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
 		$this->repository			= $this->createMock(type: UserRepository::class);
-		$this->duplcateValidator	= new UserDuplicateValidator(repository: $this->repository);
+		$this->duplicateValidator	= new UserDuplicateValidator(repository: $this->repository);
 	}
 
 	/**
 	 * NOTE:
 	 *
 	 * Unlike {@see RoleEntity}, {@see UserEntity} ships with no default data
-	 * fixtures. Therefore, we must be create a valid mock user so that it can be
+	 * fixtures. Therefore, we must create a valid user so that it can be
 	 * adjusted to the specific scenario under each test.
 	 */
 	private function mockUserEntity(
-		?int	$id				= 88888,
-		?string	$name			= 'Gambler',
-		?string	$avatar			= 'https://a.ppy.sh/88?88.png',
-		?int	$rank			= 88,
-		?string $countryFlag	= 'ZW',
+		?int	$id		= 88888,
+		?string	$name	= 'Gambler',
 	): UserEntity
 	{
 		return (new UserEntity())
@@ -64,117 +68,97 @@ class UserDuplicateValidatorTest extends TestCase
 					->setName(name: 'User')
 			)
 			->setName(name: $name)
-			->setAvatar(avatar: $avatar)
-			->setRank(rank: $rank)
-			->setCountryFlag(countryFlag: $countryFlag);
+			->setAvatar(avatar: 'https://a.ppy.sh/88?88.png')
+			->setRank(rank: 88)
+			->setCountryFlag(countryFlag: 'ZW');
 	}
 
 
 	/**
-	 * validatePost() - 409 Conflicts
+	 * validatePost() - 409 Conflict
 	 */
 
 
 	#[Test]
-	public function testMissingNameFieldOnPost(): void
+	public function testPostWithMissingNameSkipsLookup(): void
 	{
-		$testPayload = ['avatar' => 'https://a.ppy.sh/88?88.png'];
-
+		// 'name' absent: let the DTO NotBlank constraint surface the error
 		$this
 			->repository
 			->expects(self::never())
 			->method('findOneBy');
 
 		$this
-			->duplcateValidator
-			->validatePost(payload: $testPayload);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
+			->duplicateValidator
+			->validatePost(payload: ['avatar' => 'https://a.ppy.sh/88?88.png']);
 	}
 
 	#[Test]
-	public function testNullNameFieldOnPost(): void
+	public function testPostWithNullNameSkipsLookup(): void
 	{
-		$testPayload = ['name' => null];
-
+		// `?? null` treats an explicit NULL the same as a missing field
 		$this
 			->repository
 			->expects(self::never())
 			->method('findOneBy');
 
 		$this
-			->duplcateValidator
-			->validatePost(payload: $testPayload);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
+			->duplicateValidator
+			->validatePost(payload: ['name' => null]);
 	}
 
 	#[Test]
-	public function testPassedNameFieldOnPost(): void
+	public function testPostWithUniqueNamePasses(): void
 	{
-		$testPayload = ['name' => 'Gambler'];
-
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
+			->with(['name' => 'Gambler'])
 			->willReturn(null);
 
 		$this
-			->duplcateValidator
-			->validatePost(payload: $testPayload);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
+			->duplicateValidator
+			->validatePost(payload: ['name' => 'Gambler']);
 	}
 
 	#[Test]
-	public function testMatchingNameFieldOnPost(): void
+	public function testPostWithDuplicateNameThrowsConflict(): void
 	{
-		$testPayload		= ['name' => 'Gambler'];
-		$userCurrentData	= $this->mockUserEntity();
+		$current = $this->mockUserEntity(name: 'Gambler');
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
-			->willReturn($userCurrentData);
+			->with(['name' => 'Gambler'])
+			->willReturn($current);
 
 		$this->expectException(exception: ConflictHttpException::class);
-		$this->expectExceptionMessage(message: "A user with the name [{$testPayload['name']}] already exists.");
+		$this->expectExceptionMessage(message: 'A user with the name [Gambler] already exists.');
 
 		$this
-			->duplcateValidator
-			->validatePost(payload: $testPayload);
+			->duplicateValidator
+			->validatePost(payload: ['name' => 'Gambler']);
 	}
 
 	#[Test]
-	public function testOptionalAvatarFieldOnPost(): void
+	public function testPostChecksDuplicateByNameOnly(): void
 	{
-		$testPayload = ['name' => 'Gambler'];
-
+		// The sibling 'avatar' field must never leak into the criteria
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
+			->with(['name' => 'Gambler'])
 			->willReturn(null);
 
 		$this
-			->duplcateValidator
-			->validatePost(
-				payload: array_merge(
-					$testPayload,
-					['avatar' => 'https://a.ppy.sh/88?88.png'],
-				),
-			);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
+			->duplicateValidator
+			->validatePost(payload: [
+				'name'		=> 'Gambler',
+				'avatar'	=> 'https://a.ppy.sh/88?88.png',
+			]);
 	}
 
 
@@ -184,149 +168,122 @@ class UserDuplicateValidatorTest extends TestCase
 
 
 	#[Test]
-	public function testMissingNameFieldOnPatch(): void
+	public function testPatchWithoutNameSkipsLookup(): void
 	{
-		$testPayload = ['avatar' => 'https://a.ppy.sh/88?88.png'];
-
+		// A partial update that does not touch 'name' must not query at all
 		$this
 			->repository
 			->expects(self::never())
 			->method('findOneBy');
 
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: $testPayload,
+				payload: ['avatar' => 'https://a.ppy.sh/88?88.png'],
 				id: 88888,
 			);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
 	}
 
 	#[Test]
-	public function testNullNameFieldOnPatch(): void
+	public function testPatchWithNullNameLooksUpNullAndPasses(): void
 	{
-		$testPayload = ['name' => null];
-
+		// `array_key_exists` treats an explicit NULL as a real update, so the
+		// NULL is looked up and simply not found.
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
+			->with(['name' => null])
 			->willReturn(null);
 
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: $testPayload,
+				payload: ['name' => null],
 				id: 88888,
 			);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
 	}
 
 	#[Test]
-	public function testPassedNameFieldOnPatch(): void
+	public function testPatchWithUniqueNamePasses(): void
 	{
-		$testPayload = ['name' => 'Gambler'];
-
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
+			->with(['name' => 'Gambler'])
 			->willReturn(null);
 
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: $testPayload,
+				payload: ['name' => 'Gambler'],
 				id: 88888,
 			);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
 	}
 
 	#[Test]
-	public function testSameEntityMatchingNameFieldOnPatch(): void
+	public function testPatchWithOwnNamePasses(): void
 	{
-		$testPayload		= ['name' => 'Gambler'];
-		$userCurrentData	= $this->mockUserEntity();
+		$current = $this->mockUserEntity(id: 88888, name: 'Gambler');
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
-			->willReturn($userCurrentData);
+			->with(['name' => 'Gambler'])
+			->willReturn($current);
 
+		// Re-sending the current value must NOT be treated as a duplicate
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: $testPayload,
+				payload: ['name' => 'Gambler'],
 				id: 88888,
 			);
-
-		$this->addToAssertionCount(count: 1);
 	}
 
 	#[Test]
-	public function testDifferentEntityMatchingNameFieldOnPatch(): void
+	public function testPatchWithAnotherEntityNameThrowsBadRequest(): void
 	{
-		$testPayload = ['name' => 'Gambler'];
-		$userCurrentData
-			= $this->mockUserEntity(
-				id:				19817503,
-				name:			'DeepInDark',
-				avatar:			'https://a.ppy.sh/19817503?1752731877.png',
-				rank:			5103,
-				countryFlag:	'VN',
-			);
+		$current = $this->mockUserEntity(id: 19817503, name: 'Gambler');
 
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
-			->willReturn($userCurrentData);
+			->with(['name' => 'Gambler'])
+			->willReturn($current);
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: "Another user with the name [{$testPayload['name']}] already exists.");
+		$this->expectExceptionMessage(message: 'Another user with the name [Gambler] already exists.');
 
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: $testPayload,
+				payload: ['name' => 'Gambler'],
 				id: 88888,
 			);
 	}
 
 	#[Test]
-	public function testOptionalAvatarFieldOnPatch(): void
+	public function testPatchChecksDuplicateByNameOnly(): void
 	{
-		$testPayload = ['name' => 'Gambler'];
-
 		$this
 			->repository
 			->expects(self::once())
 			->method('findOneBy')
-			->with($testPayload)
+			->with(['name' => 'Gambler'])
 			->willReturn(null);
 
 		$this
-			->duplcateValidator
+			->duplicateValidator
 			->validatePatch(
-				payload: array_merge(
-					$testPayload,
-					['avatar' => 'https://a.ppy.sh/88?88.png'],
-				),
+				payload: [
+					'name'		=> 'Gambler',
+					'avatar'	=> 'https://a.ppy.sh/88?88.png',
+				],
 				id: 88888,
 			);
-
-		// No exception found means a valid pass
-		$this->addToAssertionCount(count: 1);
 	}
 }

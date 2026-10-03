@@ -67,10 +67,15 @@ final readonly class UserProcessor implements ProcessorInterface
 	 *
 	 * NOTE:
 	 * Existence is guaranteed by {@see UserForeignKeyValidatorInterface}; this
-	 * lookup owns the 400 surfaced when the FK itself is unknown.
+	 * lookup owns the 400 surfaced when the FK itself is unknown. An explicit
+	 * NULL is also a 400 because the owning side of the relation is NOT NULL.
 	 */
-	private function resolveRole(int $roleId): RoleEntity
+	private function resolveRole(?int $roleId): RoleEntity
 	{
+		if ($roleId === null) {
+			throw new BadRequestHttpException(message: 'Role ID must not be null.');
+		}
+
 		$roleEntity = $this->roleRepository->find(id: $roleId);
 
 		if (!$roleEntity) {
