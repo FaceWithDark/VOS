@@ -7,7 +7,7 @@ namespace App\Service\Web;
 
 /// --- Main namespaces --- ///
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 /// --- Type hint namespaces --- ///
@@ -17,42 +17,30 @@ use Override;
 /// --- Internal namespaces --- ///
 use App\Interface\Web\UserForeignKeyValidatorInterface;
 use App\Repository\Web\RoleRepository;
-use App\Repository\Web\UserRepository;
 
 
+/**
+ * NOTE:
+ *
+ * `users`.`role_id` is a 1:N relation, so a single role MAY be shared by many
+ * users. This validator therefore only owns the existence check for the
+ * referenced foreign key; there is no "already assigned" conflict anymore.
+ */
 final readonly class UserForeignKeyValidator implements UserForeignKeyValidatorInterface
 {
-	public function __construct(
-		private RoleRepository	$roleRepository,
-		private UserRepository	$userRepository,
-	) {}
+	public function __construct(private RoleRepository $roleRepository) {}
 
 	#[Override]
 	public function validatePost(array $payload): void
 	{
 		$roleId = $payload['roleId'] ?? null;
 
-		// Let DTO validation surface the error when 'roleId' field is missing
+		// Let DTO validation surface the error when 'roleId' field is missing/null
 		if ($roleId === null) {
 			return;
 		}
 
-		$roleEntity = $this->roleRepository->find(id: $roleId);
-
-		// Let UserProcessor::resolveRole() surface the 400 when the FK is unknown
-		if ($roleEntity === null) {
-			return;
-		}
-
-		// 1:1 relationship - a role can only ever belong to a single user
-		if ($this->userRepository->findOneBy(criteria: ['roleId' => $roleEntity]) !== null) {
-			throw new ConflictHttpException(
-				message: sprintf(
-					'Role with ID [%d] is already assigned to another user.',
-					$roleId,
-				),
-			);
-		}
+		$this->assertRoleExists(roleId: $roleId);
 	}
 
 	#[Override]
@@ -68,29 +56,26 @@ final readonly class UserForeignKeyValidator implements UserForeignKeyValidatorI
 
 		$roleId = $payload['roleId'] ?? null;
 
-		// Leave explicit NULL handling to UserProcessor::resolveRole()
+		// The owning side is NOT NULL, so an explicit NULL can never be applied
 		if ($roleId === null) {
+			throw new BadRequestHttpException(
+				message: 'Role ID must not be null.',
+			);
+		}
+
+		$this->assertRoleExists(roleId: $roleId);
+	}
+
+	private function assertRoleExists(int $roleId): void
+	{
+		if ($this->roleRepository->find(id: $roleId) !== null) {
 			return;
 		}
 
-		$roleEntity = $this->roleRepository->find(id: $roleId);
-
-		// Let UserProcessor::resolveRole() surface the 400 when the FK is unknown
-		if ($roleEntity === null) {
-			return;
-		}
-
-		$userWithRole = $this->userRepository->findOneBy(criteria: ['roleId' => $roleEntity]);
-
-		// Detect a 1:1 collision only when another user already holds the role
-		if ($userWithRole === null || (int) $userWithRole->getId() === $id) {
-			return;
-		}
-
-		throw new BadRequestHttpException(
+		throw new NotFoundHttpException(
 			message: sprintf(
-				'Another user with role ID [%d] already exists.',
-				$roleId
+				'Role with ID [%d] not found.',
+				$roleId,
 			),
 		);
 	}

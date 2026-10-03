@@ -6,12 +6,15 @@ namespace App\Tests\Entity\Web;
 
 
 /// --- Main namespaces --- ///
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\OneToMany;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 
 /// --- Type hint namespaces --- ///
+use ReflectionProperty;
 
 
 /// --- Internal namespaces --- ///
@@ -75,35 +78,6 @@ class RoleEntityTest extends TestCase
 	}
 
 	#[Test]
-	public function testSetUsersKeepsBothSidesOfTheRelationInSync(): void
-	{
-		$role	= new RoleEntity();
-		$user	= new UserEntity();
-
-		$role->setUsers(users: $user);
-
-		self::assertSame(expected: $user, actual: $role->getUsers());
-		self::assertSame(
-			expected: $role,
-			actual: $user->getRoleId(),
-			message: 'Owning side must be updated when the inverse side is set.',
-		);
-	}
-
-	#[Test]
-	public function testSetUsersDoesNotRewriteAnAlreadyCorrectOwner(): void
-	{
-		$role	= new RoleEntity();
-		$user	= new UserEntity();
-
-		$user->setRoleId(roleId: $role);
-		$role->setUsers(users: $user);
-
-		self::assertSame(expected: $role, actual: $user->getRoleId());
-		self::assertSame(expected: $user, actual: $role->getUsers());
-	}
-
-	#[Test]
 	public function testInheritsIdentityAndTimestampBehaviour(): void
 	{
 		$entity = new RoleEntity();
@@ -116,5 +90,86 @@ class RoleEntityTest extends TestCase
 			expected: 'UTC',
 			actual: $entity->getCreateOn()->getTimezone()->getName(),
 		);
+	}
+
+
+	/**
+	 * 1:N association with users
+	 */
+
+
+	#[Test]
+	public function testUsersAssociationIsOneToMany(): void
+	{
+		$attributes = (new ReflectionProperty(
+			class: RoleEntity::class,
+			property: 'users',
+		))->getAttributes(name: OneToMany::class);
+
+		self::assertCount(
+			expectedCount: 1,
+			haystack: $attributes,
+			message: 'A role must own a OneToMany association to its users.',
+		);
+
+		$association = $attributes[0]->newInstance();
+
+		self::assertSame(expected: UserEntity::class, actual: $association->targetEntity);
+		self::assertSame(expected: 'roleId', actual: $association->mappedBy);
+	}
+
+	#[Test]
+	public function testConstructorInitialisesUsersAsEmptyCollection(): void
+	{
+		$entity = new RoleEntity();
+
+		self::assertInstanceOf(expected: Collection::class, actual: $entity->getUsers());
+		self::assertCount(expectedCount: 0, haystack: $entity->getUsers());
+	}
+
+	#[Test]
+	public function testAddUserKeepsBothSidesOfTheRelationInSync(): void
+	{
+		$role	= new RoleEntity();
+		$user	= new UserEntity();
+
+		self::assertSame(expected: $role, actual: $role->addUser(user: $user));
+
+		self::assertCount(expectedCount: 1, haystack: $role->getUsers());
+		self::assertTrue(condition: $role->getUsers()->contains($user));
+		self::assertSame(
+			expected: $role,
+			actual: $user->getRoleId(),
+			message: 'Owning side must be updated when a user joins the collection.',
+		);
+	}
+
+	#[Test]
+	public function testAddUserIsIdempotent(): void
+	{
+		$role	= new RoleEntity();
+		$user	= new UserEntity();
+
+		$role->addUser(user: $user);
+		$role->addUser(user: $user);
+
+		self::assertCount(
+			expectedCount: 1,
+			haystack: $role->getUsers(),
+			message: 'Adding the same user twice must not duplicate it.',
+		);
+	}
+
+	#[Test]
+	public function testRemoveUserDetachesFromCollection(): void
+	{
+		$role	= new RoleEntity();
+		$user	= new UserEntity();
+
+		$role->addUser(user: $user);
+
+		self::assertSame(expected: $role, actual: $role->removeUser(user: $user));
+		self::assertCount(expectedCount: 0, haystack: $role->getUsers());
+		self::assertFalse(condition: $role->getUsers()->contains($user));
 	}
 }

@@ -10,7 +10,7 @@ namespace App\Interface\Abstract;
 
 /// --- Type hint namespaces --- ///
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 /// --- Internal namespaces --- ///
@@ -21,8 +21,7 @@ interface ForeignKeyValidatorInterface
 	/**
 	 * @param array<string, mixed>	$payload Fully JSON decoded request body.
 	 *
-	 * @throws ConflictHttpException 409 when the referenced record is already
-	 *                               linked to another entity (1:1 relationship).
+	 * @throws NotFoundHttpException 404 when the referenced record is unknown.
 	 */
 	public function validatePost(array $payload): void;
 
@@ -30,8 +29,9 @@ interface ForeignKeyValidatorInterface
 	 * @param array<string, mixed>	$payload	Fully JSON decoded request body.
 	 * @param int					$id			ID of the entity being updated.
 	 *
-	 * @throws BadRequestHttpException 400 when another entity already
-	 *                                 references the record.
+	 * @throws BadRequestHttpException 400 when an explicit NULL targets a
+	 *                                 column that does not accept it.
+	 * @throws NotFoundHttpException   404 when the referenced record is unknown.
 	 */
 	public function validatePatch(array $payload, int $id): void;
 }

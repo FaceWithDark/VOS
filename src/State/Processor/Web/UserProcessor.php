@@ -66,9 +66,9 @@ final readonly class UserProcessor implements ProcessorInterface
 	 * Resolves the incoming foreign key into an existing Role entity.
 	 *
 	 * NOTE:
-	 * Existence is guaranteed by {@see UserForeignKeyValidatorInterface}; this
-	 * lookup owns the 400 surfaced when the FK itself is unknown. An explicit
-	 * NULL is also a 400 because the owning side of the relation is NOT NULL.
+	 * The FK validator normally rejects an unknown role first (404); this lookup
+	 * keeps the processor safe for direct callers and owns the 400 for an
+	 * explicit NULL, which a NOT NULL relation can never accept.
 	 */
 	private function resolveRole(?int $roleId): RoleEntity
 	{
@@ -79,7 +79,7 @@ final readonly class UserProcessor implements ProcessorInterface
 		$roleEntity = $this->roleRepository->find(id: $roleId);
 
 		if (!$roleEntity) {
-			throw new BadRequestHttpException(
+			throw new NotFoundHttpException(
 				message: sprintf(
 					'Role with ID [%d] not found.',
 					$roleId,

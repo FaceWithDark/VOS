@@ -26,14 +26,13 @@ use App\Repository\Web\UserRepository;
 )]
 final class UserEntity extends UserAbstract
 {
-	#[ORM\OneToOne(
+	#[ORM\ManyToOne(
 		inversedBy: 'users',
 		cascade: ['persist']
 	)]
 	#[ORM\JoinColumn(
 		name: 'role_id',
 		referencedColumnName: 'id',
-		unique: true,
 		nullable: false,
 		onDelete: 'NO ACTION'
 	)]

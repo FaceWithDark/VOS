@@ -291,6 +291,56 @@ class UserProcessorTest extends TestCase
 	}
 
 	#[Test]
+	public function testPostWithoutCurrentRequestForwardsEmptyPayload(): void
+	{
+		$dto = new UserCreateDto();
+
+		$dto->id			= 88888;
+		$dto->roleId		= 3;
+		$dto->name			= 'Gambler';
+		$dto->avatar		= 'https://a.ppy.sh/88?88.png';
+		$dto->rank			= 88;
+		$dto->countryFlag	= 'ZW';
+
+		// No stubbed request at all: getDecodedPayload() must fall back to []
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePost')
+			->with([]);
+
+		$this
+			->foreignKeyValidator
+			->expects(self::once())
+			->method('validatePost')
+			->with([]);
+
+		$this
+			->roleRepository
+			->expects(self::once())
+			->method('find')
+			->willReturn($this->mockRoleEntity());
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save');
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn(new UserResourceDto());
+
+		$this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Post(),
+			);
+	}
+
+	#[Test]
 	public function testPostWithDuplicateNameDoesNotPersist(): void
 	{
 		$dto = new UserCreateDto();
@@ -331,7 +381,7 @@ class UserProcessorTest extends TestCase
 	}
 
 	#[Test]
-	public function testPostWithMissingRoleThrowsBadRequest(): void
+	public function testPostWithUnknownRoleThrowsNotFound(): void
 	{
 		$dto = new UserCreateDto();
 
@@ -361,7 +411,7 @@ class UserProcessorTest extends TestCase
 			->method('validatePost')
 			->with($dtoPayload);
 
-		// The FK validator lets the processor own the 400 for an unknown role
+		// The processor also owns the 404 as a defensive fallback
 		$this
 			->roleRepository
 			->expects(self::once())
@@ -374,7 +424,7 @@ class UserProcessorTest extends TestCase
 			->expects(self::never())
 			->method('save');
 
-		$this->expectException(exception: BadRequestHttpException::class);
+		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Role with ID [999] not found.');
 
 		$this
@@ -690,6 +740,121 @@ class UserProcessorTest extends TestCase
 				operation: new Patch(),
 				payload: ['id' => 88888],
 			);
+	}
+
+	#[Test]
+	public function testPatchWithUnknownRoleThrowsNotFound(): void
+	{
+		$dto = new UserUpdateDto();
+
+		$dto->roleId = 999;
+
+		$current	= $this->mockUserEntity();
+		$payload	= ['roleId' => $dto->roleId];
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(88888)
+			->willReturn($current);
+
+		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload, 88888);
+
+		$this
+			->foreignKeyValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload, 88888);
+
+		$this
+			->roleRepository
+			->expects(self::once())
+			->method('find')
+			->with(999)
+			->willReturn(null);
+
+		$this
+			->repository
+			->expects(self::never())
+			->method('save');
+
+		$this->expectException(exception: NotFoundHttpException::class);
+		$this->expectExceptionMessage(message: 'Role with ID [999] not found.');
+
+		$this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Patch(),
+				payload: ['id' => 88888],
+			);
+	}
+
+	#[Test]
+	public function testPatchWithRankAndCountryFlagUpdatesThem(): void
+	{
+		$dto = new UserUpdateDto();
+
+		$dto->rank			= 5103;
+		$dto->countryFlag	= 'VN';
+
+		$current	= $this->mockUserEntity(name: 'DeepInDark');
+		$payload	= [
+			'rank'			=> $dto->rank,
+			'countryFlag'	=> $dto->countryFlag,
+		];
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(88888)
+			->willReturn($current);
+
+		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload, 88888);
+
+		$this
+			->foreignKeyValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload, 88888);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save')
+			->with($current, true);
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn(new UserResourceDto());
+
+		$this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Patch(),
+				payload: ['id' => 88888],
+			);
+
+		self::assertSame(expected: 5103, actual: $current->getRank());
+		self::assertSame(expected: 'VN', actual: $current->getCountryFlag());
+		self::assertSame(expected: 'DeepInDark', actual: $current->getName());
 	}
 
 	#[Test]
