@@ -6,7 +6,7 @@ namespace App\Dto\Input\Web;
 
 
 /// --- Main namespaces --- ///
-use Symfony\Component\Validator\Constraint as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /// --- Type hint namespaces --- ///
