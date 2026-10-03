@@ -2,30 +2,41 @@
 
 declare(strict_types=1);
 
+namespace App\Entity\Web;
 
-namespace App\Entity\Tourney;
 
-use App\Entity\Abstract\UserAbstract;
-use App\Repository\Tourney\UserRepository;
-use Doctrine\DBAL\Types\Types;
+/// --- Main namespaces --- ///
 use Doctrine\ORM\Mapping as ORM;
+
+
+/// --- Type hint namespaces --- ///
+use Doctrine\DBAL\Types\Types;
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Abstract\UserAbstract;
+use App\Repository\Web\UserRepository;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(
 	name: '`users`',
-	options: ['comment' => 'storing info about osu!taiko users that ARE belong to one or more registered tournaments under VOS org.']
+	schema: 'vos_catalog',
+	options: ['comment' => 'storing info about osu!taiko users that ARE NOT belong to any registered tournaments under VOS org.']
 )]
-final class User extends UserAbstract
+final class UserEntity extends UserAbstract
 {
-	#[ORM\ManyToOne(inversedBy: 'users')]
+	#[ORM\ManyToOne(
+		inversedBy: 'users',
+		cascade: ['persist']
+	)]
 	#[ORM\JoinColumn(
 		name: 'role_id',
 		referencedColumnName: 'id',
 		nullable: false,
 		onDelete: 'NO ACTION'
 	)]
-	private ?Role $roleId = null;
+	private ?RoleEntity $roleId = null;
 
 	#[ORM\Column(
 		type: Types::TEXT,
@@ -52,12 +63,12 @@ final class User extends UserAbstract
 	)]
 	private ?string $countryFlag = null;
 
-	public function getRoleId(): ?Role
+	public function getRoleId(): ?RoleEntity
 	{
 		return $this->roleId;
 	}
 
-	public function setRoleId(?Role $roleId): static
+	public function setRoleId(RoleEntity $roleId): static
 	{
 		$this->roleId = $roleId;
 

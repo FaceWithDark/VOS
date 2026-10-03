@@ -2,46 +2,52 @@
 
 declare(strict_types=1);
 
-
 namespace App\Repository\Web;
 
-use App\Entity\Web\Role;
+
+/// --- Main namespaces --- ///
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 
+/// --- Type hint namespaces --- ///
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Web\RoleEntity;
+
+
 /**
- * @extends ServiceEntityRepository<Role>
+ * @extends ServiceEntityRepository<RoleEntity>
  */
 class RoleRepository extends ServiceEntityRepository
 {
 	public function __construct(ManagerRegistry $registry)
 	{
-		parent::__construct($registry, Role::class);
+		parent::__construct($registry, RoleEntity::class);
 	}
 
-	//    /**
-	//     * @return Role[] Returns an array of Role objects
-	//     */
-	//    public function findByExampleField($value): array
-	//    {
-	//        return $this->createQueryBuilder('r')
-	//            ->andWhere('r.exampleField = :val')
-	//            ->setParameter('val', $value)
-	//            ->orderBy('r.id', 'ASC')
-	//            ->setMaxResults(10)
-	//            ->getQuery()
-	//            ->getResult()
-	//        ;
-	//    }
+	public function save(
+		RoleEntity	$entity,
+		bool		$flush = true,
+	): void
+	{
+		$this->getEntityManager()->persist(object: $entity);
 
-	//    public function findOneBySomeField($value): ?Role
-	//    {
-	//        return $this->createQueryBuilder('r')
-	//            ->andWhere('r.exampleField = :val')
-	//            ->setParameter('val', $value)
-	//            ->getQuery()
-	//            ->getOneOrNullResult()
-	//        ;
-	//    }
+		if ($flush) {
+			$this->getEntityManager()->flush();
+		}
+	}
+
+	public function remove(
+		RoleEntity	$entity,
+		bool		$flush = true,
+	): void
+	{
+		$this->getEntityManager()->remove(object: $entity);
+
+		if ($flush) {
+			$this->getEntityManager()->flush();
+		}
+	}
 }
