@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\State\Processor\Web;
+namespace App\Tests\Unit\State\Processor\Web;
 
 
 /// --- Main namespaces --- ///
@@ -12,7 +12,9 @@ use ApiPlatform\Metadata\Post;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +34,8 @@ use stdClass;
 use App\Dto\Input\Web\UserCreateDto;
 use App\Dto\Input\Web\UserUpdateDto;
 use App\Dto\Main\Web\UserResourceDto;
+use App\Entity\Abstract\RoleAbstract;
+use App\Entity\Abstract\UserAbstract;
 use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
 use App\Interface\Web\UserDuplicateValidatorInterface;
@@ -71,6 +75,10 @@ use App\State\Processor\Web\UserProcessor;
  */
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(className: UserProcessor::class)]
+#[UsesClass(className: RoleAbstract::class)]
+#[UsesClass(className: RoleEntity::class)]
+#[UsesClass(className: UserAbstract::class)]
+#[UsesClass(className: UserEntity::class)]
 class UserProcessorTest extends TestCase
 {
 	private UserRepository&MockObject						$repository;
@@ -153,6 +161,48 @@ class UserProcessorTest extends TestCase
 			->setAvatar(avatar: $avatar)
 			->setRank(rank: $rank)
 			->setCountryFlag(countryFlag: $countryFlag);
+	}
+
+	/**
+	 * Seals every collaborator once the test has declared all of its
+	 * expectations: any undeclared call now fails instead of returning null.
+	 */
+	private function sealCollaborators(): void
+	{
+		$this
+			->repository
+			->method('find')
+			->seal();
+
+		$this
+			->roleRepository
+			->method('find')
+			->seal();
+
+		$this
+			->mapper
+			->method('map')
+			->seal();
+
+		$this
+			->requestStack
+			->method('getCurrentRequest')
+			->seal();
+
+		$this
+			->duplicateValidator
+			->method('validatePost')
+			->seal();
+
+		$this
+			->foreignKeyValidator
+			->method('validatePost')
+			->seal();
+
+		$this
+			->emptyPayloadValidator
+			->method('validatePatch')
+			->seal();
 	}
 
 
@@ -238,6 +288,8 @@ class UserProcessorTest extends TestCase
 			)
 			->willReturn($resource);
 
+		$this->sealCollaborators();
+
 		$result = $this
 			->processor
 			->process(
@@ -297,6 +349,8 @@ class UserProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new UserResourceDto());
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -347,6 +401,8 @@ class UserProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new UserResourceDto());
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -390,6 +446,8 @@ class UserProcessorTest extends TestCase
 			->method('map');
 
 		$this->expectException(exception: ConflictHttpException::class);
+
+		$this->sealCollaborators();
 
 		$this
 			->processor
@@ -446,6 +504,8 @@ class UserProcessorTest extends TestCase
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Role with ID [999] not found.');
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -493,6 +553,8 @@ class UserProcessorTest extends TestCase
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'User with ID [88888] not found.');
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -515,6 +577,8 @@ class UserProcessorTest extends TestCase
 
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'User with ID [0] not found.');
+
+		$this->sealCollaborators();
 
 		$this
 			->processor
@@ -563,6 +627,8 @@ class UserProcessorTest extends TestCase
 
 		$this->expectException(exception: BadRequestHttpException::class);
 		$this->expectExceptionMessage(message: 'Request payload must not be empty.');
+
+		$this->sealCollaborators();
 
 		$this
 			->processor
@@ -634,6 +700,8 @@ class UserProcessorTest extends TestCase
 			->expects(self::once())
 			->method('map')
 			->willReturn($resource);
+
+		$this->sealCollaborators();
 
 		$result = $this
 			->processor
@@ -713,6 +781,8 @@ class UserProcessorTest extends TestCase
 			->expects(self::once())
 			->method('map')
 			->willReturn(new UserResourceDto());
+
+		$this->sealCollaborators();
 
 		$this
 			->processor
@@ -803,6 +873,8 @@ class UserProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new UserResourceDto());
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -868,6 +940,8 @@ class UserProcessorTest extends TestCase
 		$this->expectException(exception: BadRequestHttpException::class);
 		$this->expectExceptionMessage(message: 'Role ID must not be null.');
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -928,6 +1002,8 @@ class UserProcessorTest extends TestCase
 
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Role with ID [999] not found.');
+
+		$this->sealCollaborators();
 
 		$this
 			->processor
@@ -994,6 +1070,8 @@ class UserProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new UserResourceDto());
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -1055,6 +1133,8 @@ class UserProcessorTest extends TestCase
 
 		$this->expectException(exception: BadRequestHttpException::class);
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -1062,6 +1142,138 @@ class UserProcessorTest extends TestCase
 				operation: new Patch(),
 				payload: ['id' => 88888],
 			);
+	}
+
+
+	/**
+	 * Every combination of the five optional PATCH fields. `handlePatch()` owns
+	 * one independent guard per field, so exercising the full power set is the
+	 * only way to reach every path through its decision table.
+	 *
+	 * @return array<string, array{0: list<string>}>
+	 */
+	public static function providePatchFieldCombinations(): array
+	{
+		$fields			= ['name', 'avatar', 'rank', 'countryFlag', 'roleId'];
+		$combinations	= [];
+
+		for ($mask = 0; $mask < (1 << count(value: $fields)); $mask++) {
+			$presentFields = [];
+
+			foreach ($fields as $index => $field) {
+				if (($mask & (1 << $index)) !== 0) {
+					$presentFields[] = $field;
+				}
+			}
+
+			$combinations['mask ' . $mask] = [$presentFields];
+		}
+
+		return $combinations;
+	}
+
+	#[Test]
+	#[DataProvider(methodName: 'providePatchFieldCombinations')]
+	public function testPatchAppliesExactlyTheFieldsPresentInThePayload(array $presentFields): void
+	{
+		$dto = new UserUpdateDto();
+
+		$dto->name			= 'DeepInDark';
+		$dto->avatar		= 'https://a.ppy.sh/19817503?1752731877.png';
+		$dto->rank			= 5103;
+		$dto->countryFlag	= 'VN';
+		$dto->roleId		= 3;
+
+		$current		= $this->mockUserEntity(
+			name: 'Gambler',
+			avatar: 'https://a.ppy.sh/88?88.png',
+			rank: 88,
+			countryFlag: 'ZW',
+		);
+		$previousRole	= $current->getRoleId();
+		$newRole		= $this->mockRoleEntity(
+			id: 3,
+			name: 'Gambler',
+		);
+		$payload		= [];
+
+		foreach ($presentFields as $field) {
+			$payload[$field] = $dto->{$field};
+		}
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(88888)
+			->willReturn($current);
+
+		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		// The guards vary per data set; every collaborator is stubbed so the
+		// combination under test is the only thing that changes the outcome.
+		$this
+			->emptyPayloadValidator
+			->method('validatePatch');
+
+		$this
+			->duplicateValidator
+			->method('validatePatch');
+
+		$this
+			->foreignKeyValidator
+			->method('validatePatch');
+
+		$this
+			->roleRepository
+			->method('find')
+			->willReturn($newRole);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save')
+			->with(
+				$current,
+				true,
+			);
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn(new UserResourceDto());
+
+		$this->sealCollaborators();
+
+		$this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Patch(),
+				payload: ['id' => 88888],
+			);
+
+		self::assertSame(
+			expected: in_array(needle: 'name', haystack: $presentFields, strict: true) ? $dto->name : 'Gambler',
+			actual: $current->getName(),
+		);
+		self::assertSame(
+			expected: in_array(needle: 'avatar', haystack: $presentFields, strict: true) ? $dto->avatar : 'https://a.ppy.sh/88?88.png',
+			actual: $current->getAvatar(),
+		);
+		self::assertSame(
+			expected: in_array(needle: 'rank', haystack: $presentFields, strict: true) ? $dto->rank : 88,
+			actual: $current->getRank(),
+		);
+		self::assertSame(
+			expected: in_array(needle: 'countryFlag', haystack: $presentFields, strict: true) ? $dto->countryFlag : 'ZW',
+			actual: $current->getCountryFlag(),
+		);
+		self::assertSame(
+			expected: in_array(needle: 'roleId', haystack: $presentFields, strict: true) ? $newRole : $previousRole,
+			actual: $current->getRoleId(),
+		);
 	}
 
 
@@ -1090,6 +1302,8 @@ class UserProcessorTest extends TestCase
 				$current,
 				true,
 			);
+
+		$this->sealCollaborators();
 
 		$result = $this
 			->processor
@@ -1120,6 +1334,8 @@ class UserProcessorTest extends TestCase
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'User with ID [88888] not found.');
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -1142,6 +1358,8 @@ class UserProcessorTest extends TestCase
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'User with ID [0] not found.');
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -1162,6 +1380,8 @@ class UserProcessorTest extends TestCase
 	{
 		$this->expectException(exception: InvalidArgumentException::class);
 		$this->expectExceptionMessage(message: 'Unsupported opearation or input DTO type.');
+
+		$this->sealCollaborators();
 
 		$this
 			->processor

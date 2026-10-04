@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Entity\Web;
+namespace App\Tests\Unit\Entity\Web;
 
 
 /// --- Main namespaces --- ///
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 
@@ -18,11 +20,16 @@ use ReflectionProperty;
 
 
 /// --- Internal namespaces --- ///
+use App\Entity\Abstract\RoleAbstract;
+use App\Entity\Abstract\UserAbstract;
 use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
 
 
 #[CoversClass(className: UserEntity::class)]
+#[UsesClass(className: RoleAbstract::class)]
+#[UsesClass(className: RoleEntity::class)]
+#[UsesClass(className: UserAbstract::class)]
 class UserEntityTest extends TestCase
 {
 	#[Test]
@@ -141,6 +148,7 @@ class UserEntityTest extends TestCase
 
 
 	#[Test]
+	#[CoversNothing]
 	public function testRoleAssociationIsManyToOne(): void
 	{
 		$property = new ReflectionProperty(
@@ -164,6 +172,7 @@ class UserEntityTest extends TestCase
 	}
 
 	#[Test]
+	#[CoversNothing]
 	public function testRoleJoinColumnIsRequiredAndNotUnique(): void
 	{
 		$attributes = (new ReflectionProperty(

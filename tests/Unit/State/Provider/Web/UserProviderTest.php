@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\State\Provider\Web;
+namespace App\Tests\Unit\State\Provider\Web;
 
 
 /// --- Main namespaces --- ///
@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
@@ -21,12 +22,15 @@ use Override;
 
 /// --- Internal namespaces --- ///
 use App\Dto\Main\Web\UserResourceDto;
+use App\Entity\Abstract\UserAbstract;
 use App\Entity\Web\UserEntity;
 use App\Repository\Web\UserRepository;
 use App\State\Provider\Web\UserProvider;
 
 
 #[CoversClass(className: UserProvider::class)]
+#[UsesClass(className: UserAbstract::class)]
+#[UsesClass(className: UserEntity::class)]
 class UserProviderTest extends TestCase
 {
 	private UserRepository&MockObject			$repository;
@@ -45,6 +49,23 @@ class UserProviderTest extends TestCase
 			repository:	$this->repository,
 			mapper:		$this->mapper,
 		);
+	}
+
+	/**
+	 * Seals every collaborator once the test has declared all of its
+	 * expectations: any undeclared call now fails instead of returning null.
+	 */
+	private function sealCollaborators(): void
+	{
+		$this
+			->repository
+			->method('find')
+			->seal();
+
+		$this
+			->mapper
+			->method('map')
+			->seal();
 	}
 
 	#[Test]
@@ -71,6 +92,8 @@ class UserProviderTest extends TestCase
 				$first,
 				$second,
 			);
+
+		$this->sealCollaborators();
 
 		$result
 			= $this
@@ -99,6 +122,8 @@ class UserProviderTest extends TestCase
 			->mapper
 			->expects(self::never())
 			->method('map');
+
+		$this->sealCollaborators();
 
 		$result
 			= $this
@@ -134,6 +159,8 @@ class UserProviderTest extends TestCase
 			)
 			->willReturn($resource);
 
+		$this->sealCollaborators();
+
 		$result
 		   	= $this
 				->provider
@@ -163,6 +190,8 @@ class UserProviderTest extends TestCase
 			->mapper
 			->expects(self::never())
 			->method('map');
+
+		$this->sealCollaborators();
 
 		$result
 		   	= $this
