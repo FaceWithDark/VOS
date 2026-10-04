@@ -502,7 +502,7 @@ class UserProcessorTest extends TestCase
 			->method('save');
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Role with ID [999] not found.');
+		$this->expectExceptionMessageIs(message: 'Role with ID [999] not found.');
 
 		$this->sealCollaborators();
 
@@ -551,7 +551,7 @@ class UserProcessorTest extends TestCase
 			->method('map');
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'User with ID [88888] not found.');
+		$this->expectExceptionMessageIs(message: 'User with ID [88888] not found.');
 
 		$this->sealCollaborators();
 
@@ -576,7 +576,7 @@ class UserProcessorTest extends TestCase
 			->willReturn(null);
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'User with ID [0] not found.');
+		$this->expectExceptionMessageIs(message: 'User with ID [0] not found.');
 
 		$this->sealCollaborators();
 
@@ -626,7 +626,7 @@ class UserProcessorTest extends TestCase
 			->method('save');
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: 'Request payload must not be empty.');
+		$this->expectExceptionMessageIs(message: 'Request payload must not be empty.');
 
 		$this->sealCollaborators();
 
@@ -938,7 +938,7 @@ class UserProcessorTest extends TestCase
 			->method('save');
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: 'Role ID must not be null.');
+		$this->expectExceptionMessageIs(message: 'Role ID must not be null.');
 
 		$this->sealCollaborators();
 
@@ -1001,7 +1001,7 @@ class UserProcessorTest extends TestCase
 			->method('save');
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Role with ID [999] not found.');
+		$this->expectExceptionMessageIs(message: 'Role with ID [999] not found.');
 
 		$this->sealCollaborators();
 
@@ -1332,7 +1332,7 @@ class UserProcessorTest extends TestCase
 			->method('remove');
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'User with ID [88888] not found.');
+		$this->expectExceptionMessageIs(message: 'User with ID [88888] not found.');
 
 		$this->sealCollaborators();
 
@@ -1356,7 +1356,7 @@ class UserProcessorTest extends TestCase
 			->willReturn(null);
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'User with ID [0] not found.');
+		$this->expectExceptionMessageIs(message: 'User with ID [0] not found.');
 
 		$this->sealCollaborators();
 
@@ -1379,7 +1379,7 @@ class UserProcessorTest extends TestCase
 	public function testProcessRejectsUnsupportedInput(): void
 	{
 		$this->expectException(exception: InvalidArgumentException::class);
-		$this->expectExceptionMessage(message: 'Unsupported opearation or input DTO type.');
+		$this->expectExceptionMessageIs(message: 'Unsupported opearation or input DTO type.');
 
 		$this->sealCollaborators();
 

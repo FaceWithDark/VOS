@@ -107,7 +107,7 @@ class UserForeignKeyValidatorTest extends TestCase
 			->seal();
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Role with ID [999] not found.');
+		$this->expectExceptionMessageIs(message: 'Role with ID [999] not found.');
 
 		$this
 			->foreignKeyValidator
@@ -169,7 +169,7 @@ class UserForeignKeyValidatorTest extends TestCase
 			->seal();
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: 'Role ID must not be null.');
+		$this->expectExceptionMessageIs(message: 'Role ID must not be null.');
 
 		$this
 			->foreignKeyValidator
@@ -191,7 +191,7 @@ class UserForeignKeyValidatorTest extends TestCase
 			->seal();
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Role with ID [999] not found.');
+		$this->expectExceptionMessageIs(message: 'Role with ID [999] not found.');
 
 		$this
 			->foreignKeyValidator

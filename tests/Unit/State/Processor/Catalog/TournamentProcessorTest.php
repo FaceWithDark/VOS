@@ -369,7 +369,7 @@ class TournamentProcessorTest extends TestCase
 			->method('map');
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Tournament with ID [88] not found.');
+		$this->expectExceptionMessageIs(message: 'Tournament with ID [88] not found.');
 
 		$this->sealCollaborators();
 
@@ -394,7 +394,7 @@ class TournamentProcessorTest extends TestCase
 			->willReturn(null);
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Tournament with ID [0] not found.');
+		$this->expectExceptionMessageIs(message: 'Tournament with ID [0] not found.');
 
 		$this->sealCollaborators();
 
@@ -439,7 +439,7 @@ class TournamentProcessorTest extends TestCase
 			->method('save');
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: 'Request payload must not be empty.');
+		$this->expectExceptionMessageIs(message: 'Request payload must not be empty.');
 
 		$this->sealCollaborators();
 
@@ -887,7 +887,7 @@ class TournamentProcessorTest extends TestCase
 			->method('remove');
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Tournament with ID [88] not found.');
+		$this->expectExceptionMessageIs(message: 'Tournament with ID [88] not found.');
 
 		$this->sealCollaborators();
 
@@ -911,7 +911,7 @@ class TournamentProcessorTest extends TestCase
 			->willReturn(null);
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Tournament with ID [0] not found.');
+		$this->expectExceptionMessageIs(message: 'Tournament with ID [0] not found.');
 
 		$this->sealCollaborators();
 
@@ -934,7 +934,7 @@ class TournamentProcessorTest extends TestCase
 	public function testProcessRejectsUnsupportedInput(): void
 	{
 		$this->expectException(exception: InvalidArgumentException::class);
-		$this->expectExceptionMessage(message: 'Unsupported opearation or input DTO type.');
+		$this->expectExceptionMessageIs(message: 'Unsupported opearation or input DTO type.');
 
 		$this->sealCollaborators();
 

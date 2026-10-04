@@ -139,7 +139,7 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->willReturn($current);
 
 		$this->expectException(exception: ConflictHttpException::class);
-		$this->expectExceptionMessage(message: 'A tournament with the name [VOT6] already exists.');
+		$this->expectExceptionMessageIs(message: 'A tournament with the name [VOT6] already exists.');
 
 		$this->sealRepository();
 
@@ -278,7 +278,7 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->willReturn($current);
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: 'Another tournament with the name [VOT6] already exists.');
+		$this->expectExceptionMessageIs(message: 'Another tournament with the name [VOT6] already exists.');
 
 		$this->sealRepository();
 

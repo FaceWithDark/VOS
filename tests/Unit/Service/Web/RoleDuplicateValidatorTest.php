@@ -129,7 +129,7 @@ class RoleDuplicateValidatorTest extends TestCase
 			->seal();
 
 		$this->expectException(exception: ConflictHttpException::class);
-		$this->expectExceptionMessage(message: 'A role with the name [Admin] already exists.');
+		$this->expectExceptionMessageIs(message: 'A role with the name [Admin] already exists.');
 
 		$this
 			->duplicateValidator
@@ -262,7 +262,7 @@ class RoleDuplicateValidatorTest extends TestCase
 			->seal();
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: 'Another role with the name [Admin] already exists.');
+		$this->expectExceptionMessageIs(message: 'Another role with the name [Admin] already exists.');
 
 		$this
 			->duplicateValidator
