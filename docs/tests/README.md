@@ -55,7 +55,7 @@ XDEBUG_MODE=coverage php vendor/bin/phpunit --list-suites
 > [!TIP]
 > Test-only changes use the dedicated `test` commit tag (e.g.,
 > `test(tournaments): cover provider not-found branch`). See the
-> [**Git Commit Convention**](../docs/conventions/GIT.md) for the full tag list.
+> [**Git Commit Convention**](../conventions/GIT.md) for the full tag list.
 
 Every run already writes an HTML report to `var/coverage/html`. For a terminal report, use `--coverage-text` (or `--only-summary-for-coverage-text` for the totals only):
 
