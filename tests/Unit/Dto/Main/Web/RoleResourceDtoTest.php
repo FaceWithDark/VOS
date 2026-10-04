@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Dto\Main\Web;
+namespace App\Tests\Unit\Dto\Main\Web;
 
 
 /// --- Main namespaces --- ///
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\ObjectMapper\Attribute\Map;
@@ -29,8 +29,13 @@ use App\Entity\Web\RoleEntity;
  * This is an output-only DTO: it has public properties and #[Map] attributes
  * that tell API Platform's ObjectMapper how an entity becomes a response body.
  * The tests pin down both the value object behaviour and that mapping contract.
+ *
+ * The DTO declares no executable lines (only typed properties and attributes),
+ * so PHPUnit has nothing to attribute coverage to: the class is covered, it
+ * simply cannot contribute. `#[CoversNothing]` states that explicitly instead
+ * of leaving PHPUnit to flag every test as risky.
  */
-#[CoversClass(className: RoleResourceDto::class)]
+#[CoversNothing]
 class RoleResourceDtoTest extends TestCase
 {
 	#[Test]

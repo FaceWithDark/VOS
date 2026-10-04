@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Dto\Input\Web;
+namespace App\Tests\Unit\Dto\Input\Web;
 
 
 /// --- Main namespaces --- ///
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
@@ -27,8 +27,13 @@ use App\Dto\Input\Web\RoleUpdateDto;
  * PATCH is a partial update, so every property is optional and defaults to
  * NULL. "Not sent at all" and "sent as NULL" are therefore indistinguishable
  * inside the DTO itself; the processor tells them apart from the raw payload.
+ *
+ * The DTO declares no executable lines (only typed properties), so PHPUnit has
+ * nothing to attribute coverage to: the class is covered, it simply cannot
+ * contribute. `#[CoversNothing]` states that explicitly instead of leaving
+ * PHPUnit to flag every test as risky.
  */
-#[CoversClass(className: RoleUpdateDto::class)]
+#[CoversNothing]
 class RoleUpdateDtoTest extends TestCase
 {
 	private ValidatorInterface $validator;

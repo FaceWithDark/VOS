@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Dto\Main\Web;
+namespace App\Tests\Unit\Dto\Main\Web;
 
 
 /// --- Main namespaces --- ///
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\ObjectMapper\Attribute\Map;
@@ -32,8 +32,13 @@ use App\Entity\Web\UserEntity;
  *
  * `roleId` is flattened from the entity's RoleEntity association, hence the
  * dotted `roleId.id` source path.
+ *
+ * The DTO declares no executable lines (only typed properties and attributes),
+ * so PHPUnit has nothing to attribute coverage to: the class is covered, it
+ * simply cannot contribute. `#[CoversNothing]` states that explicitly instead
+ * of leaving PHPUnit to flag every test as risky.
  */
-#[CoversClass(className: UserResourceDto::class)]
+#[CoversNothing]
 class UserResourceDtoTest extends TestCase
 {
 	#[Test]
