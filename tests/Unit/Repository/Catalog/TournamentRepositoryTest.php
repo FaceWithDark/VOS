@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Repository\Catalog;
+namespace App\Tests\Unit\Repository\Catalog;
 
 
 /// --- Main namespaces --- ///
@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,6 +21,7 @@ use Override;
 
 
 /// --- Internal namespaces --- ///
+use App\Entity\Abstract\TournamentAbstract;
 use App\Entity\Catalog\TournamentEntity;
 use App\Repository\Catalog\TournamentRepository;
 
@@ -31,8 +33,14 @@ use App\Repository\Catalog\TournamentRepository;
  * write methods are tested against a mocked manager instead of a live database.
  * `ServiceEntityRepository` lazily resolves its inner repository, which means
  * the mocked manager must also answer `getClassMetadata()`.
+ *
+ * The manager is sealed once a test has declared every interaction it expects:
+ * PHPUnit then turns any undeclared call into a failure instead of a silent
+ * `null`, and `#[UsesClass]` accounts for the entity code instantiated here.
  */
 #[CoversClass(className: TournamentRepository::class)]
+#[UsesClass(className: TournamentEntity::class)]
+#[UsesClass(className: TournamentAbstract::class)]
 class TournamentRepositoryTest extends TestCase
 {
 	private EntityManagerInterface&MockObject	$entityManager;
@@ -54,6 +62,14 @@ class TournamentRepositoryTest extends TestCase
 			->willReturn($this->entityManager);
 
 		$this->repository = new TournamentRepository(registry: $registry);
+	}
+
+	private function sealEntityManager(): void
+	{
+		$this
+			->entityManager
+			->method('getClassMetadata')
+			->seal();
 	}
 
 
@@ -78,6 +94,8 @@ class TournamentRepositoryTest extends TestCase
 			->expects(self::once())
 			->method('flush');
 
+		$this->sealEntityManager();
+
 		$this->repository->save(entity: $entity);
 	}
 
@@ -96,6 +114,8 @@ class TournamentRepositoryTest extends TestCase
 			->entityManager
 			->expects(self::never())
 			->method('flush');
+
+		$this->sealEntityManager();
 
 		$this->repository->save(
 			entity: $entity,
@@ -125,6 +145,8 @@ class TournamentRepositoryTest extends TestCase
 			->expects(self::once())
 			->method('flush');
 
+		$this->sealEntityManager();
+
 		$this->repository->remove(entity: $entity);
 	}
 
@@ -143,6 +165,8 @@ class TournamentRepositoryTest extends TestCase
 			->entityManager
 			->expects(self::never())
 			->method('flush');
+
+		$this->sealEntityManager();
 
 		$this->repository->remove(
 			entity: $entity,

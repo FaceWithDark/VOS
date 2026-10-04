@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\State\Provider\Catalog;
+namespace App\Tests\Unit\State\Provider\Catalog;
 
 
 /// --- Main namespaces --- ///
@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
@@ -21,12 +22,14 @@ use Override;
 
 /// --- Internal namespaces --- ///
 use App\Dto\Main\Catalog\TournamentResourceDto;
+use App\Entity\Abstract\TournamentAbstract;
 use App\Entity\Catalog\TournamentEntity;
 use App\Repository\Catalog\TournamentRepository;
 use App\State\Provider\Catalog\TournamentProvider;
 
 
 #[CoversClass(className: TournamentProvider::class)]
+#[UsesClass(className: TournamentAbstract::class)]
 class TournamentProviderTest extends TestCase
 {
 	private TournamentRepository&MockObject		$repository;
@@ -45,6 +48,19 @@ class TournamentProviderTest extends TestCase
 			repository:	$this->repository,
 			mapper:		$this->mapper,
 		);
+	}
+
+	private function sealCollaborators(): void
+	{
+		$this
+			->repository
+			->method('find')
+			->seal();
+
+		$this
+			->mapper
+			->method('map')
+			->seal();
 	}
 
 	#[Test]
@@ -71,6 +87,8 @@ class TournamentProviderTest extends TestCase
 				$first,
 				$second,
 			);
+
+		$this->sealCollaborators();
 
 		$result
 		   	= $this
@@ -99,6 +117,8 @@ class TournamentProviderTest extends TestCase
 			->mapper
 			->expects(self::never())
 			->method('map');
+
+		$this->sealCollaborators();
 
 		$result
 			= $this
@@ -134,6 +154,8 @@ class TournamentProviderTest extends TestCase
 			)
 			->willReturn($resource);
 
+		$this->sealCollaborators();
+
 		$result
 		   	= $this
 				->provider
@@ -163,6 +185,8 @@ class TournamentProviderTest extends TestCase
 			->mapper
 			->expects(self::never())
 			->method('map');
+
+		$this->sealCollaborators();
 
 		$result = $this
 				->provider

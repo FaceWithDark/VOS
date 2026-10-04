@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service\Catalog;
+namespace App\Tests\Unit\Service\Catalog;
 
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -19,6 +20,7 @@ use Override;
 
 
 /// --- Internal namespaces --- ///
+use App\Entity\Abstract\TournamentAbstract;
 use App\Entity\Catalog\TournamentEntity;
 use App\Repository\Catalog\TournamentRepository;
 use App\Service\Catalog\TournamentDuplicateValidator;
@@ -32,6 +34,8 @@ use App\Service\Catalog\TournamentDuplicateValidator;
  * is mocked so each test pins exactly one policy branch.
  */
 #[CoversClass(className: TournamentDuplicateValidator::class)]
+#[UsesClass(className: TournamentEntity::class)]
+#[UsesClass(className: TournamentAbstract::class)]
 class TournamentDuplicateValidatorTest extends TestCase
 {
 	private TournamentRepository&MockObject	$repository;
@@ -45,6 +49,14 @@ class TournamentDuplicateValidatorTest extends TestCase
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
 		$this->repository			= $this->createMock(type: TournamentRepository::class);
 		$this->duplicateValidator	= new TournamentDuplicateValidator(repository: $this->repository);
+	}
+
+	private function sealRepository(): void
+	{
+		$this
+			->repository
+			->method('findOneBy')
+			->seal();
 	}
 
 	private function mockTournamentEntity(
@@ -72,6 +84,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->expects(self::never())
 			->method('findOneBy');
 
+		$this->sealRepository();
+
 		$this
 			->duplicateValidator
 			->validatePost(payload: [
@@ -88,6 +102,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->expects(self::never())
 			->method('findOneBy');
 
+		$this->sealRepository();
+
 		$this
 			->duplicateValidator
 			->validatePost(payload: ['name' => null]);
@@ -102,6 +118,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->method('findOneBy')
 			->with(['name' => 'VOT88'])
 			->willReturn(null);
+
+		$this->sealRepository();
 
 		$this
 			->duplicateValidator
@@ -123,6 +141,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 		$this->expectException(exception: ConflictHttpException::class);
 		$this->expectExceptionMessage(message: 'A tournament with the name [VOT6] already exists.');
 
+		$this->sealRepository();
+
 		$this
 			->duplicateValidator
 			->validatePost(payload: ['name' => 'VOT6']);
@@ -138,6 +158,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->method('findOneBy')
 			->with(['name' => 'VOT88'])
 			->willReturn(null);
+
+		$this->sealRepository();
 
 		$this
 			->duplicateValidator
@@ -162,6 +184,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->expects(self::never())
 			->method('findOneBy');
 
+		$this->sealRepository();
+
 		$this
 			->duplicateValidator
 			->validatePatch(
@@ -182,6 +206,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->with(['name' => null])
 			->willReturn(null);
 
+		$this->sealRepository();
+
 		$this
 			->duplicateValidator
 			->validatePatch(
@@ -199,6 +225,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->method('findOneBy')
 			->with(['name' => 'VOT88'])
 			->willReturn(null);
+
+		$this->sealRepository();
 
 		$this
 			->duplicateValidator
@@ -224,6 +252,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->willReturn($current);
 
 		// Re-sending the current value must NOT be treated as a duplicate
+		$this->sealRepository();
+
 		$this
 			->duplicateValidator
 			->validatePatch(
@@ -250,6 +280,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 		$this->expectException(exception: BadRequestHttpException::class);
 		$this->expectExceptionMessage(message: 'Another tournament with the name [VOT6] already exists.');
 
+		$this->sealRepository();
+
 		$this
 			->duplicateValidator
 			->validatePatch(
@@ -267,6 +299,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->method('findOneBy')
 			->with(['name' => 'VOT88'])
 			->willReturn(null);
+
+		$this->sealRepository();
 
 		$this
 			->duplicateValidator

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Entity\Catalog;
+namespace App\Tests\Unit\Entity\Catalog;
 
 
 /// --- Main namespaces --- ///
