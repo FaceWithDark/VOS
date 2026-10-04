@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service\Web;
+namespace App\Tests\Unit\Service\Web;
 
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -19,6 +20,7 @@ use Override;
 
 
 /// --- Internal namespaces --- ///
+use App\Entity\Abstract\RoleAbstract;
 use App\Entity\Web\RoleEntity;
 use App\Repository\Web\RoleRepository;
 use App\Service\Web\UserForeignKeyValidator;
@@ -31,6 +33,8 @@ use App\Service\Web\UserForeignKeyValidator;
  * for the referenced foreign key.
  */
 #[CoversClass(className: UserForeignKeyValidator::class)]
+#[UsesClass(className: RoleAbstract::class)]
+#[UsesClass(className: RoleEntity::class)]
 class UserForeignKeyValidatorTest extends TestCase
 {
 	private RoleRepository&MockObject	$roleRepository;
@@ -68,7 +72,8 @@ class UserForeignKeyValidatorTest extends TestCase
 		$this
 			->roleRepository
 			->expects(self::never())
-			->method('find');
+			->method('find')
+			->seal();
 
 		$this
 			->foreignKeyValidator
@@ -82,7 +87,8 @@ class UserForeignKeyValidatorTest extends TestCase
 		$this
 			->roleRepository
 			->expects(self::never())
-			->method('find');
+			->method('find')
+			->seal();
 
 		$this
 			->foreignKeyValidator
@@ -97,7 +103,8 @@ class UserForeignKeyValidatorTest extends TestCase
 			->expects(self::once())
 			->method('find')
 			->with(999)
-			->willReturn(null);
+			->willReturn(null)
+			->seal();
 
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Role with ID [999] not found.');
@@ -117,7 +124,8 @@ class UserForeignKeyValidatorTest extends TestCase
 			->expects(self::once())
 			->method('find')
 			->with(3)
-			->willReturn($roleEntity);
+			->willReturn($roleEntity)
+			->seal();
 
 		$this
 			->foreignKeyValidator
@@ -137,7 +145,8 @@ class UserForeignKeyValidatorTest extends TestCase
 		$this
 			->roleRepository
 			->expects(self::never())
-			->method('find');
+			->method('find')
+			->seal();
 
 		$this
 			->foreignKeyValidator
@@ -156,7 +165,8 @@ class UserForeignKeyValidatorTest extends TestCase
 		$this
 			->roleRepository
 			->expects(self::never())
-			->method('find');
+			->method('find')
+			->seal();
 
 		$this->expectException(exception: BadRequestHttpException::class);
 		$this->expectExceptionMessage(message: 'Role ID must not be null.');
@@ -177,7 +187,8 @@ class UserForeignKeyValidatorTest extends TestCase
 			->expects(self::once())
 			->method('find')
 			->with(999)
-			->willReturn(null);
+			->willReturn(null)
+			->seal();
 
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Role with ID [999] not found.');
@@ -200,7 +211,8 @@ class UserForeignKeyValidatorTest extends TestCase
 			->expects(self::once())
 			->method('find')
 			->with(3)
-			->willReturn($roleEntity);
+			->willReturn($roleEntity)
+			->seal();
 
 		$this
 			->foreignKeyValidator
