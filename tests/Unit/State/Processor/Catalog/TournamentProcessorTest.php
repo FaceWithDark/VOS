@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\State\Processor\Catalog;
+namespace App\Tests\Unit\State\Processor\Catalog;
 
 
 /// --- Main namespaces --- ///
@@ -13,6 +13,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +33,7 @@ use stdClass;
 use App\Dto\Input\Catalog\TournamentCreateDto;
 use App\Dto\Input\Catalog\TournamentUpdateDto;
 use App\Dto\Main\Catalog\TournamentResourceDto;
+use App\Entity\Abstract\TournamentAbstract;
 use App\Entity\Catalog\TournamentEntity;
 use App\Interface\Catalog\TournamentDuplicateValidatorInterface;
 use App\Interface\Catalog\TournamentEmptyPayloadValidatorInterface;
@@ -66,6 +68,8 @@ use App\State\Processor\Catalog\TournamentProcessor;
  */
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(className: TournamentProcessor::class)]
+#[UsesClass(className: TournamentEntity::class)]
+#[UsesClass(className: TournamentAbstract::class)]
 class TournamentProcessorTest extends TestCase
 {
 	private TournamentRepository&MockObject						$repository;
@@ -110,6 +114,38 @@ class TournamentProcessorTest extends TestCase
 			->setId(id: 7)
 			->setName(name: 'VOT6')
 			->setDescription(description: 'Vietnamese Osu!taiko Tournament 6');
+	}
+
+	/**
+	 * Seals every collaborator once the test has declared all of its
+	 * expectations: any undeclared call now fails instead of returning null.
+	 */
+	private function sealCollaborators(): void
+	{
+		$this
+			->repository
+			->method('find')
+			->seal();
+
+		$this
+			->mapper
+			->method('map')
+			->seal();
+
+		$this
+			->requestStack
+			->method('getCurrentRequest')
+			->seal();
+
+		$this
+			->duplicateValidator
+			->method('validatePost')
+			->seal();
+
+		$this
+			->emptyPayloadValidator
+			->method('validatePatch')
+			->seal();
 	}
 
 
@@ -167,6 +203,8 @@ class TournamentProcessorTest extends TestCase
 			)
 			->willReturn($resource);
 
+		$this->sealCollaborators();
+
 		$result = $this
 			->processor
 			->process(
@@ -209,6 +247,8 @@ class TournamentProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new TournamentResourceDto());
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -241,6 +281,8 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::once())
 			->method('map')
 			->willReturn(new TournamentResourceDto());
+
+		$this->sealCollaborators();
 
 		$this
 			->processor
@@ -285,6 +327,8 @@ class TournamentProcessorTest extends TestCase
 
 		$this->expectException(exception: ConflictHttpException::class);
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -327,6 +371,8 @@ class TournamentProcessorTest extends TestCase
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Tournament with ID [88] not found.');
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -349,6 +395,8 @@ class TournamentProcessorTest extends TestCase
 
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Tournament with ID [0] not found.');
+
+		$this->sealCollaborators();
 
 		$this
 			->processor
@@ -392,6 +440,8 @@ class TournamentProcessorTest extends TestCase
 
 		$this->expectException(exception: BadRequestHttpException::class);
 		$this->expectExceptionMessage(message: 'Request payload must not be empty.');
+
+		$this->sealCollaborators();
 
 		$this
 			->processor
@@ -453,6 +503,8 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::once())
 			->method('map')
 			->willReturn($resource);
+
+		$this->sealCollaborators();
 
 		$result = $this
 			->processor
@@ -520,6 +572,8 @@ class TournamentProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new TournamentResourceDto());
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -578,6 +632,8 @@ class TournamentProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new TournamentResourceDto());
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -587,6 +643,141 @@ class TournamentProcessorTest extends TestCase
 			);
 
 		self::assertNull(actual: $current->getDescription());
+	}
+
+	#[Test]
+	public function testPatchWithNameAndDescriptionUpdatesBothFields(): void
+	{
+		$dto = new TournamentUpdateDto();
+
+		$dto->name			= 'VOT88';
+		$dto->description	= 'Vietnamese Osu!taiko Tournament 88 (special edition).';
+
+		$current	= $this->mockTournamentEntity();
+		$payload	= [
+			'name'			=> $dto->name,
+			'description'	=> $dto->description,
+		];
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(7)
+			->willReturn($current);
+
+		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		$this
+			->emptyPayloadValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload);
+
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with(
+				$payload,
+				7,
+			);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save')
+			->with($current, true);
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn(new TournamentResourceDto());
+
+		$this->sealCollaborators();
+
+		$this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Patch(),
+				payload: ['id' => 7],
+			);
+
+		self::assertSame(
+			expected: 'VOT88',
+			actual: $current->getName(),
+		);
+		self::assertSame(
+			expected: $dto->description,
+			actual: $current->getDescription(),
+		);
+	}
+
+	#[Test]
+	public function testPatchWithUnrelatedPayloadSkipsBothFieldUpdates(): void
+	{
+		$dto = new TournamentUpdateDto();
+
+		$current	= $this->mockTournamentEntity();
+		$payload	= ['rank' => 5];
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(7)
+			->willReturn($current);
+
+		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		$this
+			->emptyPayloadValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload);
+
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with(
+				$payload,
+				7,
+			);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save')
+			->with($current, true);
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn(new TournamentResourceDto());
+
+		$this->sealCollaborators();
+
+		$this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Patch(),
+				payload: ['id' => 7],
+			);
+
+		// Neither 'name' nor 'description' was sent: stored values survive
+		self::assertSame(
+			expected: 'VOT6',
+			actual: $current->getName(),
+		);
+		self::assertSame(
+			expected: 'Vietnamese Osu!taiko Tournament 6',
+			actual: $current->getDescription(),
+		);
 	}
 
 	#[Test]
@@ -629,6 +820,8 @@ class TournamentProcessorTest extends TestCase
 
 		$this->expectException(exception: BadRequestHttpException::class);
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -665,6 +858,8 @@ class TournamentProcessorTest extends TestCase
 				true,
 			);
 
+		$this->sealCollaborators();
+
 		$result = $this
 			->processor
 			->process(
@@ -694,6 +889,8 @@ class TournamentProcessorTest extends TestCase
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Tournament with ID [88] not found.');
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -716,6 +913,8 @@ class TournamentProcessorTest extends TestCase
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Tournament with ID [0] not found.');
 
+		$this->sealCollaborators();
+
 		$this
 			->processor
 			->process(
@@ -736,6 +935,8 @@ class TournamentProcessorTest extends TestCase
 	{
 		$this->expectException(exception: InvalidArgumentException::class);
 		$this->expectExceptionMessage(message: 'Unsupported opearation or input DTO type.');
+
+		$this->sealCollaborators();
 
 		$this
 			->processor
