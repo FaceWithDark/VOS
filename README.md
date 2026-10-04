@@ -178,17 +178,75 @@ Please head to [dev.vososu.site/api](http://dev.vososu.site/api) to play around 
 ---
 # Testing
 
-To run test file under `/tests` directory, please follow these steps:
+All tests live under the `/tests` directory and are grouped into suites declared in
+[`phpunit.dist.xml`](./phpunit.dist.xml):
+
+| Suite | Directory | What it holds |
+| :--- | :--- | :--- |
+| `unit` | `tests/Unit` | DTOs, entities, repositories, validators, state processors & providers |
+| `application` | `tests/Application` | Functional HTTP tests that boot the Symfony kernel (`WebTestCase`) |
+| `integration` | `tests/Integration` | Reserved for tests that need the real database/services |
+
+## Run the tests
+
+Get inside the `vos-symfony` container first, then pick the command you need:
 
 ```bash
 # Get inside `vos-symfony` Docker container
 docker exec -it vos-symfony sh
 
-# Run the `phpunit` binary file to do different kinds of testing techniques
-php bin/phpunit tests/
+# Run every suite
+XDEBUG_MODE=coverage php vendor/bin/phpunit
+
+# Run a single suite by name
+XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
+XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite application
+
+# Run a single file, or filter by class/method name
+XDEBUG_MODE=coverage php vendor/bin/phpunit tests/Unit/Entity/Web/UserEntityTest.php
+XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit --filter UserEntityTest
+
+# List the available suites without running anything
+XDEBUG_MODE=coverage php vendor/bin/phpunit --list-suites
 ```
 
+> [!IMPORTANT]
+> Prefix every command with `XDEBUG_MODE=coverage`. The project's PHPUnit
+> configuration enables coverage reports, so PHPUnit refuses to run and reports
+> *"XDEBUG_MODE=coverage ... has to be set"* otherwise.
+
+> [!NOTE]
+> The `integration` suite is currently empty, and the configuration enables
+> `failOnEmptyTestSuite`, so running `--testsuite integration` on its own exits
+> with an error until the first integration test is added.
+
+## View code coverage
+
+The configuration already writes an HTML report to `var/coverage/html` on every run.
+For a quick terminal summary, use `--coverage-text` (or
+`--only-summary-for-coverage-text` for the totals only):
+
+```bash
+XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit --only-summary-for-coverage-text
+
+# Full per-class text report
+XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit --coverage-text
+
+# Jump to an existing HTML report from your browser
+#   var/coverage/html/index.html
+```
+
+> [!NOTE]
+> [`phpunit.dist.xml`](./phpunit.dist.xml) is deliberately strict:
+> `requireCoverageMetadata`, `requireCoverageContribution` and
+> `requireSealedMockObjects` are all on. Concretely, that means a test must
+> declare what it covers (`#[CoversClass]`, or `#[CoversNothing]` for pure value
+> objects with no executable lines) and must seal its mocks (`->seal()`), or
+> PHPUnit reports the test as *risky* and drops its coverage. When adding tests,
+> check the run output for `Risky:` entries.
+
 ---
+
 # Conventions
 
 > [!TIP]
@@ -198,6 +256,12 @@ There're many conventions that this project followed to ensure that it's not a b
 
 1. [**Git Commit Convention**](./docs/conventions/GIT.md)
 2. [**Domain Specificity Convention**](./docs/conventions/TRAEFIK.md)
+
+> [!TIP]
+> Test-only changes use the dedicated `test` commit tag (e.g.,
+> `test(tournaments): cover provider not-found branch`) so they stay easy to
+> review and revert. See the [**Git Commit Convention**](./docs/conventions/GIT.md)
+> for the full tag list.
 
 ---
 # Contributing
