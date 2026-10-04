@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Entity\Web;
+namespace App\Tests\Unit\Entity\Web;
 
 
 /// --- Main namespaces --- ///
@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\OneToMany;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 
@@ -18,11 +19,14 @@ use ReflectionProperty;
 
 
 /// --- Internal namespaces --- ///
+use App\Entity\Abstract\UserAbstract;
 use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
 
 
 #[CoversClass(className: RoleEntity::class)]
+#[UsesClass(className: UserEntity::class)]
+#[UsesClass(className: UserAbstract::class)]
 class RoleEntityTest extends TestCase
 {
 	#[Test]
@@ -116,8 +120,12 @@ class RoleEntityTest extends TestCase
 	#[Test]
 	public function testUsersAssociationIsOneToMany(): void
 	{
+		// Instantiate the mapped class so this test also executes the entity it
+		// introspects (required by `requireCoverageContribution`).
+		$entity = new RoleEntity();
+
 		$attributes = (new ReflectionProperty(
-			class: RoleEntity::class,
+			class: $entity::class,
 			property: 'users',
 		))->getAttributes(name: OneToMany::class);
 

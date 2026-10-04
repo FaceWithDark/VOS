@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service\Web;
+namespace App\Tests\Unit\Service\Web;
 
 
 /// --- Main namespaces --- ///

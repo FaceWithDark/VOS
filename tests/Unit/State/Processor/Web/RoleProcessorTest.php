@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\State\Processor\Web;
+namespace App\Tests\Unit\State\Processor\Web;
 
 
 /// --- Main namespaces --- ///
@@ -13,6 +13,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +33,7 @@ use stdClass;
 use App\Dto\Input\Web\RoleCreateDto;
 use App\Dto\Input\Web\RoleUpdateDto;
 use App\Dto\Main\Web\RoleResourceDto;
+use App\Entity\Abstract\RoleAbstract;
 use App\Entity\Web\RoleEntity;
 use App\Interface\Web\RoleDuplicateValidatorInterface;
 use App\Interface\Web\RoleEmptyPayloadValidatorInterface;
@@ -66,6 +68,8 @@ use App\State\Processor\Web\RoleProcessor;
  */
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(className: RoleProcessor::class)]
+#[UsesClass(className: RoleEntity::class)]
+#[UsesClass(className: RoleAbstract::class)]
 class RoleProcessorTest extends TestCase
 {
 	private RoleRepository&MockObject					$repository;
@@ -110,6 +114,38 @@ class RoleProcessorTest extends TestCase
 			->setId(id: 2)
 			->setName(name: 'Admin')
 			->setDescription(description: 'can take control of the whole website both internally and externally.');
+	}
+
+	/**
+	 * Seals every collaborator once all of a test's expectations are declared,
+	 * so any undeclared interaction fails instead of being silently ignored.
+	 */
+	private function sealMockObjects(): void
+	{
+		$this
+			->repository
+			->method('find')
+			->seal();
+
+		$this
+			->mapper
+			->method('map')
+			->seal();
+
+		$this
+			->requestStack
+			->method('getCurrentRequest')
+			->seal();
+
+		$this
+			->duplicateValidator
+			->method('validatePost')
+			->seal();
+
+		$this
+			->emptyPayloadValidator
+			->method('validatePatch')
+			->seal();
 	}
 
 
@@ -167,6 +203,8 @@ class RoleProcessorTest extends TestCase
 			)
 			->willReturn($resource);
 
+		$this->sealMockObjects();
+
 		$result = $this
 			->processor
 			->process(
@@ -209,6 +247,8 @@ class RoleProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new RoleResourceDto());
 
+		$this->sealMockObjects();
+
 		$this
 			->processor
 			->process(
@@ -241,6 +281,8 @@ class RoleProcessorTest extends TestCase
 			->expects(self::once())
 			->method('map')
 			->willReturn(new RoleResourceDto());
+
+		$this->sealMockObjects();
 
 		$this
 			->processor
@@ -280,6 +322,8 @@ class RoleProcessorTest extends TestCase
 			->method('map');
 
 		$this->expectException(exception: ConflictHttpException::class);
+
+		$this->sealMockObjects();
 
 		$this
 			->processor
@@ -323,6 +367,8 @@ class RoleProcessorTest extends TestCase
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Role with ID [3] not found.');
 
+		$this->sealMockObjects();
+
 		$this
 			->processor
 			->process(
@@ -345,6 +391,8 @@ class RoleProcessorTest extends TestCase
 
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Role with ID [0] not found.');
+
+		$this->sealMockObjects();
 
 		$this
 			->processor
@@ -388,6 +436,8 @@ class RoleProcessorTest extends TestCase
 
 		$this->expectException(exception: BadRequestHttpException::class);
 		$this->expectExceptionMessage(message: 'Request payload must not be empty.');
+
+		$this->sealMockObjects();
 
 		$this
 			->processor
@@ -449,6 +499,8 @@ class RoleProcessorTest extends TestCase
 			->expects(self::once())
 			->method('map')
 			->willReturn($resource);
+
+		$this->sealMockObjects();
 
 		$result = $this
 			->processor
@@ -516,6 +568,8 @@ class RoleProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new RoleResourceDto());
 
+		$this->sealMockObjects();
+
 		$this
 			->processor
 			->process(
@@ -577,6 +631,8 @@ class RoleProcessorTest extends TestCase
 			->method('map')
 			->willReturn(new RoleResourceDto());
 
+		$this->sealMockObjects();
+
 		$this
 			->processor
 			->process(
@@ -586,6 +642,149 @@ class RoleProcessorTest extends TestCase
 			);
 
 		self::assertNull(actual: $current->getDescription());
+	}
+
+	#[Test]
+	public function testPatchWithNameAndDescriptionUpdatesBothFields(): void
+	{
+		$dto = new RoleUpdateDto();
+
+		$dto->name			= 'Gambler';
+		$dto->description	= 'double the pay, double the deal baby.';
+
+		$current	= $this->mockRoleEntity();
+		$payload	= [
+			'name'			=> $dto->name,
+			'description'	=> $dto->description,
+		];
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(2)
+			->willReturn($current);
+
+		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		// Both fields are present, so both must be applied
+		$this
+			->emptyPayloadValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload);
+
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with(
+				$payload,
+				2,
+			);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save')
+			->with(
+				$current,
+				true,
+			);
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn(new RoleResourceDto());
+
+		$this->sealMockObjects();
+
+		$this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Patch(),
+				payload: ['id' => 2],
+			);
+
+		self::assertSame(
+			expected: 'Gambler',
+			actual: $current->getName(),
+		);
+		self::assertSame(
+			expected: $dto->description,
+			actual: $current->getDescription(),
+		);
+	}
+
+	#[Test]
+	public function testPatchWithUnknownFieldLeavesEntityUnchanged(): void
+	{
+		$dto		= new RoleUpdateDto();
+		$payload	= ['rank' => 0];
+
+		$current = $this->mockRoleEntity();
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('find')
+			->with(2)
+			->willReturn($current);
+
+		// A non-empty body without 'name'/'description' passes both guards
+		$this->stubRawPayload(json: json_encode(value: $payload));
+
+		$this
+			->emptyPayloadValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with($payload);
+
+		$this
+			->duplicateValidator
+			->expects(self::once())
+			->method('validatePatch')
+			->with(
+				$payload,
+				2,
+			);
+
+		$this
+			->repository
+			->expects(self::once())
+			->method('save')
+			->with(
+				$current,
+				true,
+			);
+
+		$this
+			->mapper
+			->expects(self::once())
+			->method('map')
+			->willReturn(new RoleResourceDto());
+
+		$this->sealMockObjects();
+
+		$this
+			->processor
+			->process(
+				data: $dto,
+				operation: new Patch(),
+				payload: ['id' => 2],
+			);
+
+		// Neither branch applied, so the stored entity keeps its values
+		self::assertSame(
+			expected: 'Admin',
+			actual: $current->getName(),
+		);
+		self::assertSame(
+			expected: 'can take control of the whole website both internally and externally.',
+			actual: $current->getDescription(),
+		);
 	}
 
 	#[Test]
@@ -628,6 +827,8 @@ class RoleProcessorTest extends TestCase
 
 		$this->expectException(exception: BadRequestHttpException::class);
 
+		$this->sealMockObjects();
+
 		$this
 			->processor
 			->process(
@@ -664,6 +865,8 @@ class RoleProcessorTest extends TestCase
 				true,
 			);
 
+		$this->sealMockObjects();
+
 		$result = $this
 			->processor
 			->process(
@@ -693,6 +896,8 @@ class RoleProcessorTest extends TestCase
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Role with ID [3] not found.');
 
+		$this->sealMockObjects();
+
 		$this
 			->processor
 			->process(
@@ -715,6 +920,8 @@ class RoleProcessorTest extends TestCase
 		$this->expectException(exception: NotFoundHttpException::class);
 		$this->expectExceptionMessage(message: 'Role with ID [0] not found.');
 
+		$this->sealMockObjects();
+
 		$this
 			->processor
 			->process(
@@ -735,6 +942,8 @@ class RoleProcessorTest extends TestCase
 	{
 		$this->expectException(exception: InvalidArgumentException::class);
 		$this->expectExceptionMessage(message: 'Unsupported opearation or input DTO type.');
+
+		$this->sealMockObjects();
 
 		$this
 			->processor
