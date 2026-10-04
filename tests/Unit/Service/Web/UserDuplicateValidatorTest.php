@@ -146,7 +146,7 @@ class UserDuplicateValidatorTest extends TestCase
 			->seal();
 
 		$this->expectException(exception: ConflictHttpException::class);
-		$this->expectExceptionMessage(message: 'A user with the name [Gambler] already exists.');
+		$this->expectExceptionMessageIs(message: 'A user with the name [Gambler] already exists.');
 
 		$this
 			->duplicateValidator
@@ -279,7 +279,7 @@ class UserDuplicateValidatorTest extends TestCase
 			->seal();
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: 'Another user with the name [Gambler] already exists.');
+		$this->expectExceptionMessageIs(message: 'Another user with the name [Gambler] already exists.');
 
 		$this
 			->duplicateValidator

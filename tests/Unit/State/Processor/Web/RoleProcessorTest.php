@@ -365,7 +365,7 @@ class RoleProcessorTest extends TestCase
 			->method('map');
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Role with ID [3] not found.');
+		$this->expectExceptionMessageIs(message: 'Role with ID [3] not found.');
 
 		$this->sealMockObjects();
 
@@ -390,7 +390,7 @@ class RoleProcessorTest extends TestCase
 			->willReturn(null);
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Role with ID [0] not found.');
+		$this->expectExceptionMessageIs(message: 'Role with ID [0] not found.');
 
 		$this->sealMockObjects();
 
@@ -435,7 +435,7 @@ class RoleProcessorTest extends TestCase
 			->method('save');
 
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: 'Request payload must not be empty.');
+		$this->expectExceptionMessageIs(message: 'Request payload must not be empty.');
 
 		$this->sealMockObjects();
 
@@ -894,7 +894,7 @@ class RoleProcessorTest extends TestCase
 			->method('remove');
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Role with ID [3] not found.');
+		$this->expectExceptionMessageIs(message: 'Role with ID [3] not found.');
 
 		$this->sealMockObjects();
 
@@ -918,7 +918,7 @@ class RoleProcessorTest extends TestCase
 			->willReturn(null);
 
 		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessage(message: 'Role with ID [0] not found.');
+		$this->expectExceptionMessageIs(message: 'Role with ID [0] not found.');
 
 		$this->sealMockObjects();
 
@@ -941,7 +941,7 @@ class RoleProcessorTest extends TestCase
 	public function testProcessRejectsUnsupportedInput(): void
 	{
 		$this->expectException(exception: InvalidArgumentException::class);
-		$this->expectExceptionMessage(message: 'Unsupported opearation or input DTO type.');
+		$this->expectExceptionMessageIs(message: 'Unsupported opearation or input DTO type.');
 
 		$this->sealMockObjects();
 

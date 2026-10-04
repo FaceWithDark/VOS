@@ -44,7 +44,7 @@ class TournamentEmptyPayloadValidatorTest extends TestCase
 	public function testEmptyPayloadThrowsBadRequest(): void
 	{
 		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessage(message: 'Request payload must not be empty.');
+		$this->expectExceptionMessageIs(message: 'Request payload must not be empty.');
 
 		$this->emptyPayloadValidator->validatePatch(payload: []);
 	}
