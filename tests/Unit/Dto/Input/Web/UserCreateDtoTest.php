@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Dto\Input\Web;
+namespace App\Tests\Unit\Dto\Input\Web;
 
 
 /// --- Main namespaces --- ///
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -31,8 +31,13 @@ use App\Dto\Input\Web\UserCreateDto;
  * properties, then run them through a Symfony Validator built from attributes.
  *
  * `id` is the externally-sourced osu! identifier, so it is required on create.
+ *
+ * The DTO declares no executable lines (only typed properties and constraint
+ * attributes), so PHPUnit has nothing to attribute coverage to: the class is
+ * covered, it simply cannot contribute. `#[CoversNothing]` states that
+ * explicitly instead of leaving PHPUnit to flag every test as risky.
  */
-#[CoversClass(className: UserCreateDto::class)]
+#[CoversNothing]
 class UserCreateDtoTest extends TestCase
 {
 	private ValidatorInterface $validator;

@@ -1,43 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         colors="true"
-         failOnDeprecation="true"
-         failOnNotice="true"
-         failOnWarning="true"
-         bootstrap="tests/bootstrap.php"
-         cacheDirectory=".phpunit.cache"
+<phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+	bootstrap="tests/bootstrap.php"
+	cacheDirectory=".phpunit.cache"
+	colors="true"
+	columns="max"
+
+	executionOrder="defects"
+	resolveDependencies="true"
+
+	beStrictAboutTestsThatDoNotTestAnything="true"
+	beStrictAboutOutputDuringTests="true"
+	beStrictAboutChangesToGlobalState="true"
+	beStrictAboutCoverageMetadata="true"
+	requireCoverageContribution="true"
+
+	requireCoverageMetadata="true"
+	requireCoverageMetadataOnSmallTests="true"
+	requireCoverageMetadataOnMediumTests="true"
+	requireCoverageMetadataOnLargeTests="true"
+
+	requireSealedMockObjects="true"
+
+	failOnAllIssues="true"
+	failOnSelfDeprecation="true"
+	failOnDirectDeprecation="true"
+	failOnIndirectDeprecation="true"
+
+	failOnEmptyTestSuite="true"
+
+	displayDetailsOnAllIssues="true"
+	displayDetailsOnTestsThatTriggerDeprecations="true"
+	displayDetailsOnTestsThatTriggerErrors="true"
+	displayDetailsOnTestsThatTriggerNotices="true"
+	displayDetailsOnTestsThatTriggerWarnings="true"
+	displayDetailsOnPhpunitDeprecations="true"
+	displayDetailsOnPhpunitNotices="true"
+	displayDetailsOnIncompleteTests="true"
+	displayDetailsOnSkippedTests="true"
 >
+    <coverage
+        pathCoverage="true"
+        branchCoverage="true"
+        includeUncoveredFiles="true"
+        ignoreDeprecatedCodeUnits="false"
+        disableCodeCoverageIgnore="false"
+    >
+        <report>
+			<text
+				outputFile="php://stdout"
+                showUncoveredFiles="true"
+				showOnlySummary="false"
+			/>
+            <html outputDirectory="var/coverage/html"/>
+            <clover outputFile="var/coverage/clover.xml"/>
+            <cobertura outputFile="var/coverage/cobertura.xml"/>
+            <xml outputDirectory="var/coverage/xml"/>
+        </report>
+    </coverage>
+
+    <logging>
+        <junit outputFile="var/log/phpunit/junit.xml"/>
+        <testdoxHtml outputFile="var/log/phpunit/testdox.html"/>
+        <testdoxText outputFile="var/log/phpunit/testdox.txt"/>
+    </logging>
+
     <php>
+        <env name="APP_ENV" value="test" force="true"/>
+        <env name="APP_DEBUG" value="0" force="true"/>
         <ini name="display_errors" value="1" />
         <ini name="error_reporting" value="-1" />
-        <server name="APP_ENV" value="test" force="true" />
+		<ini name="display_startup_errors" value="1"/>
+        <ini name="memory_limit" value="-1"/>
         <server name="SHELL_VERBOSITY" value="-1" />
     </php>
 
     <testsuites>
-        <testsuite name="unit-test-suite">
-            <directory>tests/Dto</directory>
-            <directory>tests/Entity</directory>
-            <directory>tests/Repository</directory>
-            <directory>tests/Service</directory>
-            <directory>tests/State</directory>
+        <testsuite name="unit">
+			<directory>tests/Unit</directory>
         </testsuite>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+		<testsuite name="application">
+			<directory>tests/Application</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
 
-    <source ignoreSuppressionOfDeprecations="true"
-            ignoreIndirectDeprecations="true"
-            restrictNotices="true"
-            restrictWarnings="true"
+    <source
+        restrictNotices="false"
+        restrictWarnings="false"
+        ignoreSuppressionOfDeprecations="false"
+        ignoreSuppressionOfPhpDeprecations="false"
+        ignoreSuppressionOfErrors="false"
+        ignoreSuppressionOfNotices="false"
+        ignoreSuppressionOfPhpNotices="false"
+        ignoreSuppressionOfWarnings="false"
+        ignoreSuppressionOfPhpWarnings="false"
+        identifyIssueTrigger="true"
     >
         <include>
-            <directory>src</directory>
+            <directory suffix=".php">src</directory>
         </include>
+
+        <exclude>
+            <directory>src/DataFixtures</directory>
+            <directory>src/Migrations</directory>
+        </exclude>
 
         <deprecationTrigger>
             <method>Doctrine\Deprecations\Deprecation::trigger</method>

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Dto\Input\Web;
+namespace App\Tests\Unit\Dto\Input\Web;
 
 
 /// --- Main namespaces --- ///
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -28,8 +28,13 @@ use App\Dto\Input\Web\RoleCreateDto;
  * The DTO carries validation constraints but no logic of its own, so these
  * tests exercise it the same way API Platform does: put values on the public
  * properties, then run them through a Symfony Validator built from attributes.
+ *
+ * The DTO declares no executable lines (only typed properties and constraint
+ * attributes), so PHPUnit has nothing to attribute coverage to: the class is
+ * covered, it simply cannot contribute. `#[CoversNothing]` states that
+ * explicitly instead of leaving PHPUnit to flag every test as risky.
  */
-#[CoversClass(className: RoleCreateDto::class)]
+#[CoversNothing]
 class RoleCreateDtoTest extends TestCase
 {
 	private ValidatorInterface $validator;
