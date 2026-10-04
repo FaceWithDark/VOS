@@ -60,3 +60,8 @@ Coverage metadata is enforced according to default configs provided in [`phpunit
    ```
 
    Sealing makes an undeclared call fail instead of silently returning `null`, which is exactly the class of bug `requireSealedMockObjects` is there to catch.
+5. **Use the modern exception-message assertions.** `expectExceptionMessage()` is deprecated in PHPUnit 13. Pin the expected message with one of:
+
+   - `expectExceptionMessageIs(message: '...')` when the whole message is known - this is what every test in this project uses;
+   - `expectExceptionMessageIsOrContains(message: '...')` when only a fragment matters;
+   - `expectExceptionMessageMatches(regularExpression: '...')` for a pattern.
