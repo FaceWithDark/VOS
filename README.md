@@ -178,15 +178,17 @@ Please head to [dev.vososu.site/api](http://dev.vososu.site/api) to play around 
 ---
 # Testing
 
+> [!TIP]
+> You know it's a good and well maintained project if they do have test files included.
+
 There're more than one kind of test in this project, and each of them has its own dedicated guide. If you want to know how to run them, how the coverage works, or how to write a new one, please take a look at the one you need here:
 
-1. [**Testing Guide**](./tests/README.md) *(shared setup, coverage & strictness)*
-2. [**Unit Test Guide**](./tests/UNIT-TEST.md)
-3. [**Application Test Guide**](./tests/APPLICATION-TEST.md)
-4. [**Integration Test Guide**](./tests/INTEGRATION-TEST.md)
+1. [**General Testing Guide**](./docs/tests/README.md) *(shared setup, coverage & strictness)*
+2. [**Unit Test Guide**](./docs/tests/UNIT-TEST.md)
+3. [**Application Test Guide**](./docs/tests/APPLICATION-TEST.md)
+4. [**Integration Test Guide**](./docs/tests/INTEGRATION-TEST.md)
 
 ---
-
 # Conventions
 
 > [!TIP]
@@ -196,12 +198,6 @@ There're many conventions that this project followed to ensure that it's not a b
 
 1. [**Git Commit Convention**](./docs/conventions/GIT.md)
 2. [**Domain Specificity Convention**](./docs/conventions/TRAEFIK.md)
-
-> [!TIP]
-> Test-only changes use the dedicated `test` commit tag (e.g.,
-> `test(tournaments): cover provider not-found branch`) so they stay easy to
-> review and revert. See the [**Git Commit Convention**](./docs/conventions/GIT.md)
-> for the full tag list.
 
 ---
 # Contributing
