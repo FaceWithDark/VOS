@@ -60,7 +60,11 @@ final readonly class TournamentDuplicateValidator implements TournamentDuplicate
 
 		// Detect duplicate data if any field within the incoming payload
 		// matched current one
-		if ($tournamentCurrentData === null || (int) $tournamentCurrentData->getId() === $id) {
+		if ($tournamentCurrentData === null) {
+			return;
+		}
+
+		if ((int) $tournamentCurrentData->getId() === $id) {
 			return;
 		}
 

@@ -53,15 +53,21 @@ final readonly class UserProcessor implements ProcessorInterface
 	private function getDecodedPayload(): array
 	{
 		$request = $this->requestStack->getCurrentRequest();
-		$decoded
-			= $request
-			? json_decode(
-				json: $request->getContent(),
-				associative: true,
-			)
-			: null;
 
-		return is_array(value: $decoded) ? $decoded : [];
+		if (!$request) {
+			return [];
+		}
+
+		$decoded = json_decode(
+			json: $request->getContent(),
+			associative: true,
+		);
+
+		if (is_array(value: $decoded)) {
+			return $decoded;
+		}
+
+		return [];
 	}
 
 	/**

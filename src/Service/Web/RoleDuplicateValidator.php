@@ -60,7 +60,11 @@ final readonly class RoleDuplicateValidator implements RoleDuplicateValidatorInt
 
 		// Detect duplicate data if any field within the incoming payload
 		// matched current one
-		if ($roleCurrentData === null || (int) $roleCurrentData->getId() === $id) {
+		if ($roleCurrentData === null) {
+			return;
+		}
+
+		if ((int) $roleCurrentData->getId() === $id) {
 			return;
 		}
 

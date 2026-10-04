@@ -60,7 +60,11 @@ final readonly class UserDuplicateValidator implements UserDuplicateValidatorInt
 
 		// Detect duplicate data if any field within the incoming payload
 		// matched current one
-		if ($userCurrentData === null || (int) $userCurrentData->getId() === $id) {
+		if ($userCurrentData === null) {
+			return;
+		}
+
+		if ((int) $userCurrentData->getId() === $id) {
 			return;
 		}
 
