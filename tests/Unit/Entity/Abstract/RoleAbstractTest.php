@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Entity\Abstract;
+namespace App\Tests\Unit\Entity\Abstract;
 
 
 /// --- Main namespaces --- ///

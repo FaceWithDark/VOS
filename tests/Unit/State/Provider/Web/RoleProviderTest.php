@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\State\Provider\Web;
+namespace App\Tests\Unit\State\Provider\Web;
 
 
 /// --- Main namespaces --- ///
@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
@@ -21,12 +22,15 @@ use Override;
 
 /// --- Internal namespaces --- ///
 use App\Dto\Main\Web\RoleResourceDto;
+use App\Entity\Abstract\RoleAbstract;
 use App\Entity\Web\RoleEntity;
 use App\Repository\Web\RoleRepository;
 use App\State\Provider\Web\RoleProvider;
 
 
 #[CoversClass(className: RoleProvider::class)]
+#[UsesClass(className: RoleEntity::class)]
+#[UsesClass(className: RoleAbstract::class)]
 class RoleProviderTest extends TestCase
 {
 	private RoleRepository&MockObject			$repository;
@@ -61,7 +65,8 @@ class RoleProviderTest extends TestCase
 			->repository
 			->expects(self::once())
 			->method('findAll')
-			->willReturn($entities);
+			->willReturn($entities)
+			->seal();
 
 		$this
 			->mapper
@@ -70,7 +75,8 @@ class RoleProviderTest extends TestCase
 			->willReturnOnConsecutiveCalls(
 				$first,
 				$second,
-			);
+			)
+			->seal();
 
 		$result
 			= $this
@@ -93,12 +99,14 @@ class RoleProviderTest extends TestCase
 			->repository
 			->expects(self::once())
 			->method('findAll')
-			->willReturn([]);
+			->willReturn([])
+			->seal();
 
 		$this
 			->mapper
 			->expects(self::never())
-			->method('map');
+			->method('map')
+			->seal();
 
 		$result
 			= $this
@@ -122,7 +130,8 @@ class RoleProviderTest extends TestCase
 			->expects(self::once())
 			->method('find')
 			->with(3)
-			->willReturn($entity);
+			->willReturn($entity)
+			->seal();
 
 		$this
 			->mapper
@@ -132,7 +141,8 @@ class RoleProviderTest extends TestCase
 				$entity,
 				RoleResourceDto::class,
 			)
-			->willReturn($resource);
+			->willReturn($resource)
+			->seal();
 
 		$result
 		   	= $this
@@ -157,12 +167,14 @@ class RoleProviderTest extends TestCase
 			->expects(self::once())
 			->method('find')
 			->with(404)
-			->willReturn(null);
+			->willReturn(null)
+			->seal();
 
 		$this
 			->mapper
 			->expects(self::never())
-			->method('map');
+			->method('map')
+			->seal();
 
 		$result
 		   	= $this

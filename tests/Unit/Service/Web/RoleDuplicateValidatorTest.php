@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Service\Web;
+namespace App\Tests\Unit\Service\Web;
 
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -19,6 +20,7 @@ use Override;
 
 
 /// --- Internal namespaces --- ///
+use App\Entity\Abstract\RoleAbstract;
 use App\Entity\Web\RoleEntity;
 use App\Repository\Web\RoleRepository;
 use App\Service\Web\RoleDuplicateValidator;
@@ -32,6 +34,8 @@ use App\Service\Web\RoleDuplicateValidator;
  * each test pins exactly one policy branch.
  */
 #[CoversClass(className: RoleDuplicateValidator::class)]
+#[UsesClass(className: RoleEntity::class)]
+#[UsesClass(className: RoleAbstract::class)]
 class RoleDuplicateValidatorTest extends TestCase
 {
 	private RoleRepository&MockObject	$repository;
@@ -70,7 +74,8 @@ class RoleDuplicateValidatorTest extends TestCase
 		$this
 			->repository
 			->expects(self::never())
-			->method('findOneBy');
+			->method('findOneBy')
+			->seal();
 
 		$this
 			->duplicateValidator
@@ -86,7 +91,8 @@ class RoleDuplicateValidatorTest extends TestCase
 		$this
 			->repository
 			->expects(self::never())
-			->method('findOneBy');
+			->method('findOneBy')
+			->seal();
 
 		$this
 			->duplicateValidator
@@ -101,7 +107,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->expects(self::once())
 			->method('findOneBy')
 			->with(['name' => 'Gambler'])
-			->willReturn(null);
+			->willReturn(null)
+			->seal();
 
 		$this
 			->duplicateValidator
@@ -118,7 +125,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->expects(self::once())
 			->method('findOneBy')
 			->with(['name' => 'Admin'])
-			->willReturn($current);
+			->willReturn($current)
+			->seal();
 
 		$this->expectException(exception: ConflictHttpException::class);
 		$this->expectExceptionMessage(message: 'A role with the name [Admin] already exists.');
@@ -137,7 +145,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->expects(self::once())
 			->method('findOneBy')
 			->with(['name' => 'Gambler'])
-			->willReturn(null);
+			->willReturn(null)
+			->seal();
 
 		$this
 			->duplicateValidator
@@ -160,7 +169,8 @@ class RoleDuplicateValidatorTest extends TestCase
 		$this
 			->repository
 			->expects(self::never())
-			->method('findOneBy');
+			->method('findOneBy')
+			->seal();
 
 		$this
 			->duplicateValidator
@@ -180,7 +190,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->expects(self::once())
 			->method('findOneBy')
 			->with(['name' => null])
-			->willReturn(null);
+			->willReturn(null)
+			->seal();
 
 		$this
 			->duplicateValidator
@@ -198,7 +209,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->expects(self::once())
 			->method('findOneBy')
 			->with(['name' => 'Gambler'])
-			->willReturn(null);
+			->willReturn(null)
+			->seal();
 
 		$this
 			->duplicateValidator
@@ -221,7 +233,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->expects(self::once())
 			->method('findOneBy')
 			->with(['name' => 'Admin'])
-			->willReturn($current);
+			->willReturn($current)
+			->seal();
 
 		// Re-sending the current value must NOT be treated as a duplicate
 		$this
@@ -245,7 +258,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->expects(self::once())
 			->method('findOneBy')
 			->with(['name' => 'Admin'])
-			->willReturn($current);
+			->willReturn($current)
+			->seal();
 
 		$this->expectException(exception: BadRequestHttpException::class);
 		$this->expectExceptionMessage(message: 'Another role with the name [Admin] already exists.');
@@ -266,7 +280,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->expects(self::once())
 			->method('findOneBy')
 			->with(['name' => 'Gambler'])
-			->willReturn(null);
+			->willReturn(null)
+			->seal();
 
 		$this
 			->duplicateValidator
