@@ -21,7 +21,7 @@ use DateTimeZone;
 use App\Entity\Web\RoleEntity;
 
 
-class RoleFixtures extends Fixture {
+class RoleFixture extends Fixture {
 	private string $prefix = 'VOS';
     private string $schema = '';
 	private array $roles = [
