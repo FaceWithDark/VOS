@@ -32,9 +32,9 @@ use App\Service\Web\UserForeignKeyValidator;
  * Since `users`.`role_id` is 1:N, the validator now only owns the existence check
  * for the referenced foreign key.
  */
-#[CoversClass(className: UserForeignKeyValidator::class)]
-#[UsesClass(className: RoleAbstract::class)]
-#[UsesClass(className: RoleEntity::class)]
+#[CoversClass(UserForeignKeyValidator::class)]
+#[UsesClass(RoleAbstract::class)]
+#[UsesClass(RoleEntity::class)]
 class UserForeignKeyValidatorTest extends TestCase
 {
 	private RoleRepository&MockObject	$roleRepository;
@@ -46,13 +46,13 @@ class UserForeignKeyValidatorTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->roleRepository		= $this->createMock(type: RoleRepository::class);
+		$this->roleRepository		= $this->createMock(RoleRepository::class);
 		$this->foreignKeyValidator	= new UserForeignKeyValidator(
 			roleRepository: $this->roleRepository,
 		);
 	}
 
-	private function mockRoleEntity(?int $id = 3): RoleEntity
+	private function mockRoleEntity(int $id = 3): RoleEntity
 	{
 		return (new RoleEntity())
 			->setId(id: $id)
@@ -106,8 +106,8 @@ class UserForeignKeyValidatorTest extends TestCase
 			->willReturn(null)
 			->seal();
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Role with ID [999] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('Role with ID [999] not found.');
 
 		$this
 			->foreignKeyValidator
@@ -168,8 +168,8 @@ class UserForeignKeyValidatorTest extends TestCase
 			->method('find')
 			->seal();
 
-		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Role ID must not be null.');
+		$this->expectException(BadRequestHttpException::class);
+		$this->expectExceptionMessageIs('Role ID must not be null.');
 
 		$this
 			->foreignKeyValidator
@@ -190,8 +190,8 @@ class UserForeignKeyValidatorTest extends TestCase
 			->willReturn(null)
 			->seal();
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Role with ID [999] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('Role with ID [999] not found.');
 
 		$this
 			->foreignKeyValidator

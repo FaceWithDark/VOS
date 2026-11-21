@@ -43,7 +43,7 @@ class TournamentResourceDtoTest extends TestCase
 	{
 		$dto = new TournamentResourceDto();
 
-		self::assertNull(actual: $dto->description);
+		self::assertNull($dto->description);
 	}
 
 	#[Test]
@@ -59,20 +59,20 @@ class TournamentResourceDtoTest extends TestCase
 		$dto->timestamp		= $timestamp;
 
 		self::assertSame(
-			expected: 7,
-			actual: $dto->id,
+			7,
+			$dto->id,
 		);
 		self::assertSame(
-			expected: 'VOT88',
-			actual: $dto->name,
+			'VOT88',
+			$dto->name,
 		);
 		self::assertSame(
-			expected: 'Vietnamese Osu!taiko Tournament 88 (special edition).',
-			actual: $dto->description,
+			'Vietnamese Osu!taiko Tournament 88 (special edition).',
+			$dto->description,
 		);
 		self::assertSame(
-			expected: $timestamp,
-			actual: $dto->timestamp,
+			$timestamp,
+			$dto->timestamp,
 		);
 	}
 
@@ -82,8 +82,8 @@ class TournamentResourceDtoTest extends TestCase
 		$attribute = self::classMapAttribute(className: TournamentResourceDto::class);
 
 		self::assertSame(
-			expected: TournamentEntity::class,
-			actual: $attribute->source,
+			TournamentEntity::class,
+			$attribute->source,
 		);
 	}
 
@@ -96,8 +96,8 @@ class TournamentResourceDtoTest extends TestCase
 		);
 
 		self::assertSame(
-			expected: 'createOn',
-			actual: $attribute->source,
+			'createOn',
+			$attribute->source,
 		);
 	}
 
@@ -107,15 +107,18 @@ class TournamentResourceDtoTest extends TestCase
 	 */
 
 
+	/**
+	 * @param class-string $className
+	 */
 	private static function classMapAttribute(string $className): Map
 	{
 		$attributes = (new ReflectionClass(objectOrClass: $className))
 			->getAttributes(name: Map::class);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $attributes,
-			message: sprintf(
+			1,
+			$attributes,
+			sprintf(
 				'%s must declare exactly one #[Map] on the class.',
 				$className,
 			),
@@ -124,6 +127,9 @@ class TournamentResourceDtoTest extends TestCase
 		return $attributes[0]->newInstance();
 	}
 
+	/**
+	 * @param class-string $className
+	 */
 	private static function propertyMapAttribute(
 		string	$className,
 		string	$propertyName,
@@ -135,9 +141,9 @@ class TournamentResourceDtoTest extends TestCase
 		))->getAttributes(name: Map::class);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $attributes,
-			message: sprintf(
+			1,
+			$attributes,
+			sprintf(
 				'%s::$%s must declare exactly one #[Map].',
 				$className,
 				$propertyName,

@@ -28,8 +28,8 @@ use App\Repository\Catalog\TournamentRepository;
 use App\State\Provider\Catalog\TournamentProvider;
 
 
-#[CoversClass(className: TournamentProvider::class)]
-#[UsesClass(className: TournamentAbstract::class)]
+#[CoversClass(TournamentProvider::class)]
+#[UsesClass(TournamentAbstract::class)]
 class TournamentProviderTest extends TestCase
 {
 	private TournamentRepository&MockObject		$repository;
@@ -42,8 +42,8 @@ class TournamentProviderTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository	= $this->createMock(type: TournamentRepository::class);
-		$this->mapper		= $this->createMock(type: ObjectMapperInterface::class);
+		$this->repository	= $this->createMock(TournamentRepository::class);
+		$this->mapper		= $this->createMock(ObjectMapperInterface::class);
 		$this->provider		= new TournamentProvider(
 			repository:	$this->repository,
 			mapper:		$this->mapper,
@@ -96,11 +96,11 @@ class TournamentProviderTest extends TestCase
 				->provide(operation: new GetCollection());
 
 		self::assertSame(
-			expected: [
+			[
 				$first,
 				$second,
 			],
-			actual: $result,
+			$result,
 		);
 	}
 
@@ -126,8 +126,8 @@ class TournamentProviderTest extends TestCase
 				->provide(operation: new GetCollection());
 
 		self::assertSame(
-			expected: [],
-			actual: $result,
+			[],
+			$result,
 		);
 	}
 
@@ -165,8 +165,8 @@ class TournamentProviderTest extends TestCase
 				);
 
 		self::assertSame(
-			expected: $resource,
-			actual: $result,
+			$resource,
+			$result,
 		);
 	}
 
@@ -195,6 +195,6 @@ class TournamentProviderTest extends TestCase
 					uriVariables:	['id' => 404],
 				);
 
-		self::assertNull(actual: $result);
+		self::assertNull($result);
 	}
 }

@@ -33,9 +33,9 @@ use App\Service\Catalog\TournamentDuplicateValidator;
  * decides which HTTP error a repeated tournament name maps to. The repository
  * is mocked so each test pins exactly one policy branch.
  */
-#[CoversClass(className: TournamentDuplicateValidator::class)]
-#[UsesClass(className: TournamentEntity::class)]
-#[UsesClass(className: TournamentAbstract::class)]
+#[CoversClass(TournamentDuplicateValidator::class)]
+#[UsesClass(TournamentEntity::class)]
+#[UsesClass(TournamentAbstract::class)]
 class TournamentDuplicateValidatorTest extends TestCase
 {
 	private TournamentRepository&MockObject	$repository;
@@ -47,7 +47,7 @@ class TournamentDuplicateValidatorTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository			= $this->createMock(type: TournamentRepository::class);
+		$this->repository			= $this->createMock(TournamentRepository::class);
 		$this->duplicateValidator	= new TournamentDuplicateValidator(repository: $this->repository);
 	}
 
@@ -60,8 +60,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 	}
 
 	private function mockTournamentEntity(
-		?int	$id		= 7,
-		?string	$name	= 'VOT6',
+		int		$id		= 7,
+		string	$name	= 'VOT6',
 	): TournamentEntity
 	{
 		return (new TournamentEntity())
@@ -138,8 +138,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->with(['name' => 'VOT6'])
 			->willReturn($current);
 
-		$this->expectException(exception: ConflictHttpException::class);
-		$this->expectExceptionMessageIs(message: 'A tournament with the name [VOT6] already exists.');
+		$this->expectException(ConflictHttpException::class);
+		$this->expectExceptionMessageIs('A tournament with the name [VOT6] already exists.');
 
 		$this->sealRepository();
 
@@ -277,8 +277,8 @@ class TournamentDuplicateValidatorTest extends TestCase
 			->with(['name' => 'VOT6'])
 			->willReturn($current);
 
-		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Another tournament with the name [VOT6] already exists.');
+		$this->expectException(BadRequestHttpException::class);
+		$this->expectExceptionMessageIs('Another tournament with the name [VOT6] already exists.');
 
 		$this->sealRepository();
 

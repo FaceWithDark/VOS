@@ -28,9 +28,9 @@ use App\Repository\Web\RoleRepository;
 use App\State\Provider\Web\RoleProvider;
 
 
-#[CoversClass(className: RoleProvider::class)]
-#[UsesClass(className: RoleEntity::class)]
-#[UsesClass(className: RoleAbstract::class)]
+#[CoversClass(RoleProvider::class)]
+#[UsesClass(RoleEntity::class)]
+#[UsesClass(RoleAbstract::class)]
 class RoleProviderTest extends TestCase
 {
 	private RoleRepository&MockObject			$repository;
@@ -43,8 +43,8 @@ class RoleProviderTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository	= $this->createMock(type: RoleRepository::class);
-		$this->mapper		= $this->createMock(type: ObjectMapperInterface::class);
+		$this->repository	= $this->createMock(RoleRepository::class);
+		$this->mapper		= $this->createMock(ObjectMapperInterface::class);
 		$this->provider		= new RoleProvider(
 			repository:	$this->repository,
 			mapper:		$this->mapper,
@@ -84,11 +84,11 @@ class RoleProviderTest extends TestCase
 				->provide(operation: new GetCollection());
 
 		self::assertSame(
-			expected: [
+			[
 				$first,
 				$second,
 			],
-			actual: $result,
+			$result,
 		);
 	}
 
@@ -114,8 +114,8 @@ class RoleProviderTest extends TestCase
 				->provide(operation: new GetCollection());
 
 		self::assertSame(
-			expected: [],
-			actual: $result,
+			[],
+			$result,
 		);
 	}
 
@@ -153,8 +153,8 @@ class RoleProviderTest extends TestCase
 				);
 
 		self::assertSame(
-			expected: $resource,
-			actual: $result,
+			$resource,
+			$result,
 		);
 	}
 
@@ -184,6 +184,6 @@ class RoleProviderTest extends TestCase
 					uriVariables:	['id' => 404],
 				);
 
-		self::assertNull(actual: $result);
+		self::assertNull($result);
 	}
 }

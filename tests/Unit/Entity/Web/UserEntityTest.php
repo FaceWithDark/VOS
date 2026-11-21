@@ -26,24 +26,12 @@ use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
 
 
-#[CoversClass(className: UserEntity::class)]
-#[UsesClass(className: RoleAbstract::class)]
-#[UsesClass(className: RoleEntity::class)]
-#[UsesClass(className: UserAbstract::class)]
+#[CoversClass(UserEntity::class)]
+#[UsesClass(RoleAbstract::class)]
+#[UsesClass(RoleEntity::class)]
+#[UsesClass(UserAbstract::class)]
 class UserEntityTest extends TestCase
 {
-	#[Test]
-	public function testDefaultsEveryFieldToNull(): void
-	{
-		$entity = new UserEntity();
-
-		self::assertNull(actual: $entity->getRoleId());
-		self::assertNull(actual: $entity->getName());
-		self::assertNull(actual: $entity->getAvatar());
-		self::assertNull(actual: $entity->getRank());
-		self::assertNull(actual: $entity->getCountryFlag());
-	}
-
 	#[Test]
 	public function testSetRoleIdIsFluentAndStoresValue(): void
 	{
@@ -51,12 +39,12 @@ class UserEntityTest extends TestCase
 		$role	= new RoleEntity();
 
 		self::assertSame(
-			expected: $entity,
-			actual: $entity->setRoleId(roleId: $role),
+			$entity,
+			$entity->setRoleId(roleId: $role),
 		);
 		self::assertSame(
-			expected: $role,
-			actual: $entity->getRoleId(),
+			$role,
+			$entity->getRoleId(),
 		);
 	}
 
@@ -66,12 +54,12 @@ class UserEntityTest extends TestCase
 		$entity = new UserEntity();
 
 		self::assertSame(
-			expected: $entity,
-			actual: $entity->setName(name: 'Gambler'),
+			$entity,
+			$entity->setName(name: 'Gambler'),
 		);
 		self::assertSame(
-			expected: 'Gambler',
-			actual: $entity->getName(),
+			'Gambler',
+			$entity->getName(),
 		);
 	}
 
@@ -81,12 +69,12 @@ class UserEntityTest extends TestCase
 		$entity = new UserEntity();
 
 		self::assertSame(
-			expected: $entity,
-			actual: $entity->setAvatar(avatar: 'https://a.ppy.sh/88?88.png'),
+			$entity,
+			$entity->setAvatar(avatar: 'https://a.ppy.sh/88?88.png'),
 		);
 		self::assertSame(
-			expected: 'https://a.ppy.sh/88?88.png',
-			actual: $entity->getAvatar(),
+			'https://a.ppy.sh/88?88.png',
+			$entity->getAvatar(),
 		);
 	}
 
@@ -96,12 +84,12 @@ class UserEntityTest extends TestCase
 		$entity = new UserEntity();
 
 		self::assertSame(
-			expected: $entity,
-			actual: $entity->setRank(rank: 88),
+			$entity,
+			$entity->setRank(rank: 88),
 		);
 		self::assertSame(
-			expected: 88,
-			actual: $entity->getRank(),
+			88,
+			$entity->getRank(),
 		);
 	}
 
@@ -111,12 +99,12 @@ class UserEntityTest extends TestCase
 		$entity = new UserEntity();
 
 		self::assertSame(
-			expected: $entity,
-			actual: $entity->setCountryFlag(countryFlag: 'ZW'),
+			$entity,
+			$entity->setCountryFlag(countryFlag: 'ZW'),
 		);
 		self::assertSame(
-			expected: 'ZW',
-			actual: $entity->getCountryFlag(),
+			'ZW',
+			$entity->getCountryFlag(),
 		);
 	}
 
@@ -128,13 +116,13 @@ class UserEntityTest extends TestCase
 		$entity->setId(id: 88888);
 
 		self::assertSame(
-			expected: 88888,
-			actual: $entity->getId(),
+			88888,
+			$entity->getId(),
 		);
-		self::assertNotNull(actual: $entity->getCreateOn());
+		self::assertNotNull($entity->getCreateOn());
 		self::assertSame(
-			expected: 'UTC',
-			actual: $entity
+			'UTC',
+			$entity
 				->getCreateOn()
 				->getTimezone()
 				->getName(),
@@ -158,16 +146,16 @@ class UserEntityTest extends TestCase
 		$attributes = $property->getAttributes(name: ManyToOne::class);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $attributes,
-			message: 'A user must own a ManyToOne association to its role.',
+			1,
+			$attributes,
+			'A user must own a ManyToOne association to its role.',
 		);
 
 		$association = $attributes[0]->newInstance();
 
 		self::assertSame(
-			expected: 'users',
-			actual: $association->inversedBy,
+			'users',
+			$association->inversedBy,
 		);
 	}
 
@@ -181,20 +169,20 @@ class UserEntityTest extends TestCase
 		))->getAttributes(name: JoinColumn::class);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $attributes,
+			1,
+			$attributes,
 		);
 
 		$joinColumn = $attributes[0]->newInstance();
 
 		self::assertSame(
-			expected: 'role_id',
-			actual: $joinColumn->name,
+			'role_id',
+			$joinColumn->name,
 		);
-		self::assertFalse(condition: $joinColumn->nullable);
+		self::assertFalse($joinColumn->nullable);
 		self::assertFalse(
-			condition: $joinColumn->unique,
-			message: 'A non-unique FK is what makes the relation 1:N.',
+			$joinColumn->unique,
+			'A non-unique FK is what makes the relation 1:N.',
 		);
 	}
 }

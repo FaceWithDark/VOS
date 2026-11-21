@@ -38,9 +38,9 @@ use App\Repository\Web\RoleRepository;
  * PHPUnit then turns any undeclared call into a failure instead of a silent
  * `null`, and `#[UsesClass]` accounts for the entity code instantiated here.
  */
-#[CoversClass(className: RoleRepository::class)]
-#[UsesClass(className: RoleEntity::class)]
-#[UsesClass(className: RoleAbstract::class)]
+#[CoversClass(RoleRepository::class)]
+#[UsesClass(RoleEntity::class)]
+#[UsesClass(RoleAbstract::class)]
 class RoleRepositoryTest extends TestCase
 {
 	private EntityManagerInterface&MockObject	$entityManager;
@@ -51,12 +51,12 @@ class RoleRepositoryTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->entityManager = $this->createMock(type: EntityManagerInterface::class);
+		$this->entityManager = $this->createMock(EntityManagerInterface::class);
 		$this->entityManager
 			->method('getClassMetadata')
 			->willReturn(new ClassMetadata(name: RoleEntity::class));
 
-		$registry = $this->createStub(type: ManagerRegistry::class);
+		$registry = self::createStub(ManagerRegistry::class);
 		$registry
 			->method('getManagerForClass')
 			->willReturn($this->entityManager);

@@ -27,7 +27,7 @@ use App\Service\Web\RoleEmptyPayloadValidator;
  * directly. It only asserts the decoded payload is a non-empty array; it never
  * inspects the individual values.
  */
-#[CoversClass(className: RoleEmptyPayloadValidator::class)]
+#[CoversClass(RoleEmptyPayloadValidator::class)]
 class RoleEmptyPayloadValidatorTest extends TestCase
 {
 	private RoleEmptyPayloadValidator $emptyPayloadValidator;
@@ -43,8 +43,8 @@ class RoleEmptyPayloadValidatorTest extends TestCase
 	#[Test]
 	public function testEmptyPayloadThrowsBadRequest(): void
 	{
-		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Request payload must not be empty.');
+		$this->expectException(BadRequestHttpException::class);
+		$this->expectExceptionMessageIs('Request payload must not be empty.');
 
 		$this->emptyPayloadValidator->validatePatch(payload: []);
 	}

@@ -28,7 +28,7 @@ use App\Entity\Abstract\UserAbstract;
  * rather than a generated one. The anonymous subclass lets the test
  * instantiate the abstract directly.
  */
-#[CoversClass(className: UserAbstract::class)]
+#[CoversClass(UserAbstract::class)]
 class UserAbstractTest extends TestCase
 {
 	private function createSubject(): UserAbstract
@@ -42,8 +42,8 @@ class UserAbstractTest extends TestCase
 		$subject = $this->createSubject();
 
 		self::assertNull(
-			actual: $subject->getId(),
-			message: 'The client-supplied identifier starts unset.',
+			$subject->getId(),
+			'The client-supplied identifier starts unset.',
 		);
 	}
 
@@ -53,13 +53,13 @@ class UserAbstractTest extends TestCase
 		$subject = $this->createSubject();
 
 		self::assertSame(
-			expected: $subject,
-			actual: $subject->setId(id: 88888),
-			message: 'The setter must support a fluent chain.',
+			$subject,
+			$subject->setId(id: 88888),
+			'The setter must support a fluent chain.',
 		);
 		self::assertSame(
-			expected: 88888,
-			actual: $subject->getId(),
+			88888,
+			$subject->getId(),
 		);
 	}
 
@@ -78,20 +78,20 @@ class UserAbstractTest extends TestCase
 
 		$createOn = $subject->getCreateOn();
 
-		self::assertNotNull(actual: $createOn);
+		self::assertNotNull($createOn);
 		self::assertSame(
-			expected: 'UTC',
-			actual: $createOn
+			'UTC',
+			$createOn
 				->getTimezone()
 				->getName(),
 		);
 		self::assertGreaterThanOrEqual(
-			minimum: $before,
-			actual: $createOn,
+			$before,
+			$createOn,
 		);
 		self::assertLessThanOrEqual(
-			maximum: $after,
-			actual: $createOn,
+			$after,
+			$createOn,
 		);
 	}
 
@@ -102,12 +102,12 @@ class UserAbstractTest extends TestCase
 		$subject	= $this->createSubject();
 
 		self::assertSame(
-			expected: $subject,
-			actual: $subject->setCreateOn(createOn: $createOn),
+			$subject,
+			$subject->setCreateOn(createOn: $createOn),
 		);
 		self::assertSame(
-			expected: $createOn,
-			actual: $subject->getCreateOn(),
+			$createOn,
+			$subject->getCreateOn(),
 		);
 	}
 }

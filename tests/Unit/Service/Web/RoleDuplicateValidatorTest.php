@@ -33,9 +33,9 @@ use App\Service\Web\RoleDuplicateValidator;
  * which HTTP error a repeated role name maps to. The repository is mocked so
  * each test pins exactly one policy branch.
  */
-#[CoversClass(className: RoleDuplicateValidator::class)]
-#[UsesClass(className: RoleEntity::class)]
-#[UsesClass(className: RoleAbstract::class)]
+#[CoversClass(RoleDuplicateValidator::class)]
+#[UsesClass(RoleEntity::class)]
+#[UsesClass(RoleAbstract::class)]
 class RoleDuplicateValidatorTest extends TestCase
 {
 	private RoleRepository&MockObject	$repository;
@@ -47,13 +47,13 @@ class RoleDuplicateValidatorTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository			= $this->createMock(type: RoleRepository::class);
+		$this->repository			= $this->createMock(RoleRepository::class);
 		$this->duplicateValidator	= new RoleDuplicateValidator(repository: $this->repository);
 	}
 
 	private function mockRoleEntity(
-		?int	$id		= 2,
-		?string	$name	= 'Admin',
+		int		$id		= 2,
+		string	$name	= 'Admin',
 	): RoleEntity
 	{
 		return (new RoleEntity())
@@ -128,8 +128,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->willReturn($current)
 			->seal();
 
-		$this->expectException(exception: ConflictHttpException::class);
-		$this->expectExceptionMessageIs(message: 'A role with the name [Admin] already exists.');
+		$this->expectException(ConflictHttpException::class);
+		$this->expectExceptionMessageIs('A role with the name [Admin] already exists.');
 
 		$this
 			->duplicateValidator
@@ -261,8 +261,8 @@ class RoleDuplicateValidatorTest extends TestCase
 			->willReturn($current)
 			->seal();
 
-		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Another role with the name [Admin] already exists.');
+		$this->expectException(BadRequestHttpException::class);
+		$this->expectExceptionMessageIs('Another role with the name [Admin] already exists.');
 
 		$this
 			->duplicateValidator

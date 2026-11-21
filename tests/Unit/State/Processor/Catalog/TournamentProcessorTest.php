@@ -67,9 +67,9 @@ use App\State\Processor\Catalog\TournamentProcessor;
  * ---------------------------------------------------------------------------
  */
 #[AllowMockObjectsWithoutExpectations]
-#[CoversClass(className: TournamentProcessor::class)]
-#[UsesClass(className: TournamentEntity::class)]
-#[UsesClass(className: TournamentAbstract::class)]
+#[CoversClass(TournamentProcessor::class)]
+#[UsesClass(TournamentEntity::class)]
+#[UsesClass(TournamentAbstract::class)]
 class TournamentProcessorTest extends TestCase
 {
 	private TournamentRepository&MockObject						$repository;
@@ -85,11 +85,11 @@ class TournamentProcessorTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository				= $this->createMock(type: TournamentRepository::class);
-		$this->mapper					= $this->createMock(type: ObjectMapperInterface::class);
-		$this->requestStack				= $this->createMock(type: RequestStack::class);
-		$this->duplicateValidator		= $this->createMock(type: TournamentDuplicateValidatorInterface::class);
-		$this->emptyPayloadValidator	= $this->createMock(type: TournamentEmptyPayloadValidatorInterface::class);
+		$this->repository				= $this->createMock(TournamentRepository::class);
+		$this->mapper					= $this->createMock(ObjectMapperInterface::class);
+		$this->requestStack				= $this->createMock(RequestStack::class);
+		$this->duplicateValidator		= $this->createMock(TournamentDuplicateValidatorInterface::class);
+		$this->emptyPayloadValidator	= $this->createMock(TournamentEmptyPayloadValidatorInterface::class);
 
 		$this->processor = new TournamentProcessor(
 			repository:				$this->repository,
@@ -100,8 +100,12 @@ class TournamentProcessorTest extends TestCase
 		);
 	}
 
-	private function stubRawPayload(string $json): void
+	private function stubRawPayload(string|false $json): void
 	{
+		if ($json === false) {
+			throw new \RuntimeException('Unable to encode the stub payload.');
+		}
+
 		$this
 			->requestStack
 			->method('getCurrentRequest')
@@ -185,7 +189,7 @@ class TournamentProcessorTest extends TestCase
 			->method('save')
 			->with(
 				self::callback(
-					callback: static fn (TournamentEntity $entity): bool
+					static fn (TournamentEntity $entity): bool
 						=> $entity->getName() === $dto->name
 						&& $entity->getDescription() === $dto->description
 						&& $entity->getCreateOn()?->getTimezone()->getName() === 'UTC'
@@ -198,7 +202,7 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::once())
 			->method('map')
 			->with(
-				self::isInstanceOf(className: TournamentEntity::class),
+				self::isInstanceOf(TournamentEntity::class),
 				TournamentResourceDto::class,
 			)
 			->willReturn($resource);
@@ -213,8 +217,8 @@ class TournamentProcessorTest extends TestCase
 			);
 
 		self::assertSame(
-			expected: $resource,
-			actual: $result,
+			$resource,
+			$result,
 		);
 	}
 
@@ -325,7 +329,7 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$this->expectException(exception: ConflictHttpException::class);
+		$this->expectException(ConflictHttpException::class);
 
 		$this->sealCollaborators();
 
@@ -368,8 +372,8 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Tournament with ID [88] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('Tournament with ID [88] not found.');
 
 		$this->sealCollaborators();
 
@@ -393,8 +397,8 @@ class TournamentProcessorTest extends TestCase
 			->with(0)
 			->willReturn(null);
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Tournament with ID [0] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('Tournament with ID [0] not found.');
 
 		$this->sealCollaborators();
 
@@ -438,8 +442,8 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::never())
 			->method('save');
 
-		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Request payload must not be empty.');
+		$this->expectException(BadRequestHttpException::class);
+		$this->expectExceptionMessageIs('Request payload must not be empty.');
 
 		$this->sealCollaborators();
 
@@ -515,17 +519,17 @@ class TournamentProcessorTest extends TestCase
 			);
 
 		self::assertSame(
-			expected: $resource,
-			actual: $result,
+			$resource,
+			$result,
 		);
 		self::assertSame(
-			expected: 'VOT88',
-			actual: $current->getName(),
+			'VOT88',
+			$current->getName(),
 		);
 		self::assertSame(
-			expected: 'Vietnamese Osu!taiko Tournament 6',
-			actual: $current->getDescription(),
-			message: 'An omitted description must survive a name-only PATCH.',
+			'Vietnamese Osu!taiko Tournament 6',
+			$current->getDescription(),
+			'An omitted description must survive a name-only PATCH.',
 		);
 	}
 
@@ -583,12 +587,12 @@ class TournamentProcessorTest extends TestCase
 			);
 
 		self::assertSame(
-			expected: 'VOT6',
-			actual: $current->getName()
+			'VOT6',
+			$current->getName()
 		);
 		self::assertSame(
-			expected: $dto->description,
-			actual: $current->getDescription()
+			$dto->description,
+			$current->getDescription()
 		);
 	}
 
@@ -642,7 +646,7 @@ class TournamentProcessorTest extends TestCase
 				payload: ['id' => 7],
 			);
 
-		self::assertNull(actual: $current->getDescription());
+		self::assertNull($current->getDescription());
 	}
 
 	#[Test]
@@ -706,12 +710,12 @@ class TournamentProcessorTest extends TestCase
 			);
 
 		self::assertSame(
-			expected: 'VOT88',
-			actual: $current->getName(),
+			'VOT88',
+			$current->getName(),
 		);
 		self::assertSame(
-			expected: $dto->description,
-			actual: $current->getDescription(),
+			$dto->description,
+			$current->getDescription(),
 		);
 	}
 
@@ -771,12 +775,12 @@ class TournamentProcessorTest extends TestCase
 
 		// Neither 'name' nor 'description' was sent: stored values survive
 		self::assertSame(
-			expected: 'VOT6',
-			actual: $current->getName(),
+			'VOT6',
+			$current->getName(),
 		);
 		self::assertSame(
-			expected: 'Vietnamese Osu!taiko Tournament 6',
-			actual: $current->getDescription(),
+			'Vietnamese Osu!taiko Tournament 6',
+			$current->getDescription(),
 		);
 	}
 
@@ -818,7 +822,7 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$this->expectException(exception: BadRequestHttpException::class);
+		$this->expectException(BadRequestHttpException::class);
 
 		$this->sealCollaborators();
 
@@ -868,7 +872,7 @@ class TournamentProcessorTest extends TestCase
 				payload: ['id' => 7],
 			);
 
-		self::assertNull(actual: $result);
+		self::assertNull($result);
 	}
 
 	#[Test]
@@ -886,8 +890,8 @@ class TournamentProcessorTest extends TestCase
 			->expects(self::never())
 			->method('remove');
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Tournament with ID [88] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('Tournament with ID [88] not found.');
 
 		$this->sealCollaborators();
 
@@ -910,8 +914,8 @@ class TournamentProcessorTest extends TestCase
 			->with(0)
 			->willReturn(null);
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Tournament with ID [0] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('Tournament with ID [0] not found.');
 
 		$this->sealCollaborators();
 
@@ -933,8 +937,8 @@ class TournamentProcessorTest extends TestCase
 	#[Test]
 	public function testProcessRejectsUnsupportedInput(): void
 	{
-		$this->expectException(exception: InvalidArgumentException::class);
-		$this->expectExceptionMessageIs(message: 'Unsupported opearation or input DTO type.');
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessageIs('Unsupported opearation or input DTO type.');
 
 		$this->sealCollaborators();
 

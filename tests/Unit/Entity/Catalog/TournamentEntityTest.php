@@ -18,16 +18,15 @@ use PHPUnit\Framework\TestCase;
 use App\Entity\Catalog\TournamentEntity;
 
 
-#[CoversClass(className: TournamentEntity::class)]
+#[CoversClass(TournamentEntity::class)]
 class TournamentEntityTest extends TestCase
 {
 	#[Test]
-	public function testDefaultsNameAndDescriptionToNull(): void
+	public function testDefaultsDescriptionToNull(): void
 	{
 		$entity = new TournamentEntity();
 
-		self::assertNull(actual: $entity->getName());
-		self::assertNull(actual: $entity->getDescription());
+		self::assertNull($entity->getDescription());
 	}
 
 	#[Test]
@@ -36,12 +35,12 @@ class TournamentEntityTest extends TestCase
 		$entity = new TournamentEntity();
 
 		self::assertSame(
-			expected: $entity,
-			actual: $entity->setName(name: 'VOT88'),
+			$entity,
+			$entity->setName(name: 'VOT88'),
 		);
 		self::assertSame(
-			expected: 'VOT88',
-			actual: $entity->getName(),
+			'VOT88',
+			$entity->getName(),
 		);
 	}
 
@@ -51,14 +50,14 @@ class TournamentEntityTest extends TestCase
 		$entity = new TournamentEntity();
 
 		self::assertSame(
-			expected: $entity,
-			actual: $entity->setDescription(
+			$entity,
+			$entity->setDescription(
 				description: 'Vietnamese Osu!taiko Tournament 88 (special edition).',
 			),
 		);
 		self::assertSame(
-			expected: 'Vietnamese Osu!taiko Tournament 88 (special edition).',
-			actual: $entity->getDescription(),
+			'Vietnamese Osu!taiko Tournament 88 (special edition).',
+			$entity->getDescription(),
 		);
 	}
 
@@ -71,8 +70,8 @@ class TournamentEntityTest extends TestCase
 		$entity->setDescription(description: null);
 
 		self::assertNull(
-			actual: $entity->getDescription(),
-			message: 'Clearing the nullable description must be possible.',
+			$entity->getDescription(),
+			'Clearing the nullable description must be possible.',
 		);
 	}
 
@@ -84,13 +83,13 @@ class TournamentEntityTest extends TestCase
 		$entity->setId(id: 7);
 
 		self::assertSame(
-			expected: 7,
-			actual: $entity->getId(),
+			7,
+			$entity->getId(),
 		);
-		self::assertNotNull(actual: $entity->getCreateOn());
+		self::assertNotNull($entity->getCreateOn());
 		self::assertSame(
-			expected: 'UTC',
-			actual: $entity
+			'UTC',
+			$entity
 				->getCreateOn()
 				->getTimezone()
 				->getName(),

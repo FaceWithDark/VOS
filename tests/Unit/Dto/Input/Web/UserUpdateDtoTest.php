@@ -62,11 +62,11 @@ class UserUpdateDtoTest extends TestCase
 	{
 		$dto = new UserUpdateDto();
 
-		self::assertNull(actual: $dto->name);
-		self::assertNull(actual: $dto->roleId);
-		self::assertNull(actual: $dto->avatar);
-		self::assertNull(actual: $dto->rank);
-		self::assertNull(actual: $dto->countryFlag);
+		self::assertNull($dto->name);
+		self::assertNull($dto->roleId);
+		self::assertNull($dto->avatar);
+		self::assertNull($dto->rank);
+		self::assertNull($dto->countryFlag);
 	}
 
 	#[Test]
@@ -81,24 +81,24 @@ class UserUpdateDtoTest extends TestCase
 		$dto->countryFlag	= 'ZW';
 
 		self::assertSame(
-			expected: 'Gambler',
-			actual: $dto->name,
+			'Gambler',
+			$dto->name,
 		);
 		self::assertSame(
-			expected: 1,
-			actual: $dto->roleId,
+			1,
+			$dto->roleId,
 		);
 		self::assertSame(
-			expected: 'https://a.ppy.sh/88?88.png',
-			actual: $dto->avatar,
+			'https://a.ppy.sh/88?88.png',
+			$dto->avatar,
 		);
 		self::assertSame(
-			expected: 88,
-			actual: $dto->rank,
+			88,
+			$dto->rank,
 		);
 		self::assertSame(
-			expected: 'ZW',
-			actual: $dto->countryFlag,
+			'ZW',
+			$dto->countryFlag,
 		);
 	}
 
@@ -118,8 +118,8 @@ class UserUpdateDtoTest extends TestCase
 				->validate(value: new UserUpdateDto());
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
+			0,
+			$violations,
 		);
 	}
 
@@ -140,8 +140,8 @@ class UserUpdateDtoTest extends TestCase
 				->validate(value: $dto);
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
+			0,
+			$violations,
 		);
 	}
 
@@ -158,8 +158,8 @@ class UserUpdateDtoTest extends TestCase
 				->validate(value: $dto);
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
+			0,
+			$violations,
 		);
 	}
 
@@ -214,20 +214,20 @@ class UserUpdateDtoTest extends TestCase
 	): void
 	{
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $violations,
+			1,
+			$violations,
 		);
 
 		self::assertSame(
-			expected: $propertyPath,
-			actual: $violations
+			$propertyPath,
+			$violations
 				->get(0)
 				->getPropertyPath(),
 		);
 
 		self::assertSame(
-			expected: $message,
-			actual: $violations
+			$message,
+			$violations
 				->get(0)
 				->getMessage(),
 		);

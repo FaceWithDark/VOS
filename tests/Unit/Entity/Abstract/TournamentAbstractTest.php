@@ -27,7 +27,7 @@ use App\Entity\Abstract\TournamentAbstract;
  * tournament entity. The anonymous subclass lets the test instantiate the
  * abstract directly without dragging a concrete entity into the subject.
  */
-#[CoversClass(className: TournamentAbstract::class)]
+#[CoversClass(TournamentAbstract::class)]
 class TournamentAbstractTest extends TestCase
 {
 	private function createSubject(): TournamentAbstract
@@ -41,8 +41,8 @@ class TournamentAbstractTest extends TestCase
 		$subject = $this->createSubject();
 
 		self::assertNull(
-			actual: $subject->getId(),
-			message: 'A not-yet-persisted entity has no identifier.',
+			$subject->getId(),
+			'A not-yet-persisted entity has no identifier.',
 		);
 	}
 
@@ -52,13 +52,13 @@ class TournamentAbstractTest extends TestCase
 		$subject = $this->createSubject();
 
 		self::assertSame(
-			expected: $subject,
-			actual: $subject->setId(id: 7),
-			message: 'The setter must support a fluent chain.',
+			$subject,
+			$subject->setId(id: 7),
+			'The setter must support a fluent chain.',
 		);
 		self::assertSame(
-			expected: 7,
-			actual: $subject->getId(),
+			7,
+			$subject->getId(),
 		);
 	}
 
@@ -77,20 +77,20 @@ class TournamentAbstractTest extends TestCase
 
 		$createOn = $subject->getCreateOn();
 
-		self::assertNotNull(actual: $createOn);
+		self::assertNotNull($createOn);
 		self::assertSame(
-			expected: 'UTC',
-			actual: $createOn
+			'UTC',
+			$createOn
 				->getTimezone()
 				->getName(),
 		);
 		self::assertGreaterThanOrEqual(
-			minimum: $before,
-			actual: $createOn,
+			$before,
+			$createOn,
 		);
 		self::assertLessThanOrEqual(
-			maximum: $after,
-			actual: $createOn,
+			$after,
+			$createOn,
 		);
 	}
 
@@ -101,12 +101,12 @@ class TournamentAbstractTest extends TestCase
 		$subject	= $this->createSubject();
 
 		self::assertSame(
-			expected: $subject,
-			actual: $subject->setCreateOn(createOn: $createOn),
+			$subject,
+			$subject->setCreateOn(createOn: $createOn),
 		);
 		self::assertSame(
-			expected: $createOn,
-			actual: $subject->getCreateOn(),
+			$createOn,
+			$subject->getCreateOn(),
 		);
 	}
 }
