@@ -25,46 +25,46 @@ final class User extends UserAbstract
 		nullable: false,
 		onDelete: 'NO ACTION'
 	)]
-	private ?Role $roleId = null;
+	private Role $roleId;
 
 	#[ORM\Column(
 		type: Types::TEXT,
 		nullable: false
 	)]
-	private ?string $name = null;
+	private string $name;
 
 	#[ORM\Column(
 		type: Types::TEXT,
 		nullable: false
 	)]
-	private ?string $avatar = null;
+	private string $avatar;
 
 	#[ORM\Column(
 		type: Types::SMALLINT,
 		nullable: false
 	)]
-	private ?int $rank = null;
+	private int $rank;
 
 	#[ORM\Column(
 		type: Types::STRING,
 		length: 2,
 		nullable: false
 	)]
-	private ?string $countryFlag = null;
+	private string $countryFlag;
 
-	public function getRoleId(): ?Role
+	public function getRoleId(): Role
 	{
 		return $this->roleId;
 	}
 
-	public function setRoleId(?Role $roleId): static
+	public function setRoleId(Role $roleId): static
 	{
 		$this->roleId = $roleId;
 
 		return $this;
 	}
 
-	public function getName(): ?string
+	public function getName(): string
 	{
 		return $this->name;
 	}
@@ -76,7 +76,7 @@ final class User extends UserAbstract
 		return $this;
 	}
 
-	public function getAvatar(): ?string
+	public function getAvatar(): string
 	{
 		return $this->avatar;
 	}
@@ -88,7 +88,7 @@ final class User extends UserAbstract
 		return $this;
 	}
 
-	public function getRank(): ?int
+	public function getRank(): int
 	{
 		return $this->rank;
 	}
@@ -100,7 +100,7 @@ final class User extends UserAbstract
 		return $this;
 	}
 
-	public function getCountryFlag(): ?string
+	public function getCountryFlag(): string
 	{
 		return $this->countryFlag;
 	}

@@ -24,6 +24,7 @@ use App\Entity\Web\RoleEntity;
 class RoleFixture extends Fixture {
 	private string $prefix = 'VOS';
     private string $schema = '';
+	/** @var array<string, string> */
 	private array $roles = [
 		'User'	=> 'can only interact with what exposed to the website.',
 		'Admin'	=> 'can take control of the whole website both internally and externally.'
@@ -31,7 +32,7 @@ class RoleFixture extends Fixture {
 
     public function __construct()
     {
-		if ($this->prefix == 'VOS') {
+		if ($this->prefix === 'VOS') {
 			// VOS schemas
 			$this->schema .= sprintf(
 				'%s_%s',

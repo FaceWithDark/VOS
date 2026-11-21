@@ -25,7 +25,7 @@ final class Beatmap extends AbstractBeatmap
 		nullable: false,
 		onDelete: 'NO ACTION'
 	)]
-	private ?Mod $modId = null;
+	private Mod $modId;
 
 	#[ORM\ManyToOne(inversedBy: 'beatmaps')]
 	#[ORM\JoinColumn(
@@ -34,7 +34,7 @@ final class Beatmap extends AbstractBeatmap
 		nullable: false,
 		onDelete: 'NO ACTION'
 	)]
-	private ?Round $roundId = null;
+	private Round $roundId;
 
 	#[ORM\Column(
 		type: Types::JSONB,
@@ -59,24 +59,24 @@ final class Beatmap extends AbstractBeatmap
 	)]
 	private mixed $details = null;
 
-	public function getModId(): ?Mod
+	public function getModId(): Mod
 	{
 		return $this->modId;
 	}
 
-	public function setModId(?Mod $modId): static
+	public function setModId(Mod $modId): static
 	{
 		$this->modId = $modId;
 
 		return $this;
 	}
 
-	public function getRoundId(): ?Round
+	public function getRoundId(): Round
 	{
 		return $this->roundId;
 	}
 
-	public function setRoundId(?Round $roundId): static
+	public function setRoundId(Round $roundId): static
 	{
 		$this->roundId = $roundId;
 

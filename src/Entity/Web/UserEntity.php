@@ -36,34 +36,34 @@ final class UserEntity extends UserAbstract
 		nullable: false,
 		onDelete: 'NO ACTION'
 	)]
-	private ?RoleEntity $roleId = null;
+	private RoleEntity $roleId;
 
 	#[ORM\Column(
 		type: Types::TEXT,
 		nullable: false
 	)]
-	private ?string $name = null;
+	private string $name;
 
 	#[ORM\Column(
 		type: Types::TEXT,
 		nullable: false
 	)]
-	private ?string $avatar = null;
+	private string $avatar;
 
 	#[ORM\Column(
 		type: Types::SMALLINT,
 		nullable: false
 	)]
-	private ?int $rank = null;
+	private int $rank;
 
 	#[ORM\Column(
 		type: Types::STRING,
 		length: 2,
 		nullable: false
 	)]
-	private ?string $countryFlag = null;
+	private string $countryFlag;
 
-	public function getRoleId(): ?RoleEntity
+	public function getRoleId(): RoleEntity
 	{
 		return $this->roleId;
 	}
@@ -75,7 +75,7 @@ final class UserEntity extends UserAbstract
 		return $this;
 	}
 
-	public function getName(): ?string
+	public function getName(): string
 	{
 		return $this->name;
 	}
@@ -87,7 +87,7 @@ final class UserEntity extends UserAbstract
 		return $this;
 	}
 
-	public function getAvatar(): ?string
+	public function getAvatar(): string
 	{
 		return $this->avatar;
 	}
@@ -99,7 +99,7 @@ final class UserEntity extends UserAbstract
 		return $this;
 	}
 
-	public function getRank(): ?int
+	public function getRank(): int
 	{
 		return $this->rank;
 	}
@@ -111,7 +111,7 @@ final class UserEntity extends UserAbstract
 		return $this;
 	}
 
-	public function getCountryFlag(): ?string
+	public function getCountryFlag(): string
 	{
 		return $this->countryFlag;
 	}

@@ -30,7 +30,7 @@ final class TournamentEntity extends TournamentAbstract
 		type: Types::TEXT,
 		nullable: false
 	)]
-    private ?string $name = null;
+    private string $name;
 
 	#[ORM\Column(
 		type: Types::TEXT,
@@ -38,7 +38,7 @@ final class TournamentEntity extends TournamentAbstract
 	)]
     private ?string $description = null;
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

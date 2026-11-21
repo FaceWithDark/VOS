@@ -44,11 +44,14 @@ final readonly class RoleProcessor implements ProcessorInterface
 		private RoleEmptyPayloadValidatorInterface	$emptyPayloadValidator,
 	) {}
 
+	/**
+	 * @return array<array-key, mixed>
+	 */
 	private function getDecodedPayload(): array
 	{
 		$request = $this->requestStack->getCurrentRequest();
 
-		if (!$request) {
+		if ($request === null) {
 			return [];
 		}
 
@@ -107,15 +110,19 @@ final readonly class RoleProcessor implements ProcessorInterface
 		);
 	}
 
+	/**
+	 * @param array<array-key, mixed> $payload
+	 */
 	private function handlePatch(
 		RoleUpdateDto $dto,
 		array $payload,
 	): RoleResourceDto
 	{
-		$roleId = (int) ($payload['id'] ?? 0);
+$roleId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
+		$roleId = $roleId === false ? 0 : $roleId;
 		$roleEntity = $this->repository->find(id: $roleId);
 
-		if (!$roleEntity) {
+		if ($roleEntity === null) {
 			throw new NotFoundHttpException(
 				message: sprintf(
 					'Role with ID [%d] not found.',
@@ -139,7 +146,7 @@ final readonly class RoleProcessor implements ProcessorInterface
 		if (array_key_exists(
 			key: 'name',
 			array: $roleDecodedPayload,
-		)) {
+		) && $dto->name !== null) {
 			$roleEntity->setName(name: $dto->name);
 		}
 
@@ -161,16 +168,20 @@ final readonly class RoleProcessor implements ProcessorInterface
 		);
 	}
 
+	/**
+	 * @param array<array-key, mixed> $payload
+	 */
 	private function handleDelete(array $payload): null
 	{
-		$roleId = (int) ($payload['id'] ?? 0);
+$roleId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
+		$roleId = $roleId === false ? 0 : $roleId;
 		$roleEntity = $this->repository->find(id: $roleId);
 
-		if (!$roleEntity) {
+		if ($roleEntity === null) {
 			throw new NotFoundHttpException(
 				sprintf(
 					'Role with ID [%d] not found.',
-					(int) $roleId,
+					$roleId,
 				)
 			);
 		}

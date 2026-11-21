@@ -22,12 +22,14 @@ use App\Entity\Catalog\TournamentEntity;
 
 
 class TournamentFixture extends Fixture {
+	/** @var list<string> */
 	private array $prefixes = [
 		'VOS',
 		'VOT',
 		'VTC'
 	];
 	private string $schema = '';
+    /** @var array<string, string> */
     private array $metadatas = [];
 
     public function __construct()

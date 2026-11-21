@@ -29,7 +29,7 @@ final readonly class TournamentDuplicateValidator implements TournamentDuplicate
 		$tournamentName = $payload['name'] ?? null;
 
 		// Let DTO validation surface the error when 'name' field is missing
-		if ($tournamentName === null) {
+		if (!is_string($tournamentName)) {
 			return;
 		}
 
@@ -56,7 +56,13 @@ final readonly class TournamentDuplicateValidator implements TournamentDuplicate
 			return;
 		}
 
-		$tournamentCurrentData = $this->repository->findOneBy(criteria: ['name' => $payload['name']]);
+		$tournamentName = $payload['name'];
+
+		if ($tournamentName !== null && !is_string($tournamentName)) {
+			return;
+		}
+
+		$tournamentCurrentData = $this->repository->findOneBy(criteria: ['name' => $tournamentName]);
 
 		// Detect duplicate data if any field within the incoming payload
 		// matched current one
@@ -71,7 +77,7 @@ final readonly class TournamentDuplicateValidator implements TournamentDuplicate
 		throw new BadRequestHttpException(
 			message: sprintf(
 				'Another tournament with the name [%s] already exists.',
-				$payload['name'],
+				$tournamentName,
 			),
 		);
 	}

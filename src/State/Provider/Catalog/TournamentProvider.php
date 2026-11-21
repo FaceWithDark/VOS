@@ -42,7 +42,7 @@ final readonly class TournamentProvider implements ProviderInterface
 		if(isset($uriVariables['id'])) {
 			$entity = $this->repository->find(id: $uriVariables['id']);
 
-			if(!$entity) {
+			if ($entity === null) {
 				// API Platform automatically triggers 404 status code when not found
 				return null;
 			}
