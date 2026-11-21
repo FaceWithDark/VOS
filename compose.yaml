@@ -6,7 +6,7 @@ services:
     depends_on:
       database:
         restart: true
-        condition: service_started
+        condition: service_healthy
         required: true
     restart: unless-stopped
     build:
