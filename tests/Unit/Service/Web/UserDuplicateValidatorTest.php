@@ -35,11 +35,11 @@ use App\Service\Web\UserDuplicateValidator;
  * which HTTP error a repeated user name maps to. The repository is mocked so
  * each test pins exactly one policy branch.
  */
-#[CoversClass(className: UserDuplicateValidator::class)]
-#[UsesClass(className: RoleAbstract::class)]
-#[UsesClass(className: RoleEntity::class)]
-#[UsesClass(className: UserAbstract::class)]
-#[UsesClass(className: UserEntity::class)]
+#[CoversClass(UserDuplicateValidator::class)]
+#[UsesClass(RoleAbstract::class)]
+#[UsesClass(RoleEntity::class)]
+#[UsesClass(UserAbstract::class)]
+#[UsesClass(UserEntity::class)]
 class UserDuplicateValidatorTest extends TestCase
 {
 	private UserRepository&MockObject	$repository;
@@ -51,7 +51,7 @@ class UserDuplicateValidatorTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository			= $this->createMock(type: UserRepository::class);
+		$this->repository			= $this->createMock(UserRepository::class);
 		$this->duplicateValidator	= new UserDuplicateValidator(repository: $this->repository);
 	}
 
@@ -63,8 +63,8 @@ class UserDuplicateValidatorTest extends TestCase
 	 * adjusted to the specific scenario under each test.
 	 */
 	private function mockUserEntity(
-		?int	$id		= 88888,
-		?string	$name	= 'Gambler',
+		int		$id		= 88888,
+		string	$name	= 'Gambler',
 	): UserEntity
 	{
 		return (new UserEntity())
@@ -145,8 +145,8 @@ class UserDuplicateValidatorTest extends TestCase
 			->willReturn($current)
 			->seal();
 
-		$this->expectException(exception: ConflictHttpException::class);
-		$this->expectExceptionMessageIs(message: 'A user with the name [Gambler] already exists.');
+		$this->expectException(ConflictHttpException::class);
+		$this->expectExceptionMessageIs('A user with the name [Gambler] already exists.');
 
 		$this
 			->duplicateValidator
@@ -278,8 +278,8 @@ class UserDuplicateValidatorTest extends TestCase
 			->willReturn($current)
 			->seal();
 
-		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Another user with the name [Gambler] already exists.');
+		$this->expectException(BadRequestHttpException::class);
+		$this->expectExceptionMessageIs('Another user with the name [Gambler] already exists.');
 
 		$this
 			->duplicateValidator

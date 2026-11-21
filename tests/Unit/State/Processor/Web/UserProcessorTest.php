@@ -74,11 +74,11 @@ use App\State\Processor\Web\UserProcessor;
  * ---------------------------------------------------------------------------
  */
 #[AllowMockObjectsWithoutExpectations]
-#[CoversClass(className: UserProcessor::class)]
-#[UsesClass(className: RoleAbstract::class)]
-#[UsesClass(className: RoleEntity::class)]
-#[UsesClass(className: UserAbstract::class)]
-#[UsesClass(className: UserEntity::class)]
+#[CoversClass(UserProcessor::class)]
+#[UsesClass(RoleAbstract::class)]
+#[UsesClass(RoleEntity::class)]
+#[UsesClass(UserAbstract::class)]
+#[UsesClass(UserEntity::class)]
 class UserProcessorTest extends TestCase
 {
 	private UserRepository&MockObject						$repository;
@@ -96,13 +96,13 @@ class UserProcessorTest extends TestCase
 		parent::setUp();
 
 		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository				= $this->createMock(type: UserRepository::class);
-		$this->roleRepository			= $this->createMock(type: RoleRepository::class);
-		$this->mapper					= $this->createMock(type: ObjectMapperInterface::class);
-		$this->requestStack				= $this->createMock(type: RequestStack::class);
-		$this->duplicateValidator		= $this->createMock(type: UserDuplicateValidatorInterface::class);
-		$this->foreignKeyValidator		= $this->createMock(type: UserForeignKeyValidatorInterface::class);
-		$this->emptyPayloadValidator	= $this->createMock(type: UserEmptyPayloadValidatorInterface::class);
+		$this->repository				= $this->createMock(UserRepository::class);
+		$this->roleRepository			= $this->createMock(RoleRepository::class);
+		$this->mapper					= $this->createMock(ObjectMapperInterface::class);
+		$this->requestStack				= $this->createMock(RequestStack::class);
+		$this->duplicateValidator		= $this->createMock(UserDuplicateValidatorInterface::class);
+		$this->foreignKeyValidator		= $this->createMock(UserForeignKeyValidatorInterface::class);
+		$this->emptyPayloadValidator	= $this->createMock(UserEmptyPayloadValidatorInterface::class);
 
 		$this->processor = new UserProcessor(
 			repository:				$this->repository,
@@ -115,8 +115,12 @@ class UserProcessorTest extends TestCase
 		);
 	}
 
-	private function stubRawPayload(string $json): void
+	private function stubRawPayload(string|false $json): void
 	{
+		if ($json === false) {
+			throw new \RuntimeException('Unable to encode the stub payload.');
+		}
+
 		$this
 			->requestStack
 			->method('getCurrentRequest')
@@ -124,8 +128,8 @@ class UserProcessorTest extends TestCase
 	}
 
 	private function mockRoleEntity(
-		?int	$id		= 3,
-		?string	$name	= 'Gambler',
+		int		$id		= 3,
+		string	$name	= 'Gambler',
 	): RoleEntity
 	{
 		return (new RoleEntity())
@@ -141,12 +145,12 @@ class UserProcessorTest extends TestCase
 	 * adjusted to the specific scenario under each test.
 	 */
 	private function mockUserEntity(
-		?int		$id				= 88888,
+		int			$id				= 88888,
 		?RoleEntity	$roleId			= null,
-		?string		$name			= 'Gambler',
-		?string		$avatar			= 'https://a.ppy.sh/88?88.png',
-		?int		$rank			= 88,
-		?string		$countryFlag	= 'ZW',
+		string		$name			= 'Gambler',
+		string		$avatar			= 'https://a.ppy.sh/88?88.png',
+		int			$rank			= 88,
+		string		$countryFlag	= 'ZW',
 	): UserEntity
 	{
 		return (new UserEntity())
@@ -266,7 +270,7 @@ class UserProcessorTest extends TestCase
 			->method('save')
 			->with(
 				self::callback(
-					callback: static fn (UserEntity $entity): bool
+					static fn (UserEntity $entity): bool
 						=> $entity->getId() === $dto->id
 						&& $entity->getName() === $dto->name
 						&& $entity->getAvatar() === $dto->avatar
@@ -283,7 +287,7 @@ class UserProcessorTest extends TestCase
 			->expects(self::once())
 			->method('map')
 			->with(
-				self::isInstanceOf(className: UserEntity::class),
+				self::isInstanceOf(UserEntity::class),
 				UserResourceDto::class,
 			)
 			->willReturn($resource);
@@ -298,8 +302,8 @@ class UserProcessorTest extends TestCase
 			);
 
 		self::assertSame(
-			expected: $resource,
-			actual: $result,
+			$resource,
+			$result,
 		);
 	}
 
@@ -445,7 +449,7 @@ class UserProcessorTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$this->expectException(exception: ConflictHttpException::class);
+		$this->expectException(ConflictHttpException::class);
 
 		$this->sealCollaborators();
 
@@ -501,8 +505,8 @@ class UserProcessorTest extends TestCase
 			->expects(self::never())
 			->method('save');
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Role with ID [999] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('Role with ID [999] not found.');
 
 		$this->sealCollaborators();
 
@@ -550,8 +554,8 @@ class UserProcessorTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'User with ID [88888] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('User with ID [88888] not found.');
 
 		$this->sealCollaborators();
 
@@ -575,8 +579,8 @@ class UserProcessorTest extends TestCase
 			->with(0)
 			->willReturn(null);
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'User with ID [0] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('User with ID [0] not found.');
 
 		$this->sealCollaborators();
 
@@ -625,8 +629,8 @@ class UserProcessorTest extends TestCase
 			->expects(self::never())
 			->method('save');
 
-		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Request payload must not be empty.');
+		$this->expectException(BadRequestHttpException::class);
+		$this->expectExceptionMessageIs('Request payload must not be empty.');
 
 		$this->sealCollaborators();
 
@@ -712,17 +716,17 @@ class UserProcessorTest extends TestCase
 			);
 
 		self::assertSame(
-			expected: $resource,
-			actual: $result,
+			$resource,
+			$result,
 		);
 		self::assertSame(
-			expected: 'DeepInDark',
-			actual: $current->getName(),
+			'DeepInDark',
+			$current->getName(),
 		);
 		self::assertSame(
-			expected: $previousRole,
-			actual: $current->getRoleId(),
-			message: 'A name-only PATCH must not touch the role relation.',
+			$previousRole,
+			$current->getRoleId(),
+			'A name-only PATCH must not touch the role relation.',
 		);
 	}
 
@@ -793,20 +797,20 @@ class UserProcessorTest extends TestCase
 			);
 
 		self::assertSame(
-			expected: $dto->avatar,
-			actual: $current->getAvatar(),
+			$dto->avatar,
+			$current->getAvatar(),
 		);
 		self::assertSame(
-			expected: 'DeepInDark',
-			actual: $current->getName(),
+			'DeepInDark',
+			$current->getName(),
 		);
 		self::assertSame(
-			expected: 5103,
-		   	actual: $current->getRank(),
+			5103,
+			$current->getRank(),
 		);
 		self::assertSame(
-			expected: 'VN',
-			actual: $current->getCountryFlag(),
+			'VN',
+			$current->getCountryFlag(),
 		);
 	}
 
@@ -884,8 +888,8 @@ class UserProcessorTest extends TestCase
 			);
 
 		self::assertSame(
-			expected: $newRole,
-			actual: $current->getRoleId(),
+			$newRole,
+			$current->getRoleId(),
 		);
 	}
 
@@ -937,8 +941,8 @@ class UserProcessorTest extends TestCase
 			->expects(self::never())
 			->method('save');
 
-		$this->expectException(exception: BadRequestHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Role ID must not be null.');
+		$this->expectException(BadRequestHttpException::class);
+		$this->expectExceptionMessageIs('Role ID must not be null.');
 
 		$this->sealCollaborators();
 
@@ -1000,8 +1004,8 @@ class UserProcessorTest extends TestCase
 			->expects(self::never())
 			->method('save');
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'Role with ID [999] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('Role with ID [999] not found.');
 
 		$this->sealCollaborators();
 
@@ -1081,15 +1085,16 @@ class UserProcessorTest extends TestCase
 			);
 
 		self::assertSame(
-			expected: 5103,
-		   	actual: $current->getRank(),);
-		self::assertSame(
-			expected: 'VN',
-			actual: $current->getCountryFlag(),
+			5103,
+			$current->getRank(),
 		);
 		self::assertSame(
-			expected: 'DeepInDark',
-			actual: $current->getName(),
+			'VN',
+			$current->getCountryFlag(),
+		);
+		self::assertSame(
+			'DeepInDark',
+			$current->getName(),
 		);
 	}
 
@@ -1131,7 +1136,7 @@ class UserProcessorTest extends TestCase
 			->expects(self::never())
 			->method('map');
 
-		$this->expectException(exception: BadRequestHttpException::class);
+		$this->expectException(BadRequestHttpException::class);
 
 		$this->sealCollaborators();
 
@@ -1150,7 +1155,7 @@ class UserProcessorTest extends TestCase
 	 * one independent guard per field, so exercising the full power set is the
 	 * only way to reach every path through its decision table.
 	 *
-	 * @return array<string, array{0: list<string>}>
+	 * @return array<array-key, array{0: list<string>}>
 	 */
 	public static function providePatchFieldCombinations(): array
 	{
@@ -1158,6 +1163,7 @@ class UserProcessorTest extends TestCase
 		$combinations	= [];
 
 		for ($mask = 0; $mask < (1 << count(value: $fields)); $mask++) {
+			/** @var list<string> $presentFields */
 			$presentFields = [];
 
 			foreach ($fields as $index => $field) {
@@ -1172,8 +1178,11 @@ class UserProcessorTest extends TestCase
 		return $combinations;
 	}
 
+	/**
+	 * @param list<string> $presentFields
+	 */
 	#[Test]
-	#[DataProvider(methodName: 'providePatchFieldCombinations')]
+	#[DataProvider('providePatchFieldCombinations')]
 	public function testPatchAppliesExactlyTheFieldsPresentInThePayload(array $presentFields): void
 	{
 		$dto = new UserUpdateDto();
@@ -1195,11 +1204,16 @@ class UserProcessorTest extends TestCase
 			id: 3,
 			name: 'Gambler',
 		);
-		$payload		= [];
-
-		foreach ($presentFields as $field) {
-			$payload[$field] = $dto->{$field};
-		}
+		$payload = array_intersect_key(
+			[
+				'name'			=> $dto->name,
+				'avatar'		=> $dto->avatar,
+				'rank'			=> $dto->rank,
+				'countryFlag'	=> $dto->countryFlag,
+				'roleId'		=> $dto->roleId,
+			],
+			array_fill_keys($presentFields, true),
+		);
 
 		$this
 			->repository
@@ -1255,24 +1269,24 @@ class UserProcessorTest extends TestCase
 			);
 
 		self::assertSame(
-			expected: in_array(needle: 'name', haystack: $presentFields, strict: true) ? $dto->name : 'Gambler',
-			actual: $current->getName(),
+			in_array(needle: 'name', haystack: $presentFields, strict: true) ? $dto->name : 'Gambler',
+			$current->getName(),
 		);
 		self::assertSame(
-			expected: in_array(needle: 'avatar', haystack: $presentFields, strict: true) ? $dto->avatar : 'https://a.ppy.sh/88?88.png',
-			actual: $current->getAvatar(),
+			in_array(needle: 'avatar', haystack: $presentFields, strict: true) ? $dto->avatar : 'https://a.ppy.sh/88?88.png',
+			$current->getAvatar(),
 		);
 		self::assertSame(
-			expected: in_array(needle: 'rank', haystack: $presentFields, strict: true) ? $dto->rank : 88,
-			actual: $current->getRank(),
+			in_array(needle: 'rank', haystack: $presentFields, strict: true) ? $dto->rank : 88,
+			$current->getRank(),
 		);
 		self::assertSame(
-			expected: in_array(needle: 'countryFlag', haystack: $presentFields, strict: true) ? $dto->countryFlag : 'ZW',
-			actual: $current->getCountryFlag(),
+			in_array(needle: 'countryFlag', haystack: $presentFields, strict: true) ? $dto->countryFlag : 'ZW',
+			$current->getCountryFlag(),
 		);
 		self::assertSame(
-			expected: in_array(needle: 'roleId', haystack: $presentFields, strict: true) ? $newRole : $previousRole,
-			actual: $current->getRoleId(),
+			in_array(needle: 'roleId', haystack: $presentFields, strict: true) ? $newRole : $previousRole,
+			$current->getRoleId(),
 		);
 	}
 
@@ -1313,7 +1327,7 @@ class UserProcessorTest extends TestCase
 				payload: ['id' => 88888],
 			);
 
-		self::assertNull(actual: $result);
+		self::assertNull($result);
 	}
 
 	#[Test]
@@ -1331,8 +1345,8 @@ class UserProcessorTest extends TestCase
 			->expects(self::never())
 			->method('remove');
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'User with ID [88888] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('User with ID [88888] not found.');
 
 		$this->sealCollaborators();
 
@@ -1355,8 +1369,8 @@ class UserProcessorTest extends TestCase
 			->with(0)
 			->willReturn(null);
 
-		$this->expectException(exception: NotFoundHttpException::class);
-		$this->expectExceptionMessageIs(message: 'User with ID [0] not found.');
+		$this->expectException(NotFoundHttpException::class);
+		$this->expectExceptionMessageIs('User with ID [0] not found.');
 
 		$this->sealCollaborators();
 
@@ -1378,8 +1392,8 @@ class UserProcessorTest extends TestCase
 	#[Test]
 	public function testProcessRejectsUnsupportedInput(): void
 	{
-		$this->expectException(exception: InvalidArgumentException::class);
-		$this->expectExceptionMessageIs(message: 'Unsupported opearation or input DTO type.');
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessageIs('Unsupported opearation or input DTO type.');
 
 		$this->sealCollaborators();
 

@@ -43,7 +43,7 @@ class RoleResourceDtoTest extends TestCase
 	{
 		$dto = new RoleResourceDto();
 
-		self::assertNull(actual: $dto->description);
+		self::assertNull($dto->description);
 	}
 
 	#[Test]
@@ -59,20 +59,20 @@ class RoleResourceDtoTest extends TestCase
 		$dto->timestamp		= $timestamp;
 
 		self::assertSame(
-			expected: 3,
-			actual: $dto->id,
+			3,
+			$dto->id,
 		);
 		self::assertSame(
-			expected: 'Gambler',
-			actual: $dto->name,
+			'Gambler',
+			$dto->name,
 		);
 		self::assertSame(
-			expected: 'double the pay, double the deal baby. That is what high risk high reward about.',
-			actual: $dto->description,
+			'double the pay, double the deal baby. That is what high risk high reward about.',
+			$dto->description,
 		);
 		self::assertSame(
-			expected: $timestamp,
-			actual: $dto->timestamp,
+			$timestamp,
+			$dto->timestamp,
 		);
 	}
 
@@ -82,8 +82,8 @@ class RoleResourceDtoTest extends TestCase
 		$attribute = self::classMapAttribute(className: RoleResourceDto::class);
 
 		self::assertSame(
-			expected: RoleEntity::class,
-			actual: $attribute->source,
+			RoleEntity::class,
+			$attribute->source,
 		);
 	}
 
@@ -96,8 +96,8 @@ class RoleResourceDtoTest extends TestCase
 		);
 
 		self::assertSame(
-			expected: 'createOn',
-			actual: $attribute->source,
+			'createOn',
+			$attribute->source,
 		);
 	}
 
@@ -107,15 +107,18 @@ class RoleResourceDtoTest extends TestCase
 	 */
 
 
+	/**
+	 * @param class-string $className
+	 */
 	private static function classMapAttribute(string $className): Map
 	{
 		$attributes = (new ReflectionClass(objectOrClass: $className))
 			->getAttributes(name: Map::class);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $attributes,
-			message: sprintf(
+			1,
+			$attributes,
+			sprintf(
 				'%s must declare exactly one #[Map] on the class.',
 				$className,
 			),
@@ -124,6 +127,9 @@ class RoleResourceDtoTest extends TestCase
 		return $attributes[0]->newInstance();
 	}
 
+	/**
+	 * @param class-string $className
+	 */
 	private static function propertyMapAttribute(
 		string	$className,
 		string	$propertyName,
@@ -135,9 +141,9 @@ class RoleResourceDtoTest extends TestCase
 		))->getAttributes(name: Map::class);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $attributes,
-			message: sprintf(
+			1,
+			$attributes,
+			sprintf(
 				'%s::$%s must declare exactly one #[Map].',
 				$className,
 				$propertyName,

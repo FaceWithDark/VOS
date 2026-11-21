@@ -61,8 +61,8 @@ class TournamentUpdateDtoTest extends TestCase
 	{
 		$dto = new TournamentUpdateDto();
 
-		self::assertNull(actual: $dto->name);
-		self::assertNull(actual: $dto->description);
+		self::assertNull($dto->name);
+		self::assertNull($dto->description);
 	}
 
 	#[Test]
@@ -74,12 +74,12 @@ class TournamentUpdateDtoTest extends TestCase
 		$dto->description	= 'Vietnamese Osu!taiko Tournament 88 (special edition).';
 
 		self::assertSame(
-			expected: 'VOT88',
-			actual: $dto->name,
+			'VOT88',
+			$dto->name,
 		);
 		self::assertSame(
-			expected: 'Vietnamese Osu!taiko Tournament 88 (special edition).',
-			actual: $dto->description,
+			'Vietnamese Osu!taiko Tournament 88 (special edition).',
+			$dto->description,
 		);
 	}
 
@@ -90,7 +90,7 @@ class TournamentUpdateDtoTest extends TestCase
 
 		$dto->description = null;
 
-		self::assertNull(actual: $dto->description);
+		self::assertNull($dto->description);
 	}
 
 
@@ -109,8 +109,8 @@ class TournamentUpdateDtoTest extends TestCase
 				->validate(value: new TournamentUpdateDto());
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
+			0,
+			$violations,
 		);
 	}
 
@@ -127,8 +127,8 @@ class TournamentUpdateDtoTest extends TestCase
 				->validate(value: $dto);
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
+			0,
+			$violations,
 		);
 	}
 
@@ -145,9 +145,9 @@ class TournamentUpdateDtoTest extends TestCase
 				->validate(value: $dto);
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
-			message: 'PATCH must allow clearing the description with NULL.',
+			0,
+			$violations,
+			'PATCH must allow clearing the description with NULL.',
 		);
 	}
 }

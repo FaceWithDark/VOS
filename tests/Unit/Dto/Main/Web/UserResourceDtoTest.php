@@ -57,32 +57,32 @@ class UserResourceDtoTest extends TestCase
 		$dto->timestamp		= $timestamp;
 
 		self::assertSame(
-			expected: 88888,
-			actual: $dto->id,
+			88888,
+			$dto->id,
 		);
 		self::assertSame(
-			expected: 1,
-			actual: $dto->roleId,
+			1,
+			$dto->roleId,
 		);
 		self::assertSame(
-			expected: 'Gambler',
-			actual: $dto->name,
+			'Gambler',
+			$dto->name,
 		);
 		self::assertSame(
-			expected: 'https://a.ppy.sh/88?88.png',
-			actual: $dto->avatar,
+			'https://a.ppy.sh/88?88.png',
+			$dto->avatar,
 		);
 		self::assertSame(
-			expected: 88,
-			actual: $dto->rank,
+			88,
+			$dto->rank,
 		);
 		self::assertSame(
-			expected: 'ZW',
-			actual: $dto->countryFlag,
+			'ZW',
+			$dto->countryFlag,
 		);
 		self::assertSame(
-			expected: $timestamp,
-			actual: $dto->timestamp,
+			$timestamp,
+			$dto->timestamp,
 		);
 	}
 
@@ -92,8 +92,8 @@ class UserResourceDtoTest extends TestCase
 		$attribute = self::classMapAttribute(className: UserResourceDto::class);
 
 		self::assertSame(
-			expected: UserEntity::class,
-			actual: $attribute->source,
+			UserEntity::class,
+			$attribute->source,
 		);
 	}
 
@@ -106,8 +106,8 @@ class UserResourceDtoTest extends TestCase
 		);
 
 		self::assertSame(
-			expected: 'roleId.id',
-			actual: $attribute->source,
+			'roleId.id',
+			$attribute->source,
 		);
 	}
 
@@ -120,8 +120,8 @@ class UserResourceDtoTest extends TestCase
 		);
 
 		self::assertSame(
-			expected: 'createOn',
-			actual: $attribute->source,
+			'createOn',
+			$attribute->source,
 		);
 	}
 
@@ -131,15 +131,18 @@ class UserResourceDtoTest extends TestCase
 	 */
 
 
+	/**
+	 * @param class-string $className
+	 */
 	private static function classMapAttribute(string $className): Map
 	{
 		$attributes = (new ReflectionClass(objectOrClass: $className))
 			->getAttributes(name: Map::class);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $attributes,
-			message: sprintf(
+			1,
+			$attributes,
+			sprintf(
 				'%s must declare exactly one #[Map] on the class.',
 				$className,
 			),
@@ -148,6 +151,9 @@ class UserResourceDtoTest extends TestCase
 		return $attributes[0]->newInstance();
 	}
 
+	/**
+	 * @param class-string $className
+	 */
 	private static function propertyMapAttribute(
 		string	$className,
 		string	$propertyName,
@@ -159,9 +165,9 @@ class UserResourceDtoTest extends TestCase
 		))->getAttributes(name: Map::class);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $attributes,
-			message: sprintf(
+			1,
+			$attributes,
+			sprintf(
 				'%s::$%s must declare exactly one #[Map].',
 				$className,
 				$propertyName,

@@ -24,9 +24,9 @@ use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
 
 
-#[CoversClass(className: RoleEntity::class)]
-#[UsesClass(className: UserEntity::class)]
-#[UsesClass(className: UserAbstract::class)]
+#[CoversClass(RoleEntity::class)]
+#[UsesClass(UserEntity::class)]
+#[UsesClass(UserAbstract::class)]
 class RoleEntityTest extends TestCase
 {
 	#[Test]
@@ -35,12 +35,12 @@ class RoleEntityTest extends TestCase
 		$entity = new RoleEntity();
 
 		self::assertSame(
-			expected: 'User',
-			actual: $entity->getName(),
+			'User',
+			$entity->getName(),
 		);
 		self::assertSame(
-			expected: 'can only interact with what exposed to the website.',
-			actual: $entity->getDescription(),
+			'can only interact with what exposed to the website.',
+			$entity->getDescription(),
 		);
 	}
 
@@ -50,12 +50,12 @@ class RoleEntityTest extends TestCase
 		$entity = new RoleEntity();
 
 		self::assertSame(
-			expected: $entity,
-			actual: $entity->setName(name: 'Gambler'),
+			$entity,
+			$entity->setName(name: 'Gambler'),
 		);
 		self::assertSame(
-			expected: 'Gambler',
-			actual: $entity->getName(),
+			'Gambler',
+			$entity->getName(),
 		);
 	}
 
@@ -65,14 +65,14 @@ class RoleEntityTest extends TestCase
 		$entity = new RoleEntity();
 
 		self::assertSame(
-			expected: $entity,
-			actual: $entity->setDescription(
+			$entity,
+			$entity->setDescription(
 				description: 'double the pay, double the deal baby.',
 			),
 		);
 		self::assertSame(
-			expected: 'double the pay, double the deal baby.',
-			actual: $entity->getDescription(),
+			'double the pay, double the deal baby.',
+			$entity->getDescription(),
 		);
 	}
 
@@ -85,8 +85,8 @@ class RoleEntityTest extends TestCase
 		$entity->setDescription(description: null);
 
 		self::assertNull(
-			actual: $entity->getDescription(),
-			message: 'Clearing the nullable description must be possible.',
+			$entity->getDescription(),
+			'Clearing the nullable description must be possible.',
 		);
 	}
 
@@ -98,13 +98,13 @@ class RoleEntityTest extends TestCase
 		$entity->setId(id: 3);
 
 		self::assertSame(
-			expected: 3,
-			actual: $entity->getId(),
+			3,
+			$entity->getId(),
 		);
-		self::assertNotNull(actual: $entity->getCreateOn());
+		self::assertNotNull($entity->getCreateOn());
 		self::assertSame(
-			expected: 'UTC',
-			actual: $entity
+			'UTC',
+			$entity
 				->getCreateOn()
 				->getTimezone()
 				->getName(),
@@ -130,20 +130,20 @@ class RoleEntityTest extends TestCase
 		))->getAttributes(name: OneToMany::class);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $attributes,
-			message: 'A role must own a OneToMany association to its users.',
+			1,
+			$attributes,
+			'A role must own a OneToMany association to its users.',
 		);
 
 		$association = $attributes[0]->newInstance();
 
 		self::assertSame(
-			expected: UserEntity::class,
-			actual: $association->targetEntity,
+			UserEntity::class,
+			$association->targetEntity,
 		);
 		self::assertSame(
-			expected: 'roleId',
-			actual: $association->mappedBy,
+			'roleId',
+			$association->mappedBy,
 		);
 	}
 
@@ -153,12 +153,12 @@ class RoleEntityTest extends TestCase
 		$entity = new RoleEntity();
 
 		self::assertInstanceOf(
-			expected: Collection::class,
-			actual: $entity->getUsers(),
+			Collection::class,
+			$entity->getUsers(),
 		);
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $entity->getUsers(),
+			0,
+			$entity->getUsers(),
 		);
 	}
 
@@ -169,23 +169,23 @@ class RoleEntityTest extends TestCase
 		$user	= new UserEntity();
 
 		self::assertSame(
-			expected: $role,
-			actual: $role->addUser(user: $user),
+			$role,
+			$role->addUser(user: $user),
 		);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $role->getUsers(),
+			1,
+			$role->getUsers(),
 		);
 		self::assertTrue(
-			condition: $role
+			$role
 				->getUsers()
 				->contains($user),
 		);
 		self::assertSame(
-			expected: $role,
-			actual: $user->getRoleId(),
-			message: 'Owning side must be updated when a user joins the collection.',
+			$role,
+			$user->getRoleId(),
+			'Owning side must be updated when a user joins the collection.',
 		);
 	}
 
@@ -199,9 +199,9 @@ class RoleEntityTest extends TestCase
 		$role->addUser(user: $user);
 
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $role->getUsers(),
-			message: 'Adding the same user twice must not duplicate it.',
+			1,
+			$role->getUsers(),
+			'Adding the same user twice must not duplicate it.',
 		);
 	}
 
@@ -214,15 +214,15 @@ class RoleEntityTest extends TestCase
 		$role->addUser(user: $user);
 
 		self::assertSame(
-			expected: $role,
-			actual: $role->removeUser(user: $user),
+			$role,
+			$role->removeUser(user: $user),
 		);
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $role->getUsers(),
+			0,
+			$role->getUsers(),
 		);
 		self::assertFalse(
-			condition: $role
+			$role
 				->getUsers()
 				->contains($user),
 		);

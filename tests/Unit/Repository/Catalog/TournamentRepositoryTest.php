@@ -38,9 +38,9 @@ use App\Repository\Catalog\TournamentRepository;
  * PHPUnit then turns any undeclared call into a failure instead of a silent
  * `null`, and `#[UsesClass]` accounts for the entity code instantiated here.
  */
-#[CoversClass(className: TournamentRepository::class)]
-#[UsesClass(className: TournamentEntity::class)]
-#[UsesClass(className: TournamentAbstract::class)]
+#[CoversClass(TournamentRepository::class)]
+#[UsesClass(TournamentEntity::class)]
+#[UsesClass(TournamentAbstract::class)]
 class TournamentRepositoryTest extends TestCase
 {
 	private EntityManagerInterface&MockObject	$entityManager;
@@ -51,12 +51,12 @@ class TournamentRepositoryTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->entityManager = $this->createMock(type: EntityManagerInterface::class);
+		$this->entityManager = $this->createMock(EntityManagerInterface::class);
 		$this->entityManager
 			->method('getClassMetadata')
 			->willReturn(new ClassMetadata(name: TournamentEntity::class));
 
-		$registry = $this->createStub(type: ManagerRegistry::class);
+		$registry = self::createStub(ManagerRegistry::class);
 		$registry
 			->method('getManagerForClass')
 			->willReturn($this->entityManager);

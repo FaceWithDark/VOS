@@ -65,8 +65,8 @@ class TournamentCreateDtoTest extends TestCase
 		$dto = new TournamentCreateDto();
 
 		self::assertNull(
-			actual: $dto->description,
-			message: 'The optional description field must default to NULL.',
+			$dto->description,
+			'The optional description field must default to NULL.',
 		);
 	}
 
@@ -79,12 +79,12 @@ class TournamentCreateDtoTest extends TestCase
 		$dto->description	= 'Vietnamese Osu!taiko Tournament 88 (special edition).';
 
 		self::assertSame(
-			expected: 'VOT88',
-			actual: $dto->name,
+			'VOT88',
+			$dto->name,
 		);
 		self::assertSame(
-			expected: 'Vietnamese Osu!taiko Tournament 88 (special edition).',
-			actual: $dto->description,
+			'Vietnamese Osu!taiko Tournament 88 (special edition).',
+			$dto->description,
 		);
 	}
 
@@ -134,9 +134,9 @@ class TournamentCreateDtoTest extends TestCase
 				->validate(value: $dto);
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
-			message: 'A name alone must satisfy TournamentCreateDto.',
+			0,
+			$violations,
+			'A name alone must satisfy TournamentCreateDto.',
 		);
 	}
 
@@ -154,8 +154,8 @@ class TournamentCreateDtoTest extends TestCase
 				->validate(value: $dto);
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
+			0,
+			$violations,
 		);
 	}
 
@@ -170,20 +170,20 @@ class TournamentCreateDtoTest extends TestCase
 	): void
 	{
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $violations,
+			1,
+			$violations,
 		);
 
 		self::assertSame(
-			expected: 'name',
-			actual: $violations
+			'name',
+			$violations
 				->get(0)
 				->getPropertyPath(),
 		);
 
 		self::assertSame(
-			expected: 'This value should not be blank.',
-			actual: $violations
+			'This value should not be blank.',
+			$violations
 				->get(0)
 				->getMessage(),
 		);

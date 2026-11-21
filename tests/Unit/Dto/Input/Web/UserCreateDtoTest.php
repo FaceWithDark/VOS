@@ -80,28 +80,28 @@ class UserCreateDtoTest extends TestCase
 		$dto = $this->createValidDto();
 
 		self::assertSame(
-			expected: 88888,
-			actual: $dto->id,
+			88888,
+			$dto->id,
 		);
 		self::assertSame(
-			expected: 1,
-			actual: $dto->roleId,
+			1,
+			$dto->roleId,
 		);
 		self::assertSame(
-			expected: 'Gambler',
-			actual: $dto->name,
+			'Gambler',
+			$dto->name,
 		);
 		self::assertSame(
-			expected: 'https://a.ppy.sh/88?88.png',
-			actual: $dto->avatar,
+			'https://a.ppy.sh/88?88.png',
+			$dto->avatar,
 		);
 		self::assertSame(
-			expected: 88,
-			actual: $dto->rank,
+			88,
+			$dto->rank,
 		);
 		self::assertSame(
-			expected: 'ZW',
-			actual: $dto->countryFlag,
+			'ZW',
+			$dto->countryFlag,
 		);
 	}
 
@@ -121,7 +121,7 @@ class UserCreateDtoTest extends TestCase
 				->validate(value: new UserCreateDto());
 
 		self::assertSame(
-			expected: [
+			[
 				'id',
 				'roleId',
 				'name',
@@ -129,7 +129,7 @@ class UserCreateDtoTest extends TestCase
 				'rank',
 				'countryFlag',
 			],
-			actual: self::propertyPaths(violations: $violations),
+			self::propertyPaths(violations: $violations),
 		);
 	}
 
@@ -142,8 +142,8 @@ class UserCreateDtoTest extends TestCase
 				->validate(value: $this->createValidDto());
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
+			0,
+			$violations,
 		);
 	}
 
@@ -161,8 +161,8 @@ class UserCreateDtoTest extends TestCase
 				->validate(value: $dto);
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
+			0,
+			$violations,
 		);
 	}
 
@@ -220,13 +220,13 @@ class UserCreateDtoTest extends TestCase
 
 		// '' is blank AND the wrong length, hence two violations for the flag
 		self::assertSame(
-			expected: [
+			[
 				'name',
 				'avatar',
 				'countryFlag',
 				'countryFlag'
 			],
-			actual: self::propertyPaths(violations: $violations),
+			self::propertyPaths(violations: $violations),
 		);
 	}
 
@@ -245,7 +245,7 @@ class UserCreateDtoTest extends TestCase
 
 		foreach ($violations as $violation) {
 			/** @var ConstraintViolation $violation */
-			$paths[] = (string) $violation->getPropertyPath();
+			$paths[] = $violation->getPropertyPath();
 		}
 
 		return $paths;
@@ -258,20 +258,20 @@ class UserCreateDtoTest extends TestCase
 	): void
 	{
 		self::assertCount(
-			expectedCount: 1,
-			haystack: $violations,
+			1,
+			$violations,
 		);
 
 		self::assertSame(
-			expected: $propertyPath,
-			actual: $violations
+			$propertyPath,
+			$violations
 				->get(0)
 				->getPropertyPath(),
 		);
 
 		self::assertSame(
-			expected: $message,
-			actual: $violations
+			$message,
+			$violations
 				->get(0)
 				->getMessage(),
 		);

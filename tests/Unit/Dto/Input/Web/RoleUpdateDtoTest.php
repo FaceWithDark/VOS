@@ -61,8 +61,8 @@ class RoleUpdateDtoTest extends TestCase
 	{
 		$dto = new RoleUpdateDto();
 
-		self::assertNull(actual: $dto->name);
-		self::assertNull(actual: $dto->description);
+		self::assertNull($dto->name);
+		self::assertNull($dto->description);
 	}
 
 	#[Test]
@@ -74,12 +74,12 @@ class RoleUpdateDtoTest extends TestCase
 		$dto->description	= 'double the pay, double the deal baby. That is what high risk high reward about.';
 
 		self::assertSame(
-			expected: 'Gambler',
-			actual: $dto->name,
+			'Gambler',
+			$dto->name,
 		);
 		self::assertSame(
-			expected: 'double the pay, double the deal baby. That is what high risk high reward about.',
-			actual: $dto->description,
+			'double the pay, double the deal baby. That is what high risk high reward about.',
+			$dto->description,
 		);
 	}
 
@@ -90,7 +90,7 @@ class RoleUpdateDtoTest extends TestCase
 
 		$dto->description = null;
 
-		self::assertNull(actual: $dto->description);
+		self::assertNull($dto->description);
 	}
 
 
@@ -109,8 +109,8 @@ class RoleUpdateDtoTest extends TestCase
 				->validate(value: new RoleUpdateDto());
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
+			0,
+			$violations,
 		);
 	}
 
@@ -127,8 +127,8 @@ class RoleUpdateDtoTest extends TestCase
 				->validate(value: $dto);
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
+			0,
+			$violations,
 		);
 	}
 
@@ -145,9 +145,9 @@ class RoleUpdateDtoTest extends TestCase
 				->validate(value: $dto);
 
 		self::assertCount(
-			expectedCount: 0,
-			haystack: $violations,
-			message: 'PATCH must allow clearing the description with NULL.',
+			0,
+			$violations,
+			'PATCH must allow clearing the description with NULL.',
 		);
 	}
 }
