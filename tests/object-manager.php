@@ -2,9 +2,18 @@
 
 declare(strict_types=1);
 
+
+/// --- Main namespaces --- ///
 use App\Kernel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Dotenv\Dotenv;
+
+
+/// --- Type hint namespaces --- ///
+
+
+/// --- Internal namespaces --- ///
+
 
 require dirname(__DIR__).'/vendor/autoload.php';
 
