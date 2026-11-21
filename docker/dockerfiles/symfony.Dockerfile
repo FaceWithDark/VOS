@@ -1,4 +1,4 @@
-FROM php:8-fpm-alpine AS base
+FROM php:8.5-fpm-alpine AS base
 
 
 FROM base AS setup
