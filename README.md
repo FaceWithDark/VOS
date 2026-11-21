@@ -189,6 +189,16 @@ There're more than one kind of test in this project, and each of them has its ow
 4. [**Integration Test Guide**](./docs/tests/INTEGRATION-TEST.md)
 
 ---
+# Static Analysis
+
+> [!TIP]
+> You know it's a good and well maintained project if it refuses to merge code that lies about its own types.
+
+Every change to `src/` and `tests/` is checked by [PHPStan](https://phpstan.org/) at level 10, with the strict rule set, the Symfony and Doctrine extensions, and every relevant strictness toggle enabled. The analyser runs without a baseline: a finding has to be fixed, not silenced.
+
+1. [**PHPStan Guide**](./docs/tools/PHPSTAN.md) *(configuration, extensions, how to run it & how to handle findings)*
+
+---
 # Conventions
 
 > [!TIP]
