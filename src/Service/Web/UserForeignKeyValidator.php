@@ -40,6 +40,10 @@ final readonly class UserForeignKeyValidator implements UserForeignKeyValidatorI
 			return;
 		}
 
+		if (!is_int($roleId)) {
+			throw new BadRequestHttpException(message: 'Role ID must be an integer.');
+		}
+
 		$this->assertRoleExists(roleId: $roleId);
 	}
 
@@ -61,6 +65,10 @@ final readonly class UserForeignKeyValidator implements UserForeignKeyValidatorI
 			throw new BadRequestHttpException(
 				message: 'Role ID must not be null.',
 			);
+		}
+
+		if (!is_int($roleId)) {
+			throw new BadRequestHttpException(message: 'Role ID must be an integer.');
 		}
 
 		$this->assertRoleExists(roleId: $roleId);

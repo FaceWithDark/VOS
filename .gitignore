@@ -423,6 +423,9 @@ Backup of *.doc*
 /phpunit.xml
 /.phpunit.cache/
 
+# Local PHPStan overrides (include 'phpstan.dist.neon' and tweak as needed)
+/phpstan.neon
+
 # Generate from 'symfony/asset-mapper' package
 /public/assets/
 /assets/vendor/

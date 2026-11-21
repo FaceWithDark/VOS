@@ -44,11 +44,14 @@ final readonly class TournamentProcessor implements ProcessorInterface
 		private TournamentEmptyPayloadValidatorInterface	$emptyPayloadValidator,
 	) {}
 
+	/**
+	 * @return array<array-key, mixed>
+	 */
 	private function getDecodedPayload(): array
 	{
 		$request = $this->requestStack->getCurrentRequest();
 
-		if (!$request) {
+		if ($request === null) {
 			return [];
 		}
 
@@ -107,15 +110,19 @@ final readonly class TournamentProcessor implements ProcessorInterface
 		);
 	}
 
+	/**
+	 * @param array<array-key, mixed> $payload
+	 */
 	private function handlePatch(
 		TournamentUpdateDto $dto,
 		array $payload,
 	): TournamentResourceDto
 	{
-		$tournamentId = (int) ($payload['id'] ?? 0);
+$tournamentId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
+		$tournamentId = $tournamentId === false ? 0 : $tournamentId;
 		$tournamentEntity = $this->repository->find(id: $tournamentId);
 
-		if (!$tournamentEntity) {
+		if ($tournamentEntity === null) {
 			throw new NotFoundHttpException(
 				message: sprintf(
 					'Tournament with ID [%d] not found.',
@@ -139,7 +146,7 @@ final readonly class TournamentProcessor implements ProcessorInterface
 		if (array_key_exists(
 			key: 'name',
 			array: $tournamentDecodedPayload,
-		)) {
+		) && $dto->name !== null) {
 			$tournamentEntity->setName(name: $dto->name);
 		}
 
@@ -161,16 +168,20 @@ final readonly class TournamentProcessor implements ProcessorInterface
 		);
 	}
 
+	/**
+	 * @param array<array-key, mixed> $payload
+	 */
 	private function handleDelete(array $payload): null
 	{
-		$tournamentId = (int) ($payload['id'] ?? 0);
+$tournamentId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
+		$tournamentId = $tournamentId === false ? 0 : $tournamentId;
 		$tournamentEntity = $this->repository->find(id: $tournamentId);
 
-		if (!$tournamentEntity) {
+		if ($tournamentEntity === null) {
 			throw new NotFoundHttpException(
 				sprintf(
 					'Tournament with ID [%d] not found.',
-					(int) $tournamentId,
+					$tournamentId,
 				)
 			);
 		}

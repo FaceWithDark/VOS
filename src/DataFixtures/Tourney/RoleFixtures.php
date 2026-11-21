@@ -14,11 +14,14 @@ use Override;
 
 
 class RoleFixtures extends Fixture {
+	/** @var list<string> */
 	private array $prefixes = [
 		'VOT',
 		'VTC'
 	];
+    /** @var list<string> */
     private array $schemas = [];
+	/** @var array<string, string> */
 	private array $roles = [
 		'Organiser'		=> 'can manage their tournament page after register with the org.',
 		'Mappooler'		=> 'can add/delete beatmaps from a mappool within assigned tournaments.',
@@ -33,7 +36,7 @@ class RoleFixtures extends Fixture {
     public function __construct()
     {
         foreach ($this->prefixes as $prefix) {
-			if ($prefix == 'VOT') {
+			if ($prefix === 'VOT') {
 				// VOT schemas (e.g., 'vot_vot6')
 				for (
 					$iteration = 1;
@@ -56,7 +59,7 @@ class RoleFixtures extends Fixture {
 					$prefix,
 					'5_5'
 				);
-			} elseif ($prefix == 'VTC') {
+			} elseif ($prefix === 'VTC') {
 				// VTC schemas (e.g., 'vtc_vtc3')
 				for (
 					$iteration = 1;

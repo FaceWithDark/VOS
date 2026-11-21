@@ -21,7 +21,7 @@ interface EmptyPayloadValidatorInterface
 	 * POST bodies are already deserialized & validated by API Platform before
 	 * the processor runs, so only PATCH needs this guard.
 	 *
-	 * @param array<string, mixed>	$payload Fully JSON decoded request body.
+	 * @param array<array-key, mixed>	$payload Fully JSON decoded request body.
 	 *
 	 * @throws BadRequestHttpException 400 when the payload is empty.
 	 */

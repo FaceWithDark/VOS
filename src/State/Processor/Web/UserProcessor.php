@@ -50,11 +50,14 @@ final readonly class UserProcessor implements ProcessorInterface
 		private UserEmptyPayloadValidatorInterface	$emptyPayloadValidator,
 	) {}
 
+	/**
+	 * @return array<array-key, mixed>
+	 */
 	private function getDecodedPayload(): array
 	{
 		$request = $this->requestStack->getCurrentRequest();
 
-		if (!$request) {
+		if ($request === null) {
 			return [];
 		}
 
@@ -86,7 +89,7 @@ final readonly class UserProcessor implements ProcessorInterface
 
 		$roleEntity = $this->roleRepository->find(id: $roleId);
 
-		if (!$roleEntity) {
+		if ($roleEntity === null) {
 			throw new NotFoundHttpException(
 				message: sprintf(
 					'Role with ID [%d] not found.',
@@ -148,15 +151,19 @@ final readonly class UserProcessor implements ProcessorInterface
 		);
 	}
 
+	/**
+	 * @param array<array-key, mixed> $payload
+	 */
 	private function handlePatch(
 		UserUpdateDto $dto,
 		array $payload,
 	): UserResourceDto
 	{
-		$userId = (int) ($payload['id'] ?? 0);
+$userId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
+		$userId = $userId === false ? 0 : $userId;
 		$userEntity = $this->repository->find(id: $userId);
 
-		if (!$userEntity) {
+		if ($userEntity === null) {
 			throw new NotFoundHttpException(
 				message: sprintf(
 					'User with ID [%d] not found.',
@@ -186,28 +193,28 @@ final readonly class UserProcessor implements ProcessorInterface
 		if (array_key_exists(
 			key: 'name',
 			array: $userDecodedPayload,
-		)) {
+		) && $dto->name !== null) {
 			$userEntity->setName(name: $dto->name);
 		}
 
 		if (array_key_exists(
 			key: 'avatar',
 			array: $userDecodedPayload,
-		)) {
+		) && $dto->avatar !== null) {
 			$userEntity->setAvatar(avatar: $dto->avatar);
 		}
 
 		if (array_key_exists(
 			key: 'rank',
 			array: $userDecodedPayload,
-		)) {
+		) && $dto->rank !== null) {
 			$userEntity->setRank(rank: $dto->rank);
 		}
 
 		if (array_key_exists(
 			key: 'countryFlag',
 			array: $userDecodedPayload,
-		)) {
+		) && $dto->countryFlag !== null) {
 			$userEntity->setCountryFlag(countryFlag: $dto->countryFlag);
 		}
 
@@ -229,16 +236,20 @@ final readonly class UserProcessor implements ProcessorInterface
 		);
 	}
 
+	/**
+	 * @param array<array-key, mixed> $payload
+	 */
 	private function handleDelete(array $payload): null
 	{
-		$userId = (int) ($payload['id'] ?? 0);
+$userId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
+		$userId = $userId === false ? 0 : $userId;
 		$userEntity = $this->repository->find(id: $userId);
 
-		if (!$userEntity) {
+		if ($userEntity === null) {
 			throw new NotFoundHttpException(
 				sprintf(
 					'User with ID [%d] not found.',
-					(int) $userId,
+					$userId,
 				)
 			);
 		}

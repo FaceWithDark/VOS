@@ -25,7 +25,7 @@ final class Role extends RoleAbstract
 		length: 255,
 		nullable: false
 	)]
-	private ?string $name = null;
+	private string $name;
 
 	#[ORM\Column(
 		type: Types::TEXT,
@@ -44,10 +44,12 @@ final class Role extends RoleAbstract
 
 	public function __construct()
 	{
+		parent::__construct();
+
 		$this->users = new ArrayCollection();
 	}
 
-	public function getName(): ?string
+	public function getName(): string
 	{
 		return $this->name;
 	}
@@ -91,12 +93,9 @@ final class Role extends RoleAbstract
 
 	public function removeUser(User $user): static
 	{
-		if ($this->users->removeElement($user)) {
-			// set the owning side to null (unless already changed)
-			if ($user->getRoleId() === $this) {
-				$user->setRoleId(null);
-			}
-		}
+		// The owning side is NOT NULL, so a user cannot exist without a role:
+		// detaching only drops the in-memory association.
+		$this->users->removeElement($user);
 
 		return $this;
 	}

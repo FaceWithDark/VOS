@@ -25,7 +25,7 @@ final class Mod extends AbstractMod
 		length: 5,
 		nullable: false
 	)]
-	private ?string $name = null;
+	private string $name;
 
 	#[ORM\Column(
 		type: Types::TEXT,
@@ -44,10 +44,12 @@ final class Mod extends AbstractMod
 
 	public function __construct()
 	{
+		parent::__construct();
+
 		$this->beatmaps = new ArrayCollection();
 	}
 
-	public function getName(): ?string
+	public function getName(): string
 	{
 		return $this->name;
 	}
@@ -91,12 +93,9 @@ final class Mod extends AbstractMod
 
 	public function removeBeatmap(Beatmap $beatmap): static
 	{
-		if ($this->beatmaps->removeElement($beatmap)) {
-			// set the owning side to null (unless already changed)
-			if ($beatmap->getModId() === $this) {
-				$beatmap->setModId(null);
-			}
-		}
+		// The owning side is NOT NULL, so a beatmap cannot exist without a mod:
+		// detaching only drops the in-memory association.
+		$this->beatmaps->removeElement($beatmap);
 
 		return $this;
 	}

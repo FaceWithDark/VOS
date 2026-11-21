@@ -1,0 +1,50 @@
+includes:
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	- vendor/phpstan/phpstan-symfony/extension.neon
+	- vendor/phpstan/phpstan-symfony/rules.neon
+	- vendor/phpstan/phpstan-doctrine/extension.neon
+	- vendor/phpstan/phpstan-doctrine/rules.neon
+
+parameters:
+	level: 10
+
+	paths:
+		- src
+		- tests
+
+	# Trust PHPDoc and infer the strictest type the code supports.
+	treatPhpDocTypesAsCertain: true
+	inferPrivatePropertyTypeFromConstructor: true
+	rememberPossiblyImpureFunctionValues: true
+
+	# Stricter unions, too-wide signatures, and array string keys.
+	checkBenevolentUnionTypes: true
+	checkTooWideReturnTypesInProtectedAndPublicMethods: true
+	checkTooWideParameterOutInProtectedAndPublicMethods: true
+	checkTooWideThrowTypesInProtectedAndPublicMethods: true
+	reportUnsafeArrayStringKeyCasting: prevent
+
+	# Checked exceptions: every thrown exception must be declared in @throws.
+	exceptions:
+		implicitThrows: true
+		reportUncheckedExceptionDeadCatch: true
+		# PHP's own runtime/logic errors, storage failures, test-framework
+		# control flow, and reflection errors are unchecked; app exceptions
+		# inheriting \Exception directly stay checked and must be declared.
+		uncheckedExceptionClasses:
+			- RuntimeException
+			- LogicException
+			- ReflectionException
+			- Doctrine\DBAL\Exception
+			- Doctrine\ORM\Exception\ORMException
+			- PHPUnit\Framework\MockObject\Exception
+		check:
+			missingCheckedExceptionInThrows: true
+			tooWideImplicitThrowType: true
+
+	# The Symfony and Doctrine extensions need the compiled container and a
+	# real entity manager to analyse services, mappings, and DQL.
+	symfony:
+		containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+	doctrine:
+		objectManagerLoader: tests/object-manager.php

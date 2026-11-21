@@ -29,7 +29,7 @@ final readonly class RoleDuplicateValidator implements RoleDuplicateValidatorInt
 		$roleName = $payload['name'] ?? null;
 
 		// Let DTO validation surface the error when 'name' field is missing
-		if ($roleName === null) {
+		if (!is_string($roleName)) {
 			return;
 		}
 
@@ -56,7 +56,13 @@ final readonly class RoleDuplicateValidator implements RoleDuplicateValidatorInt
 			return;
 		}
 
-		$roleCurrentData = $this->repository->findOneBy(criteria: ['name' => $payload['name']]);
+		$roleName = $payload['name'];
+
+		if ($roleName !== null && !is_string($roleName)) {
+			return;
+		}
+
+		$roleCurrentData = $this->repository->findOneBy(criteria: ['name' => $roleName]);
 
 		// Detect duplicate data if any field within the incoming payload
 		// matched current one
@@ -71,7 +77,7 @@ final readonly class RoleDuplicateValidator implements RoleDuplicateValidatorInt
 		throw new BadRequestHttpException(
 			message: sprintf(
 				'Another role with the name [%s] already exists.',
-				$payload['name'],
+				$roleName,
 			)
 		);
 	}

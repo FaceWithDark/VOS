@@ -29,7 +29,7 @@ final readonly class UserDuplicateValidator implements UserDuplicateValidatorInt
 		$userName = $payload['name'] ?? null;
 
 		// Let DTO validation surface the error when 'name' field is missing
-		if ($userName === null) {
+		if (!is_string($userName)) {
 			return;
 		}
 
@@ -56,7 +56,13 @@ final readonly class UserDuplicateValidator implements UserDuplicateValidatorInt
 			return;
 		}
 
-		$userCurrentData = $this->repository->findOneBy(criteria: ['name' => $payload['name']]);
+		$userName = $payload['name'];
+
+		if ($userName !== null && !is_string($userName)) {
+			return;
+		}
+
+		$userCurrentData = $this->repository->findOneBy(criteria: ['name' => $userName]);
 
 		// Detect duplicate data if any field within the incoming payload
 		// matched current one
@@ -71,7 +77,7 @@ final readonly class UserDuplicateValidator implements UserDuplicateValidatorInt
 		throw new BadRequestHttpException(
 			message: sprintf(
 				'Another user with the name [%s] already exists.',
-				$payload['name'],
+				$userName,
 			),
 		);
 	}

@@ -19,14 +19,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 interface ForeignKeyValidatorInterface
 {
 	/**
-	 * @param array<string, mixed>	$payload Fully JSON decoded request body.
+	 * @param array<array-key, mixed>	$payload Fully JSON decoded request body.
 	 *
 	 * @throws NotFoundHttpException 404 when the referenced record is unknown.
 	 */
 	public function validatePost(array $payload): void;
 
 	/**
-	 * @param array<string, mixed>	$payload	Fully JSON decoded request body.
+	 * @param array<array-key, mixed>	$payload	Fully JSON decoded request body.
 	 * @param int					$id			ID of the entity being updated.
 	 *
 	 * @throws BadRequestHttpException 400 when an explicit NULL targets a

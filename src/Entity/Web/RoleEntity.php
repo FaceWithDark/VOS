@@ -33,7 +33,7 @@ final class RoleEntity extends RoleAbstract
 		length: 255,
 		nullable: false
 	)]
-	private ?string $name = 'User';
+	private string $name = 'User';
 
 	#[ORM\Column(
 		type: Types::TEXT,
@@ -58,7 +58,7 @@ final class RoleEntity extends RoleAbstract
 		$this->users = new ArrayCollection();
 	}
 
-	public function getName(): ?string
+	public function getName(): string
 	{
 		return $this->name;
 	}
