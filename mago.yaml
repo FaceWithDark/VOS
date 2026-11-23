@@ -1,0 +1,94 @@
+#:schema vendor/carthage-software/mago/schema.json
+version: "1.61.0"
+version-drift-fail-level: patch
+php-version: "8.5"
+
+source:
+  paths:
+    - src
+    - tests
+    - migrations
+    - public
+    - config
+  extensions:
+    - php
+  excludes:
+    - vendor
+    - var
+    - config/reference.php
+
+formatter:
+  preset: "default"
+  use-tabs: true
+  tab-width: 4
+  print-width: 120
+  sort-uses: alphanumeric-ascending
+  sort-class-methods: true
+  empty-line-before-return: true
+  align-parameters: true
+  align-assignment-like: true
+  preserve-breaking-argument-list: true
+  preserve-breaking-parameter-list: true
+  preserve-breaking-attribute-list: true
+  preserve-breaking-condition-expression: true
+  preserve-breaking-conditional-expression: true
+  preserve-breaking-member-access-chain: false
+  first-method-chain-on-new-line: false
+
+linter:
+  minimum-fail-level: "note"
+  integrations:
+    - symfony
+    - phpunit
+    - doctrine
+  rules:
+    ambiguous-constant-access: { enabled: true }
+    ambiguous-function-call: { enabled: true }
+    disallowed-type-instantiation: { enabled: true }
+    prefer-datetimeimmutable-create-from-timestamp: { enabled: true }
+    prefer-array-spread: { enabled: true }
+    prefer-explode-over-preg-split: { enabled: true }
+    no-redundant-else: { enabled: true }
+    no-redundant-variable: { enabled: true }
+    no-dead-store: { enabled: true }
+    no-unused-static: { enabled: true }
+    no-unused-global: { enabled: true }
+    no-unused-closure-capture: { enabled: true }
+    no-negated-ternary: { enabled: true }
+    no-is-null: { enabled: true }
+    no-iterator-to-array-in-foreach: { enabled: true }
+    no-assign-in-argument: { enabled: true }
+    no-fully-qualified-global-class-like: { enabled: true }
+    no-fully-qualified-global-constant: { enabled: true }
+    no-fully-qualified-global-function: { enabled: true }
+    prefer-early-return: { enabled: true }
+    prefer-test-attribute: { enabled: true }
+    no-array-accumulation-in-loop: { enabled: true }
+    no-parameter-shadowing: { enabled: true }
+    no-inline: { enabled: true }
+    no-side-effects-with-declarations: { enabled: true }
+    require-namespace: { enabled: true }
+    sorted-integer-keys: { enabled: true }
+    string-style: { enabled: true }
+    no-short-bool-cast: { enabled: true }
+    no-alternative-syntax: { enabled: true }
+    prefer-pre-increment: { enabled: true }
+    prefer-self-return-type: { enabled: true }
+    prefer-self: { enabled: true }
+    switch-continue-to-break: { enabled: true }
+    no-null-property-init: { enabled: true }
+    missing-docs: { enabled: true }
+    no-literal-namespace-string: { enabled: true }
+    redundant-static: { enabled: false }
+    method-name: { enabled: true, camel: true }
+    property-name: { enabled: true, camel: true }
+    variable-name: { enabled: true, camel: true, either: false }
+    no-service-state-mutation: { enabled: true, exclude: ["tests"] }
+    yoda-conditions: { enabled: true, mode: deny }
+    literal-named-argument: { enabled: true, check-first-argument: true, check-method-calls: true }
+    prefer-first-class-callable: { check-functions: true }
+    file-name: { check-functions: true }
+    assertion-style: { style: "self" }
+    strict-types: { exclude: ["config/bundles.php", "config/preload.php", "public/index.php"] }
+    too-many-methods: { exclude: ["tests"] }
+    cyclomatic-complexity: { exclude: ["tests"] }
