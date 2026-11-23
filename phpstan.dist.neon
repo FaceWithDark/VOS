@@ -17,6 +17,9 @@ parameters:
 	inferPrivatePropertyTypeFromConstructor: true
 	rememberPossiblyImpureFunctionValues: true
 
+	# Every overriding method must carry #[Override].
+	checkMissingOverrideMethodAttribute: true
+
 	# Stricter unions, too-wide signatures, and array string keys.
 	checkBenevolentUnionTypes: true
 	checkTooWideReturnTypesInProtectedAndPublicMethods: true
