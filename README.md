@@ -208,6 +208,7 @@ There're many conventions that this project followed to ensure that it's not a b
 
 1. [**Git Commit Convention**](./docs/conventions/GIT.md)
 2. [**Domain Specificity Convention**](./docs/conventions/TRAEFIK.md)
+3. [**PHP Coding Convention**](./docs/conventions/PHP.md)
 
 ---
 # Contributing
