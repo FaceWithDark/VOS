@@ -88,6 +88,9 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "importmap:install": "symfony-cmd"
         },
+        "fmt": "mago fmt --check",
+        "lint": "mago lint",
+        "lint:staged": "mago lint --staged",
         "post-install-cmd": [
             "@auto-scripts"
         ],
@@ -106,6 +109,7 @@
         }
     },
     "require-dev": {
+        "carthage-software/mago": "1.61.0",
         "doctrine/doctrine-fixtures-bundle": "^4.3",
         "phpstan/phpstan": "^2.3",
         "phpstan/phpstan-doctrine": "^2.1",
