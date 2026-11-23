@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Dto\Input\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversNothing;
@@ -21,6 +23,7 @@ use Override;
 use App\Dto\Input\Web\RoleUpdateDto;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -36,42 +39,20 @@ use App\Dto\Input\Web\RoleUpdateDto;
 #[CoversNothing]
 class RoleUpdateDtoTest extends TestCase
 {
+	/** Validator. */
 	private ValidatorInterface $validator;
 
-	#[Override]
-	protected function setUp(): void
-	{
-		parent::setUp();
-
-		$this->validator
-		   	= Validation
-			::createValidatorBuilder()
-			->enableAttributeMapping()
-			->getValidator();
-	}
-
-
 	/**
-	 * Property defaults & assignment
+	 * Covers: test assigns name and description.
+	 * @mago-expect lint:literal-named-argument(2)
 	 */
-
-
-	#[Test]
-	public function testDefaultsEveryFieldToNull(): void
-	{
-		$dto = new RoleUpdateDto();
-
-		self::assertNull($dto->name);
-		self::assertNull($dto->description);
-	}
-
 	#[Test]
 	public function testAssignsNameAndDescription(): void
 	{
 		$dto = new RoleUpdateDto();
 
-		$dto->name			= 'Gambler';
-		$dto->description	= 'double the pay, double the deal baby. That is what high risk high reward about.';
+		$dto->name        = 'Gambler';
+		$dto->description = 'double the pay, double the deal baby. That is what high risk high reward about.';
 
 		self::assertSame(
 			'Gambler',
@@ -83,6 +64,7 @@ class RoleUpdateDtoTest extends TestCase
 		);
 	}
 
+	/** Covers: test assigns null description. */
 	#[Test]
 	public function testAssignsNullDescription(): void
 	{
@@ -93,20 +75,29 @@ class RoleUpdateDtoTest extends TestCase
 		self::assertNull($dto->description);
 	}
 
+	/**
+	 * Property defaults & assignment
+	 */
+
+	#[Test]
+	public function testDefaultsEveryFieldToNull(): void
+	{
+		$dto = new RoleUpdateDto();
+
+		self::assertNull($dto->name);
+		self::assertNull($dto->description);
+	}
 
 	/**
 	 * Attribute constraints
 	 */
 
-
 	#[Test]
+	/** @mago-expect lint:literal-named-argument */
 	public function testEmptyPayloadHasNoViolations(): void
 	{
 		// An empty PATCH body is rejected earlier (400) by the API, not here
-		$violations
-			= $this
-				->validator
-				->validate(value: new RoleUpdateDto());
+		$violations = $this->validator->validate(value: new RoleUpdateDto());
 
 		self::assertCount(
 			0,
@@ -114,6 +105,10 @@ class RoleUpdateDtoTest extends TestCase
 		);
 	}
 
+	/**
+	 * Covers: test name update has no violations.
+	 * @mago-expect lint:literal-named-argument
+	 */
 	#[Test]
 	public function testNameUpdateHasNoViolations(): void
 	{
@@ -121,10 +116,7 @@ class RoleUpdateDtoTest extends TestCase
 
 		$dto->name = 'Gambler';
 
-		$violations
-			= $this
-				->validator
-				->validate(value: $dto);
+		$violations = $this->validator->validate(value: $dto);
 
 		self::assertCount(
 			0,
@@ -132,6 +124,10 @@ class RoleUpdateDtoTest extends TestCase
 		);
 	}
 
+	/**
+	 * Covers: test null description has no violations.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
 	#[Test]
 	public function testNullDescriptionHasNoViolations(): void
 	{
@@ -139,15 +135,25 @@ class RoleUpdateDtoTest extends TestCase
 
 		$dto->description = null;
 
-		$violations
-			= $this
-				->validator
-				->validate(value: $dto);
+		$violations = $this->validator->validate(value: $dto);
 
 		self::assertCount(
 			0,
 			$violations,
 			'PATCH must allow clearing the description with NULL.',
 		);
+	}
+
+	/** Prepares the test fixtures. */
+	#[Override]
+	protected function setUp(): void
+	{
+		parent::setUp();
+
+		// @mago-format-ignore-start
+		$this->validator = Validation::createValidatorBuilder()
+			->enableAttributeMapping()
+			->getValidator();
+		// @mago-format-ignore-end
 	}
 }

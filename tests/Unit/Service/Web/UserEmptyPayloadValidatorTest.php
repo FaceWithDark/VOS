@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Service\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,6 +22,7 @@ use Override;
 use App\Service\Web\UserEmptyPayloadValidator;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -30,16 +33,13 @@ use App\Service\Web\UserEmptyPayloadValidator;
 #[CoversClass(UserEmptyPayloadValidator::class)]
 class UserEmptyPayloadValidatorTest extends TestCase
 {
+	/** Empty payload validator. */
 	private UserEmptyPayloadValidator $emptyPayloadValidator;
 
-	#[Override]
-	protected function setUp(): void
-	{
-		parent::setUp();
-
-		$this->emptyPayloadValidator = new UserEmptyPayloadValidator();
-	}
-
+	/**
+	 * Covers: test empty payload throws bad request.
+	 * @mago-expect lint:literal-named-argument
+	 */
 	#[Test]
 	public function testEmptyPayloadThrowsBadRequest(): void
 	{
@@ -49,6 +49,22 @@ class UserEmptyPayloadValidatorTest extends TestCase
 		$this->emptyPayloadValidator->validatePatch(payload: []);
 	}
 
+	/** Covers: test falsy values still count as apresent payload. */
+	#[Test]
+	public function testFalsyValuesStillCountAsAPresentPayload(): void
+	{
+		// `0`/`''`/`false` are values, not an absent payload
+		self::expectNotToPerformAssertions();
+
+		$this->emptyPayloadValidator->validatePatch(
+			payload: [
+				'name' => '',
+				'rank' => 0,
+			],
+		);
+	}
+
+	/** Covers: test non empty payload passes. */
 	#[Test]
 	public function testNonEmptyPayloadPasses(): void
 	{
@@ -58,17 +74,12 @@ class UserEmptyPayloadValidatorTest extends TestCase
 		$this->emptyPayloadValidator->validatePatch(payload: ['name' => 'Gambler']);
 	}
 
-	#[Test]
-	public function testFalsyValuesStillCountAsAPresentPayload(): void
+	/** Prepares the test fixtures. */
+	#[Override]
+	protected function setUp(): void
 	{
-		// `0`/`''`/`false` are values, not an absent payload
-		self::expectNotToPerformAssertions();
+		parent::setUp();
 
-		$this->emptyPayloadValidator->validatePatch(
-			payload: [
-				'name'	=> '',
-				'rank'	=> 0,
-			],
-		);
+		$this->emptyPayloadValidator = new UserEmptyPayloadValidator();
 	}
 }

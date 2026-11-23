@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -11,6 +13,9 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 
 /// --- Type hint namespaces --- ///
+use function array_key_exists;
+use function is_string;
+use function sprintf;
 use Override;
 
 
@@ -19,32 +24,15 @@ use App\Interface\Web\UserDuplicateValidatorInterface;
 use App\Repository\Web\UserRepository;
 
 
+// @mago-format-ignore-end
 final readonly class UserDuplicateValidator implements UserDuplicateValidatorInterface
 {
-	public function __construct(private UserRepository $repository) {}
+	/** Initialises the instance. */
+	public function __construct(
+		private UserRepository $repository,
+	) {}
 
-	#[Override]
-	public function validatePost(array $payload): void
-	{
-		$userName = $payload['name'] ?? null;
-
-		// Let DTO validation surface the error when 'name' field is missing
-		if (!is_string($userName)) {
-			return;
-		}
-
-		$userCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $userName]);
-
-		if ($userCurrentNameValue !== null) {
-			throw new ConflictHttpException(
-				message: sprintf(
-					'A user with the name [%s] already exists.',
-					$userName,
-				),
-			);
-		}
-	}
-
+	/** Validate patch. */
 	#[Override]
 	public function validatePatch(array $payload, int $id): void
 	{
@@ -80,5 +68,28 @@ final readonly class UserDuplicateValidator implements UserDuplicateValidatorInt
 				$userName,
 			),
 		);
+	}
+
+	/** Validate post. */
+	#[Override]
+	public function validatePost(array $payload): void
+	{
+		$userName = $payload['name'] ?? null;
+
+		// Let DTO validation surface the error when 'name' field is missing
+		if (!is_string($userName)) {
+			return;
+		}
+
+		$userCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $userName]);
+
+		if ($userCurrentNameValue !== null) {
+			throw new ConflictHttpException(
+				message: sprintf(
+					'A user with the name [%s] already exists.',
+					$userName,
+				),
+			);
+		}
 	}
 }

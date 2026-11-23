@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Dto\Main\Catalog;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use ApiPlatform\Doctrine\Orm\State\Options;
@@ -13,6 +15,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -23,14 +26,14 @@ use DateTimeImmutable;
 
 
 /// --- Internal namespaces --- ///
-use App\Entity\Catalog\TournamentEntity;
 use App\Dto\Input\Catalog\TournamentCreateDto;
 use App\Dto\Input\Catalog\TournamentUpdateDto;
+use App\Entity\Catalog\TournamentEntity;
 use App\State\Processor\Catalog\TournamentProcessor;
 use App\State\Provider\Catalog\TournamentProvider;
-use Symfony\Component\HttpFoundation\Response;
 
 
+// @mago-format-ignore-end
 #[ApiResource(
 	shortName: 'Tournament API Endpoints',
 	description: 'Tournament API resource opearations.',
@@ -72,9 +75,9 @@ use Symfony\Component\HttpFoundation\Response;
 			 * working as intended.
 			 */
 			denormalizationContext: [
-				AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES				=> false,
-				DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS	=> true,
-			]
+				AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES            => false,
+				DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS => true,
+			],
 		),
 		new Delete(
 			uriTemplate: '/tournaments/{id}',
@@ -90,12 +93,16 @@ use Symfony\Component\HttpFoundation\Response;
 #[Map(source: TournamentEntity::class)]
 final class TournamentResourceDto
 {
+	/** Id. */
 	public int $id;
 
+	/** Name. */
 	public string $name;
 
+	/** Description. */
 	public ?string $description = null;
 
+	/** Timestamp. */
 	#[Map(source: 'createOn')]
 	public DateTimeImmutable $timestamp;
 }

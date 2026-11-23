@@ -4,43 +4,50 @@ declare(strict_types=1);
 
 namespace App\State\Provider\Catalog;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use Override;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 
 /// --- Type hint namespaces --- ///
+use function array_map;
+use Override;
 
 
 /// --- Internal namespaces --- ///
+use App\Dto\Main\Catalog\TournamentResourceDto;
 use App\Entity\Catalog\TournamentEntity;
 use App\Repository\Catalog\TournamentRepository;
-use App\Dto\Main\Catalog\TournamentResourceDto;
 
 
+// @mago-format-ignore-end
 /**
  * @implements ProviderInterface<TournamentResourceDto>
  */
 final readonly class TournamentProvider implements ProviderInterface
 {
+	/** Initialises the instance. */
 	public function __construct(
-		private TournamentRepository $repository,
+		private TournamentRepository  $repository,
 		private ObjectMapperInterface $mapper,
 	) {}
 
+	/** Provide. */
 	#[Override]
 	public function provide(
-		Operation	$operation,
-		array		$uriVariables = [],
-		array		$context = [],
-	): object|array|null
-	{
+		Operation $operation,
+		array     $uriVariables = [],
+		array     $context = [],
+	): object|array|null {
 		// Individual GET: /v1/tournaments/{id}
-		if(isset($uriVariables['id'])) {
-			$entity = $this->repository->find(id: $uriVariables['id']);
+		$id = $uriVariables['id'] ?? null;
+
+		if ($id !== null) {
+			$entity = $this->repository->find(id: $id);
 
 			if ($entity === null) {
 				// API Platform automatically triggers 404 status code when not found

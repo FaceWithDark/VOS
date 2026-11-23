@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\State\Provider\Catalog;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use ApiPlatform\Metadata\Get;
@@ -28,59 +30,56 @@ use App\Repository\Catalog\TournamentRepository;
 use App\State\Provider\Catalog\TournamentProvider;
 
 
+// @mago-format-ignore-end
 #[CoversClass(TournamentProvider::class)]
 #[UsesClass(TournamentAbstract::class)]
 class TournamentProviderTest extends TestCase
 {
-	private TournamentRepository&MockObject		$repository;
-	private ObjectMapperInterface&MockObject	$mapper;
-	private TournamentProvider					$provider;
+	/** Repository. */
+	private TournamentRepository&MockObject $repository;
+	/** Mapper. */
+	private ObjectMapperInterface&MockObject $mapper;
+	/** Provider. */
+	private TournamentProvider $provider;
 
-	#[Override]
-	protected function setUp(): void
+	/**
+	 * Covers: test provide collection maps empty result to empty array.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	#[Test]
+	public function testProvideCollectionMapsEmptyResultToEmptyArray(): void
 	{
-		parent::setUp();
+		$this->repository->expects(self::once())->method('findAll')->willReturn([]);
 
-		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository	= $this->createMock(TournamentRepository::class);
-		$this->mapper		= $this->createMock(ObjectMapperInterface::class);
-		$this->provider		= new TournamentProvider(
-			repository:	$this->repository,
-			mapper:		$this->mapper,
+		$this->mapper->expects(self::never())->method('map');
+
+		$this->sealCollaborators();
+
+		$result = $this->provider->provide(operation: new GetCollection());
+
+		self::assertSame(
+			[],
+			$result,
 		);
 	}
 
-	private function sealCollaborators(): void
-	{
-		$this
-			->repository
-			->method('find')
-			->seal();
-
-		$this
-			->mapper
-			->method('map')
-			->seal();
-	}
-
+	/**
+	 * Covers: test provide collection maps every entity.
+	 * @mago-expect lint:literal-named-argument(3)
+	 */
 	#[Test]
 	public function testProvideCollectionMapsEveryEntity(): void
 	{
 		$entities = [
 			new TournamentEntity(),
-			new TournamentEntity()
+			new TournamentEntity(),
 		];
-		$first = new TournamentResourceDto();
+		$first  = new TournamentResourceDto();
 		$second = new TournamentResourceDto();
 
-		$this
-			->repository
-			->expects(self::once())
-			->method('findAll')
-			->willReturn($entities);
+		$this->repository->expects(self::once())->method('findAll')->willReturn($entities);
 
-		$this
-			->mapper
+		$this->mapper
 			->expects(self::exactly(2))
 			->method('map')
 			->willReturnOnConsecutiveCalls(
@@ -90,10 +89,7 @@ class TournamentProviderTest extends TestCase
 
 		$this->sealCollaborators();
 
-		$result
-		   	= $this
-				->provider
-				->provide(operation: new GetCollection());
+		$result = $this->provider->provide(operation: new GetCollection());
 
 		self::assertSame(
 			[
@@ -104,48 +100,19 @@ class TournamentProviderTest extends TestCase
 		);
 	}
 
-	#[Test]
-	public function testProvideCollectionMapsEmptyResultToEmptyArray(): void
-	{
-		$this
-			->repository
-			->expects(self::once())
-			->method('findAll')
-			->willReturn([]);
-
-		$this
-			->mapper
-			->expects(self::never())
-			->method('map');
-
-		$this->sealCollaborators();
-
-		$result
-			= $this
-				->provider
-				->provide(operation: new GetCollection());
-
-		self::assertSame(
-			[],
-			$result,
-		);
-	}
-
+	/**
+	 * Covers: test provide individual maps found entity.
+	 * @mago-expect lint:literal-named-argument(3)
+	 */
 	#[Test]
 	public function testProvideIndividualMapsFoundEntity(): void
 	{
-		$entity		= new TournamentEntity();
-		$resource	= new TournamentResourceDto();
+		$entity   = new TournamentEntity();
+		$resource = new TournamentResourceDto();
 
-		$this
-			->repository
-			->expects(self::once())
-			->method('find')
-			->with(7)
-			->willReturn($entity);
+		$this->repository->expects(self::once())->method('find')->with(7)->willReturn($entity);
 
-		$this
-			->mapper
+		$this->mapper
 			->expects(self::once())
 			->method('map')
 			->with(
@@ -156,13 +123,10 @@ class TournamentProviderTest extends TestCase
 
 		$this->sealCollaborators();
 
-		$result
-		   	= $this
-				->provider
-				->provide(
-					operation:		new Get(),
-					uriVariables:	['id' => 7],
-				);
+		$result = $this->provider->provide(
+			operation: new Get(),
+			uriVariables: ['id' => 7],
+		);
 
 		self::assertSame(
 			$resource,
@@ -170,31 +134,51 @@ class TournamentProviderTest extends TestCase
 		);
 	}
 
+	/**
+	 * Covers: test provide individual returns null when entity missing.
+	 * @mago-expect lint:literal-named-argument(4)
+	 */
 	#[Test]
 	public function testProvideIndividualReturnsNullWhenEntityMissing(): void
 	{
 		// API Platform turns this NULL into the 404 for a missing ID
-		$this
-			->repository
-			->expects(self::once())
-			->method('find')
-			->with(404)
-			->willReturn(null);
+		$this->repository->expects(self::once())->method('find')->with(404)->willReturn(null);
 
-		$this
-			->mapper
-			->expects(self::never())
-			->method('map');
+		$this->mapper->expects(self::never())->method('map');
 
 		$this->sealCollaborators();
 
-		$result = $this
-				->provider
-				->provide(
-					operation:		new Get(),
-					uriVariables:	['id' => 404],
-				);
+		$result = $this->provider->provide(
+			operation: new Get(),
+			uriVariables: ['id' => 404],
+		);
 
 		self::assertNull($result);
+	}
+
+	/** Covers: set up. */
+	#[Override]
+	protected function setUp(): void
+	{
+		parent::setUp();
+
+		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
+		$this->repository = $this->createMock(TournamentRepository::class);
+		$this->mapper     = $this->createMock(ObjectMapperInterface::class);
+		$this->provider   = new TournamentProvider(
+			repository: $this->repository,
+			mapper: $this->mapper,
+		);
+	}
+
+	/**
+	 * Covers: seal collaborators.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	private function sealCollaborators(): void
+	{
+		$this->repository->method('find')->seal();
+
+		$this->mapper->method('map')->seal();
 	}
 }

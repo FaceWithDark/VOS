@@ -4,58 +4,66 @@ declare(strict_types=1);
 
 namespace App\DataFixtures\Catalog;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
-use Override;
 
 
 /// --- Type hint namespaces --- ///
+use const SORT_REGULAR;
 use DateTimeImmutable;
 use DateTimeZone;
+use function ksort;
+use function sprintf;
+use Override;
 
 
 /// --- Internal namespaces --- ///
 use App\Entity\Catalog\TournamentEntity;
 
 
-class TournamentFixture extends Fixture {
+// @mago-format-ignore-end
+class TournamentFixture extends Fixture
+{
 	/** @var list<string> */
 	private array $prefixes = [
 		'VOS',
 		'VOT',
-		'VTC'
+		'VTC',
 	];
+	/** Schema. */
 	private string $schema = '';
-    /** @var array<string, string> */
-    private array $metadatas = [];
+	/** @var array<string, string> */
+	private array $metadatas = [];
 
-    public function __construct()
-    {
-        foreach ($this->prefixes as $prefix) {
+	/** Initialises the instance. */
+	public function __construct()
+	{
+		foreach ($this->prefixes as $prefix) {
 			if ($prefix === 'VOS') {
 				$this->schema .= sprintf(
 					'%s_%s',
 					$prefix,
-					'CATALOG'
+					'CATALOG',
 				);
-			} elseif ($prefix === 'VOT') {
+				continue;
+			}
+
+			if ($prefix === 'VOT') {
 				// VOT metadatas
-				for (
-					$iteration = 1;
-					$iteration <= 6;
-					$iteration++
-				) {
+				for ($iteration = 1; $iteration <= 6; ++$iteration) {
 					$tourneyInteration = sprintf(
 						'%s%d',
 						$prefix,
-						$iteration
+						$iteration,
 					);
 					$tourneyDescription = sprintf(
 						'Vietnamese Osu!taiko Tournament %d',
-						$iteration
+						$iteration,
 					);
 
 					$this->metadatas[$tourneyInteration] = $tourneyDescription;
@@ -65,49 +73,50 @@ class TournamentFixture extends Fixture {
 				$specialInteration = sprintf(
 					'%s%s',
 					$prefix,
-					'5.5'
+					'5.5',
 				);
 				$specialDescription = sprintf(
 					'Vietnamese Osu!taiko Tournament %s',
-					'5.5'
+					'5.5',
 				);
 
 				$this->metadatas[$specialInteration] = $specialDescription;
-			} elseif ($prefix === 'VTC') {
+				continue;
+			}
+
+			if ($prefix === 'VTC') {
 				// VTC metadatas
-				for (
-					$iteration = 1;
-					$iteration <= 3;
-					$iteration++
-				) {
+				for ($iteration = 1; $iteration <= 3; ++$iteration) {
 					$tourneyInteration = sprintf(
 						'%s%d',
 						$prefix,
-						$iteration
+						$iteration,
 					);
 					$tourneyDescription = sprintf(
 						'Vietnam\'s Taiko Colosseum %d',
-						$iteration
+						$iteration,
 					);
 
 					$this->metadatas[$tourneyInteration] = $tourneyDescription;
 				}
-			} else {
-				// Do nothing
-				break;
+				continue;
 			}
+
+			// Do nothing
+			break;
 		}
 
-        /*
+		/*
 		 * Give the final assoc array a sort so that the hard-coded value gets placed
 		 * in the right order
-         */
+		 */
 		ksort(
 			array: $this->metadatas,
-			flags: SORT_REGULAR
+			flags: SORT_REGULAR,
 		);
-    }
+	}
 
+	/** Load. */
 	#[Override]
 	public function load(ObjectManager $manager): void
 	{
@@ -118,18 +127,18 @@ class TournamentFixture extends Fixture {
 		$connection = $manager->getConnection();
 
 		$connection->executeStatement(
-			sql: <<<"SQL"
-			SET search_path TO {$this->schema}
-			SQL
+			sql: <<<SQL
+				SET search_path TO {$this->schema}
+				SQL,
 		);
 
 		$connection->executeStatement(
-			sql: <<<"SQL"
-			TRUNCATE TABLE tournaments RESTART IDENTITY CASCADE
-			SQL
+			sql: <<<SQL
+				TRUNCATE TABLE tournaments RESTART IDENTITY CASCADE
+				SQL,
 		);
 
-		foreach($this->metadatas as $tourneyIteration => $tourneyDescription) {
+		foreach ($this->metadatas as $tourneyIteration => $tourneyDescription) {
 			$tournament = new TournamentEntity();
 
 			$tournament->setName(name: $tourneyIteration);
@@ -137,8 +146,8 @@ class TournamentFixture extends Fixture {
 			$tournament->setCreateOn(
 				createOn: new DateTimeImmutable(
 					datetime: 'now',
-					timezone: new DateTimeZone(timezone: 'UTC')
-				)
+					timezone: new DateTimeZone(timezone: 'UTC'),
+				),
 			);
 
 			$manager->persist(object: $tournament);
@@ -148,8 +157,9 @@ class TournamentFixture extends Fixture {
 		$manager->clear();
 
 		$connection->executeStatement(
-			sql: <<<"SQL"
-			SET search_path TO public
-			SQL
-		);	}
+			sql: <<<SQL
+				SET search_path TO public
+				SQL,
+		);
+	}
 }

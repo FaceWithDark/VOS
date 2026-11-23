@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Controller;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 
 /// --- Type hint namespaces --- ///
 
 
-/// --- Internal namespaces --- //
-//
+/// --- Internal namespaces --- ///
 
+
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -27,14 +31,16 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 #[CoversNothing]
 final class TournamentControllerTest extends WebTestCase
 {
-    public function testIndex(): void
-    {
-        $client = static::createClient();
+	/** Covers: index. */
+	#[Test]
+	public function index(): void
+	{
+		$client = static::createClient();
 		$client->request(
 			method: 'GET',
 			uri: '/tournament',
 		);
 
-        self::assertResponseIsSuccessful();
-    }
+		self::assertResponseIsSuccessful();
+	}
 }

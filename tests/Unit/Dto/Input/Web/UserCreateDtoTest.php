@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Dto\Input\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversNothing;
@@ -23,6 +25,7 @@ use Override;
 use App\Dto\Input\Web\UserCreateDto;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -40,206 +43,50 @@ use App\Dto\Input\Web\UserCreateDto;
 #[CoversNothing]
 class UserCreateDtoTest extends TestCase
 {
-	private ValidatorInterface $validator;
+	/** Validator. */
+	protected ValidatorInterface $validator;
 
-	#[Override]
-	protected function setUp(): void
-	{
-		parent::setUp();
+	/**
+	 * Covers: assert single violation.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	protected static function assertSingleViolation(
+		ConstraintViolationListInterface $violations,
+		string                           $propertyPath,
+		string                           $message,
+	): void {
+		self::assertCount(
+			1,
+			$violations,
+		);
 
-		$this->validator
-			= Validation
-			::createValidatorBuilder()
-			->enableAttributeMapping()
-			->getValidator();
+		self::assertSame(
+			$propertyPath,
+			$violations->get(offset: 0)->getPropertyPath(),
+		);
+
+		self::assertSame(
+			$message,
+			$violations->get(offset: 0)->getMessage(),
+		);
 	}
-
-	private function createValidDto(): UserCreateDto
-	{
-		$dto = new UserCreateDto();
-
-		$dto->id			= 88888;
-		$dto->roleId		= 1;
-		$dto->name			= 'Gambler';
-		$dto->avatar		= 'https://a.ppy.sh/88?88.png';
-		$dto->rank			= 88;
-		$dto->countryFlag	= 'ZW';
-
-		return $dto;
-	}
-
 
 	/**
 	 * Property assignment
 	 */
 
-
-	#[Test]
-	public function testAssignsEveryField(): void
-	{
-		$dto = $this->createValidDto();
-
-		self::assertSame(
-			88888,
-			$dto->id,
-		);
-		self::assertSame(
-			1,
-			$dto->roleId,
-		);
-		self::assertSame(
-			'Gambler',
-			$dto->name,
-		);
-		self::assertSame(
-			'https://a.ppy.sh/88?88.png',
-			$dto->avatar,
-		);
-		self::assertSame(
-			88,
-			$dto->rank,
-		);
-		self::assertSame(
-			'ZW',
-			$dto->countryFlag,
-		);
-	}
-
-
 	/**
 	 * Attribute constraints
 	 */
-
-
-	#[Test]
-	public function testUninitializedFieldsViolateEveryConstraint(): void
-	{
-		// A POST payload that omits fields leaves the typed properties uninitialized
-		$violations
-			= $this
-				->validator
-				->validate(value: new UserCreateDto());
-
-		self::assertSame(
-			[
-				'id',
-				'roleId',
-				'name',
-				'avatar',
-				'rank',
-				'countryFlag',
-			],
-			self::propertyPaths(violations: $violations),
-		);
-	}
-
-	#[Test]
-	public function testFullyPopulatedPayloadHasNoViolations(): void
-	{
-		$violations
-			= $this
-				->validator
-				->validate(value: $this->createValidDto());
-
-		self::assertCount(
-			0,
-			$violations,
-		);
-	}
-
-	#[Test]
-	public function testZeroRankIsValid(): void
-	{
-		// `NotBlank` must not reject an integer 0
-		$dto = $this->createValidDto();
-
-		$dto->rank = 0;
-
-		$violations
-			= $this
-				->validator
-				->validate(value: $dto);
-
-		self::assertCount(
-			0,
-			$violations,
-		);
-	}
-
-	#[Test]
-	public function testNegativeRankViolatesRange(): void
-	{
-		$dto = $this->createValidDto();
-
-		$dto->rank = -1;
-
-		$violations
-			= $this
-				->validator
-				->validate(value: $dto);
-
-		self::assertSingleViolation(
-			violations:		$violations,
-			propertyPath:	'rank',
-			message:		'This value should be 0 or more.',
-		);
-	}
-
-	#[Test]
-	public function testCountryFlagMustBeExactlyTwoCharacters(): void
-	{
-		$dto = $this->createValidDto();
-
-		$dto->countryFlag = 'VNM';
-
-		$violations
-			= $this
-				->validator
-				->validate(value: $dto);
-
-		self::assertSingleViolation(
-			violations:		$violations,
-			propertyPath:	'countryFlag',
-			message:		'This value should have exactly 2 characters.',
-		);
-	}
-
-	#[Test]
-	public function testBlankStringsViolateNotBlank(): void
-	{
-		$dto = $this->createValidDto();
-
-		$dto->name			= '';
-		$dto->avatar		= '';
-		$dto->countryFlag	= '';
-
-		$violations
-			= $this
-				->validator
-				->validate(value: $dto);
-
-		// '' is blank AND the wrong length, hence two violations for the flag
-		self::assertSame(
-			[
-				'name',
-				'avatar',
-				'countryFlag',
-				'countryFlag'
-			],
-			self::propertyPaths(violations: $violations),
-		);
-	}
-
 
 	/**
 	 * Shared assertions
 	 */
 
-
 	/**
 	 * @return list<string>
 	 */
-	private static function propertyPaths(ConstraintViolationListInterface $violations): array
+	protected static function propertyPaths(ConstraintViolationListInterface $violations): array
 	{
 		$paths = [];
 
@@ -251,29 +98,189 @@ class UserCreateDtoTest extends TestCase
 		return $paths;
 	}
 
-	private static function assertSingleViolation(
-		ConstraintViolationListInterface	$violations,
-		string								$propertyPath,
-		string								$message,
-	): void
+	/**
+	 * Covers: test assigns every field.
+	 * @mago-expect lint:literal-named-argument(6)
+	 */
+	#[Test]
+	public function testAssignsEveryField(): void
 	{
-		self::assertCount(
+		$dto = $this->createValidDto();
+
+		self::assertSame(
+			88_888,
+			$dto->id,
+		);
+
+		self::assertSame(
 			1,
+			$dto->roleId,
+		);
+
+		self::assertSame(
+			'Gambler',
+			$dto->name,
+		);
+
+		self::assertSame(
+			'https://a.ppy.sh/88?88.png',
+			$dto->avatar,
+		);
+
+		self::assertSame(
+			88,
+			$dto->rank,
+		);
+
+		self::assertSame(
+			'ZW',
+			$dto->countryFlag,
+		);
+	}
+
+	/** Covers: test blank strings violate not blank. */
+	#[Test]
+	public function testBlankStringsViolateNotBlank(): void
+	{
+		$dto = $this->createValidDto();
+
+		$dto->name = '';
+
+		$dto->avatar = '';
+
+		$dto->countryFlag = '';
+
+		$violations = $this->validator->validate(value: $dto);
+
+		// '' is blank AND the wrong length, hence two violations for the flag
+		self::assertSame(
+			[
+				'name',
+				'avatar',
+				'countryFlag',
+				'countryFlag',
+			],
+			self::propertyPaths(violations: $violations),
+		);
+	}
+
+	/** Covers: test country flag must be exactly two characters. */
+	#[Test]
+	public function testCountryFlagMustBeExactlyTwoCharacters(): void
+	{
+		$dto = $this->createValidDto();
+
+		$dto->countryFlag = 'VNM';
+
+		$violations = $this->validator->validate(value: $dto);
+
+		self::assertSingleViolation(
+			violations: $violations,
+			propertyPath: 'countryFlag',
+			message: 'This value should have exactly 2 characters.',
+		);
+	}
+
+	/**
+	 * Covers: test fully populated payload has no violations.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testFullyPopulatedPayloadHasNoViolations(): void
+	{
+		$violations = $this->validator->validate(value: $this->createValidDto());
+
+		self::assertCount(
+			0,
 			$violations,
 		);
+	}
 
-		self::assertSame(
-			$propertyPath,
-			$violations
-				->get(0)
-				->getPropertyPath(),
-		);
+	/** Covers: test negative rank violates range. */
+	#[Test]
+	public function testNegativeRankViolatesRange(): void
+	{
+		$dto = $this->createValidDto();
 
-		self::assertSame(
-			$message,
-			$violations
-				->get(0)
-				->getMessage(),
+		$dto->rank = -1;
+
+		$violations = $this->validator->validate(value: $dto);
+
+		self::assertSingleViolation(
+			violations: $violations,
+			propertyPath: 'rank',
+			message: 'This value should be 0 or more.',
 		);
+	}
+
+	/** Covers: test uninitialized fields violate every constraint. */
+	#[Test]
+	public function testUninitializedFieldsViolateEveryConstraint(): void
+	{
+		// A POST payload that omits fields leaves the typed properties uninitialized
+		$violations = $this->validator->validate(value: new UserCreateDto());
+
+		// @mago-format-ignore-start
+		self::assertSame(
+			[
+				'id',     'roleId', 'name',
+				'avatar', 'rank',   'countryFlag',
+			],
+			self::propertyPaths(violations: $violations),
+		);
+		// @mago-format-ignore-end
+	}
+
+	/**
+	 * Covers: test zero rank is valid.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testZeroRankIsValid(): void
+	{
+		// `NotBlank` must not reject an integer 0
+		$dto = $this->createValidDto();
+
+		$dto->rank = 0;
+
+		$violations = $this->validator->validate(value: $dto);
+
+		self::assertCount(
+			0,
+			$violations,
+		);
+	}
+
+	/** Covers: create valid dto. */
+	protected function createValidDto(): UserCreateDto
+	{
+		$dto = new UserCreateDto();
+
+		$dto->id = 88_888;
+
+		$dto->roleId = 1;
+
+		$dto->name = 'Gambler';
+
+		$dto->avatar = 'https://a.ppy.sh/88?88.png';
+
+		$dto->rank = 88;
+
+		$dto->countryFlag = 'ZW';
+
+		return $dto;
+	}
+
+	/** Covers: set up. */
+	#[Override]
+	protected function setUp(): void
+	{
+		parent::setUp();
+
+		// @mago-format-ignore-start
+		$this->validator = Validation::createValidatorBuilder()
+			->enableAttributeMapping()
+			->getValidator();
+		// @mago-format-ignore-end
 	}
 }

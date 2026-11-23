@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Dto\Input\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Symfony\Component\Validator\Constraints as Assert;
@@ -15,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /// --- Internal namespaces --- ///
 
 
+// @mago-format-ignore-end
 final class UserCreateDto
 {
 	/**
@@ -34,19 +37,23 @@ final class UserCreateDto
 	#[Assert\Type(['integer'])]
 	public int $roleId;
 
+	/** Name. */
 	#[Assert\NotBlank]
 	#[Assert\Type(['string'])]
 	public string $name;
 
+	/** Avatar. */
 	#[Assert\NotBlank]
 	#[Assert\Type(['string'])]
 	public string $avatar;
 
+	/** Rank. */
 	#[Assert\NotNull]
 	#[Assert\Type(['integer'])]
 	#[Assert\Range(min: 0)]
 	public int $rank;
 
+	/** Country flag. */
 	#[Assert\NotBlank]
 	#[Assert\Type(['string'])]
 	#[Assert\Length(exactly: 2)]

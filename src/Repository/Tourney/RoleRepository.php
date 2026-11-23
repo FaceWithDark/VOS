@@ -2,22 +2,36 @@
 
 declare(strict_types=1);
 
-
 namespace App\Repository\Tourney;
 
-use App\Entity\Tourney\Role;
+// @mago-format-ignore-start
+
+
+/// --- Main namespaces --- ///
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 
+/// --- Type hint namespaces --- ///
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Tourney\Role;
+
+
+// @mago-format-ignore-end
 /**
  * @extends ServiceEntityRepository<Role>
  */
 class RoleRepository extends ServiceEntityRepository
 {
+	/** Initialises the instance. */
 	public function __construct(ManagerRegistry $registry)
 	{
-		parent::__construct($registry, Role::class);
+		parent::__construct(
+			$registry,
+			Role::class,
+		);
 	}
 
 	//    /**
@@ -34,7 +48,6 @@ class RoleRepository extends ServiceEntityRepository
 	//            ->getResult()
 	//        ;
 	//    }
-
 	//    public function findOneBySomeField($value): ?Role
 	//    {
 	//        return $this->createQueryBuilder('r')

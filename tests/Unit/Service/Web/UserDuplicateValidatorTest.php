@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Service\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -28,6 +30,7 @@ use App\Repository\Web\UserRepository;
 use App\Service\Web\UserDuplicateValidator;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -42,17 +45,240 @@ use App\Service\Web\UserDuplicateValidator;
 #[UsesClass(UserEntity::class)]
 class UserDuplicateValidatorTest extends TestCase
 {
-	private UserRepository&MockObject	$repository;
-	private UserDuplicateValidator		$duplicateValidator;
+	/** Repository. */
+	protected UserRepository&MockObject $repository;
 
-	#[Override]
-	protected function setUp(): void
+	/** Duplicate validator. */
+	protected UserDuplicateValidator $duplicateValidator;
+
+	/**
+	 * Covers: test patch checks duplicate by name only.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	#[Test]
+	public function testPatchChecksDuplicateByNameOnly(): void
 	{
-		parent::setUp();
+		$this->repository
+			->expects(self::once())
+			->method('findOneBy')
+			->with(['name' => 'Gambler'])
+			->willReturn(null)
+			->seal();
 
-		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository			= $this->createMock(UserRepository::class);
-		$this->duplicateValidator	= new UserDuplicateValidator(repository: $this->repository);
+		$this->duplicateValidator->validatePatch(
+			payload: [
+				'name'   => 'Gambler',
+				'avatar' => 'https://a.ppy.sh/88?88.png',
+			],
+			id: 88_888,
+		);
+	}
+
+	/**
+	 * Covers: test patch with another entity name throws bad request.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	#[Test]
+	public function testPatchWithAnotherEntityNameThrowsBadRequest(): void
+	{
+		$current = $this->mockUserEntity(
+			id: 19_817_503,
+			name: 'Gambler',
+		);
+
+		$this->repository
+			->expects(self::once())
+			->method('findOneBy')
+			->with(['name' => 'Gambler'])
+			->willReturn($current)
+			->seal();
+
+		$this->expectException(BadRequestHttpException::class);
+
+		$this->expectExceptionMessageIs('Another user with the name [Gambler] already exists.');
+
+		$this->duplicateValidator->validatePatch(
+			payload: ['name' => 'Gambler'],
+			id: 88_888,
+		);
+	}
+
+	/**
+	 * Covers: test patch with null name looks up null and passes.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	#[Test]
+	public function testPatchWithNullNameLooksUpNullAndPasses(): void
+	{
+		// `array_key_exists` treats an explicit NULL as a real update, so the
+		// NULL is looked up and simply not found.
+		$this->repository
+			->expects(self::once())
+			->method('findOneBy')
+			->with(['name' => null])
+			->willReturn(null)
+			->seal();
+
+		$this->duplicateValidator->validatePatch(
+			payload: ['name' => null],
+			id: 88_888,
+		);
+	}
+
+	/**
+	 * Covers: test patch without name skips lookup.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testPatchWithoutNameSkipsLookup(): void
+	{
+		// A partial update that does not touch 'name' must not query at all
+		$this->repository->expects(self::never())->method('findOneBy')->seal();
+
+		$this->duplicateValidator->validatePatch(
+			payload: ['avatar' => 'https://a.ppy.sh/88?88.png'],
+			id: 88_888,
+		);
+	}
+
+	/**
+	 * Covers: test patch with own name passes.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testPatchWithOwnNamePasses(): void
+	{
+		$current = $this->mockUserEntity(
+			id: 88_888,
+			name: 'Gambler',
+		);
+
+		$this->repository
+			->expects(self::once())
+			->method('findOneBy')
+			->with(['name' => 'Gambler'])
+			->willReturn($current)
+			->seal();
+
+		// Re-sending the current value must NOT be treated as a duplicate
+		$this->duplicateValidator->validatePatch(
+			payload: ['name' => 'Gambler'],
+			id: 88_888,
+		);
+	}
+
+	/**
+	 * Covers: test patch with unique name passes.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	#[Test]
+	public function testPatchWithUniqueNamePasses(): void
+	{
+		$this->repository
+			->expects(self::once())
+			->method('findOneBy')
+			->with(['name' => 'Gambler'])
+			->willReturn(null)
+			->seal();
+
+		$this->duplicateValidator->validatePatch(
+			payload: ['name' => 'Gambler'],
+			id: 88_888,
+		);
+	}
+
+	/**
+	 * Covers: test post checks duplicate by name only.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	#[Test]
+	public function testPostChecksDuplicateByNameOnly(): void
+	{
+		// The sibling 'avatar' field must never leak into the criteria
+		$this->repository
+			->expects(self::once())
+			->method('findOneBy')
+			->with(['name' => 'Gambler'])
+			->willReturn(null)
+			->seal();
+
+		$this->duplicateValidator->validatePost(payload: [
+			'name'   => 'Gambler',
+			'avatar' => 'https://a.ppy.sh/88?88.png',
+		]);
+	}
+
+	/**
+	 * Covers: test post with duplicate name throws conflict.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	#[Test]
+	public function testPostWithDuplicateNameThrowsConflict(): void
+	{
+		$current = $this->mockUserEntity(name: 'Gambler');
+
+		$this->repository
+			->expects(self::once())
+			->method('findOneBy')
+			->with(['name' => 'Gambler'])
+			->willReturn($current)
+			->seal();
+
+		$this->expectException(ConflictHttpException::class);
+
+		$this->expectExceptionMessageIs('A user with the name [Gambler] already exists.');
+
+		$this->duplicateValidator->validatePost(payload: ['name' => 'Gambler']);
+	}
+
+	/**
+	 * validatePost() - 409 Conflict
+	 */
+	/**
+	 * validatePatch() - 400 Bad Request
+	 */
+
+	/**
+	 * Covers: test post with missing name skips lookup.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testPostWithMissingNameSkipsLookup(): void
+	{
+		// 'name' absent: let the DTO NotBlank constraint surface the error
+		$this->repository->expects(self::never())->method('findOneBy')->seal();
+
+		$this->duplicateValidator->validatePost(payload: ['avatar' => 'https://a.ppy.sh/88?88.png']);
+	}
+
+	/**
+	 * Covers: test post with null name skips lookup.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testPostWithNullNameSkipsLookup(): void
+	{
+		// `?? null` treats an explicit NULL the same as a missing field
+		$this->repository->expects(self::never())->method('findOneBy')->seal();
+
+		$this->duplicateValidator->validatePost(payload: ['name' => null]);
+	}
+
+	/**
+	 * Covers: test post with unique name passes.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	#[Test]
+	public function testPostWithUniqueNamePasses(): void
+	{
+		$this->repository
+			->expects(self::once())
+			->method('findOneBy')
+			->with(['name' => 'Gambler'])
+			->willReturn(null)
+			->seal();
+
+		$this->duplicateValidator->validatePost(payload: ['name' => 'Gambler']);
 	}
 
 	/**
@@ -62,17 +288,16 @@ class UserDuplicateValidatorTest extends TestCase
 	 * fixtures. Therefore, we must create a valid user so that it can be
 	 * adjusted to the specific scenario under each test.
 	 */
-	private function mockUserEntity(
-		int		$id		= 88888,
-		string	$name	= 'Gambler',
-	): UserEntity
-	{
-		return (new UserEntity())
+	protected function mockUserEntity(
+		int    $id = 88_888,
+		string $name = 'Gambler',
+	): UserEntity {
+		return new UserEntity()
 			->setId(id: $id)
 			->setRoleId(
-				roleId: (new RoleEntity())
+				roleId: new RoleEntity()
 					->setId(id: 1)
-					->setName(name: 'User')
+					->setName(name: 'User'),
 			)
 			->setName(name: $name)
 			->setAvatar(avatar: 'https://a.ppy.sh/88?88.png')
@@ -80,234 +305,15 @@ class UserDuplicateValidatorTest extends TestCase
 			->setCountryFlag(countryFlag: 'ZW');
 	}
 
-
-	/**
-	 * validatePost() - 409 Conflict
-	 */
-
-
-	#[Test]
-	public function testPostWithMissingNameSkipsLookup(): void
+	/** Prepares the test fixtures. */
+	#[Override]
+	protected function setUp(): void
 	{
-		// 'name' absent: let the DTO NotBlank constraint surface the error
-		$this
-			->repository
-			->expects(self::never())
-			->method('findOneBy')
-			->seal();
+		parent::setUp();
 
-		$this
-			->duplicateValidator
-			->validatePost(payload: ['avatar' => 'https://a.ppy.sh/88?88.png']);
-	}
+		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
+		$this->repository = $this->createMock(UserRepository::class);
 
-	#[Test]
-	public function testPostWithNullNameSkipsLookup(): void
-	{
-		// `?? null` treats an explicit NULL the same as a missing field
-		$this
-			->repository
-			->expects(self::never())
-			->method('findOneBy')
-			->seal();
-
-		$this
-			->duplicateValidator
-			->validatePost(payload: ['name' => null]);
-	}
-
-	#[Test]
-	public function testPostWithUniqueNamePasses(): void
-	{
-		$this
-			->repository
-			->expects(self::once())
-			->method('findOneBy')
-			->with(['name' => 'Gambler'])
-			->willReturn(null)
-			->seal();
-
-		$this
-			->duplicateValidator
-			->validatePost(payload: ['name' => 'Gambler']);
-	}
-
-	#[Test]
-	public function testPostWithDuplicateNameThrowsConflict(): void
-	{
-		$current = $this->mockUserEntity(name: 'Gambler');
-
-		$this
-			->repository
-			->expects(self::once())
-			->method('findOneBy')
-			->with(['name' => 'Gambler'])
-			->willReturn($current)
-			->seal();
-
-		$this->expectException(ConflictHttpException::class);
-		$this->expectExceptionMessageIs('A user with the name [Gambler] already exists.');
-
-		$this
-			->duplicateValidator
-			->validatePost(payload: ['name' => 'Gambler']);
-	}
-
-	#[Test]
-	public function testPostChecksDuplicateByNameOnly(): void
-	{
-		// The sibling 'avatar' field must never leak into the criteria
-		$this
-			->repository
-			->expects(self::once())
-			->method('findOneBy')
-			->with(['name' => 'Gambler'])
-			->willReturn(null)
-			->seal();
-
-		$this
-			->duplicateValidator
-			->validatePost(payload: [
-				'name'		=> 'Gambler',
-				'avatar'	=> 'https://a.ppy.sh/88?88.png',
-			]);
-	}
-
-
-	/**
-	 * validatePatch() - 400 Bad Request
-	 */
-
-
-	#[Test]
-	public function testPatchWithoutNameSkipsLookup(): void
-	{
-		// A partial update that does not touch 'name' must not query at all
-		$this
-			->repository
-			->expects(self::never())
-			->method('findOneBy')
-			->seal();
-
-		$this
-			->duplicateValidator
-			->validatePatch(
-				payload: ['avatar' => 'https://a.ppy.sh/88?88.png'],
-				id: 88888,
-			);
-	}
-
-	#[Test]
-	public function testPatchWithNullNameLooksUpNullAndPasses(): void
-	{
-		// `array_key_exists` treats an explicit NULL as a real update, so the
-		// NULL is looked up and simply not found.
-		$this
-			->repository
-			->expects(self::once())
-			->method('findOneBy')
-			->with(['name' => null])
-			->willReturn(null)
-			->seal();
-
-		$this
-			->duplicateValidator
-			->validatePatch(
-				payload: ['name' => null],
-				id: 88888,
-			);
-	}
-
-	#[Test]
-	public function testPatchWithUniqueNamePasses(): void
-	{
-		$this
-			->repository
-			->expects(self::once())
-			->method('findOneBy')
-			->with(['name' => 'Gambler'])
-			->willReturn(null)
-			->seal();
-
-		$this
-			->duplicateValidator
-			->validatePatch(
-				payload: ['name' => 'Gambler'],
-				id: 88888,
-			);
-	}
-
-	#[Test]
-	public function testPatchWithOwnNamePasses(): void
-	{
-		$current = $this->mockUserEntity(
-			id: 88888,
-			name: 'Gambler',
-		);
-
-		$this
-			->repository
-			->expects(self::once())
-			->method('findOneBy')
-			->with(['name' => 'Gambler'])
-			->willReturn($current)
-			->seal();
-
-		// Re-sending the current value must NOT be treated as a duplicate
-		$this
-			->duplicateValidator
-			->validatePatch(
-				payload: ['name' => 'Gambler'],
-				id: 88888,
-			);
-	}
-
-	#[Test]
-	public function testPatchWithAnotherEntityNameThrowsBadRequest(): void
-	{
-		$current = $this->mockUserEntity(
-			id: 19817503,
-			name: 'Gambler',
-		);
-
-		$this
-			->repository
-			->expects(self::once())
-			->method('findOneBy')
-			->with(['name' => 'Gambler'])
-			->willReturn($current)
-			->seal();
-
-		$this->expectException(BadRequestHttpException::class);
-		$this->expectExceptionMessageIs('Another user with the name [Gambler] already exists.');
-
-		$this
-			->duplicateValidator
-			->validatePatch(
-				payload: ['name' => 'Gambler'],
-				id: 88888,
-			);
-	}
-
-	#[Test]
-	public function testPatchChecksDuplicateByNameOnly(): void
-	{
-		$this
-			->repository
-			->expects(self::once())
-			->method('findOneBy')
-			->with(['name' => 'Gambler'])
-			->willReturn(null)
-			->seal();
-
-		$this
-			->duplicateValidator
-			->validatePatch(
-				payload: [
-					'name'		=> 'Gambler',
-					'avatar'	=> 'https://a.ppy.sh/88?88.png',
-				],
-				id: 88888,
-			);
+		$this->duplicateValidator = new UserDuplicateValidator(repository: $this->repository);
 	}
 }

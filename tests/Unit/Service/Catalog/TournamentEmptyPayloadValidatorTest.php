@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Service\Catalog;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,6 +22,7 @@ use Override;
 use App\Service\Catalog\TournamentEmptyPayloadValidator;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -30,16 +33,13 @@ use App\Service\Catalog\TournamentEmptyPayloadValidator;
 #[CoversClass(TournamentEmptyPayloadValidator::class)]
 class TournamentEmptyPayloadValidatorTest extends TestCase
 {
+	/** Empty payload validator. */
 	private TournamentEmptyPayloadValidator $emptyPayloadValidator;
 
-	#[Override]
-	protected function setUp(): void
-	{
-		parent::setUp();
-
-		$this->emptyPayloadValidator = new TournamentEmptyPayloadValidator();
-	}
-
+	/**
+	 * Covers: test empty payload throws bad request.
+	 * @mago-expect lint:literal-named-argument
+	 */
 	#[Test]
 	public function testEmptyPayloadThrowsBadRequest(): void
 	{
@@ -49,6 +49,22 @@ class TournamentEmptyPayloadValidatorTest extends TestCase
 		$this->emptyPayloadValidator->validatePatch(payload: []);
 	}
 
+	/** Covers: test falsy values still count as apresent payload. */
+	#[Test]
+	public function testFalsyValuesStillCountAsAPresentPayload(): void
+	{
+		// `0`/`''`/`false` are values, not an absent payload
+		self::expectNotToPerformAssertions();
+
+		$this->emptyPayloadValidator->validatePatch(
+			payload: [
+				'name' => '',
+				'rank' => 0,
+			],
+		);
+	}
+
+	/** Covers: test non empty payload passes. */
 	#[Test]
 	public function testNonEmptyPayloadPasses(): void
 	{
@@ -58,17 +74,12 @@ class TournamentEmptyPayloadValidatorTest extends TestCase
 		$this->emptyPayloadValidator->validatePatch(payload: ['name' => 'VOT88']);
 	}
 
-	#[Test]
-	public function testFalsyValuesStillCountAsAPresentPayload(): void
+	/** Covers: set up. */
+	#[Override]
+	protected function setUp(): void
 	{
-		// `0`/`''`/`false` are values, not an absent payload
-		self::expectNotToPerformAssertions();
+		parent::setUp();
 
-		$this->emptyPayloadValidator->validatePatch(
-			payload: [
-				'name'	=> '',
-				'rank'	=> 0,
-			],
-		);
+		$this->emptyPayloadValidator = new TournamentEmptyPayloadValidator();
 	}
 }

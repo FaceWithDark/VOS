@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Repository\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,6 +28,7 @@ use App\Entity\Web\RoleEntity;
 use App\Repository\Web\RoleRepository;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -43,134 +46,73 @@ use App\Repository\Web\RoleRepository;
 #[UsesClass(RoleAbstract::class)]
 class RoleRepositoryTest extends TestCase
 {
-	private EntityManagerInterface&MockObject	$entityManager;
-	private RoleRepository						$repository;
-
-	#[Override]
-	protected function setUp(): void
-	{
-		parent::setUp();
-
-		$this->entityManager = $this->createMock(EntityManagerInterface::class);
-		$this->entityManager
-			->method('getClassMetadata')
-			->willReturn(new ClassMetadata(name: RoleEntity::class));
-
-		$registry = self::createStub(ManagerRegistry::class);
-		$registry
-			->method('getManagerForClass')
-			->willReturn($this->entityManager);
-
-		$this->repository = new RoleRepository(registry: $registry);
-	}
-
-	private function sealEntityManager(): void
-	{
-		$this
-			->entityManager
-			->method('getClassMetadata')
-			->seal();
-	}
-
-
-	/**
-	 * save()
-	 */
-
-
-	#[Test]
-	public function testSavePersistsAndFlushesByDefault(): void
-	{
-		$entity = new RoleEntity();
-
-		$this
-			->entityManager
-			->expects(self::once())
-			->method('persist')
-			->with($entity);
-
-		$this
-			->entityManager
-			->expects(self::once())
-			->method('flush');
-
-		$this->sealEntityManager();
-
-		$this->repository->save(entity: $entity);
-	}
-
-	#[Test]
-	public function testSaveWithoutFlushSkipsFlush(): void
-	{
-		$entity = new RoleEntity();
-
-		$this
-			->entityManager
-			->expects(self::once())
-			->method('persist')
-			->with($entity);
-
-		$this
-			->entityManager
-			->expects(self::never())
-			->method('flush');
-
-		$this->sealEntityManager();
-
-		$this->repository->save(
-			entity: $entity,
-			flush: false,
-		);
-	}
-
+	/** Entity manager. */
+	private EntityManagerInterface&MockObject $entityManager;
+	/** Repository. */
+	private RoleRepository $repository;
 
 	/**
 	 * remove()
 	 */
 
-
 	#[Test]
+	/** @mago-expect lint:literal-named-argument(2) */
 	public function testRemoveRemovesAndFlushesByDefault(): void
 	{
 		$entity = new RoleEntity();
 
-		$this
-			->entityManager
-			->expects(self::once())
-			->method('remove')
-			->with($entity);
+		$this->entityManager->expects(self::once())->method('remove')->with($entity);
 
-		$this
-			->entityManager
-			->expects(self::once())
-			->method('flush');
+		$this->entityManager->expects(self::once())->method('flush');
 
 		$this->sealEntityManager();
 
 		$this->repository->remove(entity: $entity);
 	}
 
+	/**
+	 * save()
+	 */
+
 	#[Test]
-	public function testRemoveWithoutFlushSkipsFlush(): void
+	/** @mago-expect lint:literal-named-argument(2) */
+	public function testSavePersistsAndFlushesByDefault(): void
 	{
 		$entity = new RoleEntity();
 
-		$this
-			->entityManager
-			->expects(self::once())
-			->method('remove')
-			->with($entity);
+		$this->entityManager->expects(self::once())->method('persist')->with($entity);
 
-		$this
-			->entityManager
-			->expects(self::never())
-			->method('flush');
+		$this->entityManager->expects(self::once())->method('flush');
 
 		$this->sealEntityManager();
 
-		$this->repository->remove(
-			entity: $entity,
-			flush: false,
-		);
+		$this->repository->save(entity: $entity);
+	}
+
+	/**
+	 * Prepares the test fixtures.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	#[Override]
+	protected function setUp(): void
+	{
+		parent::setUp();
+
+		$this->entityManager = $this->createMock(EntityManagerInterface::class);
+		$this->entityManager->method('getClassMetadata')->willReturn(new ClassMetadata(name: RoleEntity::class));
+
+		$registry = self::createStub(ManagerRegistry::class);
+		$registry->method('getManagerForClass')->willReturn($this->entityManager);
+
+		$this->repository = new RoleRepository(registry: $registry);
+	}
+
+	/**
+	 * Seal entity manager.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	private function sealEntityManager(): void
+	{
+		$this->entityManager->method('getClassMetadata')->seal();
 	}
 }

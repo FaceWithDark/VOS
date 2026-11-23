@@ -4,236 +4,64 @@ declare(strict_types=1);
 
 namespace App\State\Processor\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use Override;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 
 /// --- Type hint namespaces --- ///
-use DateTimeImmutable;
-use DateTimeZone;
+use const FILTER_VALIDATE_INT;
+use function filter_var;
+use function sprintf;
 use InvalidArgumentException;
+use Override;
 
 
 /// --- Internal namespaces --- ///
 use App\Dto\Input\Web\UserCreateDto;
 use App\Dto\Input\Web\UserUpdateDto;
 use App\Dto\Main\Web\UserResourceDto;
-use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
-use App\Interface\Web\UserDuplicateValidatorInterface;
-use App\Interface\Web\UserEmptyPayloadValidatorInterface;
-use App\Interface\Web\UserForeignKeyValidatorInterface;
-use App\Repository\Web\RoleRepository;
 use App\Repository\Web\UserRepository;
+use App\Service\Web\UserPayloadHandler;
 
 
+// @mago-format-ignore-end
 /**
  * @implements ProcessorInterface<UserCreateDto|UserUpdateDto|mixed, UserResourceDto|null>
  */
 final readonly class UserProcessor implements ProcessorInterface
 {
+	/** Initialises the instance. */
 	public function __construct(
-		private UserRepository						$repository,
-		private RoleRepository						$roleRepository,
-		private ObjectMapperInterface				$mapper,
-		private RequestStack						$requestStack,
-		private UserDuplicateValidatorInterface		$duplicateValidator,
-		private UserForeignKeyValidatorInterface	$foreignKeyValidator,
-		private UserEmptyPayloadValidatorInterface	$emptyPayloadValidator,
+		private UserRepository        $repository,
+		private ObjectMapperInterface $mapper,
+		private UserPayloadHandler    $handler,
 	) {}
 
-	/**
-	 * @return array<array-key, mixed>
-	 */
-	private function getDecodedPayload(): array
-	{
-		$request = $this->requestStack->getCurrentRequest();
-
-		if ($request === null) {
-			return [];
-		}
-
-		$decoded = json_decode(
-			json: $request->getContent(),
-			associative: true,
-		);
-
-		if (is_array(value: $decoded)) {
-			return $decoded;
-		}
-
-		return [];
-	}
-
-	/**
-	 * Resolves the incoming foreign key into an existing Role entity.
-	 *
-	 * NOTE:
-	 * The FK validator normally rejects an unknown role first (404); this lookup
-	 * keeps the processor safe for direct callers and owns the 400 for an
-	 * explicit NULL, which a NOT NULL relation can never accept.
-	 */
-	private function resolveRole(?int $roleId): RoleEntity
-	{
-		if ($roleId === null) {
-			throw new BadRequestHttpException(message: 'Role ID must not be null.');
-		}
-
-		$roleEntity = $this->roleRepository->find(id: $roleId);
-
-		if ($roleEntity === null) {
-			throw new NotFoundHttpException(
-				message: sprintf(
-					'Role with ID [%d] not found.',
-					$roleId,
-				),
-			);
-		}
-
-		return $roleEntity;
-	}
-
+	/** Process. */
 	#[Override]
 	public function process(
-		mixed		$data,
-		Operation	$operation,
-		array		$payload	= [],
-		array		$context	= [],
-	): ?UserResourceDto
-	{
+		mixed     $data,
+		Operation $operation,
+		array     $payload = [],
+		array     $context = [],
+	): ?UserResourceDto {
 		return match (true) {
-			$data instanceof UserCreateDto	=> $this->handlePost(dto: $data),
-			$data instanceof UserUpdateDto	=> $this->handlePatch(dto: $data, payload: $payload),
-			$operation instanceof Delete	=> $this->handleDelete(payload: $payload),
-			default							=> throw new InvalidArgumentException('Unsupported opearation or input DTO type.'),
+			$data instanceof UserCreateDto => $this->handlePost(dto: $data),
+			$data instanceof UserUpdateDto => $this->handlePatch(
+				dto: $data,
+				payload: $payload,
+			),
+			$operation instanceof Delete   => $this->handleDelete(payload: $payload),
+			default => throw new InvalidArgumentException(message: 'Unsupported opearation or input DTO type.'),
 		};
-	}
-
-
-	private function handlePost(UserCreateDto $dto): UserResourceDto
-	{
-		$userDecodedPayload = $this->getDecodedPayload();
-
-		$this->duplicateValidator->validatePost(payload: $userDecodedPayload);
-		$this->foreignKeyValidator->validatePost(payload: $userDecodedPayload);
-
-		$userEntity = new UserEntity();
-
-		$userEntity->setId(id: $dto->id);
-		$userEntity->setName(name: $dto->name);
-		$userEntity->setAvatar(avatar: $dto->avatar);
-		$userEntity->setRank(rank: $dto->rank);
-		$userEntity->setCountryFlag(countryFlag: $dto->countryFlag);
-		$userEntity->setRoleId(roleId: $this->resolveRole(roleId: $dto->roleId));
-		$userEntity->setCreateOn(
-			createOn: new DateTimeImmutable(
-				datetime: 'now',
-				timezone: new DateTimeZone(timezone: 'UTC'),
-			)
-		);
-
-		$this->repository->save(
-			entity: $userEntity,
-			flush: true
-		);
-
-		return $this->mapper->map(
-			source: $userEntity,
-			target: UserResourceDto::class,
-		);
-	}
-
-	/**
-	 * @param array<array-key, mixed> $payload
-	 */
-	private function handlePatch(
-		UserUpdateDto $dto,
-		array $payload,
-	): UserResourceDto
-	{
-$userId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
-		$userId = $userId === false ? 0 : $userId;
-		$userEntity = $this->repository->find(id: $userId);
-
-		if ($userEntity === null) {
-			throw new NotFoundHttpException(
-				message: sprintf(
-					'User with ID [%d] not found.',
-					$userId,
-				),
-			);
-		}
-
-		$userDecodedPayload = $this->getDecodedPayload();
-
-		// 400 for an empty request body (entity existence is already checked)
-		$this->emptyPayloadValidator->validatePatch(payload: $userDecodedPayload);
-
-		// 400 if another entity already uses the same 'name' value
-		$this->duplicateValidator->validatePatch(
-			payload: $userDecodedPayload,
-			id: $userId
-		);
-
-		// 409/400 if the referenced role is already bound to another user (1:1)
-		$this->foreignKeyValidator->validatePatch(
-			payload: $userDecodedPayload,
-			id: $userId,
-		);
-
-		// Apply only the fields that the client actually sent (partial update)
-		if (array_key_exists(
-			key: 'name',
-			array: $userDecodedPayload,
-		) && $dto->name !== null) {
-			$userEntity->setName(name: $dto->name);
-		}
-
-		if (array_key_exists(
-			key: 'avatar',
-			array: $userDecodedPayload,
-		) && $dto->avatar !== null) {
-			$userEntity->setAvatar(avatar: $dto->avatar);
-		}
-
-		if (array_key_exists(
-			key: 'rank',
-			array: $userDecodedPayload,
-		) && $dto->rank !== null) {
-			$userEntity->setRank(rank: $dto->rank);
-		}
-
-		if (array_key_exists(
-			key: 'countryFlag',
-			array: $userDecodedPayload,
-		) && $dto->countryFlag !== null) {
-			$userEntity->setCountryFlag(countryFlag: $dto->countryFlag);
-		}
-
-		if (array_key_exists(
-			key: 'roleId',
-			array: $userDecodedPayload,
-		)) {
-			$userEntity->setRoleId(roleId: $this->resolveRole(roleId: $dto->roleId));
-		}
-
-		$this->repository->save(
-			entity: $userEntity,
-			flush: true,
-		);
-
-		return $this->mapper->map(
-			source: $userEntity,
-			target: UserResourceDto::class,
-		);
 	}
 
 	/**
@@ -241,24 +69,89 @@ $userId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
 	 */
 	private function handleDelete(array $payload): null
 	{
-$userId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
-		$userId = $userId === false ? 0 : $userId;
+		$userId = filter_var(
+			value: $payload['id'] ?? 0,
+			filter: FILTER_VALIDATE_INT,
+		);
+		$userId     = $userId === false ? 0 : $userId;
 		$userEntity = $this->repository->find(id: $userId);
 
 		if ($userEntity === null) {
 			throw new NotFoundHttpException(
-				sprintf(
+				message: sprintf(
 					'User with ID [%d] not found.',
 					$userId,
-				)
+				),
 			);
 		}
 
-		$this->repository->remove(
-			entity: $userEntity,
-			flush: true,
-		);
+		$this->repository->remove(entity: $userEntity);
 
 		return null;
+	}
+
+	/**
+	 * @param array<array-key, mixed> $payload
+	 */
+	private function handlePatch(
+		UserUpdateDto $dto,
+		array         $payload,
+	): UserResourceDto {
+		$userId = filter_var(
+			value: $payload['id'] ?? 0,
+			filter: FILTER_VALIDATE_INT,
+		);
+		$userId     = $userId === false ? 0 : $userId;
+		$userEntity = $this->repository->find(id: $userId);
+
+		if ($userEntity === null) {
+			throw new NotFoundHttpException(
+				message: sprintf(
+					'User with ID [%d] not found.',
+					$userId,
+				),
+			);
+		}
+
+		$decodedPayload = $this->handler->readPayload();
+
+		$this->handler->validatePatch(
+			payload: $decodedPayload,
+			id: $userId,
+		);
+		$this->handler->applyPatch(
+			entity: $userEntity,
+			dto: $dto,
+			payload: $decodedPayload,
+		);
+
+		$this->repository->save(entity: $userEntity);
+
+		return $this->mapper->map(
+			source: $userEntity,
+			target: UserResourceDto::class,
+		);
+	}
+
+	/** Handle post. */
+	private function handlePost(UserCreateDto $dto): UserResourceDto
+	{
+		$payload = $this->handler->readPayload();
+
+		$this->handler->validatePost(payload: $payload);
+
+		$userEntity = new UserEntity();
+
+		$this->handler->applyCreate(
+			entity: $userEntity,
+			dto: $dto,
+		);
+
+		$this->repository->save(entity: $userEntity);
+
+		return $this->mapper->map(
+			source: $userEntity,
+			target: UserResourceDto::class,
+		);
 	}
 }

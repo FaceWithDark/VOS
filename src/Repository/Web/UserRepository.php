@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repository\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -17,37 +19,32 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Web\UserEntity;
 
 
+// @mago-format-ignore-end
 /**
  * @extends ServiceEntityRepository<UserEntity>
  */
 class UserRepository extends ServiceEntityRepository
 {
+	/** Initialises the instance. */
 	public function __construct(ManagerRegistry $registry)
 	{
-		parent::__construct($registry, UserEntity::class);
+		parent::__construct(
+			registry: $registry,
+			entityClass: UserEntity::class,
+		);
 	}
 
-	public function save(
-		UserEntity	$entity,
-		bool		$flush = true,
-	): void
-	{
-		$this->getEntityManager()->persist(object: $entity);
-
-		if ($flush) {
-			$this->getEntityManager()->flush();
-		}
-	}
-
-	public function remove(
-		UserEntity	$entity,
-		bool		$flush = true,
-	): void
+	/** Remove. */
+	public function remove(UserEntity $entity): void
 	{
 		$this->getEntityManager()->remove(object: $entity);
+		$this->getEntityManager()->flush();
+	}
 
-		if ($flush) {
-			$this->getEntityManager()->flush();
-		}
+	/** Save. */
+	public function save(UserEntity $entity): void
+	{
+		$this->getEntityManager()->persist(object: $entity);
+		$this->getEntityManager()->flush();
 	}
 }

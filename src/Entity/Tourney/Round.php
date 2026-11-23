@@ -2,34 +2,47 @@
 
 declare(strict_types=1);
 
-
 namespace App\Entity\Tourney;
 
-use App\Entity\Abstract\AbstractRound;
-use App\Repository\Tourney\RoundRepository;
-use Doctrine\ORM\Mapping as ORM;
+// @mago-format-ignore-start
+
+
+/// --- Main namespaces --- ///
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 
 
+/// --- Type hint namespaces --- ///
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Abstract\AbstractRound;
+use App\Repository\Tourney\RoundRepository;
+
+
+// @mago-format-ignore-end
 #[ORM\Entity(repositoryClass: RoundRepository::class)]
 #[ORM\Table(
 	name: '`rounds`',
-	options: ['comment' => 'storing rounds definition for any registered tournaments under VOS org.']
+	options: ['comment' => 'storing rounds definition for any registered tournaments under VOS org.'],
 )]
 final class Round extends AbstractRound
 {
+	/** Name. */
+	/** Name. */
 	#[ORM\Column(
 		type: Types::STRING,
 		length: 255,
-		nullable: false
+		nullable: false,
 	)]
 	private string $name;
 
+	/** Description. */
 	#[ORM\Column(
 		type: Types::TEXT,
-		nullable: true
+		nullable: true,
 	)]
 	private ?string $description = null;
 
@@ -38,10 +51,11 @@ final class Round extends AbstractRound
 	 */
 	#[ORM\OneToMany(
 		targetEntity: Beatmap::class,
-		mappedBy: 'roundId'
+		mappedBy: 'roundId',
 	)]
 	private Collection $beatmaps;
 
+	/** Initialises the instance. */
 	public function __construct()
 	{
 		parent::__construct();
@@ -49,26 +63,13 @@ final class Round extends AbstractRound
 		$this->beatmaps = new ArrayCollection();
 	}
 
-	public function getName(): string
+	/** Add beatmap. */
+	public function addBeatmap(Beatmap $beatmap): static
 	{
-		return $this->name;
-	}
-
-	public function setName(string $name): static
-	{
-		$this->name = $name;
-
-		return $this;
-	}
-
-	public function getDescription(): ?string
-	{
-		return $this->description;
-	}
-
-	public function setDescription(?string $description): static
-	{
-		$this->description = $description;
+		if (!$this->beatmaps->contains($beatmap)) {
+			$this->beatmaps->add($beatmap);
+			$beatmap->setRoundId($this);
+		}
 
 		return $this;
 	}
@@ -81,21 +82,40 @@ final class Round extends AbstractRound
 		return $this->beatmaps;
 	}
 
-	public function addBeatmap(Beatmap $beatmap): static
+	/** Describes the migration. */
+	public function getDescription(): ?string
 	{
-		if (!$this->beatmaps->contains($beatmap)) {
-			$this->beatmaps->add($beatmap);
-			$beatmap->setRoundId($this);
-		}
-
-		return $this;
+		return $this->description;
 	}
 
+	/** Get name. */
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
+	/** Remove beatmap. */
 	public function removeBeatmap(Beatmap $beatmap): static
 	{
 		// The owning side is NOT NULL, so a beatmap cannot exist without a round:
 		// detaching only drops the in-memory association.
 		$this->beatmaps->removeElement($beatmap);
+
+		return $this;
+	}
+
+	/** Set description. */
+	public function setDescription(?string $description): static
+	{
+		$this->description = $description;
+
+		return $this;
+	}
+
+	/** Set name. */
+	public function setName(string $name): static
+	{
+		$this->name = $name;
 
 		return $this;
 	}

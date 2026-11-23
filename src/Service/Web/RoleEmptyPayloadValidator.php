@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -17,6 +19,7 @@ use Override;
 use App\Interface\Web\RoleEmptyPayloadValidatorInterface;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -26,6 +29,7 @@ use App\Interface\Web\RoleEmptyPayloadValidatorInterface;
  */
 final readonly class RoleEmptyPayloadValidator implements RoleEmptyPayloadValidatorInterface
 {
+	/** Validate patch. */
 	#[Override]
 	public function validatePatch(array $payload): void
 	{

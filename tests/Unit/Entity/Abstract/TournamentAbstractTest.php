@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Entity\Abstract;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,6 +22,7 @@ use DateTimeZone;
 use App\Entity\Abstract\TournamentAbstract;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -30,11 +33,44 @@ use App\Entity\Abstract\TournamentAbstract;
 #[CoversClass(TournamentAbstract::class)]
 class TournamentAbstractTest extends TestCase
 {
-	private function createSubject(): TournamentAbstract
+	/**
+	 * Covers: test constructor initialises create on in utc.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testConstructorInitialisesCreateOnInUtc(): void
 	{
-		return new class extends TournamentAbstract {};
+		$before = new DateTimeImmutable(
+			datetime: 'now',
+			timezone: new DateTimeZone(timezone: 'UTC'),
+		);
+		$subject = $this->createSubject();
+		$after   = new DateTimeImmutable(
+			datetime: 'now',
+			timezone: new DateTimeZone(timezone: 'UTC'),
+		);
+
+		$createOn = $subject->getCreateOn();
+
+		self::assertNotNull($createOn);
+		self::assertSame(
+			'UTC',
+			$createOn->getTimezone()->getName(),
+		);
+		self::assertGreaterThanOrEqual(
+			$before,
+			$createOn,
+		);
+		self::assertLessThanOrEqual(
+			$after,
+			$createOn,
+		);
 	}
 
+	/**
+	 * Covers: test defaults id to null.
+	 * @mago-expect lint:literal-named-argument
+	 */
 	#[Test]
 	public function testDefaultsIdToNull(): void
 	{
@@ -46,6 +82,27 @@ class TournamentAbstractTest extends TestCase
 		);
 	}
 
+	/** Covers: test set create on is fluent and stores value. */
+	#[Test]
+	public function testSetCreateOnIsFluentAndStoresValue(): void
+	{
+		$createOn = new DateTimeImmutable(datetime: '2026-01-01T00:00:00+00:00');
+		$subject  = $this->createSubject();
+
+		self::assertSame(
+			$subject,
+			$subject->setCreateOn(createOn: $createOn),
+		);
+		self::assertSame(
+			$createOn,
+			$subject->getCreateOn(),
+		);
+	}
+
+	/**
+	 * Covers: test set id is fluent and stores value.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
 	#[Test]
 	public function testSetIdIsFluentAndStoresValue(): void
 	{
@@ -62,51 +119,9 @@ class TournamentAbstractTest extends TestCase
 		);
 	}
 
-	#[Test]
-	public function testConstructorInitialisesCreateOnInUtc(): void
+	/** Covers: create subject. */
+	private function createSubject(): TournamentAbstract
 	{
-		$before = new DateTimeImmutable(
-			datetime: 'now',
-			timezone: new DateTimeZone(timezone: 'UTC'),
-		);
-		$subject = $this->createSubject();
-		$after = new DateTimeImmutable(
-			datetime: 'now',
-			timezone: new DateTimeZone(timezone: 'UTC'),
-		);
-
-		$createOn = $subject->getCreateOn();
-
-		self::assertNotNull($createOn);
-		self::assertSame(
-			'UTC',
-			$createOn
-				->getTimezone()
-				->getName(),
-		);
-		self::assertGreaterThanOrEqual(
-			$before,
-			$createOn,
-		);
-		self::assertLessThanOrEqual(
-			$after,
-			$createOn,
-		);
-	}
-
-	#[Test]
-	public function testSetCreateOnIsFluentAndStoresValue(): void
-	{
-		$createOn	= new DateTimeImmutable(datetime: '2026-01-01T00:00:00+00:00');
-		$subject	= $this->createSubject();
-
-		self::assertSame(
-			$subject,
-			$subject->setCreateOn(createOn: $createOn),
-		);
-		self::assertSame(
-			$createOn,
-			$subject->getCreateOn(),
-		);
+		return new class extends TournamentAbstract {};
 	}
 }

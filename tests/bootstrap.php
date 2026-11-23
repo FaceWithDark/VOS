@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Symfony\Component\Dotenv\Dotenv;
@@ -13,10 +15,17 @@ use Symfony\Component\Dotenv\Dotenv;
 /// --- Internal namespaces --- ///
 
 
-require dirname(__DIR__).'/vendor/autoload.php';
+// @mago-format-ignore-end
+$currentDir   = dirname(__DIR__);
+$autoloadFile = "{$currentDir}/vendor/autoload.php";
+$envFile      = "{$currentDir}/.env";
 
-(new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+require $autoloadFile;
 
-if ((bool) ($_SERVER['APP_DEBUG'] ?? false)) {
-    umask(0000);
+new Dotenv()->bootEnv($envFile);
+
+$debug = $_SERVER['APP_DEBUG'] ?? false;
+
+if ((bool) $debug) {
+	umask(mask: 0o000);
 }
