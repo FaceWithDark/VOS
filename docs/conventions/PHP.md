@@ -28,6 +28,48 @@ The declaration is mandatory: a file without it accepts implicit type juggling, 
 
 ---
 
+## Tooling
+
+[Mago](https://mago.carthage.software/) formats and lints the hand-written PHP. Its configuration is the root [`mago.yaml`](../../mago.yaml), pinned to Mago `1.61.0`, PHP `8.5`, and `version-drift-fail-level: patch`, so a different Mago binary fails the run instead of silently changing the output. PHPStan remains the only static analyser: Mago's analyzer, guard, and Twig commands are not used.
+
+Mago covers `src/`, `tests/`, `migrations/`, `public/` and `config/`, and `source.extensions: [php]` means only PHP files are collected. `bin/` is excluded: `bin/console` is extensionless PHP and its indentation belongs to editorconfig-checker. Request payload reading, validation and DTO-to-entity application live in `src/Service/<domain>` handlers; processors keep persistence and DTO mapping.
+
+Run the checks from the project root inside the `vos-symfony` container:
+
+```bash
+composer fmt          # mago fmt --check
+composer lint         # mago lint
+composer lint:staged  # mago lint --staged, for a pre-commit run
+```
+
+Mago's formatter collapses the double blank lines that separate the import groups and the class. To keep the layout below, every import section is wrapped in a Mago ignore region:
+
+```php
+namespace App\Service\Web;
+
+// @mago-format-ignore-start
+
+
+/// --- Main namespaces --- ///
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+
+
+/// --- Type hint namespaces --- ///
+use Override;
+
+
+/// --- Internal namespaces --- ///
+use App\Repository\Web\UserRepository;
+
+
+// @mago-format-ignore-end
+final readonly class UserDuplicateValidator
+```
+
+The start marker goes directly under the `namespace` line (Mago keeps one blank line after `namespace`) and the end marker directly above the class docblock or declaration, so the double blank lines and the import order stay exactly as written. Mago does not sort, reflow, or remove anything inside the region, so place a new import in the right group by hand.
+
+---
+
 ## Deliberate overrides
 
 Seven points where this project intentionally differs from PER. Each one is checked in review.
@@ -76,10 +118,12 @@ use App\Repository\Web\UserRepository;
 | Label | What goes in it |
 | :--- | :--- |
 | `/// --- Main namespaces --- ///` | Vendor and framework classes the file uses in its body. |
-| `/// --- Type hint namespaces --- ///` | Native PHP classes and attribute-only imports, such as `Override`, `DateTimeImmutable`, or `DateTimeZone`. |
+| `/// --- Type hint namespaces --- ///` | Native PHP classes, attribute-only imports, and global functions/constants imported with `use function` / `use const`, such as `Override`, `DateTimeImmutable`, `sprintf`, or `SORT_REGULAR`. |
 | `/// --- Internal namespaces --- ///` | The project's own `App\` classes. |
 
 An empty group **keeps its label**. Two blank lines still separate it from the next group, so the structure stays visible and future imports land in the right place.
+
+Classes are always imported and never referenced with a leading `\`. Global functions and constants are imported with `use function` / `use const` and then called unqualified; that is what the `ambiguous-*` and `no-fully-qualified-*` lint rules enforce.
 
 ### 3. Named arguments wherever PHP allows them
 
@@ -103,7 +147,7 @@ throw new ConflictHttpException(
 );
 ```
 
-The one exception is a **variadic parameter**: its values must stay positional because PHP gives them no names. That is why the `sprintf()` format values, `array_merge()` lists, and similar variadic calls stay in order:
+The one exception is a **variadic parameter**: its values must stay positional because PHP gives them no names. That is why the `sprintf()` format values and similar variadic calls stay in order:
 
 ```php
 // Correct: `$values` is variadic, so only the fixed arguments could be named.
@@ -113,6 +157,16 @@ sprintf(
 	$rank,
 );
 ```
+
+Merge lists with the array spread operator instead of `array_merge()`; Mago's `prefer-array-spread` rule enforces it:
+
+```php
+$all = [...$first, ...$second];
+```
+
+Mago's `literal-named-argument` rule only checks **literal** arguments. Variables, properties, and nested calls are not flagged, so the rest of this rule still has to be applied in review.
+
+PHPUnit marks its assertions and mock builders with `@no-named-arguments`, so those calls stay positional even though the rest of the code uses named arguments. Suppress Mago's finding inside the test method's own docblock with `@mago-expect lint:literal-named-argument(N)`, where `N` is the number of literal arguments in that method. The docblock travels with the method when Mago sorts class members, so the suppression survives formatting.
 
 ### 4. Multi-line style
 
@@ -145,10 +199,10 @@ The exception is a **multi-line signature**. It follows PER: the closing parenth
 
 ```php
 public function __construct(
-	private UserRepository					$repository,
-	private RoleRepository					$roleRepository,
-	private ObjectMapperInterface			$mapper,
-	private UserDuplicateValidatorInterface	$duplicateValidator,
+	private UserRepository                  $repository,
+	private RoleRepository                  $roleRepository,
+	private ObjectMapperInterface           $mapper,
+	private UserDuplicateValidatorInterface $duplicateValidator,
 ) {}
 
 public function setName(
@@ -201,11 +255,28 @@ public function validatePost(array $payload): void
 
 ---
 
+## Tests
+
+Test methods use PHPUnit's `#[Test]` attribute with a descriptive name (no `test` prefix), and assertions are static `self::assert*` calls, never `$this->assert*`. A test file mirrors the path and class name of the source it covers (`src/Foo/Bar.php` becomes `tests/.../BarTest.php`); test classes are not split into differently named suites.
+
+```php
+use PHPUnit\Framework\Attributes\Test;
+
+#[Test]
+public function postWithDuplicateNameThrowsConflict(): void
+{
+	self::assertSame(1, $count);
+}
+```
+
+---
+
 ## Layout
 
 - One blank line after `declare(strict_types=1);`.
-- Two blank lines before the first import label and between import groups (see [Labelled import groups](#2-labelled-import-groups)).
-- Two blank lines between the last import and the class docblock or declaration.
+- Two blank lines before the first import label and between import groups, inside the `@mago-format-ignore` region (see [Labelled import groups](#2-labelled-import-groups)).
+- Two blank lines between the last import and the class docblock or declaration, also inside the region.
+- One blank line before a `return` that follows another statement.
 - One blank line between methods.
 
 ```php
@@ -214,6 +285,8 @@ public function validatePost(array $payload): void
 declare(strict_types=1);
 
 namespace App\Service\Web;
+
+// @mago-format-ignore-start
 
 
 /// --- Main namespaces --- ///
@@ -225,9 +298,12 @@ namespace App\Service\Web;
 use App\Repository\Web\UserRepository;
 
 
+// @mago-format-ignore-end
 final readonly class UserDuplicateValidator
 {
-	public function __construct(private UserRepository $repository) {}
+	public function __construct(
+		private UserRepository $repository,
+	) {}
 
 	#[Override]
 	public function validatePost(array $payload): void
@@ -239,19 +315,31 @@ final readonly class UserDuplicateValidator
 
 ---
 
+## Calls and arrays
+
+Every function, method and constructor call with **two or more arguments** puts one argument per line and ends the list with a trailing comma. A one-argument call stays on one line.
+
+A **`$this` receiver chain** stays on one line, for example `$this->validator->validate(value: $dto);`. The exception is a chain rooted at a class-level constructor: `Validation::createValidatorBuilder()` keeps `->enableAttributeMapping()` and `->getValidator()` on their own lines.
+
+A flat **list array with six or more elements** uses a matrix: three values per row for six to nine elements, and five per row for ten or more, with the columns space-aligned. Associative and nested arrays keep one entry per line.
+
+Mago normalises arrays to one item per line and collapses fluent chains that fit, so a matrix array and a class-init chain are wrapped in a statement-level `// @mago-format-ignore-start` / `// @mago-format-ignore-end` region, like the import section. Mago has no option for either shape, so they are review rules checked with the one-off style checker.
+
+---
+
 ## Column alignment
 
-Consecutive assignments, property declarations, and parameter lists align their names and values on a column boundary using tabs (not spaces). The alignment resets at a blank line:
+Consecutive assignments, property declarations, and parameter lists align their names and values on a column boundary using **spaces after the tab indentation**; Mago cannot align columns with tabs. The alignment resets at a blank line:
 
 ```php
-$dto->id			= 88888;
-$dto->roleId		= 1;
-$dto->name			= 'Gambler';
-$dto->countryFlag	= 'ZW';
+$dto->id          = 88888;
+$dto->roleId      = 1;
+$dto->name        = 'Gambler';
+$dto->countryFlag = 'ZW';
 
-private UserRepository					$repository;
-private RoleRepository					$roleRepository;
-private UserDuplicateValidatorInterface	$duplicateValidator;
+private UserRepository                  $repository;
+private RoleRepository                  $roleRepository;
+private UserDuplicateValidatorInterface $duplicateValidator;
 ```
 
 ---
