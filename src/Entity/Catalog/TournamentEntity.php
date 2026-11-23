@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Entity\Catalog;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 
 /// --- Type hint namespaces --- ///
-use Doctrine\DBAL\Types\Types;
 
 
 /// --- Internal namespaces --- ///
@@ -18,47 +20,55 @@ use App\Entity\Abstract\TournamentAbstract;
 use App\Repository\Catalog\TournamentRepository;
 
 
+// @mago-format-ignore-end
 #[ORM\Entity(repositoryClass: TournamentRepository::class)]
 #[ORM\Table(
 	name: '`tournaments`',
 	schema: 'vos_catalog',
-	options: ['comment' => 'storing any registered tournaments under VOS org.']
+	options: ['comment' => 'storing any registered tournaments under VOS org.'],
 )]
 final class TournamentEntity extends TournamentAbstract
 {
+	/** Name. */
+	/** Name. */
 	#[ORM\Column(
 		type: Types::TEXT,
-		nullable: false
+		nullable: false,
 	)]
-    private string $name;
+	private string $name;
 
+	/** Description. */
 	#[ORM\Column(
 		type: Types::TEXT,
-		nullable: true
+		nullable: true,
 	)]
-    private ?string $description = null;
+	private ?string $description = null;
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
+	/** Describes the migration. */
+	public function getDescription(): ?string
+	{
+		return $this->description;
+	}
 
-    public function setName(string $name): static
-    {
-        $this->name = $name;
+	/** Get name. */
+	public function getName(): string
+	{
+		return $this->name;
+	}
 
-        return $this;
-    }
+	/** Set description. */
+	public function setDescription(?string $description): static
+	{
+		$this->description = $description;
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
+		return $this;
+	}
 
-    public function setDescription(?string $description): static
-    {
-        $this->description = $description;
+	/** Set name. */
+	public function setName(string $name): static
+	{
+		$this->name = $name;
 
-        return $this;
-    }
+		return $this;
+	}
 }

@@ -2,22 +2,36 @@
 
 declare(strict_types=1);
 
-
 namespace App\Repository\Tourney;
 
-use App\Entity\Tourney\Mod;
+// @mago-format-ignore-start
+
+
+/// --- Main namespaces --- ///
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 
+/// --- Type hint namespaces --- ///
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Tourney\Mod;
+
+
+// @mago-format-ignore-end
 /**
  * @extends ServiceEntityRepository<Mod>
  */
 class ModRepository extends ServiceEntityRepository
 {
+	/** Initialises the instance. */
 	public function __construct(ManagerRegistry $registry)
 	{
-		parent::__construct($registry, Mod::class);
+		parent::__construct(
+			$registry,
+			Mod::class,
+		);
 	}
 
 	//    /**
@@ -34,7 +48,6 @@ class ModRepository extends ServiceEntityRepository
 	//            ->getResult()
 	//        ;
 	//    }
-
 	//    public function findOneBySomeField($value): ?Mod
 	//    {
 	//        return $this->createQueryBuilder('m')

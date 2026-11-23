@@ -4,64 +4,75 @@ declare(strict_types=1);
 
 namespace App\Entity\Abstract;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 
 /// --- Type hint namespaces --- ///
 use DateTimeImmutable;
 use DateTimeZone;
-use Doctrine\DBAL\Types\Types;
 
 
 /// --- Internal namespaces --- ///
 
 
+// @mago-format-ignore-end
 #[ORM\MappedSuperclass]
-abstract class TournamentAbstract {
+abstract class TournamentAbstract
+{
+	/** Id. */
 	#[ORM\Id]
 	#[ORM\GeneratedValue(strategy: 'IDENTITY')]
 	#[ORM\Column(
 		type: Types::INTEGER,
-		nullable: false
+		nullable: false,
 	)]
 	protected ?int $id = null;
 
+	/** Create on. */
 	#[ORM\Column(
 		type: Types::DATETIMETZ_IMMUTABLE,
-		nullable: false
+		nullable: false,
 	)]
-	protected ?\DateTimeImmutable $createOn = null;
+	protected ?DateTimeImmutable $createOn = null;
 
+	/** Initialises the instance. */
 	public function __construct()
 	{
 		$this->createOn = new DateTimeImmutable(
 			datetime: 'now',
-			timezone: new DateTimeZone(timezone: 'UTC')
+			timezone: new DateTimeZone(timezone: 'UTC'),
 		);
 	}
 
+	/** Get create on. */
+	public function getCreateOn(): ?DateTimeImmutable
+	{
+		return $this->createOn;
+	}
+
+	/** Get id. */
 	public function getId(): ?int
 	{
 		return $this->id;
 	}
 
-	public function setId(int $id): static
+	/** Set create on. */
+	public function setCreateOn(DateTimeImmutable $createOn): static
 	{
-		$this->id = $id;
+		$this->createOn = $createOn;
 
 		return $this;
 	}
 
-	public function getCreateOn(): ?\DateTimeImmutable
+	/** Set id. */
+	public function setId(int $id): static
 	{
-		return $this->createOn;
-	}
-
-	public function setCreateOn(\DateTimeImmutable $createOn): static
-	{
-		$this->createOn = $createOn;
+		$this->id = $id;
 
 		return $this;
 	}

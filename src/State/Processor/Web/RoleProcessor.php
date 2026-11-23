@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace App\State\Processor\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use Override;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 
 /// --- Type hint namespaces --- ///
-use DateTimeImmutable;
-use DateTimeZone;
+use const FILTER_VALIDATE_INT;
+use function filter_var;
+use function sprintf;
 use InvalidArgumentException;
+use Override;
 
 
 /// --- Internal namespaces --- ///
@@ -26,100 +28,52 @@ use App\Dto\Input\Web\RoleCreateDto;
 use App\Dto\Input\Web\RoleUpdateDto;
 use App\Dto\Main\Web\RoleResourceDto;
 use App\Entity\Web\RoleEntity;
-use App\Interface\Web\RoleDuplicateValidatorInterface;
-use App\Interface\Web\RoleEmptyPayloadValidatorInterface;
 use App\Repository\Web\RoleRepository;
+use App\Service\Web\RolePayloadHandler;
 
 
+// @mago-format-ignore-end
 /**
  * @implements ProcessorInterface<RoleCreateDto|RoleUpdateDto|mixed, RoleResourceDto|null>
  */
 final readonly class RoleProcessor implements ProcessorInterface
 {
+	/** Initialises the instance. */
 	public function __construct(
-		private RoleRepository						$repository,
-		private ObjectMapperInterface				$mapper,
-		private RequestStack						$requestStack,
-		private RoleDuplicateValidatorInterface		$duplicateValidator,
-		private RoleEmptyPayloadValidatorInterface	$emptyPayloadValidator,
+		private RoleRepository        $repository,
+		private ObjectMapperInterface $mapper,
+		private RolePayloadHandler    $handler,
 	) {}
 
-	/**
-	 * @return array<array-key, mixed>
-	 */
-	private function getDecodedPayload(): array
-	{
-		$request = $this->requestStack->getCurrentRequest();
-
-		if ($request === null) {
-			return [];
-		}
-
-		$decoded = json_decode(
-			json: $request->getContent(),
-			associative: true,
-		);
-
-		if (is_array(value: $decoded)) {
-			return $decoded;
-		}
-
-		return [];
-	}
-
+	/** Process. */
 	#[Override]
 	public function process(
-		mixed		$data,
-		Operation	$operation,
-		array		$payload	= [],
-		array		$context	= [],
-	): ?RoleResourceDto
-	{
+		mixed     $data,
+		Operation $operation,
+		array     $payload = [],
+		array     $context = [],
+	): ?RoleResourceDto {
 		return match (true) {
-			$data instanceof RoleCreateDto	=> $this->handlePost(dto: $data),
-			$data instanceof RoleUpdateDto	=> $this->handlePatch(dto: $data, payload: $payload),
-			$operation instanceof Delete	=> $this->handleDelete(payload: $payload),
-			default							=> throw new InvalidArgumentException('Unsupported opearation or input DTO type.'),
+			$data instanceof RoleCreateDto => $this->handlePost(dto: $data),
+			$data instanceof RoleUpdateDto => $this->handlePatch(
+				dto: $data,
+				payload: $payload,
+			),
+			$operation instanceof Delete   => $this->handleDelete(payload: $payload),
+			default => throw new InvalidArgumentException(message: 'Unsupported opearation or input DTO type.'),
 		};
-	}
-
-
-	private function handlePost(RoleCreateDto $dto): RoleResourceDto
-	{
-		$this->duplicateValidator->validatePost(payload: $this->getDecodedPayload());
-
-		$roleEntity = new RoleEntity();
-
-		$roleEntity->setName(name: $dto->name);
-		$roleEntity->setDescription(description: $dto->description);
-		$roleEntity->setCreateOn(
-			createOn: new DateTimeImmutable(
-				datetime: 'now',
-				timezone: new DateTimeZone(timezone: 'UTC'),
-			)
-		);
-
-		$this->repository->save(
-			entity: $roleEntity,
-			flush: true
-		);
-
-		return $this->mapper->map(
-			source: $roleEntity,
-			target: RoleResourceDto::class,
-		);
 	}
 
 	/**
 	 * @param array<array-key, mixed> $payload
 	 */
-	private function handlePatch(
-		RoleUpdateDto $dto,
-		array $payload,
-	): RoleResourceDto
+	private function handleDelete(array $payload): null
 	{
-$roleId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
-		$roleId = $roleId === false ? 0 : $roleId;
+		$roleId = filter_var(
+			value: $payload['id'] ?? 0,
+			filter: FILTER_VALIDATE_INT,
+		);
+		$roleId     = $roleId === false ? 0 : $roleId;
 		$roleEntity = $this->repository->find(id: $roleId);
 
 		if ($roleEntity === null) {
@@ -131,36 +85,47 @@ $roleId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
 			);
 		}
 
-		$roleDecodedPayload = $this->getDecodedPayload();
+		$this->repository->remove(entity: $roleEntity);
 
-		// 400 for an empty request body (entity existence is already checked)
-		$this->emptyPayloadValidator->validatePatch(payload: $roleDecodedPayload);
+		return null;
+	}
 
-		// 400 if another entity already uses the same 'name' value
-		$this->duplicateValidator->validatePatch(
-			payload: $roleDecodedPayload,
-			id: $roleId
+	/**
+	 * @param array<array-key, mixed> $payload
+	 */
+	private function handlePatch(
+		RoleUpdateDto $dto,
+		array         $payload,
+	): RoleResourceDto {
+		$roleId = filter_var(
+			value: $payload['id'] ?? 0,
+			filter: FILTER_VALIDATE_INT,
 		);
+		$roleId     = $roleId === false ? 0 : $roleId;
+		$roleEntity = $this->repository->find(id: $roleId);
 
-		// Apply the PATCH request since we allowed 'description' field value to be NULL
-		if (array_key_exists(
-			key: 'name',
-			array: $roleDecodedPayload,
-		) && $dto->name !== null) {
-			$roleEntity->setName(name: $dto->name);
+		if ($roleEntity === null) {
+			throw new NotFoundHttpException(
+				message: sprintf(
+					'Role with ID [%d] not found.',
+					$roleId,
+				),
+			);
 		}
 
-		if (array_key_exists(
-			key: 'description',
-			array: $roleDecodedPayload,
-		)) {
-			$roleEntity->setDescription(description: $dto->description);
-		}
+		$decodedPayload = $this->handler->readPayload();
 
-		$this->repository->save(
+		$this->handler->validatePatch(
+			payload: $decodedPayload,
+			id: $roleId,
+		);
+		$this->handler->applyPatch(
 			entity: $roleEntity,
-			flush: true,
+			dto: $dto,
+			payload: $decodedPayload,
 		);
+
+		$this->repository->save(entity: $roleEntity);
 
 		return $this->mapper->map(
 			source: $roleEntity,
@@ -168,29 +133,25 @@ $roleId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
 		);
 	}
 
-	/**
-	 * @param array<array-key, mixed> $payload
-	 */
-	private function handleDelete(array $payload): null
+	/** Handle post. */
+	private function handlePost(RoleCreateDto $dto): RoleResourceDto
 	{
-$roleId = filter_var($payload['id'] ?? 0, FILTER_VALIDATE_INT);
-		$roleId = $roleId === false ? 0 : $roleId;
-		$roleEntity = $this->repository->find(id: $roleId);
+		$payload = $this->handler->readPayload();
 
-		if ($roleEntity === null) {
-			throw new NotFoundHttpException(
-				sprintf(
-					'Role with ID [%d] not found.',
-					$roleId,
-				)
-			);
-		}
+		$this->handler->validatePost(payload: $payload);
 
-		$this->repository->remove(
+		$roleEntity = new RoleEntity();
+
+		$this->handler->applyCreate(
 			entity: $roleEntity,
-			flush: true,
+			dto: $dto,
 		);
 
-		return null;
+		$this->repository->save(entity: $roleEntity);
+
+		return $this->mapper->map(
+			source: $roleEntity,
+			target: RoleResourceDto::class,
+		);
 	}
 }

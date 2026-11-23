@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -11,6 +13,9 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 
 /// --- Type hint namespaces --- ///
+use function array_key_exists;
+use function is_string;
+use function sprintf;
 use Override;
 
 
@@ -19,32 +24,15 @@ use App\Interface\Web\RoleDuplicateValidatorInterface;
 use App\Repository\Web\RoleRepository;
 
 
+// @mago-format-ignore-end
 final readonly class RoleDuplicateValidator implements RoleDuplicateValidatorInterface
 {
-	public function __construct(private RoleRepository $repository) {}
+	/** Initialises the instance. */
+	public function __construct(
+		private RoleRepository $repository,
+	) {}
 
-	#[Override]
-	public function validatePost(array $payload): void
-	{
-		$roleName = $payload['name'] ?? null;
-
-		// Let DTO validation surface the error when 'name' field is missing
-		if (!is_string($roleName)) {
-			return;
-		}
-
-		$roleCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $roleName]);
-
-		if ($roleCurrentNameValue !== null) {
-			throw new ConflictHttpException(
-				message: sprintf(
-					'A role with the name [%s] already exists.',
-					$roleName,
-				),
-			);
-		}
-	}
-
+	/** Validate patch. */
 	#[Override]
 	public function validatePatch(array $payload, int $id): void
 	{
@@ -78,7 +66,30 @@ final readonly class RoleDuplicateValidator implements RoleDuplicateValidatorInt
 			message: sprintf(
 				'Another role with the name [%s] already exists.',
 				$roleName,
-			)
+			),
 		);
+	}
+
+	/** Validate post. */
+	#[Override]
+	public function validatePost(array $payload): void
+	{
+		$roleName = $payload['name'] ?? null;
+
+		// Let DTO validation surface the error when 'name' field is missing
+		if (!is_string($roleName)) {
+			return;
+		}
+
+		$roleCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $roleName]);
+
+		if ($roleCurrentNameValue !== null) {
+			throw new ConflictHttpException(
+				message: sprintf(
+					'A role with the name [%s] already exists.',
+					$roleName,
+				),
+			);
+		}
 	}
 }

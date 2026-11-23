@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Dto\Main\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use ApiPlatform\Doctrine\Orm\State\Options;
@@ -13,6 +15,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -23,14 +26,14 @@ use DateTimeImmutable;
 
 
 /// --- Internal namespaces --- ///
-use App\Entity\Web\RoleEntity;
 use App\Dto\Input\Web\RoleCreateDto;
 use App\Dto\Input\Web\RoleUpdateDto;
+use App\Entity\Web\RoleEntity;
 use App\State\Processor\Web\RoleProcessor;
 use App\State\Provider\Web\RoleProvider;
-use Symfony\Component\HttpFoundation\Response;
 
 
+// @mago-format-ignore-end
 #[ApiResource(
 	shortName: 'Role API Endpoints',
 	description: 'Role API resource opearations.',
@@ -72,9 +75,9 @@ use Symfony\Component\HttpFoundation\Response;
 			 * working as intended.
 			 */
 			denormalizationContext: [
-				AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES				=> false,
-				DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS	=> true,
-			]
+				AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES            => false,
+				DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS => true,
+			],
 		),
 		new Delete(
 			uriTemplate: '/roles/{id}',
@@ -90,12 +93,16 @@ use Symfony\Component\HttpFoundation\Response;
 #[Map(source: RoleEntity::class)]
 final class RoleResourceDto
 {
+	/** Id. */
 	public int $id;
 
+	/** Name. */
 	public string $name;
 
+	/** Description. */
 	public ?string $description = null;
 
+	/** Timestamp. */
 	#[Map(source: 'createOn')]
 	public DateTimeImmutable $timestamp;
 }

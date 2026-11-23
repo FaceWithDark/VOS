@@ -2,22 +2,36 @@
 
 declare(strict_types=1);
 
-
 namespace App\Repository\Tourney;
 
-use App\Entity\Tourney\Beatmap;
+// @mago-format-ignore-start
+
+
+/// --- Main namespaces --- ///
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 
+/// --- Type hint namespaces --- ///
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Tourney\Beatmap;
+
+
+// @mago-format-ignore-end
 /**
  * @extends ServiceEntityRepository<Beatmap>
  */
 class BeatmapRepository extends ServiceEntityRepository
 {
+	/** Initialises the instance. */
 	public function __construct(ManagerRegistry $registry)
 	{
-		parent::__construct($registry, Beatmap::class);
+		parent::__construct(
+			$registry,
+			Beatmap::class,
+		);
 	}
 
 	//    /**
@@ -34,7 +48,6 @@ class BeatmapRepository extends ServiceEntityRepository
 	//            ->getResult()
 	//        ;
 	//    }
-
 	//    public function findOneBySomeField($value): ?Beatmap
 	//    {
 	//        return $this->createQueryBuilder('b')

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Dto\Main\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use PHPUnit\Framework\Attributes\CoversNothing;
@@ -14,6 +16,7 @@ use Symfony\Component\ObjectMapper\Attribute\Map;
 
 /// --- Type hint namespaces --- ///
 use DateTimeImmutable;
+use function sprintf;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -23,6 +26,7 @@ use App\Dto\Main\Web\UserResourceDto;
 use App\Entity\Web\UserEntity;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -41,6 +45,60 @@ use App\Entity\Web\UserEntity;
 #[CoversNothing]
 class UserResourceDtoTest extends TestCase
 {
+	/**
+	 * Shared reflection helpers
+	 */
+
+	/**
+	 * @param class-string $className
+	 * @mago-expect lint:literal-named-argument
+	 */
+	private static function classMapAttribute(string $className): Map
+	{
+		$attributes = new ReflectionClass(objectOrClass: $className)->getAttributes(name: Map::class);
+
+		self::assertCount(
+			1,
+			$attributes,
+			sprintf(
+				'%s must declare exactly one #[Map] on the class.',
+				$className,
+			),
+		);
+
+		return $attributes[0]->newInstance();
+	}
+
+	/**
+	 * @param class-string $className
+	 * @mago-expect lint:literal-named-argument
+	 */
+	private static function propertyMapAttribute(
+		string $className,
+		string $propertyName,
+	): Map {
+		$attributes = new ReflectionProperty(
+			class: $className,
+			property: $propertyName,
+		)->getAttributes(name: Map::class);
+
+		self::assertCount(
+			1,
+			$attributes,
+			sprintf(
+				'%s::$%s must declare exactly one #[Map].',
+				$className,
+				$propertyName,
+			),
+		);
+
+		return $attributes[0]->newInstance();
+	}
+
+	/**
+	 * Covers: test assigns every field.
+	 * @mago-expect lint:literal-named-argument(6)
+	 */
 	#[Test]
 	public function testAssignsEveryField(): void
 	{
@@ -48,16 +106,16 @@ class UserResourceDtoTest extends TestCase
 
 		$dto = new UserResourceDto();
 
-		$dto->id			= 88888;
-		$dto->roleId		= 1;
-		$dto->name			= 'Gambler';
-		$dto->avatar		= 'https://a.ppy.sh/88?88.png';
-		$dto->rank			= 88;
-		$dto->countryFlag	= 'ZW';
-		$dto->timestamp		= $timestamp;
+		$dto->id          = 88_888;
+		$dto->roleId      = 1;
+		$dto->name        = 'Gambler';
+		$dto->avatar      = 'https://a.ppy.sh/88?88.png';
+		$dto->rank        = 88;
+		$dto->countryFlag = 'ZW';
+		$dto->timestamp   = $timestamp;
 
 		self::assertSame(
-			88888,
+			88_888,
 			$dto->id,
 		);
 		self::assertSame(
@@ -86,6 +144,7 @@ class UserResourceDtoTest extends TestCase
 		);
 	}
 
+	/** Covers: test class maps from user entity. */
 	#[Test]
 	public function testClassMapsFromUserEntity(): void
 	{
@@ -97,6 +156,10 @@ class UserResourceDtoTest extends TestCase
 		);
 	}
 
+	/**
+	 * Covers: test role id maps from the association id.
+	 * @mago-expect lint:literal-named-argument
+	 */
 	#[Test]
 	public function testRoleIdMapsFromTheAssociationId(): void
 	{
@@ -111,6 +174,10 @@ class UserResourceDtoTest extends TestCase
 		);
 	}
 
+	/**
+	 * Covers: test timestamp maps from create on.
+	 * @mago-expect lint:literal-named-argument
+	 */
 	#[Test]
 	public function testTimestampMapsFromCreateOn(): void
 	{
@@ -123,57 +190,5 @@ class UserResourceDtoTest extends TestCase
 			'createOn',
 			$attribute->source,
 		);
-	}
-
-
-	/**
-	 * Shared reflection helpers
-	 */
-
-
-	/**
-	 * @param class-string $className
-	 */
-	private static function classMapAttribute(string $className): Map
-	{
-		$attributes = (new ReflectionClass(objectOrClass: $className))
-			->getAttributes(name: Map::class);
-
-		self::assertCount(
-			1,
-			$attributes,
-			sprintf(
-				'%s must declare exactly one #[Map] on the class.',
-				$className,
-			),
-		);
-
-		return $attributes[0]->newInstance();
-	}
-
-	/**
-	 * @param class-string $className
-	 */
-	private static function propertyMapAttribute(
-		string	$className,
-		string	$propertyName,
-	): Map
-	{
-		$attributes = (new ReflectionProperty(
-			class: $className,
-			property: $propertyName,
-		))->getAttributes(name: Map::class);
-
-		self::assertCount(
-			1,
-			$attributes,
-			sprintf(
-				'%s::$%s must declare exactly one #[Map].',
-				$className,
-				$propertyName,
-			),
-		);
-
-		return $attributes[0]->newInstance();
 	}
 }

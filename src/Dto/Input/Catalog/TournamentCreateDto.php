@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Dto\Input\Catalog;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Symfony\Component\Validator\Constraints as Assert;
@@ -15,11 +17,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 /// --- Internal namespaces --- ///
 
 
+// @mago-format-ignore-end
 final class TournamentCreateDto
 {
+	/** Name. */
 	#[Assert\NotBlank]
 	public string $name;
 
+	/** Description. */
 	#[Assert\Type(['string', 'null'])]
 	public ?string $description = null;
 }

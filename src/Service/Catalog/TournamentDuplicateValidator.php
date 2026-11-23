@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service\Catalog;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -11,6 +13,9 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 
 /// --- Type hint namespaces --- ///
+use function array_key_exists;
+use function is_string;
+use function sprintf;
 use Override;
 
 
@@ -19,32 +24,15 @@ use App\Interface\Catalog\TournamentDuplicateValidatorInterface;
 use App\Repository\Catalog\TournamentRepository;
 
 
+// @mago-format-ignore-end
 final readonly class TournamentDuplicateValidator implements TournamentDuplicateValidatorInterface
 {
-	public function __construct(private TournamentRepository $repository) {}
+	/** Initialises the instance. */
+	public function __construct(
+		private TournamentRepository $repository,
+	) {}
 
-	#[Override]
-	public function validatePost(array $payload): void
-	{
-		$tournamentName = $payload['name'] ?? null;
-
-		// Let DTO validation surface the error when 'name' field is missing
-		if (!is_string($tournamentName)) {
-			return;
-		}
-
-		$tournamentCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $tournamentName]);
-
-		if ($tournamentCurrentNameValue !== null) {
-			throw new ConflictHttpException(
-				message: sprintf(
-					'A tournament with the name [%s] already exists.',
-					$tournamentName,
-				),
-			);
-		}
-	}
-
+	/** Validate patch. */
 	#[Override]
 	public function validatePatch(array $payload, int $id): void
 	{
@@ -80,5 +68,28 @@ final readonly class TournamentDuplicateValidator implements TournamentDuplicate
 				$tournamentName,
 			),
 		);
+	}
+
+	/** Validate post. */
+	#[Override]
+	public function validatePost(array $payload): void
+	{
+		$tournamentName = $payload['name'] ?? null;
+
+		// Let DTO validation surface the error when 'name' field is missing
+		if (!is_string($tournamentName)) {
+			return;
+		}
+
+		$tournamentCurrentNameValue = $this->repository->findOneBy(criteria: ['name' => $tournamentName]);
+
+		if ($tournamentCurrentNameValue !== null) {
+			throw new ConflictHttpException(
+				message: sprintf(
+					'A tournament with the name [%s] already exists.',
+					$tournamentName,
+				),
+			);
+		}
 	}
 }

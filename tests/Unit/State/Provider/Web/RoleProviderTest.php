@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\State\Provider\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use ApiPlatform\Metadata\Get;
@@ -28,48 +30,55 @@ use App\Repository\Web\RoleRepository;
 use App\State\Provider\Web\RoleProvider;
 
 
+// @mago-format-ignore-end
 #[CoversClass(RoleProvider::class)]
 #[UsesClass(RoleEntity::class)]
 #[UsesClass(RoleAbstract::class)]
 class RoleProviderTest extends TestCase
 {
-	private RoleRepository&MockObject			$repository;
-	private ObjectMapperInterface&MockObject	$mapper;
-	private RoleProvider						$provider;
+	/** Repository. */
+	private RoleRepository&MockObject $repository;
+	/** Mapper. */
+	private ObjectMapperInterface&MockObject $mapper;
+	/** Provider. */
+	private RoleProvider $provider;
 
-	#[Override]
-	protected function setUp(): void
+	/**
+	 * Covers: test provide collection maps empty result to empty array.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
+	#[Test]
+	public function testProvideCollectionMapsEmptyResultToEmptyArray(): void
 	{
-		parent::setUp();
+		$this->repository->expects(self::once())->method('findAll')->willReturn([])->seal();
 
-		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
-		$this->repository	= $this->createMock(RoleRepository::class);
-		$this->mapper		= $this->createMock(ObjectMapperInterface::class);
-		$this->provider		= new RoleProvider(
-			repository:	$this->repository,
-			mapper:		$this->mapper,
+		$this->mapper->expects(self::never())->method('map')->seal();
+
+		$result = $this->provider->provide(operation: new GetCollection());
+
+		self::assertSame(
+			[],
+			$result,
 		);
 	}
 
+	/**
+	 * Covers: test provide collection maps every entity.
+	 * @mago-expect lint:literal-named-argument(3)
+	 */
 	#[Test]
 	public function testProvideCollectionMapsEveryEntity(): void
 	{
 		$entities = [
 			new RoleEntity(),
-			new RoleEntity()
+			new RoleEntity(),
 		];
-		$first = new RoleResourceDto();
+		$first  = new RoleResourceDto();
 		$second = new RoleResourceDto();
 
-		$this
-			->repository
-			->expects(self::once())
-			->method('findAll')
-			->willReturn($entities)
-			->seal();
+		$this->repository->expects(self::once())->method('findAll')->willReturn($entities)->seal();
 
-		$this
-			->mapper
+		$this->mapper
 			->expects(self::exactly(2))
 			->method('map')
 			->willReturnOnConsecutiveCalls(
@@ -78,10 +87,7 @@ class RoleProviderTest extends TestCase
 			)
 			->seal();
 
-		$result
-			= $this
-				->provider
-				->provide(operation: new GetCollection());
+		$result = $this->provider->provide(operation: new GetCollection());
 
 		self::assertSame(
 			[
@@ -92,49 +98,24 @@ class RoleProviderTest extends TestCase
 		);
 	}
 
-	#[Test]
-	public function testProvideCollectionMapsEmptyResultToEmptyArray(): void
-	{
-		$this
-			->repository
-			->expects(self::once())
-			->method('findAll')
-			->willReturn([])
-			->seal();
-
-		$this
-			->mapper
-			->expects(self::never())
-			->method('map')
-			->seal();
-
-		$result
-			= $this
-				->provider
-				->provide(operation: new GetCollection());
-
-		self::assertSame(
-			[],
-			$result,
-		);
-	}
-
+	/**
+	 * Covers: test provide individual maps found entity.
+	 * @mago-expect lint:literal-named-argument(3)
+	 */
 	#[Test]
 	public function testProvideIndividualMapsFoundEntity(): void
 	{
-		$entity		= new RoleEntity();
-		$resource	= new RoleResourceDto();
+		$entity   = new RoleEntity();
+		$resource = new RoleResourceDto();
 
-		$this
-			->repository
+		$this->repository
 			->expects(self::once())
 			->method('find')
 			->with(3)
 			->willReturn($entity)
 			->seal();
 
-		$this
-			->mapper
+		$this->mapper
 			->expects(self::once())
 			->method('map')
 			->with(
@@ -144,13 +125,10 @@ class RoleProviderTest extends TestCase
 			->willReturn($resource)
 			->seal();
 
-		$result
-		   	= $this
-				->provider
-				->provide(
-					operation:		new Get(),
-					uriVariables:	['id' => 3],
-				);
+		$result = $this->provider->provide(
+			operation: new Get(),
+			uriVariables: ['id' => 3],
+		);
 
 		self::assertSame(
 			$resource,
@@ -158,32 +136,43 @@ class RoleProviderTest extends TestCase
 		);
 	}
 
+	/**
+	 * Covers: test provide individual returns null when entity missing.
+	 * @mago-expect lint:literal-named-argument(4)
+	 */
 	#[Test]
 	public function testProvideIndividualReturnsNullWhenEntityMissing(): void
 	{
 		// API Platform turns this NULL into the 404 for a missing ID
-		$this
-			->repository
+		$this->repository
 			->expects(self::once())
 			->method('find')
 			->with(404)
 			->willReturn(null)
 			->seal();
 
-		$this
-			->mapper
-			->expects(self::never())
-			->method('map')
-			->seal();
+		$this->mapper->expects(self::never())->method('map')->seal();
 
-		$result
-		   	= $this
-				->provider
-				->provide(
-					operation:		new Get(),
-					uriVariables:	['id' => 404],
-				);
+		$result = $this->provider->provide(
+			operation: new Get(),
+			uriVariables: ['id' => 404],
+		);
 
 		self::assertNull($result);
+	}
+
+	/** Covers: set up. */
+	#[Override]
+	protected function setUp(): void
+	{
+		parent::setUp();
+
+		// Fresh mocks per test (Symfony/PHPUnit best practice for isolation)
+		$this->repository = $this->createMock(RoleRepository::class);
+		$this->mapper     = $this->createMock(ObjectMapperInterface::class);
+		$this->provider   = new RoleProvider(
+			repository: $this->repository,
+			mapper: $this->mapper,
+		);
 	}
 }

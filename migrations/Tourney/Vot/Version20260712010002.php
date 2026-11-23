@@ -2,19 +2,37 @@
 
 declare(strict_types=1);
 
-
 namespace DoctrineMigrations\Tourney\Vot;
 
+// @mago-format-ignore-start
+
+
+/// --- Main namespaces --- ///
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
+/// --- Type hint namespaces --- ///
+use const SORT_REGULAR;
+use function array_keys;
+use function ksort;
+use function sprintf;
+
+
+/// --- Internal namespaces --- ///
+
+
+// @mago-format-ignore-end
 final class Version20260712010002 extends AbstractMigration
 {
-	private string	$name		= 'VOT';
-	private array	$schemas	= [];
-	private string	$statement	= '';
+	/** Name. */
+	private string $name = 'VOT';
+	/** Schemas. */
+	private array $schemas = [];
+	/** Statement. */
+	private string $statement = '';
 
+	/** Initialises the instance. */
 	public function __construct()
 	{
 		$this->schemas = [
@@ -29,32 +47,28 @@ final class Version20260712010002 extends AbstractMigration
 				'%s_%s%s',
 				$this->name,
 				$this->name,
-				'5_5'
+				'5_5',
 			) =>
-			// Value is for table constraints name
-			sprintf(
-				'%s%s',
-				$this->name,
-				'5_5'
-			)
+				// Value is for table constraints name
+				sprintf(
+					'%s%s',
+					$this->name,
+					'5_5',
+				),
 		];
 
-		for (
-			$iteration = 1;
-			$iteration <= 6;
-			$iteration++
-		) {
+		for ($iteration = 1; $iteration <= 6; ++$iteration) {
 			$schemaName = sprintf(
 				'%s_%s%d',
 				$this->name,
 				$this->name,
-				$iteration
+				$iteration,
 			);
 
 			$constraintName = sprintf(
 				'%s%d',
 				$this->name,
-				$iteration
+				$iteration,
 			);
 
 			$this->schemas[$schemaName] = $constraintName;
@@ -66,24 +80,38 @@ final class Version20260712010002 extends AbstractMigration
 		 */
 		ksort(
 			$this->schemas,
-			SORT_REGULAR
+			SORT_REGULAR,
 		);
 	}
 
+	/** Reverts the migration. */
+	public function down(Schema $schema): void
+	{
+		// We only need the key part of the assoc array here
+		foreach (array_keys(array: $this->schemas) as $tourneySchema) {
+			$this->statement = <<<SQL
+				DROP TABLE IF EXISTS {$tourneySchema}.roles CASCADE;
+				SQL;
+
+			$this->addSql(sql: $this->statement);
+		}
+	}
+
+	/** Describes the migration. */
 	public function getDescription(): string
 	{
 		return sprintf(
 			'Create `roles` tables across all iteration schemas for registered %s tournament.',
-			$this->name
+			$this->name,
 		);
 	}
 
+	/** Applies the migration. */
 	public function up(Schema $schema): void
 	{
 		// This table need to be created in each iteration schema first
 		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
-			$this->statement =
-				<<<"SQL"
+			$this->statement = <<<SQL
 				CREATE TABLE IF NOT EXISTS {$tourneySchema}.roles (
 					id INTEGER GENERATED ALWAYS AS IDENTITY NOT NULL,
 					name VARCHAR(255) NOT NULL,
@@ -96,35 +124,15 @@ final class Version20260712010002 extends AbstractMigration
 			$this->addSql(sql: $this->statement);
 		}
 
-
 		// Then we can add comment on it since they're existed now
-		foreach (
-			// We only need the key part of the assoc array here
-			array_keys(array: $this->schemas)
-			as $tourneySchema
-		) {
-			$this->statement =
-				<<<"SQL"
+
+		// We only need the key part of the assoc array here
+		foreach (array_keys(array: $this->schemas) as $tourneySchema) {
+			$this->statement = <<<SQL
 				COMMENT ON TABLE
 					{$tourneySchema}.roles
 				IS
 					'storing roles definition that ARE belong to one or more registered tournaments under VOS org.';
-				SQL;
-
-			$this->addSql(sql: $this->statement);
-		}
-	}
-
-	public function down(Schema $schema): void
-	{
-		foreach (
-			// We only need the key part of the assoc array here
-			array_keys(array: $this->schemas)
-			as $tourneySchema
-		) {
-			$this->statement =
-				<<<"SQL"
-				DROP TABLE IF EXISTS {$tourneySchema}.roles CASCADE;
 				SQL;
 
 			$this->addSql(sql: $this->statement);

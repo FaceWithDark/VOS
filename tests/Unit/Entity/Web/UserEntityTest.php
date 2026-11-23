@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Entity\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -26,117 +28,42 @@ use App\Entity\Web\RoleEntity;
 use App\Entity\Web\UserEntity;
 
 
+// @mago-format-ignore-end
 #[CoversClass(UserEntity::class)]
 #[UsesClass(RoleAbstract::class)]
 #[UsesClass(RoleEntity::class)]
 #[UsesClass(UserAbstract::class)]
 class UserEntityTest extends TestCase
 {
-	#[Test]
-	public function testSetRoleIdIsFluentAndStoresValue(): void
-	{
-		$entity	= new UserEntity();
-		$role	= new RoleEntity();
-
-		self::assertSame(
-			$entity,
-			$entity->setRoleId(roleId: $role),
-		);
-		self::assertSame(
-			$role,
-			$entity->getRoleId(),
-		);
-	}
-
-	#[Test]
-	public function testSetNameIsFluentAndStoresValue(): void
-	{
-		$entity = new UserEntity();
-
-		self::assertSame(
-			$entity,
-			$entity->setName(name: 'Gambler'),
-		);
-		self::assertSame(
-			'Gambler',
-			$entity->getName(),
-		);
-	}
-
-	#[Test]
-	public function testSetAvatarIsFluentAndStoresValue(): void
-	{
-		$entity = new UserEntity();
-
-		self::assertSame(
-			$entity,
-			$entity->setAvatar(avatar: 'https://a.ppy.sh/88?88.png'),
-		);
-		self::assertSame(
-			'https://a.ppy.sh/88?88.png',
-			$entity->getAvatar(),
-		);
-	}
-
-	#[Test]
-	public function testSetRankIsFluentAndStoresValue(): void
-	{
-		$entity = new UserEntity();
-
-		self::assertSame(
-			$entity,
-			$entity->setRank(rank: 88),
-		);
-		self::assertSame(
-			88,
-			$entity->getRank(),
-		);
-	}
-
-	#[Test]
-	public function testSetCountryFlagIsFluentAndStoresValue(): void
-	{
-		$entity = new UserEntity();
-
-		self::assertSame(
-			$entity,
-			$entity->setCountryFlag(countryFlag: 'ZW'),
-		);
-		self::assertSame(
-			'ZW',
-			$entity->getCountryFlag(),
-		);
-	}
-
+	/**
+	 * Covers: test inherits identity and timestamp behaviour.
+	 * @mago-expect lint:literal-named-argument(2)
+	 */
 	#[Test]
 	public function testInheritsIdentityAndTimestampBehaviour(): void
 	{
 		$entity = new UserEntity();
 
-		$entity->setId(id: 88888);
+		$entity->setId(id: 88_888);
 
 		self::assertSame(
-			88888,
+			88_888,
 			$entity->getId(),
 		);
 		self::assertNotNull($entity->getCreateOn());
 		self::assertSame(
 			'UTC',
-			$entity
-				->getCreateOn()
-				->getTimezone()
-				->getName(),
+			$entity->getCreateOn()->getTimezone()->getName(),
 		);
 	}
-
 
 	/**
 	 * N:1 association with roles
 	 */
 
-
 	#[Test]
 	#[CoversNothing]
+	/** @mago-expect lint:literal-named-argument(3) */
 	public function testRoleAssociationIsManyToOne(): void
 	{
 		$property = new ReflectionProperty(
@@ -159,14 +86,18 @@ class UserEntityTest extends TestCase
 		);
 	}
 
+	/**
+	 * Covers: test role join column is required and not unique.
+	 * @mago-expect lint:literal-named-argument(3)
+	 */
 	#[Test]
 	#[CoversNothing]
 	public function testRoleJoinColumnIsRequiredAndNotUnique(): void
 	{
-		$attributes = (new ReflectionProperty(
+		$attributes = new ReflectionProperty(
 			class: UserEntity::class,
 			property: 'roleId',
-		))->getAttributes(name: JoinColumn::class);
+		)->getAttributes(name: JoinColumn::class);
 
 		self::assertCount(
 			1,
@@ -183,6 +114,99 @@ class UserEntityTest extends TestCase
 		self::assertFalse(
 			$joinColumn->unique,
 			'A non-unique FK is what makes the relation 1:N.',
+		);
+	}
+
+	/**
+	 * Covers: test set avatar is fluent and stores value.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testSetAvatarIsFluentAndStoresValue(): void
+	{
+		$entity = new UserEntity();
+
+		self::assertSame(
+			$entity,
+			$entity->setAvatar(avatar: 'https://a.ppy.sh/88?88.png'),
+		);
+		self::assertSame(
+			'https://a.ppy.sh/88?88.png',
+			$entity->getAvatar(),
+		);
+	}
+
+	/**
+	 * Covers: test set country flag is fluent and stores value.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testSetCountryFlagIsFluentAndStoresValue(): void
+	{
+		$entity = new UserEntity();
+
+		self::assertSame(
+			$entity,
+			$entity->setCountryFlag(countryFlag: 'ZW'),
+		);
+		self::assertSame(
+			'ZW',
+			$entity->getCountryFlag(),
+		);
+	}
+
+	/**
+	 * Covers: test set name is fluent and stores value.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testSetNameIsFluentAndStoresValue(): void
+	{
+		$entity = new UserEntity();
+
+		self::assertSame(
+			$entity,
+			$entity->setName(name: 'Gambler'),
+		);
+		self::assertSame(
+			'Gambler',
+			$entity->getName(),
+		);
+	}
+
+	/**
+	 * Covers: test set rank is fluent and stores value.
+	 * @mago-expect lint:literal-named-argument
+	 */
+	#[Test]
+	public function testSetRankIsFluentAndStoresValue(): void
+	{
+		$entity = new UserEntity();
+
+		self::assertSame(
+			$entity,
+			$entity->setRank(rank: 88),
+		);
+		self::assertSame(
+			88,
+			$entity->getRank(),
+		);
+	}
+
+	/** Covers: test set role id is fluent and stores value. */
+	#[Test]
+	public function testSetRoleIdIsFluentAndStoresValue(): void
+	{
+		$entity = new UserEntity();
+		$role   = new RoleEntity();
+
+		self::assertSame(
+			$entity,
+			$entity->setRoleId(roleId: $role),
+		);
+		self::assertSame(
+			$role,
+			$entity->getRoleId(),
 		);
 	}
 }

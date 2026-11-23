@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
-use App\Kernel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Dotenv\Dotenv;
 
@@ -13,14 +14,20 @@ use Symfony\Component\Dotenv\Dotenv;
 
 
 /// --- Internal namespaces --- ///
+use App\Kernel;
 
 
-require dirname(__DIR__).'/vendor/autoload.php';
+// @mago-format-ignore-end
+$currentDir   = dirname(__DIR__);
+$autoloadFile = "{$currentDir}/vendor/autoload.php";
+$envFile      = "{$currentDir}/.env";
 
-(new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+require $autoloadFile;
+
+new Dotenv()->bootEnv($envFile);
 
 $environment = $_SERVER['APP_ENV'] ?? 'dev';
-$debug = $_SERVER['APP_DEBUG'] ?? false;
+$debug       = $_SERVER['APP_DEBUG'] ?? false;
 
 $kernel = new Kernel(
 	environment: is_string($environment) ? $environment : 'dev',
@@ -28,10 +35,10 @@ $kernel = new Kernel(
 );
 $kernel->boot();
 
-$entityManager = $kernel->getContainer()->get('doctrine')->getManager();
+$entityManager = $kernel->getContainer()->get(id: 'doctrine')->getManager();
 
 if (!$entityManager instanceof EntityManagerInterface) {
-	throw new RuntimeException('Expected the Doctrine ORM entity manager.');
+	throw new RuntimeException(message: 'Expected the Doctrine ORM entity manager.');
 }
 
 return $entityManager;

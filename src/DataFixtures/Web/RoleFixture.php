@@ -4,47 +4,56 @@ declare(strict_types=1);
 
 namespace App\DataFixtures\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
-use Override;
 
 
 /// --- Type hint namespaces --- ///
 use DateTimeImmutable;
 use DateTimeZone;
+use function sprintf;
+use Override;
 
 
 /// --- Internal namespaces --- ///
 use App\Entity\Web\RoleEntity;
 
 
-class RoleFixture extends Fixture {
+// @mago-format-ignore-end
+class RoleFixture extends Fixture
+{
+	/** Prefix. */
 	private string $prefix = 'VOS';
-    private string $schema = '';
+	/** Schema. */
+	private string $schema = '';
 	/** @var array<string, string> */
 	private array $roles = [
-		'User'	=> 'can only interact with what exposed to the website.',
-		'Admin'	=> 'can take control of the whole website both internally and externally.'
+		'User'  => 'can only interact with what exposed to the website.',
+		'Admin' => 'can take control of the whole website both internally and externally.',
 	];
 
-    public function __construct()
-    {
-		if ($this->prefix === 'VOS') {
-			// VOS schemas
-			$this->schema .= sprintf(
-				'%s_%s',
-				$this->prefix,
-				'CATALOG'
-			);
-		} else {
+	/** Initialises the instance. */
+	public function __construct()
+	{
+		if ($this->prefix !== 'VOS') {
 			// Do nothing
 			return;
 		}
-    }
 
+		// VOS schemas
+		$this->schema .= sprintf(
+			'%s_%s',
+			$this->prefix,
+			'CATALOG',
+		);
+	}
+
+	/** Load. */
 	#[Override]
 	public function load(ObjectManager $manager): void
 	{
@@ -55,18 +64,18 @@ class RoleFixture extends Fixture {
 		$connection = $manager->getConnection();
 
 		$connection->executeStatement(
-			sql: <<<"SQL"
-			SET search_path TO {$this->schema}
-			SQL
+			sql: <<<SQL
+				SET search_path TO {$this->schema}
+				SQL,
 		);
 
 		$connection->executeStatement(
-			sql: <<<"SQL"
-			TRUNCATE TABLE roles RESTART IDENTITY CASCADE
-			SQL
+			sql: <<<SQL
+				TRUNCATE TABLE roles RESTART IDENTITY CASCADE
+				SQL,
 		);
 
-		foreach($this->roles as $tourneyRole => $tourneyDescription) {
+		foreach ($this->roles as $tourneyRole => $tourneyDescription) {
 			$role = new RoleEntity();
 
 			$role->setName(name: $tourneyRole);
@@ -74,8 +83,8 @@ class RoleFixture extends Fixture {
 			$role->setCreateOn(
 				createOn: new DateTimeImmutable(
 					datetime: 'now',
-					timezone: new DateTimeZone(timezone: 'UTC')
-				)
+					timezone: new DateTimeZone(timezone: 'UTC'),
+				),
 			);
 
 			$manager->persist(object: $role);
@@ -85,9 +94,9 @@ class RoleFixture extends Fixture {
 		$manager->clear();
 
 		$connection->executeStatement(
-			sql: <<<"SQL"
-			SET search_path TO public
-			SQL
+			sql: <<<SQL
+				SET search_path TO public
+				SQL,
 		);
 	}
 }

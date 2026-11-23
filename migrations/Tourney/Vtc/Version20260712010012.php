@@ -2,37 +2,51 @@
 
 declare(strict_types=1);
 
-
 namespace DoctrineMigrations\Tourney\Vtc;
 
+// @mago-format-ignore-start
+
+
+/// --- Main namespaces --- ///
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 
+/// --- Type hint namespaces --- ///
+use const SORT_REGULAR;
+use function array_keys;
+use function ksort;
+use function sprintf;
+
+
+/// --- Internal namespaces --- ///
+
+
+// @mago-format-ignore-end
 final class Version20260712010012 extends AbstractMigration
 {
-	private string	$name		= 'VTC';
-	private array	$schemas	= [];
-	private string	$statement	= '';
+	/** Name. */
+	private string $name = 'VTC';
+	/** Schemas. */
+	private array $schemas = [];
+	/** Statement. */
+	private string $statement = '';
 
+	/** Initialises the instance. */
 	public function __construct()
 	{
-		for (
-			$iteration = 1;
-			$iteration <= 3;
-			$iteration++
-		) {
+		for ($iteration = 1; $iteration <= 3; ++$iteration) {
 			$schemaName = sprintf(
 				'%s_%s%d',
 				$this->name,
 				$this->name,
-				$iteration
+				$iteration,
 			);
 
 			$constraintName = sprintf(
 				'%s%d',
 				$this->name,
-				$iteration
+				$iteration,
 			);
 
 			$this->schemas[$schemaName] = $constraintName;
@@ -44,24 +58,38 @@ final class Version20260712010012 extends AbstractMigration
 		 */
 		ksort(
 			$this->schemas,
-			SORT_REGULAR
+			SORT_REGULAR,
 		);
 	}
 
+	/** Reverts the migration. */
+	public function down(Schema $schema): void
+	{
+		// We only need the key part of the assoc array here
+		foreach (array_keys(array: $this->schemas) as $tourneySchema) {
+			$this->statement = <<<SQL
+				DROP TABLE IF EXISTS {$tourneySchema}.beatmaps CASCADE;
+				SQL;
+
+			$this->addSql(sql: $this->statement);
+		}
+	}
+
+	/** Describes the migration. */
 	public function getDescription(): string
 	{
 		return sprintf(
 			'Create `beatmaps` tables across all iteration schemas for registered %s tournament.',
-			$this->name
+			$this->name,
 		);
 	}
 
+	/** Applies the migration. */
 	public function up(Schema $schema): void
 	{
 		// This table need to be created in each iteration schema first
 		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
-			$this->statement =
-				<<<"SQL"
+			$this->statement = <<<SQL
 				CREATE TABLE IF NOT EXISTS {$tourneySchema}.beatmaps (
 					id INTEGER NOT NULL,
 					mod_id INTEGER NOT NULL,
@@ -75,12 +103,10 @@ final class Version20260712010012 extends AbstractMigration
 			$this->addSql(sql: $this->statement);
 		}
 
-
-		// Then we create the index on FKs for performance purposes:
+		// Create both FK indexes in one pass over the schemas:
 		// https://www.beekeeperstudio.io/blog/one-to-many-database-relationships-complete-guide-interactive/
 		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
-			$this->statement =
-				<<<"SQL"
+			$this->statement = <<<SQL
 				CREATE INDEX
 					IDX_{$tourneyConstraint}_MOD_ID
 				ON
@@ -88,12 +114,8 @@ final class Version20260712010012 extends AbstractMigration
 				SQL;
 
 			$this->addSql(sql: $this->statement);
-		}
 
-
-		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
-			$this->statement =
-				<<<"SQL"
+			$this->statement = <<<SQL
 				CREATE INDEX
 					IDX_{$tourneyConstraint}_ROUND_ID
 				ON
@@ -103,16 +125,11 @@ final class Version20260712010012 extends AbstractMigration
 			$this->addSql(sql: $this->statement);
 		}
 
+		// Then we can add comment on it since they're existed now
 
-		// Finally we can add comment on the table/column since they are
-		// existed now
-		foreach (
-			// We only need the key part of the assoc array here
-			array_keys(array: $this->schemas)
-			as $tourneySchema
-		) {
-			$this->statement =
-				<<<"SQL"
+		// We only need the key part of the assoc array here
+		foreach (array_keys(array: $this->schemas) as $tourneySchema) {
+			$this->statement = <<<SQL
 				COMMENT ON TABLE
 					{$tourneySchema}.beatmaps
 				IS
@@ -120,17 +137,8 @@ final class Version20260712010012 extends AbstractMigration
 				SQL;
 
 			$this->addSql(sql: $this->statement);
-		}
 
-
-
-		foreach (
-			// We only need the key part of the assoc array here
-			array_keys(array: $this->schemas)
-			as $tourneySchema
-		) {
-			$this->statement =
-				<<<"SQL"
+			$this->statement = <<<SQL
 				COMMENT ON COLUMN
 					{$tourneySchema}.beatmaps.details
 				IS
@@ -153,11 +161,9 @@ final class Version20260712010012 extends AbstractMigration
 			$this->addSql(sql: $this->statement);
 		}
 
-
-		// Also don't forget to create FKs to bond relationship between tables
+		// Create both foreign keys in one pass to close the relationship
 		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
-			$this->statement =
-				<<<"SQL"
+			$this->statement = <<<SQL
 				ALTER TABLE IF EXISTS
 					{$tourneySchema}.beatmaps
 				ADD
@@ -172,12 +178,8 @@ final class Version20260712010012 extends AbstractMigration
 				SQL;
 
 			$this->addSql(sql: $this->statement);
-		}
 
-
-		foreach ($this->schemas as $tourneySchema => $tourneyConstraint) {
-			$this->statement =
-				<<<"SQL"
+			$this->statement = <<<SQL
 				ALTER TABLE IF EXISTS
 					{$tourneySchema}.beatmaps
 				ADD
@@ -189,22 +191,6 @@ final class Version20260712010012 extends AbstractMigration
 					ON UPDATE CASCADE
 					ON DELETE NO ACTION
 					NOT DEFERRABLE
-				SQL;
-
-			$this->addSql(sql: $this->statement);
-		}
-	}
-
-	public function down(Schema $schema): void
-	{
-		foreach (
-			// We only need the key part of the assoc array here
-			array_keys(array: $this->schemas)
-			as $tourneySchema
-		) {
-			$this->statement =
-				<<<"SQL"
-				DROP TABLE IF EXISTS {$tourneySchema}.beatmaps CASCADE;
 				SQL;
 
 			$this->addSql(sql: $this->statement);

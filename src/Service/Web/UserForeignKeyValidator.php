@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -11,6 +13,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 /// --- Type hint namespaces --- ///
+use function array_key_exists;
+use function is_int;
+use function sprintf;
 use Override;
 
 
@@ -19,6 +24,7 @@ use App\Interface\Web\UserForeignKeyValidatorInterface;
 use App\Repository\Web\RoleRepository;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
@@ -28,25 +34,12 @@ use App\Repository\Web\RoleRepository;
  */
 final readonly class UserForeignKeyValidator implements UserForeignKeyValidatorInterface
 {
-	public function __construct(private RoleRepository $roleRepository) {}
+	/** Initialises the instance. */
+	public function __construct(
+		private RoleRepository $roleRepository,
+	) {}
 
-	#[Override]
-	public function validatePost(array $payload): void
-	{
-		$roleId = $payload['roleId'] ?? null;
-
-		// Let DTO validation surface the error when 'roleId' field is missing/null
-		if ($roleId === null) {
-			return;
-		}
-
-		if (!is_int($roleId)) {
-			throw new BadRequestHttpException(message: 'Role ID must be an integer.');
-		}
-
-		$this->assertRoleExists(roleId: $roleId);
-	}
-
+	/** Validate patch. */
 	#[Override]
 	public function validatePatch(array $payload, int $id): void
 	{
@@ -74,6 +67,25 @@ final readonly class UserForeignKeyValidator implements UserForeignKeyValidatorI
 		$this->assertRoleExists(roleId: $roleId);
 	}
 
+	/** Validate post. */
+	#[Override]
+	public function validatePost(array $payload): void
+	{
+		$roleId = $payload['roleId'] ?? null;
+
+		// Let DTO validation surface the error when 'roleId' field is missing/null
+		if ($roleId === null) {
+			return;
+		}
+
+		if (!is_int($roleId)) {
+			throw new BadRequestHttpException(message: 'Role ID must be an integer.');
+		}
+
+		$this->assertRoleExists(roleId: $roleId);
+	}
+
+	/** Assert role exists. */
 	private function assertRoleExists(int $roleId): void
 	{
 		if ($this->roleRepository->find(id: $roleId) !== null) {

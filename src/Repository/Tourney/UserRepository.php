@@ -2,22 +2,36 @@
 
 declare(strict_types=1);
 
-
 namespace App\Repository\Tourney;
 
-use App\Entity\Tourney\User;
+// @mago-format-ignore-start
+
+
+/// --- Main namespaces --- ///
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 
+/// --- Type hint namespaces --- ///
+
+
+/// --- Internal namespaces --- ///
+use App\Entity\Tourney\User;
+
+
+// @mago-format-ignore-end
 /**
  * @extends ServiceEntityRepository<User>
  */
 class UserRepository extends ServiceEntityRepository
 {
+	/** Initialises the instance. */
 	public function __construct(ManagerRegistry $registry)
 	{
-		parent::__construct($registry, User::class);
+		parent::__construct(
+			$registry,
+			User::class,
+		);
 	}
 
 	//    /**
@@ -34,7 +48,6 @@ class UserRepository extends ServiceEntityRepository
 	//            ->getResult()
 	//        ;
 	//    }
-
 	//    public function findOneBySomeField($value): ?User
 	//    {
 	//        return $this->createQueryBuilder('u')

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repository\Catalog;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -17,37 +19,32 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Catalog\TournamentEntity;
 
 
+// @mago-format-ignore-end
 /**
  * @extends ServiceEntityRepository<TournamentEntity>
  */
 class TournamentRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, TournamentEntity::class);
-    }
-
-	public function save(
-		TournamentEntity	$entity,
-		bool				$flush = true,
-	): void
+	/** Initialises the instance. */
+	public function __construct(ManagerRegistry $registry)
 	{
-		$this->getEntityManager()->persist(object: $entity);
-
-		if ($flush) {
-			$this->getEntityManager()->flush();
-		}
+		parent::__construct(
+			registry: $registry,
+			entityClass: TournamentEntity::class,
+		);
 	}
 
-	public function remove(
-		TournamentEntity	$entity,
-		bool				$flush = true,
-	): void
+	/** Remove. */
+	public function remove(TournamentEntity $entity): void
 	{
 		$this->getEntityManager()->remove(object: $entity);
+		$this->getEntityManager()->flush();
+	}
 
-		if ($flush) {
-			$this->getEntityManager()->flush();
-		}
+	/** Save. */
+	public function save(TournamentEntity $entity): void
+	{
+		$this->getEntityManager()->persist(object: $entity);
+		$this->getEntityManager()->flush();
 	}
 }

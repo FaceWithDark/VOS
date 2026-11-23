@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Interface\Web;
 
+// @mago-format-ignore-start
+
 
 /// --- Main namespaces --- ///
 
@@ -15,6 +17,7 @@ namespace App\Interface\Web;
 use App\Interface\Abstract\DuplicateValidatorInterface;
 
 
+// @mago-format-ignore-end
 /**
  * NOTE:
  *
