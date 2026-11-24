@@ -6,18 +6,18 @@ Application tests live under `tests/Application`. They exercise the app the way 
 ## Running the application suite
 
 > [!TIP]
-> See the [**General Testing Guide**](./README.md) for the shared container setup, the
-> `XDEBUG_MODE=coverage` requirement and the coverage reports.
+> See the [**General Testing Guide**](./README.md) for the shared container setup,
+> the coverage reports and the Composer scripts that set `XDEBUG_MODE=coverage`.
 
 ```bash
 # Every application test
-XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite application
+composer test:application
 
 # A single file
-XDEBUG_MODE=coverage php vendor/bin/phpunit tests/Application/Controller/HomeControllerTest.php
+composer test:application -- tests/Application/Controller/HomeControllerTest.php
 
 # Filter by class/method name
-XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite application --filter HomeControllerTest
+composer test:application -- --filter HomeControllerTest
 ```
 
 ---

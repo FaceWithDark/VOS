@@ -6,11 +6,11 @@ Integration tests live under `tests/Integration`. Anything that needs the real d
 ## Running the integration suite
 
 > [!TIP]
-> See the [**General Testing Guide**](./README.md) for the shared container setup, the
-> `XDEBUG_MODE=coverage` requirement and the coverage reports.
+> See the [**General Testing Guide**](./README.md) for the shared container setup,
+> the coverage reports and the Composer scripts that set `XDEBUG_MODE=coverage`.
 
 ```bash
-XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite integration
+composer test:integration
 ```
 
 ---
@@ -19,6 +19,5 @@ XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite integration
 > [!TODO]
 > The suite is currently empty, and
 > [`phpunit.dist.xml`](../../phpunit.dist.xml) enables `failOnEmptyTestSuite`, so
-> running `--testsuite integration` on its own exits with an error until the
-> first integration test is added. Running every suite
-> (`php vendor/bin/phpunit` with no `--testsuite`) is unaffected.
+> `composer test:integration` exits with an error until the first integration
+> test is added. Running every suite (`composer test`) is unaffected.

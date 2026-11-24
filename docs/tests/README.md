@@ -15,9 +15,10 @@ The suites and their paths are declared in [`phpunit.dist.xml`](../../phpunit.di
 ## Running the tests
 
 > [!IMPORTANT]
-> Prefix every command with `XDEBUG_MODE=coverage`. The project's PHPUnit
-> configuration enables coverage reports, so PHPUnit refuses to run and reports
-> *"XDEBUG_MODE=coverage ... has to be set"* otherwise.
+> Run the tests through the Composer scripts below. They set
+> `XDEBUG_MODE=coverage` themselves; running PHPUnit directly without it fails
+> with *"XDEBUG_MODE=coverage ... has to be set"* because the PHPUnit
+> configuration enables coverage reports.
 
 Get inside the `vos-symfony` container first, then pick the command you need:
 
@@ -26,18 +27,19 @@ Get inside the `vos-symfony` container first, then pick the command you need:
 docker exec -it vos-symfony sh
 
 # Run every suite
-XDEBUG_MODE=coverage php vendor/bin/phpunit
+composer test
 
 # Run a single suite by name
-XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
-XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite application
+composer test:unit
+composer test:application
+composer test:integration
 
-# Run a single file, or filter by class/method name
-XDEBUG_MODE=coverage php vendor/bin/phpunit tests/Unit/Entity/Web/UserEntityTest.php
-XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit --filter UserEntityTest
+# Run a single file, or filter by class/method name (note the `--`)
+composer test:unit -- tests/Unit/Entity/Web/UserEntityTest.php
+composer test:unit -- --filter UserEntityTest
 
 # List the available suites without running anything
-XDEBUG_MODE=coverage php vendor/bin/phpunit --list-suites
+composer test -- --list-suites
 ```
 
 ---
@@ -60,10 +62,10 @@ XDEBUG_MODE=coverage php vendor/bin/phpunit --list-suites
 Every run already writes an HTML report to `var/coverage/html`. For a terminal report, use `--coverage-text` (or `--only-summary-for-coverage-text` for the totals only):
 
 ```bash
-XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit --only-summary-for-coverage-text
+composer test:unit -- --only-summary-for-coverage-text
 
 # Full per-class text report
-XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit --coverage-text
+composer test:unit -- --coverage-text
 
 # Then open the HTML report from your browser: var/coverage/html/index.html
 ```
