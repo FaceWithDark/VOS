@@ -10,3 +10,4 @@ This project strictly follows [**Convential Commit**](https://www.conventionalco
 7. `docker`: for commits that update files related to **Docker** setup, or add/modify new/current `Dockerfile` file if needed as the complexity of the project goes on.
 8. `review`: for commits that resolve reviews received during any created PR. Please use this with a very minimal info provided right next to the tag so that we can differenciate which sort of review is/are this when backtracking (e.g., `review(new-service)`).
 9. `test`: for commits that add or update test files only (unit, application, integration). Keep the production code out of these commits and mention the affected domain/scope in the description so a test-only change stays easy to review and to revert (e.g., `test(tournaments): cover provider not-found branch`).
+10. `ci`: for commits that add or update the CI/CD pipeline, such as GitHub Actions workflows, composite actions, or release automation.
