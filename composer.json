@@ -91,6 +91,22 @@
         "fmt": "mago fmt --check",
         "lint": "mago lint",
         "lint:staged": "mago lint --staged",
+        "test": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit"
+        ],
+        "test:application": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --testsuite application"
+        ],
+        "test:integration": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --testsuite integration"
+        ],
+        "test:unit": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --testsuite unit"
+        ],
         "post-install-cmd": [
             "@auto-scripts"
         ],

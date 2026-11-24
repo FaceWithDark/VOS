@@ -1,0 +1,40 @@
+name: Quality
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Format, lint and static analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v5
+
+      - name: Set up the project
+        uses: ./.github/actions/setup
+
+      - name: Check formatting
+        run: composer fmt
+
+      - name: Lint
+        run: composer lint
+
+      - name: Warm up the dev cache
+        run: php bin/console cache:warmup --env=dev
+
+      - name: Analyse with PHPStan
+        run: vendor/bin/phpstan analyse --no-progress --error-format=github
