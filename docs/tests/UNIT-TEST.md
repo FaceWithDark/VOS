@@ -17,18 +17,18 @@ Each test covers a single class in isolation: collaborators are replaced with PH
 ## Running the unit suite
 
 > [!TIP]
-> See the [**General Testing Guide**](./README.md) for the shared container setup, the
-> `XDEBUG_MODE=coverage` requirement and the coverage reports.
+> See the [**General Testing Guide**](./README.md) for the shared container setup,
+> the coverage reports and the Composer scripts that set `XDEBUG_MODE=coverage`.
 
 ```bash
 # Every unit test
-XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
+composer test:unit
 
 # A single file
-XDEBUG_MODE=coverage php vendor/bin/phpunit tests/Unit/Entity/Web/UserEntityTest.php
+composer test:unit -- tests/Unit/Entity/Web/UserEntityTest.php
 
 # Filter by class/method name
-XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit --filter UserEntityTest
+composer test:unit -- --filter UserEntityTest
 ```
 
 ---
