@@ -1,0 +1,26 @@
+name: Release action
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  move-major-tag:
+    name: Move the major version tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event.release.prerelease == false
+
+    steps:
+      - name: Check out the release tag
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Move the major version tag
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: ./.github/scripts/move-major-tag.sh "$TAG"
