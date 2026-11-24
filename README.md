@@ -11,6 +11,9 @@
     <strong>This is the source code for <a href="https://vososu.site">VOS website</a>, built by a <i>mentally unstable uni student</i></strong>
 </div>
 
+[![Quality](https://github.com/FaceWithDark/VOS/actions/workflows/quality.yaml/badge.svg?branch=main&event=push)](https://github.com/FaceWithDark/VOS/actions/workflows/quality.yaml)
+[![Tests](https://github.com/FaceWithDark/VOS/actions/workflows/tests.yaml/badge.svg?branch=main&event=push)](https://github.com/FaceWithDark/VOS/actions/workflows/tests.yaml)
+
 ---
 # Quick Start
 
@@ -37,6 +40,7 @@ for file in ./docker/secrets/pgadmin_*.example.txt; do
 done
 
 # Copy non-sensitive `.env` files to project root directory and remove the `.example` suffix
+cp ./examples/.env.example ./.env
 cp ./examples/.env.example.* ./
 
 for file in ./.env.example.*; do
@@ -117,6 +121,7 @@ Copy-Item "./examples/pgadmin_*.example.txt" -Destination "./docker/secrets/" -F
 Get-ChildItem "./docker/secrets/pgadmin_*.example.txt" | Rename-Item -NewName { $_.Name -replace '\.example\.txt$', '.txt' }
 
 # Copy non-sensitive `.env` files to project root directory and remove the `.example` suffix
+Copy-Item "./examples/.env.example" -Destination "./.env" -Force
 Copy-Item "./examples/.env.example.*" -Destination "./" -Force
 Get-ChildItem "./.env.example.*" | Rename-Item -NewName { $_.Name -replace '\.example\.', '.' }
 

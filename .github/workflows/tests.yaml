@@ -1,0 +1,94 @@
+name: Tests
+
+on:
+  pull_request:
+    types: [labeled]
+  pull_request_review:
+    types: [submitted]
+  push:
+    branches: [dev, main]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    if: >-
+      github.event_name == 'push' ||
+      (
+        contains(fromJSON('["dev", "main"]'), github.base_ref) &&
+        (
+          github.event.label.name == 'ci:tests' ||
+          github.event.review.state == 'approved'
+        )
+      )
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
+
+    env:
+      APP_ENV: test
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: demo
+          POSTGRES_PASSWORD: demo123
+          POSTGRES_DB: demo
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U demo -d demo"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v5
+
+      - name: Set up the project
+        uses: ./.github/actions/setup
+        with:
+          coverage: xdebug
+
+      - name: Run the unit suite
+        run: |
+          if [ -z "$(find tests/Unit -name '*Test.php' -print -quit 2>/dev/null)" ]; then
+            echo "::notice::No tests found in tests/Unit; skipping the unit suite."
+            exit 0
+          fi
+          composer test:unit
+
+      - name: Prepare the database
+        run: |
+          php bin/console doctrine:database:create --if-not-exists --no-interaction
+          php bin/console doctrine:migrations:migrate --no-interaction
+          php bin/console doctrine:fixtures:load --append --no-interaction
+
+      - name: Run the integration suite
+        run: |
+          if [ -z "$(find tests/Integration -name '*Test.php' -print -quit 2>/dev/null)" ]; then
+            echo "::notice::No tests found in tests/Integration; skipping the integration suite."
+            exit 0
+          fi
+          composer test:integration
+
+      - name: Build the Tailwind assets
+        run: php bin/console tailwind:build
+
+      - name: Run the application suite
+        run: |
+          if [ -z "$(find tests/Application -name '*Test.php' -print -quit 2>/dev/null)" ]; then
+            echo "::notice::No tests found in tests/Application; skipping the application suite."
+            exit 0
+          fi
+          composer test:application

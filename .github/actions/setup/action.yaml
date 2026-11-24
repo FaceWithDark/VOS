@@ -1,0 +1,39 @@
+name: Setup
+description: Install PHP, prepare the environment and install Composer dependencies.
+
+inputs:
+  coverage:
+    description: The coverage driver passed to the PHP setup.
+    required: false
+    default: none
+
+runs:
+  using: composite
+  steps:
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: "8.5"
+        extensions: intl, pdo_pgsql
+        coverage: ${{ inputs.coverage }}
+
+    - name: Validate Composer metadata
+      shell: bash
+      run: composer validate --strict --no-check-publish
+
+    - name: Copy the environment examples
+      shell: bash
+      run: |
+        cp examples/.env.example .env
+        cp examples/.env.example.dev .env.dev
+        cp examples/.env.example.test .env.test
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-8.5-${{ hashFiles('composer.lock') }}
+
+    - name: Install Composer dependencies
+      shell: bash
+      run: composer install --prefer-dist --no-progress --no-interaction
